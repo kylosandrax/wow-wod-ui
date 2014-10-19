@@ -1,14 +1,14 @@
 
 Postal3DB = {
-	["profileKeys"] = {
-		["Bronin - Aggramar"] = "Bronin - Aggramar",
-	},
 	["global"] = {
 		["BlackBook"] = {
 			["alts"] = {
 				"Bronin|Aggramar|Horde|90|DEATHKNIGHT", -- [1]
 			},
 		},
+	},
+	["profileKeys"] = {
+		["Bronin - Aggramar"] = "Bronin - Aggramar",
 	},
 	["profiles"] = {
 		["Bronin - Aggramar"] = {
