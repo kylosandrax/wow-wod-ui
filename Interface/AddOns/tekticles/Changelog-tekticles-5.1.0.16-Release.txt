@@ -1,0 +1,40 @@
+tag 5.1.0.16-Release
+e3d69047d9940212f10af5073038577c2a604f33
+tekkub :bear:  <tekkub@gmail.com>
+2012-12-24 02:04:50 -0700
+
+Weekly build
+
+
+--------------------
+
+tekkub :bear: :
+	- Weekly build 5.1.0.16-Release
+	- Update changelog for 5.1.0.16-Release
+	- Updating TOC to 50100
+	- Update changelog for 5.0.1.15-Beta
+	- Weekly build 5.0.1.15-Beta
+	- Improve the background of the config page
+	- Actually, that had a shadow
+	- New fonts
+	Fixes #12
+	- Update changelog for 5.0.1.14-Beta
+	- Weekly build 5.0.1.14-Beta
+	- Updating TOC to 50001
+	- README update
+	- New fonts
+	- Update changelog for 4.2.0.13-Beta
+	- Weekly build 4.2.0.13-Beta
+	- Updating TOC to 40200
+	- No need for that scrollyframe either
+	- 2 column config panel now, woo!
+	- Remove delayed load, we really do want the fonts applied at load
+tekkub :bear: :
+	- Update changelog for 4.1.0.12-Beta
+	- Weekly build 4.1.0.12-Beta
+	- Updating TOC to 40100
+	- Remove 4.0 backcompat
+	- Fix channel list buttons not getting fonts
+	Fixes #4
+	- Fix title picker buttons in 4.1
+	Fixes #6

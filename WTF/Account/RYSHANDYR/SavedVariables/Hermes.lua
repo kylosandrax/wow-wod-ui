@@ -1,5 +1,8 @@
 
 HermesDB2 = {
+	["profileKeys"] = {
+		["Bronin - Aggramar"] = "Bronin - Aggramar",
+	},
 	["global"] = {
 		["welcome"] = true,
 		["spellmetadata"] = {
@@ -36,7 +39,7 @@ HermesDB2 = {
 			[2139] = {
 				["duration"] = "6",
 			},
-			[31850] = {
+			[51052] = {
 				["duration"] = "10",
 			},
 			[109964] = {
@@ -57,29 +60,29 @@ HermesDB2 = {
 			[22842] = {
 				["duration"] = "20",
 			},
-			[31224] = {
+			[114028] = {
 				["duration"] = "5",
 			},
 			[33206] = {
 				["duration"] = "8",
 			},
-			[114028] = {
+			[31224] = {
 				["duration"] = "5",
 			},
 			[5394] = {
 				["duration"] = "15",
 			},
-			[49028] = {
-				["duration"] = "12",
+			[115176] = {
+				["duration"] = "8",
 			},
-			[102342] = {
-				["duration"] = "12",
+			[740] = {
+				["duration"] = "8",
 			},
 			[45438] = {
 				["duration"] = "10",
 			},
-			[1044] = {
-				["duration"] = "6",
+			[61336] = {
+				["duration"] = "12",
 			},
 			[2094] = {
 				["duration"] = "60",
@@ -102,14 +105,14 @@ HermesDB2 = {
 			[108280] = {
 				["duration"] = "11",
 			},
-			[48707] = {
-				["duration"] = "5",
+			[102060] = {
+				["duration"] = "4",
 			},
 			[12975] = {
 				["duration"] = "20",
 			},
-			[61336] = {
-				["duration"] = "12",
+			[47476] = {
+				["duration"] = "5",
 			},
 			[6552] = {
 				["duration"] = "4",
@@ -117,14 +120,14 @@ HermesDB2 = {
 			[20594] = {
 				["2ndcooldown"] = "6",
 			},
-			[57994] = {
-				["duration"] = "3",
+			[22812] = {
+				["duration"] = "12",
 			},
 			[55233] = {
 				["duration"] = "10",
 			},
-			[871] = {
-				["duration"] = "12",
+			[31821] = {
+				["duration"] = "6",
 			},
 			[853] = {
 				["duration"] = "6",
@@ -132,8 +135,8 @@ HermesDB2 = {
 			[76577] = {
 				["duration"] = "5",
 			},
-			[108281] = {
-				["duration"] = "10",
+			[116849] = {
+				["duration"] = "12",
 			},
 			[102351] = {
 				["duration"] = "30",
@@ -147,29 +150,29 @@ HermesDB2 = {
 			[98008] = {
 				["duration"] = "6",
 			},
-			[116849] = {
-				["duration"] = "12",
+			[108281] = {
+				["duration"] = "10",
 			},
 			[114018] = {
 				["duration"] = "15",
 			},
-			[22812] = {
+			[871] = {
 				["duration"] = "12",
 			},
-			[31821] = {
-				["duration"] = "6",
+			[57994] = {
+				["duration"] = "3",
 			},
-			[102060] = {
-				["duration"] = "4",
-			},
-			[47476] = {
+			[48707] = {
 				["duration"] = "5",
 			},
-			[740] = {
-				["duration"] = "8",
+			[1044] = {
+				["duration"] = "6",
 			},
-			[115176] = {
-				["duration"] = "8",
+			[102342] = {
+				["duration"] = "12",
+			},
+			[49028] = {
+				["duration"] = "12",
 			},
 			[64843] = {
 				["duration"] = "8",
@@ -177,7 +180,7 @@ HermesDB2 = {
 			[15286] = {
 				["duration"] = "15",
 			},
-			[51052] = {
+			[31850] = {
 				["duration"] = "10",
 			},
 		},
@@ -200,10 +203,10 @@ HermesDB2 = {
 					["level"] = 57,
 				}, -- [1]
 			},
-			[51052] = {
+			[633] = {
 				{
-					["k"] = 25,
-					["talentIndex"] = 5,
+					["k"] = 10,
+					["level"] = 16,
 				}, -- [1]
 			},
 			[48792] = {
@@ -212,10 +215,10 @@ HermesDB2 = {
 					["level"] = 62,
 				}, -- [1]
 			},
-			[15286] = {
+			[115310] = {
 				{
 					["k"] = 30,
-					["specializationId"] = 258,
+					["specializationId"] = 270,
 				}, -- [1]
 			},
 			[47788] = {
@@ -260,22 +263,22 @@ HermesDB2 = {
 					["level"] = 10,
 				}, -- [1]
 			},
-			[64843] = {
-				{
-					["k"] = 30,
-					["specializationId"] = 257,
-				}, -- [1]
-			},
-			[49028] = {
-				{
-					["k"] = 30,
-					["specializationId"] = 250,
-				}, -- [1]
-			},
-			[57994] = {
+			[34477] = {
 				{
 					["k"] = 10,
-					["level"] = 16,
+					["level"] = 76,
+				}, -- [1]
+			},
+			[115176] = {
+				{
+					["k"] = 10,
+					["level"] = 82,
+				}, -- [1]
+			},
+			[42650] = {
+				{
+					["k"] = 10,
+					["level"] = 80,
 				}, -- [1]
 			},
 			[29893] = {
@@ -296,16 +299,16 @@ HermesDB2 = {
 					["level"] = 30,
 				}, -- [1]
 			},
-			[61999] = {
+			[31224] = {
 				{
 					["k"] = 10,
-					["level"] = 72,
+					["level"] = 58,
 				}, -- [1]
 			},
-			[42650] = {
+			[124974] = {
 				{
-					["k"] = 10,
-					["level"] = 80,
+					["k"] = 25,
+					["talentIndex"] = 18,
 				}, -- [1]
 			},
 			[22842] = {
@@ -314,10 +317,10 @@ HermesDB2 = {
 					["level"] = 52,
 				}, -- [1]
 			},
-			[48707] = {
+			[102060] = {
 				{
-					["k"] = 10,
-					["level"] = 68,
+					["k"] = 25,
+					["talentIndex"] = 9,
 				}, -- [1]
 			},
 			[33206] = {
@@ -326,10 +329,10 @@ HermesDB2 = {
 					["specializationId"] = 256,
 				}, -- [1]
 			},
-			[31224] = {
+			[61999] = {
 				{
 					["k"] = 10,
-					["level"] = 58,
+					["level"] = 72,
 				}, -- [1]
 			},
 			[49576] = {
@@ -338,16 +341,16 @@ HermesDB2 = {
 					["level"] = 55,
 				}, -- [1]
 			},
-			[49222] = {
-				{
-					["k"] = 30,
-					["specializationId"] = 250,
-				}, -- [1]
-			},
-			[46584] = {
+			[2094] = {
 				{
 					["k"] = 10,
-					["level"] = 56,
+					["level"] = 34,
+				}, -- [1]
+			},
+			[642] = {
+				{
+					["k"] = 10,
+					["level"] = 48,
 				}, -- [1]
 			},
 			[45438] = {
@@ -356,16 +359,16 @@ HermesDB2 = {
 					["level"] = 30,
 				}, -- [1]
 			},
-			[108281] = {
+			[116849] = {
 				{
-					["k"] = 25,
-					["talentIndex"] = 14,
+					["k"] = 30,
+					["specializationId"] = 270,
 				}, -- [1]
 			},
-			[2094] = {
+			[49222] = {
 				{
-					["k"] = 10,
-					["level"] = 34,
+					["k"] = 30,
+					["specializationId"] = 250,
 				}, -- [1]
 			},
 			[102351] = {
@@ -386,10 +389,10 @@ HermesDB2 = {
 					["talentIndex"] = 4,
 				}, -- [1]
 			},
-			[642] = {
+			[46584] = {
 				{
 					["k"] = 10,
-					["level"] = 48,
+					["level"] = 56,
 				}, -- [1]
 			},
 			[1022] = {
@@ -410,10 +413,10 @@ HermesDB2 = {
 					["level"] = 74,
 				}, -- [1]
 			},
-			[114028] = {
+			[108920] = {
 				{
 					["k"] = 25,
-					["talentIndex"] = 13,
+					["talentIndex"] = 1,
 				}, -- [1]
 			},
 			[47476] = {
@@ -434,10 +437,10 @@ HermesDB2 = {
 					["level"] = 52,
 				}, -- [1]
 			},
-			[5394] = {
+			[109964] = {
 				{
 					["k"] = 30,
-					["specializationId"] = 264,
+					["specializationId"] = 256,
 				}, -- [1]
 			},
 			[55233] = {
@@ -446,10 +449,10 @@ HermesDB2 = {
 					["specializationId"] = 250,
 				}, -- [1]
 			},
-			[740] = {
+			[6940] = {
 				{
 					["k"] = 10,
-					["level"] = 68,
+					["level"] = 80,
 				}, -- [1]
 			},
 			[853] = {
@@ -464,22 +467,22 @@ HermesDB2 = {
 					["specializationId"] = 64,
 				}, -- [1]
 			},
-			[6940] = {
+			[740] = {
 				{
 					["k"] = 10,
-					["level"] = 80,
+					["level"] = 68,
 				}, -- [1]
 			},
-			[109964] = {
+			[5394] = {
 				{
 					["k"] = 30,
-					["specializationId"] = 256,
+					["specializationId"] = 264,
 				}, -- [1]
 			},
-			[108920] = {
+			[114028] = {
 				{
 					["k"] = 25,
-					["talentIndex"] = 1,
+					["talentIndex"] = 13,
 				}, -- [1]
 			},
 			[62618] = {
@@ -494,10 +497,10 @@ HermesDB2 = {
 					["specializationId"] = 264,
 				}, -- [1]
 			},
-			[116849] = {
+			[108281] = {
 				{
-					["k"] = 30,
-					["specializationId"] = 270,
+					["k"] = 25,
+					["talentIndex"] = 14,
 				}, -- [1]
 			},
 			[114018] = {
@@ -518,10 +521,10 @@ HermesDB2 = {
 					["level"] = 30,
 				}, -- [1]
 			},
-			[102060] = {
+			[48707] = {
 				{
-					["k"] = 25,
-					["talentIndex"] = 9,
+					["k"] = 10,
+					["level"] = 68,
 				}, -- [1]
 			},
 			[20484] = {
@@ -530,34 +533,34 @@ HermesDB2 = {
 					["level"] = 20,
 				}, -- [1]
 			},
-			[124974] = {
-				{
-					["k"] = 25,
-					["talentIndex"] = 18,
-				}, -- [1]
-			},
-			[115176] = {
-				{
-					["k"] = 10,
-					["level"] = 82,
-				}, -- [1]
-			},
-			[34477] = {
-				{
-					["k"] = 10,
-					["level"] = 76,
-				}, -- [1]
-			},
-			[633] = {
+			[57994] = {
 				{
 					["k"] = 10,
 					["level"] = 16,
 				}, -- [1]
 			},
-			[115310] = {
+			[49028] = {
 				{
 					["k"] = 30,
-					["specializationId"] = 270,
+					["specializationId"] = 250,
+				}, -- [1]
+			},
+			[64843] = {
+				{
+					["k"] = 30,
+					["specializationId"] = 257,
+				}, -- [1]
+			},
+			[15286] = {
+				{
+					["k"] = 30,
+					["specializationId"] = 258,
+				}, -- [1]
+			},
+			[51052] = {
+				{
+					["k"] = 25,
+					["talentIndex"] = 5,
 				}, -- [1]
 			},
 		},
@@ -610,31 +613,31 @@ HermesDB2 = {
 			[12975] = 180,
 			[97462] = 180,
 			[740] = 480,
-			[47476] = 120,
+			[102351] = 30,
 			[109964] = 60,
 			[1044] = 25,
-			[51052] = 120,
+			[31687] = 180,
 			[124974] = 90,
-			[55233] = 60,
+			[108281] = 120,
 			[31821] = 180,
-			[49222] = 60,
-			[42650] = 600,
+			[64843] = 180,
+			[33206] = 180,
 			[73325] = 90,
 			[22812] = 60,
-			[48707] = 45,
-			[1766] = 10,
-			[114028] = 60,
-			[2139] = 24,
-			[1038] = 120,
-			[15286] = 180,
-			[64382] = 300,
-			[871] = 300,
 			[22842] = 180,
-			[33206] = 180,
-			[64843] = 180,
-			[108281] = 120,
-			[31687] = 180,
-			[102351] = 30,
+			[871] = 300,
+			[64382] = 300,
+			[15286] = 180,
+			[1038] = 120,
+			[2139] = 24,
+			[114028] = 60,
+			[1766] = 10,
+			[48707] = 45,
+			[42650] = 600,
+			[49222] = 60,
+			[55233] = 60,
+			[51052] = 120,
+			[47476] = 120,
 		},
 		["classes"] = {
 			["DEATHKNIGHT"] = {
@@ -673,7 +676,7 @@ HermesDB2 = {
 				["schema"] = 60000,
 				["revision"] = 1,
 			},
-			["HUNTER"] = {
+			["PALADIN"] = {
 				["talents"] = {
 				},
 				["schema"] = 60000,
@@ -697,7 +700,7 @@ HermesDB2 = {
 				["schema"] = 60000,
 				["revision"] = 1,
 			},
-			["PALADIN"] = {
+			["HUNTER"] = {
 				["talents"] = {
 				},
 				["schema"] = 60000,
@@ -707,8 +710,8 @@ HermesDB2 = {
 		["races"] = {
 			["BloodElf"] = "Blood Elf",
 		},
-		["clientTime"] = 23171.052,
-		["serverTime"] = 1413733605,
+		["clientTime"] = 26587.829,
+		["serverTime"] = 1413737022,
 		["adjustments"] = {
 			[740] = {
 				{
@@ -719,13 +722,12 @@ HermesDB2 = {
 			},
 		},
 	},
-	["profileKeys"] = {
-		["Bronin - Aggramar"] = "Bronin - Aggramar",
-	},
 	["profiles"] = {
 		["Bronin - Aggramar"] = {
-			["welcome"] = true,
-			["enableparty"] = true,
+			["configMode"] = false,
+			["pluginState"] = {
+				["UI"] = true,
+			},
 			["spells"] = {
 				{
 					["enabled"] = false,
@@ -1305,53 +1307,51 @@ HermesDB2 = {
 							["filterrange"] = true,
 							["filter10man"] = true,
 							["filterself"] = false,
-							["abilities"] = {
-							},
+							["enabled"] = true,
 							["profiles"] = {
 								["GridButtons"] = {
-									["merged"] = false,
-									["hideNoSender"] = false,
 									["scale"] = 1,
-									["x"] = 1154.99987792969,
+									["hideNoSender"] = false,
+									["merged"] = false,
 									["w"] = 250,
-									["cellAnchor"] = "TOPLEFT",
+									["coloredBorders"] = true,
+									["mergedicon"] = "Interface\\ICONS\\INV_Misc_QuestionMark",
 									["y"] = 615,
 									["h"] = 150,
+									["locked"] = false,
+									["cellAnchor"] = "TOPLEFT",
 									["colorNS"] = {
 										["a"] = 0.75,
-										["b"] = 0.5,
-										["g"] = 0.5,
 										["r"] = 0.5,
+										["g"] = 0.5,
+										["b"] = 0.5,
 									},
-									["mergedicon"] = "Interface\\ICONS\\INV_Misc_QuestionMark",
-									["locked"] = false,
 									["padding"] = 5,
-									["coloredBorders"] = true,
+									["x"] = 1154.99987792969,
 									["colorU"] = {
 										["a"] = 1,
-										["b"] = 0.5,
-										["g"] = 0.5,
 										["r"] = 0.5,
+										["g"] = 0.5,
+										["b"] = 0.5,
 									},
 								},
 							},
+							["includeAll"] = true,
+							["filterdead"] = false,
 							["filter25man"] = true,
+							["filterconnection"] = true,
+							["filterplayertype"] = "disabled",
 							["playerfilters"] = {
 							},
+							["abilities"] = {
+							},
 							["name"] = "Default",
-							["filterplayertype"] = "disabled",
-							["filterconnection"] = true,
-							["filterdead"] = false,
-							["includeAll"] = true,
-							["enabled"] = true,
 						}, -- [1]
 					},
 				},
 			},
-			["configMode"] = false,
-			["pluginState"] = {
-				["UI"] = true,
-			},
+			["welcome"] = true,
+			["enableparty"] = true,
 		},
 	},
 }

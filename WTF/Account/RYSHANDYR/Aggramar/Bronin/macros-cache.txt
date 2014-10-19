@@ -13,7 +13,6 @@ VER 3 0100000000000031 "IBF" "INV_MISC_QUESTIONMARK"
 /dbm broadcast timer 00:12 Shieldwall: Bronin
 END
 VER 3 0100000000000018 "Interrupt" "INV_MISC_QUESTIONMARK"
-#showtooltip
 /castsequence reset=120 Arcane Torrent, Mind Freeze, Mind Freeze, Mind Freeze, Mind Freeze, Mind Freeze
 END
 VER 3 0100000000000024 "Lichborne" "INV_Misc_QuestionMark"

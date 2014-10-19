@@ -1,7 +1,12 @@
 
 TradeSkillDW_QueueSettings = {
-	["version"] = 1.7,
 	["Blacksmithing"] = {
+		["queueList"] = {
+		},
+		["selectedIdx"] = 0,
+	},
+	["version"] = 1.7,
+	["Runeforging"] = {
 		["queueList"] = {
 		},
 		["selectedIdx"] = 0,

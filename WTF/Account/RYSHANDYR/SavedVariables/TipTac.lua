@@ -33,21 +33,16 @@ TipTac_Config = {
 	["colorGuildByReaction"] = true,
 	["showBuffs"] = false,
 	["left"] = 1776.46166992188,
-	["healthBarText"] = "value",
-	["powerBar"] = false,
+	["fontSizeDelta"] = 1,
+	["preFadeTime"] = 0.1,
 	["reactColoredBackdrop"] = false,
-	["backdropInsets"] = 2.5,
-	["classification_trivial"] = "~%s ",
 	["classification_worldboss"] = "%s|r (Boss) ",
-	["tipBorderColor"] = {
-		0.3, -- [1]
-		0.3, -- [2]
-		0.4, -- [3]
-		1, -- [4]
-	},
+	["classification_trivial"] = "~%s ",
+	["backdropInsets"] = 2.5,
+	["hideWorldTips"] = true,
 	["classColoredBorder"] = false,
 	["if_borderlessIcons"] = false,
-	["barFontFace"] = "Fonts\\ARIALN.TTF",
+	["gradientTip"] = true,
 	["manaBar"] = false,
 	["gradientColor"] = {
 		0.647058823529412, -- [1]
@@ -56,21 +51,26 @@ TipTac_Config = {
 		0.200000047683716, -- [4]
 	},
 	["classification_rareelite"] = "+%s|r (Rare) ",
-	["colorNameByClass"] = false,
 	["fadeTime"] = 0.1,
-	["targetYouText"] = "<<YOU>>",
-	["top"] = 211.174255371094,
-	["talentOnlyInParty"] = true,
 	["healthBarColor"] = {
 		0.3, -- [1]
 		0.9, -- [2]
 		0.3, -- [3]
 		1, -- [4]
 	},
-	["gradientTip"] = true,
+	["targetYouText"] = "<<YOU>>",
+	["talentOnlyInParty"] = true,
+	["top"] = 211.174255371094,
+	["colorNameByClass"] = false,
+	["barFontFace"] = "Fonts\\ARIALN.TTF",
 	["colSameGuild"] = "|cffff32ff",
-	["hideWorldTips"] = true,
+	["tipBorderColor"] = {
+		0.3, -- [1]
+		0.3, -- [2]
+		0.4, -- [3]
+		1, -- [4]
+	},
 	["barFontSize"] = 10,
-	["preFadeTime"] = 0.1,
-	["fontSizeDelta"] = 1,
+	["powerBar"] = false,
+	["healthBarText"] = "value",
 }

@@ -1,0 +1,33 @@
+
+MSBTProfiles_SavedVars = {
+	["profiles"] = {
+		["Default"] = {
+			["critFontName"] = "ElvUI Combat",
+			["scrollAreas"] = {
+				["Static"] = {
+					["offsetY"] = 134,
+				},
+				["Incoming"] = {
+					["offsetY"] = -186,
+					["offsetX"] = -433,
+				},
+				["Notification"] = {
+					["offsetY"] = 259,
+					["offsetX"] = -171,
+				},
+				["Outgoing"] = {
+					["offsetY"] = -183,
+					["offsetX"] = 393,
+				},
+			},
+			["normalFontName"] = "ElvUI Combat",
+			["creationVersion"] = "5.7.138",
+		},
+	},
+}
+MSBT_SavedMedia = {
+	["fonts"] = {
+	},
+	["sounds"] = {
+	},
+}

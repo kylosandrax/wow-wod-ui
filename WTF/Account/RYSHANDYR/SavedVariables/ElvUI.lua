@@ -5,7 +5,7 @@ ElvDB = {
 	},
 	["gold"] = {
 		["Aggramar"] = {
-			["Bronin"] = 33366801,
+			["Bronin"] = 43262514,
 		},
 	},
 	["namespaces"] = {
@@ -20,33 +20,34 @@ ElvDB = {
 				["autoRepair"] = "PLAYER",
 				["bottomPanel"] = false,
 				["valuecolor"] = {
-					["b"] = 0.819,
-					["g"] = 0.513,
 					["r"] = 0.09,
+					["g"] = 0.513,
+					["b"] = 0.819,
 				},
 				["vendorGrays"] = true,
 				["bordercolor"] = {
-					["b"] = 0.31,
-					["g"] = 0.31,
 					["r"] = 0.31,
+					["g"] = 0.31,
+					["b"] = 0.31,
 				},
 				["interruptAnnounce"] = "SAY",
 			},
 			["movers"] = {
-				["ElvUF_TargetMover"] = "BOTTOMElvUIParentBOTTOM300300",
+				["ElvUF_TargetTargetMover"] = "BOTTOMElvUIParentBOTTOM0260",
 				["ElvAB_2"] = "BOTTOMElvUIParentBOTTOM68150",
+				["ElvUF_PetMover"] = "BOTTOMLEFTElvUIParentBOTTOMLEFT638301",
 				["ElvUF_PlayerCastbarMover"] = "BOTTOMElvUIParentBOTTOM-300360",
 				["ElvUF_FocusMover"] = "BOTTOMRIGHTElvUIParentBOTTOMRIGHT-609318",
-				["ElvAB_6"] = "BOTTOMElvUIParentBOTTOM010",
+				["ElvAB_6"] = "BOTTOMElvUIParentBOTTOM04",
 				["TooltipMover"] = "BOTTOMRIGHTElvUIParentBOTTOMRIGHT-328307",
+				["ElvAB_3"] = "BOTTOMElvUIParentBOTTOM3154",
+				["MicrobarMover"] = "TOPElvUIParentTOP0-4",
 				["ElvUF_PlayerMover"] = "BOTTOMElvUIParentBOTTOM-300300",
-				["BossButton"] = "BOTTOMElvUIParentBOTTOM071",
-				["ElvUF_PetMover"] = "BOTTOMLEFTElvUIParentBOTTOMLEFT638301",
 				["ElvAB_1"] = "BOTTOMElvUIParentBOTTOM-69150",
-				["ElvAB_3"] = "BOTTOMElvUIParentBOTTOM31510",
-				["ElvAB_5"] = "BOTTOMElvUIParentBOTTOM-31510",
+				["BossButton"] = "BOTTOMElvUIParentBOTTOM070",
+				["ElvAB_5"] = "BOTTOMElvUIParentBOTTOM-3154",
 				["ElvUF_TargetCastbarMover"] = "BOTTOMElvUIParentBOTTOM300360",
-				["ElvUF_TargetTargetMover"] = "BOTTOMElvUIParentBOTTOM0260",
+				["ElvUF_TargetMover"] = "BOTTOMElvUIParentBOTTOM300300",
 			},
 			["hideTutorial"] = true,
 			["unitframe"] = {
@@ -108,6 +109,10 @@ ElvDB = {
 				},
 				["bar6"] = {
 					["enabled"] = true,
+				},
+				["microbar"] = {
+					["enabled"] = true,
+					["mouseover"] = true,
 				},
 				["bar2"] = {
 					["enabled"] = true,

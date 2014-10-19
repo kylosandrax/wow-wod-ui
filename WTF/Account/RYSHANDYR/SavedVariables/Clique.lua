@@ -1,6 +1,11 @@
 
 CliqueDB = nil
 CliqueDB3 = {
+	["char"] = {
+		["Bronin - Aggramar"] = {
+			["alerthidden"] = true,
+		},
+	},
 	["profileKeys"] = {
 		["Bronin - Aggramar"] = "Bronin - Aggramar",
 	},
@@ -8,10 +13,10 @@ CliqueDB3 = {
 		["Bronin - Aggramar"] = {
 			["bindings"] = {
 				{
+					["type"] = "target",
 					["sets"] = {
 						["default"] = true,
 					},
-					["type"] = "target",
 					["key"] = "BUTTON1",
 					["unit"] = "mouseover",
 				}, -- [1]
@@ -22,6 +27,15 @@ CliqueDB3 = {
 						["default"] = true,
 					},
 				}, -- [2]
+				{
+					["spell"] = "Death Coil",
+					["key"] = "SHIFT-BUTTON4",
+					["sets"] = {
+						["default"] = true,
+					},
+					["icon"] = "Interface\\Icons\\Spell_Shadow_DeathCoil",
+					["type"] = "spell",
+				}, -- [3]
 			},
 		},
 	},

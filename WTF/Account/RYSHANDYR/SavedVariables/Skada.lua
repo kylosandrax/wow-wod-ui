@@ -14,7 +14,7 @@ SkadaDB = {
 				{
 					["y"] = 0,
 					["x"] = -427.000244140625,
-					["mode"] = "CC breakers",
+					["mode"] = "DPS",
 					["point"] = "BOTTOMRIGHT",
 				}, -- [1]
 			},

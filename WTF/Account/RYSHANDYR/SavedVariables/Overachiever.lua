@@ -12,7 +12,7 @@ Overachiever_Settings = {
 	["UI_SeriesTooltip"] = true,
 	["Item_consumed_whencomplete"] = false,
 	["FistfulOfLove_petals"] = false,
-	["SchoolTip_fished"] = true,
+	["Tooltip_ShowID"] = false,
 	["Item_satisfied"] = true,
 	["Tradeskill_ShowCompletedAch_Cooking"] = false,
 	["TurkeyLurkey_feathered"] = false,
@@ -25,7 +25,7 @@ Overachiever_Settings = {
 	["Version"] = "0.80",
 	["WellReadTip_read"] = true,
 	["Explore_AutoTrack"] = false,
-	["Tooltip_ShowID"] = false,
+	["SchoolTip_fished"] = true,
 	["DragSave_AchFrame"] = false,
 }
 Overachiever_CharVars_Default = nil
