@@ -1,0 +1,11 @@
+VER 3 0100000000000002 "Res-Mash-Priest" "INV_MISC_QUESTIONMARK"
+#showtooltip
+/use [nocombat] Revive
+/stopmacro [nocombat]
+/use Rebirth
+/s Rebirth on %t
+END
+VER 3 0100000000000001 "Self-Shield" "Ability_Creature_Cursed_01"
+/target Feldspar
+/cast Power Word: Shield
+END

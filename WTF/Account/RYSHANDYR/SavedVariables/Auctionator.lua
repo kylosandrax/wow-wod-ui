@@ -2,13 +2,13 @@
 AUCTIONATOR_SAVEDVARS = {
 	["_50000"] = 500,
 	["_2000"] = 100,
+	["_200000"] = 1000,
+	["STARTING_DISCOUNT"] = 5,
+	["_1000000"] = 2500,
 	["_5000000"] = 10000,
 	["LOG_DE_DATA_X"] = true,
-	["_1000000"] = 2500,
-	["_10000"] = 200,
 	["_500"] = 5,
-	["STARTING_DISCOUNT"] = 5,
-	["_200000"] = 1000,
+	["_10000"] = 200,
 }
 AUCTIONATOR_PRICING_HISTORY = {
 }
@@ -37,8 +37,36 @@ AUCTIONATOR_PRICE_DATABASE = {
 }
 AUCTIONATOR_LAST_SCAN_TIME = nil
 AUCTIONATOR_TOONS = {
+	["Ryvok"] = {
+		["firstSeen"] = 1413753142,
+		["firstVersion"] = "3.1.6",
+	},
+	["Feldspar"] = {
+		["firstSeen"] = 1413753437,
+		["firstVersion"] = "3.1.6",
+	},
+	["Ryjax"] = {
+		["firstSeen"] = 1413753189,
+		["firstVersion"] = "3.1.6",
+	},
+	["Zapunzel"] = {
+		["firstSeen"] = 1413753307,
+		["firstVersion"] = "3.1.6",
+	},
+	["Stormslinger"] = {
+		["firstSeen"] = 1413753241,
+		["firstVersion"] = "3.1.6",
+	},
 	["Bronin"] = {
 		["firstSeen"] = 1413724157,
+		["firstVersion"] = "3.1.6",
+	},
+	["Kylosandrax"] = {
+		["firstSeen"] = 1413753068,
+		["firstVersion"] = "3.1.6",
+	},
+	["Greenthorn"] = {
+		["firstSeen"] = 1413753390,
 		["firstVersion"] = "3.1.6",
 	},
 }
