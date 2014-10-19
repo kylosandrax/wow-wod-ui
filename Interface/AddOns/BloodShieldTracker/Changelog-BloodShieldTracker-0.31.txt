@@ -1,0 +1,12 @@
+tag 0.31
+17c053fb9257107d7702d107dbf4b6221547a5b2
+Talryn <git@talryn.sent.com>
+2014-10-14 16:47:31 -0400
+
+Tag as 0.31.
+
+
+--------------------
+
+Talryn:
+	- Fix issue with Est Bar not showing up when Hide OOC selected.

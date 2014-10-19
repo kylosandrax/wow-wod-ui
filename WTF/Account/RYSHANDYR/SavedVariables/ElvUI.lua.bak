@@ -1,0 +1,46 @@
+
+ElvDB = {
+	["profileKeys"] = {
+		["Bronin - Aggramar"] = "Bronin - Aggramar",
+	},
+	["gold"] = {
+		["Aggramar"] = {
+			["Bronin"] = 33366801,
+		},
+	},
+	["namespaces"] = {
+		["LibDualSpec-1.0"] = {
+		},
+	},
+	["profiles"] = {
+		["Bronin - Aggramar"] = {
+			["general"] = {
+				["valuecolor"] = {
+					["b"] = 0.819,
+					["g"] = 0.513,
+					["r"] = 0.09,
+				},
+				["bordercolor"] = {
+					["b"] = 0.31,
+					["g"] = 0.31,
+					["r"] = 0.31,
+				},
+			},
+			["movers"] = {
+				["ElvAB_2"] = "BOTTOMElvUIParentBOTTOM038",
+			},
+			["layoutSet"] = "tank",
+		},
+	},
+}
+ElvPrivateDB = {
+	["profileKeys"] = {
+		["Bronin - Aggramar"] = "Bronin - Aggramar",
+	},
+	["profiles"] = {
+		["Bronin - Aggramar"] = {
+			["theme"] = "classic",
+			["install_complete"] = "7.14",
+		},
+	},
+}

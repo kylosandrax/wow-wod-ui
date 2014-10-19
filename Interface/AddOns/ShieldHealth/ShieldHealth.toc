@@ -1,0 +1,21 @@
+## Interface: 50100
+
+## Version: 2.35
+
+## Title: ShieldHealth
+## Notes: Show you how many damage your shield can absord.
+## Notes-frFR: Vous montre la quantite de degats que vous boucliers peuvent encore absorber.
+## Author: Miow
+## OptionalDeps: LibSharedMedia-3.0
+
+## X-License: All rights reserved.
+## X-eMail: azwentry @ gmail DOT com
+## X-Donate: PayPal:azwentry @ gmail DOT com
+## X-Category: Combat
+
+## SavedVariables: Sh_DB
+
+
+embeds.xml
+Local.lua
+ShieldHealth.lua

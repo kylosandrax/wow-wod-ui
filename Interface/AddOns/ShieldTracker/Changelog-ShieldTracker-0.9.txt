@@ -1,0 +1,16 @@
+tag 0.9
+7bc514c9057066d7bb99f6f7a5ade26dbde472c9
+Talryn <git@talryn.sent.com>
+2014-10-15 12:25:32 -0400
+
+Tag as 0.9.
+
+
+--------------------
+
+Talryn:
+	- * Update for 6.0. * Fix flickering and disappearing for single spell bars with no duration such as Resolve.
+	- Replace Vengeance with Resolve.
+	- Update TOC for 6.0.
+	- Force rebuild to pickup new AceDB.
+	- Pass boolean to SetMovable to fix issues in WoD.

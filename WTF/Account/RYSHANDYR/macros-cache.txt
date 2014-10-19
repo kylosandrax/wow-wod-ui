@@ -1,0 +1,73 @@
+VER 3 0000000000000024 "Camera-MAX" "INV_Wand_36"
+/script SetCVar("cameraDistanceMax", 25)
+/script SetCVar("cameraDistanceMaxFactor", 2)
+END
+VER 3 000000000000003A "Clear-Spells" "SPELL_FROST_ARCTICWINDS"
+/run for i = 1,120 do PickupAction(i) ClearCursor() end
+END
+VER 3 000000000000003B "Extra" "INV_MISC_QUESTIONMARK"
+/click ExtraActionButton1
+END
+VER 3 0000000000000021 "FCS-Intervene" "INV_Misc_QuestionMark"
+#show Intervene
+/focus [modifier:ctrl]
+/stopmacro [modifier:ctrl]
+/cast [nostance:2] Defensive Stance
+/cast [target=focus] Intervene
+END
+VER 3 000000000000003C "Feng" "ACHIEVEMENT_GUILDPERK_MRPOPULARITY_RANK2"
+/targetfocus
+/click ExtraActionButton1
+/targetlasttarget
+END
+VER 3 0000000000000034 "GoGoMount" "Ability_Mount_Charger"
+/click GoGoButton
+END
+VER 3 000000000000002B "Hamstring" "INV_Misc_QuestionMark"
+#showtooltip
+/startattack
+/cast Hamstring
+END
+VER 3 0000000000000019 "Judge" "Spell_Holy_RighteousFury"
+#showtooltip Judgement
+/startattack
+/cast Judgement
+/cast Holy Shield
+END
+VER 3 000000000000003F "MO-Sunfire" "INV_MISC_QUESTIONMARK"
+#showtooltip
+/cast [target=mouseover,help] Sunfire; [help] Sunfire; Sunfire
+END
+VER 3 0000000000000038 "MountSpecial" "INV_Weapon_Bow_52"
+/script UIErrorsFrame:UnregisterEvent("UI_ERROR_MESSAGE");
+/mountspecial
+/script UIErrorsFrame:RegisterEvent("UI_ERROR_MESSAGE");
+END
+VER 3 0000000000000040 "Pull" "ACHIEVEMENT_GUILDPERK_FASTTRACK_RANK2"
+/dbm pull 10
+END
+VER 3 0000000000000017 "Ready-Check" "INV_Misc_QuestionMark"
+/readycheck
+END
+VER 3 000000000000003D "Res-Mash" "INV_MISC_QUESTIONMARK"
+#showtooltip
+/use [nocombat] Revive
+/stopmacro [nocombat]
+/use Rebirth
+/s Rebirth on %t
+END
+VER 3 0000000000000027 "Shield-Wall" "INV_Misc_QuestionMark"
+#showtooltip
+/party --- Shield Wall ACTIVE ---
+/raid --- Shield Fortress ACTIVE ---
+/cast Shield Wall
+/in 10 /party --- Shield Wall ENDING ---
+/in 10 /raid --- Shield Fortress ENDING ---
+/dbm broadcast timer 00:10 Kylo's Shield Wall
+END
+VER 3 000000000000003E "Vent-Info" "ACHIEVEMENT_GUILDPERK_BARTERING"
+/raid Ventrillo:
+/raid IP: 159.253.131.51
+/raid Port: 12682
+/raid Password: unreality
+END
