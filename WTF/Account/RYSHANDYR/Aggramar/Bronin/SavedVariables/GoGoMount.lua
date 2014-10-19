@@ -6,6 +6,7 @@ GoGo_Prefs = {
 	["GlobalExclude"] = {
 	},
 	["UnknownMounts"] = {
+		171845, -- [1]
 	},
 	["DruidFormNotRandomize"] = false,
 	["Zones"] = {

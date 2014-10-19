@@ -75,14 +75,14 @@ HermesDB2 = {
 			[115176] = {
 				["duration"] = "8",
 			},
-			[47476] = {
-				["duration"] = "5",
+			[740] = {
+				["duration"] = "8",
 			},
 			[45438] = {
 				["duration"] = "10",
 			},
-			[740] = {
-				["duration"] = "8",
+			[47476] = {
+				["duration"] = "5",
 			},
 			[2094] = {
 				["duration"] = "60",
@@ -138,14 +138,14 @@ HermesDB2 = {
 			[116849] = {
 				["duration"] = "12",
 			},
-			[64382] = {
-				["duration"] = "10",
-			},
 			[62618] = {
 				["duration"] = "10",
 			},
 			[102351] = {
 				["duration"] = "30",
+			},
+			[64382] = {
+				["duration"] = "10",
 			},
 			[98008] = {
 				["duration"] = "6",
@@ -371,10 +371,10 @@ HermesDB2 = {
 					["specializationId"] = 250,
 				}, -- [1]
 			},
-			[64382] = {
+			[62618] = {
 				{
-					["k"] = 10,
-					["level"] = 74,
+					["k"] = 30,
+					["specializationId"] = 256,
 				}, -- [1]
 			},
 			[102342] = {
@@ -407,10 +407,10 @@ HermesDB2 = {
 					["level"] = 20,
 				}, -- [1]
 			},
-			[62618] = {
+			[102351] = {
 				{
-					["k"] = 30,
-					["specializationId"] = 256,
+					["k"] = 25,
+					["talentIndex"] = 6,
 				}, -- [1]
 			},
 			[108920] = {
@@ -485,10 +485,10 @@ HermesDB2 = {
 					["talentIndex"] = 13,
 				}, -- [1]
 			},
-			[102351] = {
+			[64382] = {
 				{
-					["k"] = 25,
-					["talentIndex"] = 6,
+					["k"] = 10,
+					["level"] = 74,
 				}, -- [1]
 			},
 			[98008] = {
@@ -710,8 +710,8 @@ HermesDB2 = {
 		["races"] = {
 			["BloodElf"] = "Blood Elf",
 		},
-		["clientTime"] = 11511.821,
-		["serverTime"] = 1413721945,
+		["clientTime"] = 14434.414,
+		["serverTime"] = 1413724867,
 		["adjustments"] = {
 			[740] = {
 				{
@@ -1310,10 +1310,10 @@ HermesDB2 = {
 							["enabled"] = true,
 							["profiles"] = {
 								["GridButtons"] = {
-									["coloredBorders"] = true,
-									["hideNoSender"] = false,
 									["scale"] = 1,
+									["hideNoSender"] = false,
 									["merged"] = false,
+									["coloredBorders"] = true,
 									["w"] = 250,
 									["mergedicon"] = "Interface\\ICONS\\INV_Misc_QuestionMark",
 									["y"] = 615,
@@ -1338,14 +1338,14 @@ HermesDB2 = {
 							},
 							["includeAll"] = true,
 							["filterdead"] = false,
-							["abilities"] = {
-							},
+							["name"] = "Default",
 							["filterconnection"] = true,
 							["filterplayertype"] = "disabled",
 							["playerfilters"] = {
 							},
-							["name"] = "Default",
 							["filter25man"] = true,
+							["abilities"] = {
+							},
 						}, -- [1]
 					},
 				},

@@ -1,0 +1,67 @@
+<Ui xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://www.blizzard.com/wow/ui/">
+
+<Frame name="OGMainFrame"
+       toplevel="true"
+       frameStrata="BACKGROUND"
+       enableMouse="true"
+       movable="true"
+       resizable="false" 
+       hidden="true"
+       parent="UIParent">
+       <Size> 
+           <AbsDimension x="2" y="2"/>
+       </Size>
+       <Anchors>
+           <Anchor point="CENTER">
+               <Offset><AbsDimension x="-200" y="200"/></Offset>
+           </Anchor>
+       </Anchors>
+       
+       <Backdrop bgFile="Interface\FrameGeneral\UI-Background-Marble" 
+                 edgeFile="Interface\DialogFrame\UI-DialogBox-Border" 
+                 horizTile="true" vertTile="true">
+         <EdgeSize>
+           <AbsValue val="16"/>
+         </EdgeSize>
+         <BackgroundInsets>
+           <AbsInset left="2" right="3" top="3" bottom="2"/>
+         </BackgroundInsets>
+       </Backdrop>       
+       
+       <Layers>
+           <Layer level="ARTWORK">
+               <Texture name="OGFrameHeader" file="Interface\DialogFrame\UI-DialogBox-Header">
+                   <Size>
+                       <AbsDimension x="100" y="64"/>
+                   </Size>
+                   <Anchors>
+                       <Anchor point="TOP">
+                           <Offset>
+                               <AbsDimension x="0" y="12"/>
+                           </Offset>
+                       </Anchor>
+                   </Anchors>
+               </Texture>
+               <FontString name="OGFrameHeaderLogo" inherits="GameFontNormal" text="oGear">
+                   <Anchors>
+                       <Anchor point="TOP" relativeTo="OGFrameHeader">
+                           <Offset>
+                               <AbsDimension x="0" y="-14"/>
+                           </Offset>
+                       </Anchor>
+                   </Anchors>
+               </FontString>
+           </Layer>
+       </Layers>
+       <Frames>
+       </Frames>
+       <Scripts>
+           <OnLoad>
+               OG_onLoad(self) ;
+           </OnLoad>
+       </Scripts>
+</Frame>
+
+
+</Ui>
+

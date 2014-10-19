@@ -1,0 +1,19 @@
+## Title: oGear
+## Version: 0.1.4
+## Interface: 60000
+## Author: Tiny of the Zerg
+## Notes: Oath's gear tool
+## X-Category: PvP
+## X-Website: http://www.solidice.com/ogear
+## DefaultState: enabled
+## X-Curse-Project-Name: oGear
+## X-Curse-Project-ID: ogear
+## X-Curse-Packaged-Version: 0.1.4
+## SavedVariables: OGEAR
+
+ogear.lua
+ogear_tables.lua
+ogear_timers.lua
+
+ogear.xml
+
