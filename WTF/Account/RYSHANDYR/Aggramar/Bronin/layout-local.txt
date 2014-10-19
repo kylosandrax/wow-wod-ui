@@ -14,16 +14,9 @@ Y: -116
 W: 32
 H: 32
 Frame: OQMainFrame
-FrameLevel: 20
+FrameLevel: 19
 Anchor: TOP
 X: -9
 Y: -150
 W: 835
 H: 475
-Frame: DBM_GUI_OptionsFrame
-FrameLevel: 5
-Anchor: TOPLEFT
-X: 243
-Y: -87
-W: 800
-H: 510

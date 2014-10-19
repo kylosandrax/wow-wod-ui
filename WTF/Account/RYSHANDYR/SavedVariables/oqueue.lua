@@ -28,47 +28,18 @@ OQ_data = {
 		"|cFF00B00016:20:28|r  logging out", -- [8]
 		"|cFF00B00016:22:16|r  |cFF808080logged on|r Bronin-Aggramar |cFF808080v2.1.1 (eu)|r", -- [9]
 		"|cFF00B00016:31:23|r  logging out", -- [10]
+		"|cFF00B00016:37:53|r  |cFF808080logged on|r Bronin-Aggramar |cFF808080v2.1.1 (eu)|r", -- [11]
+		"|cFF00B00016:43:24|r  logging out", -- [12]
+		"|cFF00B00016:43:50|r  |cFF808080logged on|r Bronin-Aggramar |cFF808080v2.1.1 (eu)|r", -- [13]
+		"|cFF00B00016:45:03|r  logging out", -- [14]
+		"|cFF00B00016:46:45|r  |cFF808080logged on|r Bronin-Aggramar |cFF808080v2.1.1 (eu)|r", -- [15]
+		"|cFF00B00016:54:46|r  logging out", -- [16]
 	},
 	["tear_cup"] = {
 	},
-	["announce_spy"] = 1,
-	["leader"] = {
-		["pve.raid"] = {
-			["nBosses"] = 0,
-			["pts"] = 0,
-		},
-		["pve.challenge"] = {
-			["nBosses"] = 0,
-			["pts"] = 0,
-		},
-		["rbg"] = {
-			["bg_end"] = 0,
-			["start_tm"] = 0,
-			["nLosses"] = 0,
-			["tm"] = 0,
-			["nGames"] = 0,
-			["bg_length"] = 0,
-			["nWins"] = 0,
-			["bg_start"] = 0,
-		},
-		["pve.scenario"] = {
-			["nBosses"] = 0,
-			["pts"] = 0,
-		},
-		["bg"] = {
-			["bg_end"] = 0,
-			["start_tm"] = 0,
-			["nLosses"] = 0,
-			["tm"] = 0,
-			["nGames"] = 0,
-			["bg_length"] = 0,
-			["nWins"] = 0,
-			["bg_start"] = 0,
-		},
-		["pve.5man"] = {
-			["nBosses"] = 0,
-			["pts"] = 0,
-		},
+	["_members"] = {
+	},
+	["_pending_info"] = {
 	},
 	["btag_cache"] = {
 	},
@@ -76,23 +47,18 @@ OQ_data = {
 		["SVsTEN"] = 1413753678,
 		["SV5/iw"] = 1413754037,
 		["SVsRjG"] = 1413753678,
-		["SVsqch"] = 1413753688,
-		["SaBYM4"] = 1413760942,
 		["SZ5mxv"] = 1413760738,
+		["Say7om"] = 1413762241,
+		["SalF2f"] = 1413761878,
+		["SaBYM4"] = 1413760942,
 		["SV6qPx"] = 1413754055,
+		["Sa5Y6x"] = 1413762410,
+		["SVsqch"] = 1413753688,
 	},
 	["autoaccept_mesh_request"] = 1,
+	["realid"] = "kx7#2185",
+	["announce_spy"] = 1,
 	["waitlist_sort_ascending"] = true,
-	["stats"] = {
-		["bg_end"] = 0,
-		["start_tm"] = 0,
-		["nLosses"] = 0,
-		["nGames"] = 0,
-		["tm"] = 0,
-		["nWins"] = 0,
-		["bg_start"] = 0,
-	},
-	["show_premade_ads"] = 0,
 	["_raffle_intro_shown"] = 1413724958,
 	["build"] = 211,
 	["toon"] = {
@@ -125,33 +91,31 @@ OQ_data = {
 			},
 			["player_role"] = 1,
 			["last_tm"] = 0,
-			["_idata"] = {
-			},
-			["marquee_y"] = 9.9998779296875,
+			["shout_kbs"] = 0,
+			["MinimapPos"] = 0,
 			["my_group"] = 0,
-			["marquee_x"] = 842.72216796875,
+			["my_slot"] = 0,
 			["marquee_hide"] = true,
 			["say_sapped"] = 0,
-			["class_portrait"] = 1,
 			["auto_role"] = 1,
-			["my_slot"] = 0,
-			["MinimapPos"] = 0,
-			["shout_kbs"] = 0,
+			["class_portrait"] = 1,
+			["marquee_x"] = 842.72216796875,
+			["marquee_y"] = 9.9998779296875,
+			["_idata"] = {
+			},
 		},
 	},
 	["banlist_sort_ascending"] = true,
-	["waitlist_sort"] = "time",
+	["stats"] = {
+		["bg_end"] = 0,
+		["start_tm"] = 0,
+		["nLosses"] = 0,
+		["nGames"] = 0,
+		["bg_start"] = 0,
+		["nWins"] = 0,
+		["tm"] = 0,
+	},
 	["premade_filter_type"] = "X",
-	["_members"] = {
-	},
-	["_pending_info"] = {
-	},
-	["_dtp"] = 1178211,
-	["fog_enabled"] = 1,
-	["_premade_info"] = {
-	},
-	["realid"] = "kx7#2185",
-	["premade_sort"] = "lead",
 	["scores"] = {
 		["start_round_tm"] = 1413123668,
 		["time_lag"] = 0,
@@ -159,9 +123,9 @@ OQ_data = {
 		["alliance"] = 0,
 		["officers"] = {
 			["A"] = {
-				["nKnights"] = 0,
-				["nSilver"] = 0,
 				["nGenerals"] = 0,
+				["nSilver"] = 0,
+				["nKnights"] = 0,
 				["nGolden"] = 0,
 			},
 			["H"] = {
@@ -172,7 +136,7 @@ OQ_data = {
 			},
 		},
 		["horde"] = 0,
-		["ngames"] = 0,
+		["end_round_tm"] = 1413728468,
 		["bg"] = {
 			["AB"] = 50,
 			["AV"] = 50,
@@ -184,9 +148,54 @@ OQ_data = {
 			["IoC"] = 50,
 			["BFG"] = 50,
 		},
-		["end_round_tm"] = 1413728468,
+		["ngames"] = 0,
 	},
-	["timer_width"] = 200,
+	["premade_sort"] = "lead",
+	["_dtp"] = 1178211,
+	["fog_enabled"] = 1,
+	["_premade_info"] = {
+	},
+	["waitlist_sort"] = "time",
+	["show_premade_ads"] = 0,
 	["banlist_sort"] = "ts",
+	["timer_width"] = 200,
+	["leader"] = {
+		["pve.raid"] = {
+			["nBosses"] = 0,
+			["pts"] = 0,
+		},
+		["pve.challenge"] = {
+			["nBosses"] = 0,
+			["pts"] = 0,
+		},
+		["pve.5man"] = {
+			["nBosses"] = 0,
+			["pts"] = 0,
+		},
+		["bg"] = {
+			["bg_end"] = 0,
+			["start_tm"] = 0,
+			["nLosses"] = 0,
+			["nGames"] = 0,
+			["bg_start"] = 0,
+			["bg_length"] = 0,
+			["nWins"] = 0,
+			["tm"] = 0,
+		},
+		["pve.scenario"] = {
+			["nBosses"] = 0,
+			["pts"] = 0,
+		},
+		["rbg"] = {
+			["bg_end"] = 0,
+			["start_tm"] = 0,
+			["nLosses"] = 0,
+			["nGames"] = 0,
+			["bg_start"] = 0,
+			["bg_length"] = 0,
+			["nWins"] = 0,
+			["tm"] = 0,
+		},
+	},
 	["auto_join_oqgeneral"] = 0,
 }
