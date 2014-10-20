@@ -1,7 +1,7 @@
 
 BugGrabberDB = {
-	["session"] = 38,
 	["lastSanitation"] = 3,
+	["session"] = 41,
 	["errors"] = {
 		{
 			["message"] = "[ADDON_ACTION_BLOCKED] AddOn 'TipTac' tried to call the protected function 'CancelLogout()'.",

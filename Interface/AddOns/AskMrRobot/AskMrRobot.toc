@@ -1,13 +1,17 @@
 ## Interface: 60000
 ## Title: Ask Mr. Robot
 ## Author: Team Robot, Inc.
-## Version: 10
+## Version: 11
 ## Notes: Exports/Imports data to/from askmrrobot.com.
 ## URL: www.askmrrobot.com
 ## DefaultState: Enabled
 ## LoadOnDemand: 0
 ## SavedVariablesPerCharacter: AmrDb
 ## SavedVariables: AmrSettings
+## X-Curse-Packaged-Version: v11
+## X-Curse-Project-Name: AskMrRobot
+## X-Curse-Project-ID: askmrrobot
+## X-Curse-Repository-ID: wow/askmrrobot/mainline
 
 #@no-lib-strip@
 Libs\LibStub\Libstub.lua

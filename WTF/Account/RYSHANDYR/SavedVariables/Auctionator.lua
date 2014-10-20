@@ -298,11 +298,11 @@ AUCTIONATOR_PRICE_DATABASE = {
 			["H1434"] = 192555,
 			["sc"] = 5,
 		},
-		["Fine Tiger Opal"] = {
-			["mr"] = 190000,
+		["Perfect Potent Tiger Opal"] = {
+			["mr"] = 1088999,
 			["cc"] = 8,
-			["id"] = "76541",
-			["H1434"] = 190000,
+			["id"] = "76594",
+			["H1434"] = 1088999,
 			["sc"] = 6,
 		},
 		["Perfect Sensei's Jasper"] = {
@@ -312,11 +312,11 @@ AUCTIONATOR_PRICE_DATABASE = {
 			["H1434"] = 70000,
 			["sc"] = 5,
 		},
-		["Energized Alexandrite"] = {
-			["mr"] = 120000,
+		["Steady Wild Jade"] = {
+			["mr"] = 46200,
 			["cc"] = 8,
-			["id"] = "76519",
-			["H1434"] = 120000,
+			["id"] = "76657",
+			["H1434"] = 46200,
 			["sc"] = 5,
 		},
 		["Wild Jade"] = {
@@ -375,19 +375,19 @@ AUCTIONATOR_PRICE_DATABASE = {
 			["H1434"] = 300000,
 			["sc"] = 5,
 		},
-		["Perfect Misty Alexandrite"] = {
-			["mr"] = 898880,
+		["Perfect Keen Tiger Opal"] = {
+			["mr"] = 2500000,
 			["cc"] = 8,
-			["id"] = "76574",
-			["H1434"] = 898880,
-			["sc"] = 5,
+			["id"] = "76605",
+			["H1434"] = 2500000,
+			["sc"] = 6,
 		},
-		["Alexandrite Ring of the Wolf"] = {
-			["mr"] = 79930,
-			["cc"] = 2,
-			["id"] = "25055:-13",
-			["H1434"] = 79930,
-			["sc"] = 1,
+		["Willful Tiger Opal"] = {
+			["mr"] = 28272,
+			["cc"] = 8,
+			["id"] = "76545",
+			["H1434"] = 28272,
+			["sc"] = 6,
 		},
 		["Vivid Alexandrite"] = {
 			["mr"] = 25500,
@@ -403,12 +403,12 @@ AUCTIONATOR_PRICE_DATABASE = {
 			["H1434"] = 899999,
 			["sc"] = 5,
 		},
-		["Lightning Alexandrite"] = {
-			["mr"] = 90000,
+		["Artful Tiger Opal"] = {
+			["mr"] = 50000,
 			["cc"] = 8,
-			["id"] = "76509",
-			["H1434"] = 90000,
-			["sc"] = 5,
+			["id"] = "76540",
+			["H1434"] = 50000,
+			["sc"] = 6,
 		},
 		["Effulgent Wild Jade"] = {
 			["mr"] = 49550,
@@ -424,19 +424,19 @@ AUCTIONATOR_PRICE_DATABASE = {
 			["H1434"] = 57000,
 			["sc"] = 5,
 		},
-		["Energized Wild Jade"] = {
-			["mr"] = 252999,
+		["Regal Wild Jade"] = {
+			["mr"] = 60000,
 			["cc"] = 8,
-			["id"] = "76651",
-			["H1434"] = 252999,
+			["id"] = "76653",
+			["H1434"] = 60000,
 			["sc"] = 5,
 		},
-		["Perfect Deadly Tiger Opal"] = {
-			["mr"] = 1940000,
+		["Puissant Alexandrite"] = {
+			["mr"] = 100000000,
 			["cc"] = 8,
-			["id"] = "76592",
-			["H1434"] = 1940000,
-			["sc"] = 6,
+			["id"] = "76524",
+			["H1434"] = 100000000,
+			["sc"] = 5,
 		},
 		["Sensei's Wild Jade"] = {
 			["mr"] = 649000,
@@ -445,19 +445,19 @@ AUCTIONATOR_PRICE_DATABASE = {
 			["H1434"] = 649000,
 			["sc"] = 5,
 		},
-		["Radiant Wild Jade"] = {
-			["mr"] = 99950,
+		["Adept Tiger Opal"] = {
+			["mr"] = 120000,
 			["cc"] = 8,
-			["id"] = "76649",
-			["H1434"] = 99950,
-			["sc"] = 5,
+			["id"] = "76538",
+			["H1434"] = 120000,
+			["sc"] = 6,
 		},
-		["Alexandrite Ring of the Falcon"] = {
-			["mr"] = 120014,
-			["cc"] = 2,
-			["id"] = "25055:-11",
-			["H1434"] = 120014,
-			["sc"] = 1,
+		["Zen Wild Jade"] = {
+			["mr"] = 117512,
+			["cc"] = 8,
+			["id"] = "76645",
+			["H1434"] = 117512,
+			["sc"] = 5,
 		},
 		["Perfect Fine Tiger Opal"] = {
 			["mr"] = 650000,
@@ -466,25 +466,25 @@ AUCTIONATOR_PRICE_DATABASE = {
 			["H1434"] = 650000,
 			["sc"] = 6,
 		},
-		["Lightning Wild Jade"] = {
-			["mr"] = 268999,
+		["Sensei's Alexandrite"] = {
+			["mr"] = 299500,
 			["cc"] = 8,
-			["id"] = "76642",
-			["H1434"] = 268999,
+			["id"] = "76510",
+			["H1434"] = 299500,
 			["sc"] = 5,
 		},
-		["Perfect Radiant Alexandrite"] = {
-			["mr"] = 2499994,
+		["Forceful Alexandrite"] = {
+			["mr"] = 10000,
 			["cc"] = 8,
-			["id"] = "76583",
-			["H1434"] = 2499994,
+			["id"] = "76522",
+			["H1434"] = 10000,
 			["sc"] = 5,
 		},
-		["Perfect Forceful Alexandrite"] = {
-			["mr"] = 2997498,
+		["Forceful Wild Jade"] = {
+			["mr"] = 70000,
 			["cc"] = 8,
-			["id"] = "76588",
-			["H1434"] = 2997498,
+			["id"] = "76654",
+			["H1434"] = 70000,
 			["sc"] = 5,
 		},
 		["Perfect Energized Alexandrite"] = {
@@ -508,18 +508,11 @@ AUCTIONATOR_PRICE_DATABASE = {
 			["H1434"] = 450000,
 			["sc"] = 5,
 		},
-		["Sensei's Alexandrite"] = {
-			["mr"] = 299500,
+		["Perfect Sensei's Alexandrite"] = {
+			["mr"] = 1094795,
 			["cc"] = 8,
-			["id"] = "76510",
-			["H1434"] = 299500,
-			["sc"] = 5,
-		},
-		["Forceful Wild Jade"] = {
-			["mr"] = 70000,
-			["cc"] = 8,
-			["id"] = "76654",
-			["H1434"] = 70000,
+			["id"] = "76577",
+			["H1434"] = 1094795,
 			["sc"] = 5,
 		},
 		["Fierce Tiger Opal"] = {
@@ -529,33 +522,40 @@ AUCTIONATOR_PRICE_DATABASE = {
 			["H1434"] = 154000,
 			["sc"] = 6,
 		},
-		["Forceful Alexandrite"] = {
-			["mr"] = 10000,
+		["Perfect Forceful Alexandrite"] = {
+			["mr"] = 2997498,
 			["cc"] = 8,
-			["id"] = "76522",
-			["H1434"] = 10000,
+			["id"] = "76588",
+			["H1434"] = 2997498,
 			["sc"] = 5,
 		},
-		["Perfect Sensei's Alexandrite"] = {
-			["mr"] = 1094795,
+		["Perfect Radiant Alexandrite"] = {
+			["mr"] = 2499994,
 			["cc"] = 8,
-			["id"] = "76577",
-			["H1434"] = 1094795,
+			["id"] = "76583",
+			["H1434"] = 2499994,
 			["sc"] = 5,
 		},
-		["Zen Wild Jade"] = {
-			["mr"] = 117512,
+		["Lightning Wild Jade"] = {
+			["mr"] = 268999,
 			["cc"] = 8,
-			["id"] = "76645",
-			["H1434"] = 117512,
+			["id"] = "76642",
+			["H1434"] = 268999,
 			["sc"] = 5,
 		},
-		["Adept Tiger Opal"] = {
-			["mr"] = 120000,
+		["Alexandrite Ring of the Falcon"] = {
+			["mr"] = 120014,
+			["cc"] = 2,
+			["id"] = "25055:-11",
+			["H1434"] = 120014,
+			["sc"] = 1,
+		},
+		["Radiant Wild Jade"] = {
+			["mr"] = 99950,
 			["cc"] = 8,
-			["id"] = "76538",
-			["H1434"] = 120000,
-			["sc"] = 6,
+			["id"] = "76649",
+			["H1434"] = 99950,
+			["sc"] = 5,
 		},
 		["Perfect Jagged Alexandrite"] = {
 			["mr"] = 158999,
@@ -564,40 +564,40 @@ AUCTIONATOR_PRICE_DATABASE = {
 			["H1434"] = 158999,
 			["sc"] = 5,
 		},
-		["Puissant Alexandrite"] = {
-			["mr"] = 100000000,
+		["Perfect Deadly Tiger Opal"] = {
+			["mr"] = 1940000,
 			["cc"] = 8,
-			["id"] = "76524",
-			["H1434"] = 100000000,
+			["id"] = "76592",
+			["H1434"] = 1940000,
+			["sc"] = 6,
+		},
+		["Energized Wild Jade"] = {
+			["mr"] = 252999,
+			["cc"] = 8,
+			["id"] = "76651",
+			["H1434"] = 252999,
 			["sc"] = 5,
 		},
-		["Regal Wild Jade"] = {
-			["mr"] = 60000,
+		["Lightning Alexandrite"] = {
+			["mr"] = 90000,
 			["cc"] = 8,
-			["id"] = "76653",
-			["H1434"] = 60000,
+			["id"] = "76509",
+			["H1434"] = 90000,
 			["sc"] = 5,
 		},
-		["Artful Tiger Opal"] = {
-			["mr"] = 50000,
-			["cc"] = 8,
-			["id"] = "76540",
-			["H1434"] = 50000,
-			["sc"] = 6,
+		["Alexandrite Ring of the Wolf"] = {
+			["mr"] = 79930,
+			["cc"] = 2,
+			["id"] = "25055:-13",
+			["H1434"] = 79930,
+			["sc"] = 1,
 		},
-		["Willful Tiger Opal"] = {
-			["mr"] = 28272,
+		["Perfect Misty Alexandrite"] = {
+			["mr"] = 898880,
 			["cc"] = 8,
-			["id"] = "76545",
-			["H1434"] = 28272,
-			["sc"] = 6,
-		},
-		["Perfect Keen Tiger Opal"] = {
-			["mr"] = 2500000,
-			["cc"] = 8,
-			["id"] = "76605",
-			["H1434"] = 2500000,
-			["sc"] = 6,
+			["id"] = "76574",
+			["H1434"] = 898880,
+			["sc"] = 5,
 		},
 		["Perfect Wicked Tiger Opal"] = {
 			["mr"] = 3000000,
@@ -627,18 +627,18 @@ AUCTIONATOR_PRICE_DATABASE = {
 			["H1434"] = 2487500,
 			["sc"] = 5,
 		},
-		["Steady Wild Jade"] = {
-			["mr"] = 46200,
+		["Energized Alexandrite"] = {
+			["mr"] = 120000,
 			["cc"] = 8,
-			["id"] = "76657",
-			["H1434"] = 46200,
+			["id"] = "76519",
+			["H1434"] = 120000,
 			["sc"] = 5,
 		},
-		["Perfect Potent Tiger Opal"] = {
-			["mr"] = 1088999,
+		["Fine Tiger Opal"] = {
+			["mr"] = 190000,
 			["cc"] = 8,
-			["id"] = "76594",
-			["H1434"] = 1088999,
+			["id"] = "76541",
+			["H1434"] = 190000,
 			["sc"] = 6,
 		},
 	},
@@ -649,34 +649,33 @@ AUCTIONATOR_TOONS = {
 		["firstSeen"] = 1413753142,
 		["firstVersion"] = "3.1.6",
 	},
-	["Greenthorn"] = {
-		["firstSeen"] = 1413753390,
+	["Feldspar"] = {
+		["firstSeen"] = 1413753437,
 		["firstVersion"] = "3.1.6",
 	},
 	["Ryjax"] = {
 		["firstSeen"] = 1413753189,
+		["firstVersion"] = "3.1.6",
 		["guid"] = "Player-1325-03B3DDAD",
+	},
+	["Zapunzel"] = {
+		["firstSeen"] = 1413753307,
 		["firstVersion"] = "3.1.6",
 	},
 	["Stormslinger"] = {
 		["firstSeen"] = 1413753241,
 		["firstVersion"] = "3.1.6",
 	},
-	["Zapunzel"] = {
-		["firstSeen"] = 1413753307,
-		["firstVersion"] = "3.1.6",
-	},
 	["Bronin"] = {
 		["firstSeen"] = 1413724157,
-		["guid"] = "Player-1325-03B9525A",
 		["firstVersion"] = "3.1.6",
 	},
 	["Kylosandrax"] = {
 		["firstSeen"] = 1413753068,
 		["firstVersion"] = "3.1.6",
 	},
-	["Feldspar"] = {
-		["firstSeen"] = 1413753437,
+	["Greenthorn"] = {
+		["firstSeen"] = 1413753390,
 		["firstVersion"] = "3.1.6",
 	},
 }

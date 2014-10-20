@@ -1,14 +1,16 @@
 
 TipTac_Config = {
-	["fontFace"] = "Fonts\\FRIZQT__.TTF",
+	["fontFace"] = "Interface\\AddOns\\ElvUI\\media\\fonts\\PT_Sans_Narrow.ttf",
 	["classification_elite"] = "+%s ",
-	["barHeight"] = 6,
+	["barHeight"] = 8,
 	["overrideFade"] = true,
 	["if_enable"] = false,
 	["tipBackdropEdge"] = "Interface\\Tooltips\\UI-Tooltip-Border",
 	["modifyFonts"] = true,
 	["backdropEdgeSize"] = 14,
+	["healthBarText"] = "value",
 	["showTarget"] = "last",
+	["powerBar"] = false,
 	["tipBackdropBG"] = "Interface\\Buttons\\WHITE8X8",
 	["fontFlags"] = "",
 	["tipColor"] = {
@@ -20,38 +22,49 @@ TipTac_Config = {
 	["hideDefaultBar"] = true,
 	["healthBar"] = true,
 	["colRace"] = "|cffffffff",
+	["barTexture"] = "Interface\\AddOns\\ElvUI\\media\\textures\\normTex2.tga",
 	["showDebuffs"] = false,
 	["classification_normal"] = "%s ",
 	["colLevel"] = "|cffc0c0c0",
 	["healthBarClassColor"] = true,
+	["tipBorderColor"] = {
+		0.3, -- [1]
+		0.3, -- [2]
+		0.4, -- [3]
+		1, -- [4]
+	},
+	["classification_rareelite"] = "+%s|r (Rare) ",
 	["reactColoredBorder"] = false,
 	["classification_minus"] = "-%s ",
 	["barFontFlags"] = "OUTLINE",
-	["fontSize"] = 11,
-	["classification_rare"] = "%s|r (Rare) ",
+	["barFontFace"] = "Interface\\AddOns\\ElvUI\\media\\fonts\\PT_Sans_Narrow.ttf",
+	["colorNameByClass"] = false,
+	["top"] = 211.174255371094,
+	["fontSize"] = 12,
+	["if_itemQualityBorder"] = false,
 	["enableChatHoverTips"] = true,
 	["colorGuildByReaction"] = true,
 	["showBuffs"] = false,
-	["left"] = 1776.46166992188,
-	["fontSizeDelta"] = 1,
+	["optionsBottom"] = 351,
 	["preFadeTime"] = 0.1,
-	["reactColoredBackdrop"] = false,
-	["classification_worldboss"] = "%s|r (Boss) ",
-	["classification_trivial"] = "~%s ",
-	["backdropInsets"] = 2.5,
 	["hideWorldTips"] = true,
-	["classification_rareelite"] = "+%s|r (Rare) ",
-	["if_borderlessIcons"] = false,
-	["gradientTip"] = true,
+	["reactColoredBackdrop"] = false,
+	["fadeTime"] = 0.1,
+	["classification_trivial"] = "~%s ",
+	["classification_worldboss"] = "%s|r (Boss) ",
 	["manaBar"] = false,
+	["classColoredBorder"] = false,
+	["if_borderlessIcons"] = true,
+	["showTalents"] = false,
+	["if_iconSize"] = 32,
+	["iconClass"] = false,
+	["colSameGuild"] = "|cffff32ff",
 	["gradientColor"] = {
 		0.647058823529412, -- [1]
 		0.647058823529412, -- [2]
 		0.647058823529412, -- [3]
 		0.200000047683716, -- [4]
 	},
-	["colSameGuild"] = "|cffff32ff",
-	["fadeTime"] = 0.1,
 	["healthBarColor"] = {
 		0.3, -- [1]
 		0.9, -- [2]
@@ -59,18 +72,13 @@ TipTac_Config = {
 		1, -- [4]
 	},
 	["targetYouText"] = "<<YOU>>",
-	["talentOnlyInParty"] = true,
-	["top"] = 211.174255371094,
-	["colorNameByClass"] = false,
-	["barFontFace"] = "Fonts\\ARIALN.TTF",
-	["classColoredBorder"] = false,
-	["tipBorderColor"] = {
-		0.3, -- [1]
-		0.3, -- [2]
-		0.4, -- [3]
-		1, -- [4]
-	},
+	["backdropInsets"] = 2.5,
+	["talentOnlyInParty"] = false,
+	["fontSizeDelta"] = 1,
+	["gradientTip"] = true,
+	["left"] = 1776.46166992188,
+	["classification_rare"] = "%s|r (Rare) ",
 	["barFontSize"] = 10,
-	["powerBar"] = false,
-	["healthBarText"] = "value",
+	["if_showItemLevelAndId"] = true,
+	["optionsLeft"] = 1067.99987792969,
 }

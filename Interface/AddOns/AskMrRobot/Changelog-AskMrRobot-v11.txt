@@ -1,0 +1,8 @@
+2014-10-19  yellowfive  <yellowfive>
+
+[4d1a9865c90e] [v11]
+* AskMrRobot.lua, AskMrRobot.toc:
+
+fixed void storage reading bug
+
+

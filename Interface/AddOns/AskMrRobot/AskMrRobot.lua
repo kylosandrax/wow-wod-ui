@@ -407,18 +407,19 @@ function AskMrRobot.ScanVoidStorage()
 		local voidItems = {}
 		local VOID_STORAGE_MAX = 80
 		local VOID_STORAGE_PAGES = 2
-		local i
+        
 		for page = 1,VOID_STORAGE_PAGES do
 			for i = 1,VOID_STORAGE_MAX do
 				local itemId = GetVoidItemInfo(page, i)
 				if itemId then
-					local itemLink = GetVoidItemHyperlinkString(page, i);
+					local itemLink = GetVoidItemHyperlinkString(((page - 1) * VOID_STORAGE_MAX) + i);
 					if itemLink then
 						tinsert(voidItems, itemLink)
 					end
 				end
 			end
 		end
+        
 		AmrDb.VoidItems = voidItems
 	end
 end

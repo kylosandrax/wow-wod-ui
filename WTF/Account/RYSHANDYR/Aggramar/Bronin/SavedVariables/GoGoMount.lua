@@ -51,6 +51,13 @@ GoGo_Prefs = {
 			},
 			["ZoneID"] = 862,
 		},
+		["Thunder Bluff"] = {
+			["Preferred"] = {
+			},
+			["Excluded"] = {
+			},
+			["ZoneID"] = 362,
+		},
 		["Siege of Orgrimmar"] = {
 			["Preferred"] = {
 			},
@@ -63,7 +70,7 @@ GoGo_Prefs = {
 			},
 			["Excluded"] = {
 			},
-			["ZoneID"] = 811,
+			["ZoneID"] = 13,
 		},
 		["Orgrimmar"] = {
 			["Preferred"] = {
@@ -74,7 +81,7 @@ GoGo_Prefs = {
 		},
 	},
 	["DisableMountNotice"] = false,
-	["autodismount"] = true,
+	["DisableWaterFlight"] = true,
 	["DruidDisableInCombat"] = false,
 	["DisableUpdateNotice"] = false,
 	["RemoveBuffs"] = true,
@@ -85,7 +92,7 @@ GoGo_Prefs = {
 	["ShamanClickForm"] = false,
 	["ExtraPassengerMounts"] = {
 	},
-	["DisableWaterFlight"] = true,
+	["autodismount"] = true,
 }
 GoGo_DebugLog = {
 }
