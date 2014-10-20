@@ -11,19 +11,32 @@ SkadaDB = {
 		["Feldspar - Aggramar"] = "Default",
 		["Greenthorn - Aggramar"] = "Default",
 		["Ryjax - Aggramar"] = "Default",
-		["Kylosandrax - Aggramar"] = "Default",
 		["Ryvok - Aggramar"] = "Default",
+		["Kylosandrax - Aggramar"] = "Default",
 		["Bronin - Aggramar"] = "Default",
 	},
 	["profiles"] = {
 		["Default"] = {
 			["windows"] = {
 				{
+					["barheight"] = 20,
+					["set"] = "total",
 					["y"] = 0,
 					["x"] = -427.000244140625,
-					["mode"] = "DPS",
+					["title"] = {
+						["font"] = "ElvUI Font",
+					},
 					["point"] = "BOTTOMRIGHT",
+					["barfontsize"] = 12,
+					["mode"] = "DPS",
+					["bartexture"] = "Armory",
+					["barfont"] = "ElvUI Font",
 				}, -- [1]
+			},
+			["report"] = {
+				["set"] = "total",
+				["mode"] = "DPS",
+				["channel"] = "raid",
 			},
 		},
 	},

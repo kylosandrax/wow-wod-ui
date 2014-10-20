@@ -13,3 +13,10 @@ X: -164
 Y: -116
 W: 32
 H: 32
+Frame: oqbountyboard
+FrameLevel: 52
+Anchor: TOPLEFT
+X: 100
+Y: -100
+W: 400
+H: 500

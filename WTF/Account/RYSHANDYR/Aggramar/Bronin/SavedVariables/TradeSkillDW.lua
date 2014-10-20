@@ -1,5 +1,10 @@
 
 TradeSkillDW_QueueSettings = {
+	["Inscription"] = {
+		["queueList"] = {
+		},
+		["selectedIdx"] = 0,
+	},
 	["Blacksmithing"] = {
 		["queueList"] = {
 		},

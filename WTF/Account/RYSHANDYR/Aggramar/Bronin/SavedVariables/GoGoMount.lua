@@ -9,19 +9,12 @@ GoGo_Prefs = {
 	},
 	["DruidFormNotRandomize"] = false,
 	["Zones"] = {
-		["Blasted Lands"] = {
+		["Vale of Eternal Blossoms"] = {
 			["Preferred"] = {
 			},
 			["Excluded"] = {
 			},
-			["ZoneID"] = 13,
-		},
-		["Shrine of Two Moons"] = {
-			["Preferred"] = {
-			},
-			["Excluded"] = {
-			},
-			["ZoneID"] = 903,
+			["ZoneID"] = 811,
 		},
 		["Eastern Plaguelands"] = {
 			["Preferred"] = {
@@ -29,6 +22,48 @@ GoGo_Prefs = {
 			["Excluded"] = {
 			},
 			["ZoneID"] = 13,
+		},
+		["Hall of Blackhand"] = {
+			["Preferred"] = {
+			},
+			["Excluded"] = {
+			},
+			["ZoneID"] = 862,
+		},
+		["Siege of Niuzao Temple"] = {
+			["Preferred"] = {
+			},
+			["Excluded"] = {
+			},
+			["ZoneID"] = 862,
+		},
+		["Blasted Lands"] = {
+			["Preferred"] = {
+			},
+			["Excluded"] = {
+			},
+			["ZoneID"] = 13,
+		},
+		["Scarlet Monastery"] = {
+			["Preferred"] = {
+			},
+			["Excluded"] = {
+			},
+			["ZoneID"] = 862,
+		},
+		["Siege of Orgrimmar"] = {
+			["Preferred"] = {
+			},
+			["Excluded"] = {
+			},
+			["ZoneID"] = 811,
+		},
+		["Shrine of Two Moons"] = {
+			["Preferred"] = {
+			},
+			["Excluded"] = {
+			},
+			["ZoneID"] = 811,
 		},
 		["Orgrimmar"] = {
 			["Preferred"] = {
@@ -39,7 +74,7 @@ GoGo_Prefs = {
 		},
 	},
 	["DisableMountNotice"] = false,
-	["DisableWaterFlight"] = true,
+	["autodismount"] = true,
 	["DruidDisableInCombat"] = false,
 	["DisableUpdateNotice"] = false,
 	["RemoveBuffs"] = true,
@@ -50,7 +85,7 @@ GoGo_Prefs = {
 	["ShamanClickForm"] = false,
 	["ExtraPassengerMounts"] = {
 	},
-	["autodismount"] = true,
+	["DisableWaterFlight"] = true,
 }
 GoGo_DebugLog = {
 }

@@ -14,47 +14,39 @@ AmrDb = {
 		{
 			"|cffa335ee|Hitem:104710:0:5030:4607:0:0:0:2032351872:90:493:0:0|h[Rage-Blind Greathelm]|h|r", -- [1]
 			"|cffa335ee|Hitem:104982:0:0:0:0:0:0:816670720:90:491:0:0|h[Choker of the Final Word]|h|r", -- [2]
-			"|cffa335ee|Hitem:105796:4912:4625:4607:0:0:0:778214400:90:493:0:0|h[Rossi's Rosin-Soaked Shoulderplates]|h|r", -- [3]
+			"|cffa335ee|Hitem:105796:4912:4625:4527:0:0:0:778214400:90:493:0:0|h[Rossi's Rosin-Soaked Shoulderplates]|h|r", -- [3]
 			nil, -- [4]
-			"|cffa335ee|Hitem:105769:4420:4625:4607:4607:0:0:2039737728:90:493:0:0|h[Omegal's Crushing Carapace]|h|r", -- [5]
+			"|cffa335ee|Hitem:105769:4420:4625:4527:4527:0:0:2039737728:90:505:0:0|h[Omegal's Crushing Carapace]|h|r", -- [5]
 			"|cffa335ee|Hitem:104840:0:4625:4607:4607:0:0:2088394240:90:492:0:0|h[Untarnishable Greatbelt]|h|r", -- [6]
 			"|cffa335ee|Hitem:101943:4824:4625:0:0:0:-427:2066022531:90:493:0:0|h[Elder Tortoiseshell Legplates of the Mountainbed]|h|r", -- [7]
 			"|cffa335ee|Hitem:105165:4429:4625:0:0:0:0:1256235648:90:493:0:0|h[Treads of Unchained Hate]|h|r", -- [8]
 			"|cffa335ee|Hitem:105786:4411:0:0:0:0:0:398130048:90:493:0:0|h[Ordosian Cultist's Bracers]|h|r", -- [9]
-			"|cffa335ee|Hitem:103790:4869:4625:4607:0:0:0:100966656:90:491:0:0|h[Shockstriker Gauntlets]|h|r", -- [10]
-			"|cffa335ee|Hitem:104994:0:4607:0:0:0:0:1316704896:90:491:0:0|h[Galakrond Control Band]|h|r", -- [11]
+			"|cffa335ee|Hitem:103790:4869:4625:4527:0:0:0:100966656:90:505:0:0|h[Shockstriker Gauntlets]|h|r", -- [10]
+			"|cff0070dd|Hitem:118745:0:0:0:0:0:0:0:90:0:0:0|h[Painweaver Seal]|h|r", -- [11]
 			"|cffa335ee|Hitem:104787:0:4607:0:0:0:0:2130904960:90:493:0:0|h[Bloodclaw Band]|h|r", -- [12]
 			"|cffa335ee|Hitem:118780:0:0:0:0:0:0:0:90:0:0:0|h[Bloodburn Protector]|h|r", -- [13]
-			"|cffa335ee|Hitem:104821:0:0:0:0:0:0:1529967616:90:493:0:0|h[Vial of Living Corruption]|h|r", -- [14]
-			"|cffff8000|Hitem:102250:4422:4625:0:0:0:0:2025131136:90:493:0:0|h[Qian-Ying, Fortitude of Niuzao]|h|r", -- [15]
-			"|cffa335ee|Hitem:105112:3368:4607:0:0:0:0:1791030656:90:493:0:0|h[Britomart's Jagged Pike]|h|r", -- [16]
+			"|cffa335ee|Hitem:104821:0:0:0:0:0:0:1529967616:90:505:0:0|h[Vial of Living Corruption]|h|r", -- [14]
+			"|cffff8000|Hitem:102250:4422:4625:0:0:0:0:2025131136:90:505:0:0|h[Qian-Ying, Fortitude of Niuzao]|h|r", -- [15]
+			"|cffa335ee|Hitem:105112:3368:4607:0:0:0:0:1791030656:90:505:0:0|h[Britomart's Jagged Pike]|h|r", -- [16]
 		}, -- [1]
 	},
-	["VoidItems"] = {
-		"|cffa335ee|Hitem:17074:0:0:0:0:0:0:1704947328:90:0:0:0|h[Shadowstrike]|h|r", -- [1]
-		"|cffa335ee|Hitem:17074:0:0:0:0:0:0:1704947328:90:0:0:0|h[Shadowstrike]|h|r", -- [2]
-		"|cffa335ee|Hitem:17074:0:0:0:0:0:0:1704947328:90:0:0:0|h[Shadowstrike]|h|r", -- [3]
-		"|cffa335ee|Hitem:17074:0:0:0:0:0:0:1704947328:90:0:0:0|h[Shadowstrike]|h|r", -- [4]
-		"|cffa335ee|Hitem:17074:0:0:0:0:0:0:1704947328:90:0:0:0|h[Shadowstrike]|h|r", -- [5]
-		"|cffa335ee|Hitem:17074:0:0:0:0:0:0:1704947328:90:0:0:0|h[Shadowstrike]|h|r", -- [6]
-		"|cffa335ee|Hitem:17074:0:0:0:0:0:0:1704947328:90:0:0:0|h[Shadowstrike]|h|r", -- [7]
-		"|cffa335ee|Hitem:17074:0:0:0:0:0:0:1704947328:90:0:0:0|h[Shadowstrike]|h|r", -- [8]
-		"|cffa335ee|Hitem:17074:0:0:0:0:0:0:1704947328:90:0:0:0|h[Shadowstrike]|h|r", -- [9]
-		"|cffa335ee|Hitem:17074:0:0:0:0:0:0:1704947328:90:0:0:0|h[Shadowstrike]|h|r", -- [10]
-		"|cffa335ee|Hitem:17074:0:0:0:0:0:0:1704947328:90:0:0:0|h[Shadowstrike]|h|r", -- [11]
-		"|cffa335ee|Hitem:17074:0:0:0:0:0:0:1704947328:90:0:0:0|h[Shadowstrike]|h|r", -- [12]
-		"|cffa335ee|Hitem:17074:0:0:0:0:0:0:1704947328:90:0:0:0|h[Shadowstrike]|h|r", -- [13]
-		"|cffa335ee|Hitem:17074:0:0:0:0:0:0:1704947328:90:0:0:0|h[Shadowstrike]|h|r", -- [14]
-		"|cffa335ee|Hitem:17074:0:0:0:0:0:0:1704947328:90:0:0:0|h[Shadowstrike]|h|r", -- [15]
-		"|cffa335ee|Hitem:17074:0:0:0:0:0:0:1704947328:90:0:0:0|h[Shadowstrike]|h|r", -- [16]
-		"|cffa335ee|Hitem:17074:0:0:0:0:0:0:1704947328:90:0:0:0|h[Shadowstrike]|h|r", -- [17]
-		"|cffa335ee|Hitem:17074:0:0:0:0:0:0:1704947328:90:0:0:0|h[Shadowstrike]|h|r", -- [18]
-		"|cffa335ee|Hitem:17074:0:0:0:0:0:0:1704947328:90:0:0:0|h[Shadowstrike]|h|r", -- [19]
-		"|cffa335ee|Hitem:17074:0:0:0:0:0:0:1704947328:90:0:0:0|h[Shadowstrike]|h|r", -- [20]
-		"|cffa335ee|Hitem:17074:0:0:0:0:0:0:1704947328:90:0:0:0|h[Shadowstrike]|h|r", -- [21]
-		"|cffa335ee|Hitem:17074:0:0:0:0:0:0:1704947328:90:0:0:0|h[Shadowstrike]|h|r", -- [22]
+	["Guild"] = "Auditors of Unreality",
+	["Glyphs"] = {
+		{
+			60200, -- [1]
+			62259, -- [2]
+			59309, -- [3]
+			63333, -- [4]
+			59307, -- [5]
+			58657, -- [6]
+		}, -- [1]
+		{
+			63335, -- [1]
+			58629, -- [2]
+			59307, -- [3]
+			58657, -- [4]
+		}, -- [2]
 	},
-	["Class"] = "DEATHKNIGHT",
 	["Specs"] = {
 		1, -- [1]
 		2, -- [2]
@@ -184,73 +176,49 @@ AmrDb = {
 	},
 	["Currencies"] = {
 		[402] = 3,
-		[615] = 1,
-		[515] = 5,
 		[392] = 213,
-		[614] = 7,
-		[-1] = 33366801,
+		[515] = 5,
+		[615] = 1,
+		[-1] = 55553397,
 		[241] = 12,
+		[614] = 7,
 	},
-	["Guild"] = "Auditors of Unreality",
+	["Class"] = "DEATHKNIGHT",
 	["LogData"] = {
 		["_wipes"] = {
 		},
 		["_autoLog"] = {
 			[1136] = "disabled",
 		},
-		["_lastDiff"] = 0,
 		["_lastZone"] = "Pandaria",
+		["_lastDiff"] = 0,
 	},
 	["BagItems"] = {
 		"|cffffffff|Hitem:6948:0:0:0:0:0:0:334864896:90:0:0:0|h[Hearthstone]|h|r", -- [1]
 		"|cffffffff|Hitem:76087:0:0:0:0:0:0:288627712:90:0:0:0|h[Flask of the Earth]|h|r", -- [2]
 		"|cffffffff|Hitem:76084:0:0:0:0:0:0:798603008:90:0:0:0|h[Flask of Spring Blossoms]|h|r", -- [3]
 		"|cffffffff|Hitem:76078:0:0:0:0:0:0:335681793:90:0:0:0|h[Elixir of the Rapids]|h|r", -- [4]
-		"|cffffffff|Hitem:76093:0:0:0:0:0:0:160506752:90:0:0:0|h[Potion of the Jade Serpent]|h|r", -- [5]
-		"|cff0070dd|Hitem:86569:0:0:0:0:0:0:698540545:90:0:0:0|h[Crystal of Insanity]|h|r", -- [6]
-		"|cffa335ee|Hitem:64402:0:0:0:0:0:0:0:90:0:0:0|h[Battle Standard of Coordination]|h|r", -- [7]
-		"|cffa335ee|Hitem:98314:3368:0:0:0:0:-366:2056519790:90:467:0:0|h[Immaculate Pandaren Broadaxe of the Mountainbed]|h|r", -- [8]
-		"|cffffffff|Hitem:5956:0:0:0:0:0:0:0:90:0:0:0|h[Blacksmith Hammer]|h|r", -- [9]
-		"|cffa335ee|Hitem:101793:0:4657:4625:0:0:-397:962003035:90:491:0:0|h[Cliffbreaker Helm of the Earthbreaker]|h|r", -- [10]
-		"|cff1eff00|Hitem:10241:0:0:0:0:0:-68:14024727:90:0:0:0|h[Heavy Lamellar Helm of the Bear]|h|r", -- [11]
-		"|cffa335ee|Hitem:99059:4913:4625:4625:0:0:0:0:90:491:0:0|h[Pauldrons of Cyclopean Dread]|h|r", -- [12]
-		"|cffa335ee|Hitem:105769:4420:4625:4607:4607:0:0:2039737728:90:493:0:0|h[Omegal's Crushing Carapace]|h|r", -- [13]
-		"|cffa335ee|Hitem:99608:0:0:0:0:0:0:0:90:491:0:0|h[Breastplate of Cyclopean Dread]|h|r", -- [14]
-		"|cffa335ee|Hitem:104763:4411:0:0:0:0:0:1327482112:90:491:0:0|h[Wall-Borer Bracers]|h|r", -- [15]
-		"|cffa335ee|Hitem:103790:4869:4625:4607:0:0:0:100966656:90:491:0:0|h[Shockstriker Gauntlets]|h|r", -- [16]
-		"|cffa335ee|Hitem:99067:4432:4625:4625:0:0:0:0:90:491:0:0|h[Gauntlets of Cyclopean Dread]|h|r", -- [17]
-		"|cffa335ee|Hitem:101941:0:4585:0:0:0:-368:1300430946:90:493:0:0|h[Elder Tortoiseshell Girdle of the Bouldercrag]|h|r", -- [18]
-		"|cffa335ee|Hitem:105067:4872:4635:4635:4625:0:0:820856448:90:491:0:0|h[Legplates of Willful Doom]|h|r", -- [19]
-		"|cffa335ee|Hitem:95798:4429:4625:0:0:0:0:1352951168:90:465:0:0|h[Tidal Force Treads]|h|r", -- [20]
-		"|cffff8000|Hitem:102249:4424:4646:0:0:0:0:1965822080:90:493:0:0|h[Gong-Lu, Strength of Xuen]|h|r", -- [21]
-		"|cffa335ee|Hitem:95980:0:4625:0:0:0:0:547497216:90:465:0:0|h[Necklace of the Terra-Cotta Protector]|h|r", -- [22]
-		"|cffa335ee|Hitem:104787:0:4625:0:0:0:0:1195488384:90:491:0:0|h[Bloodclaw Band]|h|r", -- [23]
-		"|cffa335ee|Hitem:105091:0:4625:0:0:0:0:203855872:90:491:0:0|h[Seal of the Forgotten Kings]|h|r", -- [24]
-		"|cffa335ee|Hitem:103689:0:0:0:0:0:0:1177741312:90:491:0:0|h[Alacrity of Xuen]|h|r", -- [25]
-		"|cff0070dd|Hitem:81138:0:0:0:0:0:0:1663067520:90:452:0:0|h[Carbonic Carbuncle]|h|r", -- [26]
-		"|cff1eff00|Hitem:79253:0:0:0:0:0:0:667097472:90:0:0:0|h[Misty Pigment]|h|r", -- [27]
-		"|cffffffff|Hitem:39505:0:0:0:0:0:0:0:90:0:0:0|h[Virtuoso Inking Set]|h|r", -- [28]
-		"|cff1eff00|Hitem:74250:0:0:0:0:0:0:1521029632:90:0:0:0|h[Mysterious Essence]|h|r", -- [29]
-		"|cff0070dd|Hitem:76700:0:0:0:0:0:0:1669284608:90:0:0:0|h[Fractured Sun's Radiance]|h|r", -- [30]
-		"|cff0070dd|Hitem:76142:0:0:0:0:0:0:1814493184:90:0:0:0|h[Sun's Radiance]|h|r", -- [31]
-		"|cff1eff00|Hitem:104335:0:0:0:0:0:0:561082368:90:0:0:0|h[Thick Pi'jiu Brew]|h|r", -- [32]
-		"|cffffffff|Hitem:21230:0:0:0:0:0:0:2064179200:90:0:0:0|h[Ancient Qiraji Artifact]|h|r", -- [33]
-		"|cff0070dd|Hitem:104294:0:0:0:0:0:0:1754292004:90:0:0:0|h[Rime of the Time-Lost Mariner]|h|r", -- [34]
-		"|cffa335ee|Hitem:94222:0:0:0:0:0:0:778657792:90:0:0:0|h[Key to the Palace of Lei Shen]|h|r", -- [35]
+		"|cff0070dd|Hitem:86569:0:0:0:0:0:0:698540545:90:0:0:0|h[Crystal of Insanity]|h|r", -- [5]
+		"|cffffffff|Hitem:76093:0:0:0:0:0:0:160506752:90:0:0:0|h[Potion of the Jade Serpent]|h|r", -- [6]
+		"|cff0070dd|Hitem:76700:0:0:0:0:0:0:1669284608:90:0:0:0|h[Fractured Sun's Radiance]|h|r", -- [7]
+		"|cff0070dd|Hitem:118753:0:0:0:0:0:0:0:90:0:0:0|h[Plate of Shamanic Fury]|h|r", -- [8]
+		"|cffa335ee|Hitem:117363:0:0:0:0:0:0:0:90:0:1:1:573|h[Band of the Petrified Pumpkin]|h|r", -- [9]
+		"|cffffffff|Hitem:5512:0:0:0:0:0:0:0:90:0:3:0|h[Healthstone]|h|r", -- [10]
+		"|cff0070dd|Hitem:76061:0:0:0:0:0:0:0:90:0:0:0|h[Spirit of Harmony]|h|r", -- [11]
+		"|cffa335ee|Hitem:64402:0:0:0:0:0:0:0:90:0:0:0|h[Battle Standard of Coordination]|h|r", -- [12]
+		"|cffffffff|Hitem:5956:0:0:0:0:0:0:0:90:0:0:0|h[Blacksmith Hammer]|h|r", -- [13]
+		"|cffffffff|Hitem:39505:0:0:0:0:0:0:0:90:0:0:0|h[Virtuoso Inking Set]|h|r", -- [14]
+		"|cffff8000|Hitem:102249:4424:4646:0:0:0:0:1965822080:90:505:0:0|h[Gong-Lu, Strength of Xuen]|h|r", -- [15]
+		"|cffa335ee|Hitem:103990:0:0:0:0:0:0:0:90:492:0:0|h[Resolve of Niuzao]|h|r", -- [16]
+		"|cffa335ee|Hitem:103689:0:0:0:0:0:0:1177741312:90:491:0:0|h[Alacrity of Xuen]|h|r", -- [17]
+		"|cffa335ee|Hitem:104994:0:4607:0:0:0:0:1316704896:90:491:0:0|h[Galakrond Control Band]|h|r", -- [18]
 	},
-	["Glyphs"] = {
-		{
-			60200, -- [1]
-			62259, -- [2]
-			59307, -- [3]
-			58657, -- [4]
-		}, -- [1]
-		{
-			63335, -- [1]
-			58629, -- [2]
-			59307, -- [3]
-			58657, -- [4]
-		}, -- [2]
+	["SendSettings"] = {
+		["SendTo"] = "",
+		["SendGems"] = true,
+		["SendEnchants"] = true,
+		["SendEnchantMaterials"] = true,
+		["SendToType"] = "a friend",
 	},
 	["LastCharacterImport"] = "",
 	["Reps"] = {
@@ -265,9 +233,6 @@ AmrDb = {
 		[1270] = 5,
 	},
 	["Faction"] = "Horde",
-	["IconInfo"] = {
-		["minimapPos"] = 257.265628098113,
-	},
 	["Professions"] = {
 		["Cooking"] = 1,
 		["Blacksmithing"] = 330,
@@ -275,12 +240,32 @@ AmrDb = {
 		["First Aid"] = 409,
 		["Inscription"] = 600,
 	},
-	["SendSettings"] = {
-		["SendTo"] = "",
-		["SendGems"] = true,
-		["SendEnchants"] = true,
-		["SendEnchantMaterials"] = true,
-		["SendToType"] = "a friend",
+	["IconInfo"] = {
+		["minimapPos"] = 257.265628098113,
+	},
+	["VoidItems"] = {
+		"|cffa335ee|Hitem:17074:0:0:0:0:0:0:1704947328:90:0:0:0|h[Shadowstrike]|h|r", -- [1]
+		"|cffa335ee|Hitem:17074:0:0:0:0:0:0:1704947328:90:0:0:0|h[Shadowstrike]|h|r", -- [2]
+		"|cffa335ee|Hitem:17074:0:0:0:0:0:0:1704947328:90:0:0:0|h[Shadowstrike]|h|r", -- [3]
+		"|cffa335ee|Hitem:17074:0:0:0:0:0:0:1704947328:90:0:0:0|h[Shadowstrike]|h|r", -- [4]
+		"|cffa335ee|Hitem:17074:0:0:0:0:0:0:1704947328:90:0:0:0|h[Shadowstrike]|h|r", -- [5]
+		"|cffa335ee|Hitem:17074:0:0:0:0:0:0:1704947328:90:0:0:0|h[Shadowstrike]|h|r", -- [6]
+		"|cffa335ee|Hitem:17074:0:0:0:0:0:0:1704947328:90:0:0:0|h[Shadowstrike]|h|r", -- [7]
+		"|cffa335ee|Hitem:17074:0:0:0:0:0:0:1704947328:90:0:0:0|h[Shadowstrike]|h|r", -- [8]
+		"|cffa335ee|Hitem:17074:0:0:0:0:0:0:1704947328:90:0:0:0|h[Shadowstrike]|h|r", -- [9]
+		"|cffa335ee|Hitem:17074:0:0:0:0:0:0:1704947328:90:0:0:0|h[Shadowstrike]|h|r", -- [10]
+		"|cffa335ee|Hitem:17074:0:0:0:0:0:0:1704947328:90:0:0:0|h[Shadowstrike]|h|r", -- [11]
+		"|cffa335ee|Hitem:17074:0:0:0:0:0:0:1704947328:90:0:0:0|h[Shadowstrike]|h|r", -- [12]
+		"|cffa335ee|Hitem:17074:0:0:0:0:0:0:1704947328:90:0:0:0|h[Shadowstrike]|h|r", -- [13]
+		"|cffa335ee|Hitem:17074:0:0:0:0:0:0:1704947328:90:0:0:0|h[Shadowstrike]|h|r", -- [14]
+		"|cffa335ee|Hitem:17074:0:0:0:0:0:0:1704947328:90:0:0:0|h[Shadowstrike]|h|r", -- [15]
+		"|cffa335ee|Hitem:17074:0:0:0:0:0:0:1704947328:90:0:0:0|h[Shadowstrike]|h|r", -- [16]
+		"|cffa335ee|Hitem:17074:0:0:0:0:0:0:1704947328:90:0:0:0|h[Shadowstrike]|h|r", -- [17]
+		"|cffa335ee|Hitem:17074:0:0:0:0:0:0:1704947328:90:0:0:0|h[Shadowstrike]|h|r", -- [18]
+		"|cffa335ee|Hitem:17074:0:0:0:0:0:0:1704947328:90:0:0:0|h[Shadowstrike]|h|r", -- [19]
+		"|cffa335ee|Hitem:17074:0:0:0:0:0:0:1704947328:90:0:0:0|h[Shadowstrike]|h|r", -- [20]
+		"|cffa335ee|Hitem:17074:0:0:0:0:0:0:1704947328:90:0:0:0|h[Shadowstrike]|h|r", -- [21]
+		"|cffa335ee|Hitem:17074:0:0:0:0:0:0:1704947328:90:0:0:0|h[Shadowstrike]|h|r", -- [22]
 	},
 	["BankItemsAndCounts"] = {
 		[3466] = 20,
@@ -365,55 +350,55 @@ AmrDb = {
 		[38670] = 1,
 		[104959] = 1,
 		[95827] = 1,
-		[17102] = 1,
 		[90336] = 1,
-		[25007] = 1,
-		[11745] = 1,
+		[16868] = 1,
+		[79255] = 6,
 		[32348] = 1,
+		[13072] = 1,
 		[43117] = 1,
 		[87779] = 1,
 		[98250] = 1,
-		[21697] = 1,
-		[45472] = 1,
+		[32606] = 2,
 		[79010] = 2,
 		[21598] = 1,
+		[13502] = 1,
 		[15256] = 1,
 		[79731] = 47,
 		[27906] = 1,
 		[79253] = 1,
 		[42950] = 1,
-		[21583] = 1,
+		[45437] = 1,
 		[16957] = 1,
-		[27448] = 1,
+		[25007] = 1,
 		[16965] = 1,
 		[74249] = 7,
 		[38663] = 1,
-		[24021] = 1,
-		[11787] = 1,
 		[10241] = 1,
-		[16862] = 1,
-		[52983] = 4,
-		[18824] = 1,
-		[90330] = 1,
-		[32345] = 1,
-		[45110] = 1,
-		[38668] = 1,
-		[24064] = 1,
-		[19402] = 1,
-		[45533] = 1,
 		[12935] = 1,
+		[45533] = 1,
+		[19402] = 1,
+		[21583] = 1,
+		[24064] = 1,
+		[38668] = 1,
+		[79254] = 17,
+		[45110] = 1,
+		[27448] = 1,
+		[90330] = 1,
+		[18824] = 1,
+		[52983] = 4,
+		[16862] = 1,
 		[74250] = 1,
-		[17073] = 1,
-		[13502] = 1,
-		[45437] = 1,
+		[11787] = 1,
+		[24021] = 1,
+		[32345] = 1,
 		[21639] = 1,
 		[32608] = 1,
-		[32606] = 2,
-		[13072] = 1,
+		[45472] = 1,
+		[21697] = 1,
 		[24970] = 1,
-		[16868] = 1,
-		[79255] = 6,
+		[11745] = 1,
+		[17073] = 1,
 		[21667] = 1,
-		[79254] = 17,
+		[17102] = 1,
 	},
 }
