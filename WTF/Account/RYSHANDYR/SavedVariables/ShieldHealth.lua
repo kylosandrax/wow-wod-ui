@@ -34,11 +34,11 @@ Sh_DB = {
 			"Default", -- [1]
 			"Default", -- [2]
 			["info"] = {
-				["spe2"] = "none",
-				["time"] = 1388,
+				["spe2"] = "Frost",
+				["time"] = 1389,
 				["classe"] = "DEATHKNIGHT",
 				["level"] = 90,
-				["spe1"] = "none",
+				["spe1"] = "Blood",
 			},
 		},
 		["Ryvok-Aggramar"] = {
@@ -63,11 +63,11 @@ Sh_DB = {
 			"Default", -- [1]
 			"Default", -- [2]
 			["info"] = {
-				["spe2"] = "Feral",
-				["time"] = 1387,
+				["spe2"] = "none",
+				["time"] = 1388,
 				["classe"] = "DRUID",
 				["level"] = 90,
-				["spe1"] = "Balance",
+				["spe1"] = "none",
 			},
 		},
 		["version"] = 2.35,

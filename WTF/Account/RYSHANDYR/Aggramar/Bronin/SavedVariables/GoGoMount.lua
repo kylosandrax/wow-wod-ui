@@ -77,11 +77,11 @@ GoGo_Prefs = {
 			},
 			["Excluded"] = {
 			},
-			["ZoneID"] = 862,
+			["ZoneID"] = 321,
 		},
 	},
 	["DisableMountNotice"] = false,
-	["DisableWaterFlight"] = true,
+	["autodismount"] = true,
 	["DruidDisableInCombat"] = false,
 	["DisableUpdateNotice"] = false,
 	["RemoveBuffs"] = true,
@@ -92,7 +92,7 @@ GoGo_Prefs = {
 	["ShamanClickForm"] = false,
 	["ExtraPassengerMounts"] = {
 	},
-	["autodismount"] = true,
+	["DisableWaterFlight"] = true,
 }
 GoGo_DebugLog = {
 }

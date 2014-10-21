@@ -55,6 +55,7 @@ Quartz3DB = {
 		},
 	},
 	["profileKeys"] = {
+		["Ryjax - Aggramar"] = "Default",
 		["Bronin - Aggramar"] = "Default",
 	},
 	["profiles"] = {

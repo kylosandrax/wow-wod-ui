@@ -18,7 +18,7 @@ GoGo_Prefs = {
 		},
 	},
 	["DisableMountNotice"] = false,
-	["autodismount"] = true,
+	["DisableWaterFlight"] = true,
 	["DruidDisableInCombat"] = false,
 	["DisableUpdateNotice"] = false,
 	["RemoveBuffs"] = true,
@@ -29,7 +29,7 @@ GoGo_Prefs = {
 	["ShamanClickForm"] = false,
 	["ExtraPassengerMounts"] = {
 	},
-	["DisableWaterFlight"] = true,
+	["autodismount"] = true,
 }
 GoGo_DebugLog = {
 }

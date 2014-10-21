@@ -10,5 +10,5 @@ BagnonFrameSettings = {
 			["y"] = 326.499938964844,
 		},
 	},
-	["version"] = "6.0.9",
+	["version"] = "6.0.10",
 }
