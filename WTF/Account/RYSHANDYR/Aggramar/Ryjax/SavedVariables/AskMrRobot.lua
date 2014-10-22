@@ -148,17 +148,12 @@ AmrDb = {
 		["_autoLog"] = {
 			[1136] = "disabled",
 		},
-		["_lastZone"] = "Kalimdor",
 		["_lastDiff"] = 0,
+		["_lastZone"] = "Kalimdor",
 	},
 	["BagItems"] = {
 	},
-	["SendSettings"] = {
-		["SendTo"] = "",
-		["SendGems"] = true,
-		["SendEnchants"] = true,
-		["SendEnchantMaterials"] = true,
-		["SendToType"] = "a friend",
+	["Glyphs"] = {
 	},
 	["LastCharacterImport"] = "",
 	["Reps"] = {
@@ -168,7 +163,12 @@ AmrDb = {
 	},
 	["IconInfo"] = {
 	},
-	["Glyphs"] = {
+	["SendSettings"] = {
+		["SendTo"] = "",
+		["SendGems"] = true,
+		["SendEnchants"] = true,
+		["SendEnchantMaterials"] = true,
+		["SendToType"] = "a friend",
 	},
 	["BankItemsAndCounts"] = {
 		[40471] = 1,

@@ -1,4 +1,4 @@
-## Interface: 50400
+## Interface: 60000
 ## Title: Hermes [|cffeda55fUI|r]
 ## Author: Virtual (virtual#1157 @ US-Alleria)
 ## Notes: UI plugin for Hermes
@@ -6,7 +6,7 @@
 ## SavedVariables: 
 ## OptionalDeps: 
 ## RequiredDeps: Hermes
-## X-Curse-Packaged-Version: v2.6
+## X-Curse-Packaged-Version: v2.6.1
 ## X-Curse-Project-Name: Hermes
 ## X-Curse-Project-ID: hermes
 ## X-Curse-Repository-ID: wow/hermes/mainline

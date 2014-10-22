@@ -28,6 +28,7 @@ function AskMrRobot.parseItemLink(itemLink)
         for i = 13, 12 + numBonuses do
             table.insert(item.bonusIds, tonumber(parts[i]))
         end
+		table.sort(item.bonusIds)
     end
     
     return item

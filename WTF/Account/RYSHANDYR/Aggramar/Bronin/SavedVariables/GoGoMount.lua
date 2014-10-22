@@ -14,7 +14,7 @@ GoGo_Prefs = {
 			},
 			["Excluded"] = {
 			},
-			["ZoneID"] = 811,
+			["ZoneID"] = -1,
 		},
 		["Eastern Plaguelands"] = {
 			["Preferred"] = {
@@ -37,19 +37,19 @@ GoGo_Prefs = {
 			},
 			["ZoneID"] = 862,
 		},
+		["Shrine of Two Moons"] = {
+			["Preferred"] = {
+			},
+			["Excluded"] = {
+			},
+			["ZoneID"] = 13,
+		},
 		["Timeless Isle"] = {
 			["Preferred"] = {
 			},
 			["Excluded"] = {
 			},
 			["ZoneID"] = 951,
-		},
-		["The Veiled Stair"] = {
-			["Preferred"] = {
-			},
-			["Excluded"] = {
-			},
-			["ZoneID"] = 873,
 		},
 		["Blasted Lands"] = {
 			["Preferred"] = {
@@ -65,12 +65,12 @@ GoGo_Prefs = {
 			},
 			["ZoneID"] = 862,
 		},
-		["Kun-Lai Summit"] = {
+		["Siege of Orgrimmar"] = {
 			["Preferred"] = {
 			},
 			["Excluded"] = {
 			},
-			["ZoneID"] = 809,
+			["ZoneID"] = 811,
 		},
 		["The Jade Forest"] = {
 			["Preferred"] = {
@@ -86,19 +86,19 @@ GoGo_Prefs = {
 			},
 			["ZoneID"] = 362,
 		},
-		["Siege of Orgrimmar"] = {
+		["Kun-Lai Summit"] = {
 			["Preferred"] = {
 			},
 			["Excluded"] = {
 			},
-			["ZoneID"] = 811,
+			["ZoneID"] = 809,
 		},
-		["Shrine of Two Moons"] = {
+		["The Veiled Stair"] = {
 			["Preferred"] = {
 			},
 			["Excluded"] = {
 			},
-			["ZoneID"] = 13,
+			["ZoneID"] = 873,
 		},
 		["Orgrimmar"] = {
 			["Preferred"] = {
@@ -109,7 +109,7 @@ GoGo_Prefs = {
 		},
 	},
 	["DisableMountNotice"] = false,
-	["DisableWaterFlight"] = true,
+	["autodismount"] = true,
 	["DruidDisableInCombat"] = false,
 	["DisableUpdateNotice"] = false,
 	["RemoveBuffs"] = true,
@@ -120,7 +120,7 @@ GoGo_Prefs = {
 	["ShamanClickForm"] = false,
 	["ExtraPassengerMounts"] = {
 	},
-	["autodismount"] = true,
+	["DisableWaterFlight"] = true,
 }
 GoGo_DebugLog = {
 }

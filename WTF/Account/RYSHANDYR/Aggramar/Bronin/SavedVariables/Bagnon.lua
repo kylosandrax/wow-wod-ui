@@ -19,13 +19,6 @@ BagnonFrameSettings = {
 			["y"] = 206.667236328125,
 			["x"] = -47.777771749616,
 		},
-		["voidstorage"] = {
-			["y"] = 609.555541992188,
-			["x"] = -658.444763937116,
-			["frameLayer"] = "TOPLEVEL",
-			["scale"] = 0.9,
-			["itemFrameColumns"] = 14,
-		},
 		["guildbank"] = {
 			["frameColor"] = {
 				nil, -- [1]
@@ -38,6 +31,14 @@ BagnonFrameSettings = {
 			["scale"] = 0.9,
 			["y"] = 817.277770996094,
 		},
+		["voidstorage"] = {
+			["point"] = "BOTTOMLEFT",
+			["frameLayer"] = "TOPLEVEL",
+			["scale"] = 0.9,
+			["y"] = 628.000061035156,
+			["x"] = 0,
+			["itemFrameColumns"] = 14,
+		},
 		["bank"] = {
 			["frameColor"] = {
 				nil, -- [1]
@@ -45,13 +46,13 @@ BagnonFrameSettings = {
 				nil, -- [3]
 				1, -- [4]
 			},
-			["x"] = -638.444275655866,
 			["point"] = "BOTTOMRIGHT",
-			["frameLayer"] = "TOPLEVEL",
 			["scale"] = 0.9,
-			["y"] = 361.888946533203,
 			["itemFrameColumns"] = 14,
+			["frameLayer"] = "TOPLEVEL",
+			["y"] = 361.888946533203,
+			["x"] = -638.444275655866,
 		},
 	},
-	["version"] = "6.0.10",
+	["version"] = "6.0.12",
 }

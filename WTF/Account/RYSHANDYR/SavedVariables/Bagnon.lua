@@ -8,6 +8,6 @@ BagnonGlobalSettings = {
 			["trade"] = true,
 		},
 	},
-	["version"] = "6.0.10",
+	["version"] = "6.0.12",
 	["highlightUnusableItems"] = false,
 }

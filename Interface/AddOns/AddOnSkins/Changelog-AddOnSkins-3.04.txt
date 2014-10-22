@@ -1,0 +1,20 @@
+tag 3.04
+cd3a0f0b2f68f93570a42dd01a74cf8a94e7e642
+Azilroka <darktemplar9900@yahoo.com>
+2014-10-20 22:17:40 -0500
+
+
+
+--------------------
+
+Azilroka:
+	- 3.04
+	- Update Conflict System
+	- Not Finished
+	- #105
+	- ElvUI - Requires 7.13
+	- DBM / Skada Embed Location Fix Still have to do S&L
+	- Altoholic / Calendar Updates.
+	- Russian!
+	- Italian Update
+	- TitanPanel #116

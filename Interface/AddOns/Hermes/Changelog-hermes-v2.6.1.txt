@@ -1,0 +1,13 @@
+tag v2.6.1
+8553db77101d74bf089f9efbc48d462aa55c8d8a
+Virtual <bryan@virtualbind.com>
+2014-10-21 22:14:27 -0500
+
+Tagging as v2.6.1
+
+
+--------------------
+
+Virtual:
+	- Add some cross realm check for configuration. Thanks, sudos.
+	- Updating UI Toc for 6.0.

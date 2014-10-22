@@ -16,5 +16,8 @@ AmrSettings = {
 		"Aggramar;Bronin;1413829183", -- [13]
 		"Aggramar;Ryjax;1413837965", -- [14]
 		"Aggramar;Bronin;1413838251", -- [15]
+		"Aggramar;Ryjax;1414011849", -- [16]
+		"Aggramar;Kylosandrax;1414012260", -- [17]
+		"Aggramar;Bronin;1414013178", -- [18]
 	},
 }

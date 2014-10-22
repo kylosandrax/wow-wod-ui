@@ -10,13 +10,6 @@ GoGo_Prefs = {
 	},
 	["DruidFormNotRandomize"] = false,
 	["Zones"] = {
-		["Scarlet Monastery"] = {
-			["Preferred"] = {
-			},
-			["Excluded"] = {
-			},
-			["ZoneID"] = 13,
-		},
 		["Orgrimmar"] = {
 			["Preferred"] = {
 			},
@@ -24,9 +17,16 @@ GoGo_Prefs = {
 			},
 			["ZoneID"] = 321,
 		},
+		["Scarlet Monastery"] = {
+			["Preferred"] = {
+			},
+			["Excluded"] = {
+			},
+			["ZoneID"] = 13,
+		},
 	},
 	["DisableMountNotice"] = false,
-	["autodismount"] = true,
+	["DisableWaterFlight"] = true,
 	["DruidDisableInCombat"] = false,
 	["DisableUpdateNotice"] = false,
 	["RemoveBuffs"] = true,
@@ -37,7 +37,7 @@ GoGo_Prefs = {
 	["ShamanClickForm"] = false,
 	["ExtraPassengerMounts"] = {
 	},
-	["DisableWaterFlight"] = true,
+	["autodismount"] = true,
 }
 GoGo_DebugLog = {
 }

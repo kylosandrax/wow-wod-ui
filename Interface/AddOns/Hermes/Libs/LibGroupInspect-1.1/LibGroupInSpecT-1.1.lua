@@ -72,15 +72,7 @@
 --     Returns an array with the set of unit ids for the current group.
 --]]
 
-local MAJOR, MINOR = "LibGroupInSpecT-1.1", tonumber (("$Revision: 68 $"):match ("(%d+)") or 0)
-
--- TODO: remove once WoD is out proper
-_,_,_,interface_ver = GetBuildInfo ()
-if interface_ver < 60000 then
-  print(MAJOR.." is too new for this version of WoW - one of your addons needs to be downgraded!")
-  return
-end
-
+local MAJOR, MINOR = "LibGroupInSpecT-1.1", tonumber (("$Revision: 71 $"):match ("(%d+)") or 0)
 
 if not LibStub then error(MAJOR.." requires LibStub") end
 local lib = LibStub:NewLibrary (MAJOR, MINOR)
@@ -99,10 +91,6 @@ local COMMS_DELIM = "\a"
 
 local INSPECT_DELAY = 1.5
 local INSPECT_TIMEOUT = 10 -- If we get no notification within 10s, give up on unit
-
-local MAX_NUM_TALENTS = MAX_NUM_TALENTS or 21
-local MAX_NUM_TALENT_TIERS = MAX_NUM_TALENT_TIERS or 7
-local MAX_NUM_TALENT_COLUMNS = MAX_NUM_TALENT_COLUMNS or 3
 
 local MAX_ATTEMPTS = 2
 
@@ -535,8 +523,8 @@ function lib:BuildInfo (unit)
   -- If GetPlayerInfoByGUID didn't return the class, we can't do talents yet
   if info.class_id then
     info.spec_group = GetActiveSpecGroup (is_inspect)
-    for tier = 1, MAX_NUM_TALENT_TIERS do
-      for col = 1, MAX_NUM_TALENT_COLUMNS do
+    for tier = 1, MAX_TALENT_TIERS do
+      for col = 1, NUM_TALENT_COLUMNS do
         local talent, sel = self:GetCachedTalentInfo (info.class_id, tier, col, info.spec_group, is_inspect, unit)
         if talent and talent.talent_id then
           info.talents[talent.talent_id] = sel and talent or nil -- Set/clear as needed
@@ -652,7 +640,7 @@ function lib:SendLatestSpecData ()
   local info = self.cache[guid]
   if not info then return end
 
-  -- fmt, guid, global_spec_id, talent1 -> MAX_NUM_TALENT_TIERS, glyph1 -> NUM_GLYPH_SLOTS, glyph1 detail, glyph 2 detail,
+  -- fmt, guid, global_spec_id, talent1 -> MAX_TALENT_TIERS, glyph1 -> NUM_GLYPH_SLOTS, glyph1 detail, glyph 2 detail,
   -- sequentially, allow no gaps for missing talents/glyphs we decode by index on the receiving end.
   local datastr = COMMS_FMT..COMMS_DELIM..guid..COMMS_DELIM..(info.global_spec_id or 0)
   local talentCount = 1
@@ -660,7 +648,7 @@ function lib:SendLatestSpecData ()
     datastr = datastr..COMMS_DELIM..k
     talentCount = talentCount + 1
   end
-  for i=talentCount,MAX_NUM_TALENT_TIERS do
+  for i=talentCount,MAX_TALENT_TIERS do
     datastr = datastr..COMMS_DELIM..0
   end
 
@@ -698,7 +686,7 @@ msg_idx.fmt            = 1
 msg_idx.guid           = msg_idx.fmt + 1
 msg_idx.global_spec_id = msg_idx.guid + 1
 msg_idx.talents        = msg_idx.global_spec_id + 1
-msg_idx.glyphs         = msg_idx.talents + MAX_NUM_TALENT_TIERS
+msg_idx.glyphs         = msg_idx.talents + MAX_TALENT_TIERS
 msg_idx.glyph_detail   = msg_idx.glyphs + NUM_GLYPH_SLOTS
 
 function lib:CHAT_MSG_ADDON (prefix, datastr, scope, sender)
@@ -744,13 +732,14 @@ function lib:CHAT_MSG_ADDON (prefix, datastr, scope, sender)
   info.spec_role           = gspecs[gspec_id].role
   info.spec_role_detailed  = global_spec_id_roles_detailed[gspec_id]
 
-  -- Since we don't allow messages to create new group member entries, we can assume that we have the talents for this class cached
-  local talents = self.static_cache.talents[info.class_id]
   info.talents = wipe (info.talents or {})
-  for i = msg_idx.talents, msg_idx.glyphs - 1 do
-    local talent_id = tonumber (data[i])
-    if talent_id and talent_id > 0 then
-      info.talents[talent_id] = talents[talent_id]
+  local talents = self.static_cache.talents[info.class_id]
+  if talents then -- The group entry is created before we have inspect-data, so may not have cached talents yet
+    for i = msg_idx.talents, msg_idx.glyphs - 1 do
+      local talent_id = tonumber (data[i])
+      if talent_id and talent_id > 0 then
+        info.talents[talent_id] = talents[talent_id]
+      end
     end
   end
 

@@ -644,7 +644,10 @@ function mod:UpdatePlayerData(player)
 		--this might mean you're in config mode, and it might not.
 		--if player specified, then you're probably in config mode
 		if player then
-			if player.name ~= UnitName("player") then error("this was unexpected") end
+			local playerName = UnitName("player")
+			local combinedRealmName = playerName .. "-" .. GetRealmName()
+			-- print(player.name, combinedRealmName)
+			if player.name ~= combinedRealmName and player.name ~= playerName then error("this was unexpected") end
 			player.group = nil
 			player.unit = "player"
 		end

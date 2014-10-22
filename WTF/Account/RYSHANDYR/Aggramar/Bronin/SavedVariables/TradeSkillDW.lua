@@ -16,4 +16,9 @@ TradeSkillDW_QueueSettings = {
 		},
 		["selectedIdx"] = 0,
 	},
+	["Cooking"] = {
+		["queueList"] = {
+		},
+		["selectedIdx"] = 0,
+	},
 }
