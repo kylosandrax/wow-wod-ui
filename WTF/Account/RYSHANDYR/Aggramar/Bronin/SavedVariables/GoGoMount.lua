@@ -37,6 +37,20 @@ GoGo_Prefs = {
 			},
 			["ZoneID"] = 862,
 		},
+		["Timeless Isle"] = {
+			["Preferred"] = {
+			},
+			["Excluded"] = {
+			},
+			["ZoneID"] = 951,
+		},
+		["The Veiled Stair"] = {
+			["Preferred"] = {
+			},
+			["Excluded"] = {
+			},
+			["ZoneID"] = 873,
+		},
 		["Blasted Lands"] = {
 			["Preferred"] = {
 			},
@@ -50,6 +64,20 @@ GoGo_Prefs = {
 			["Excluded"] = {
 			},
 			["ZoneID"] = 862,
+		},
+		["Kun-Lai Summit"] = {
+			["Preferred"] = {
+			},
+			["Excluded"] = {
+			},
+			["ZoneID"] = 809,
+		},
+		["The Jade Forest"] = {
+			["Preferred"] = {
+			},
+			["Excluded"] = {
+			},
+			["ZoneID"] = 806,
 		},
 		["Thunder Bluff"] = {
 			["Preferred"] = {
@@ -77,11 +105,11 @@ GoGo_Prefs = {
 			},
 			["Excluded"] = {
 			},
-			["ZoneID"] = 321,
+			["ZoneID"] = 862,
 		},
 	},
 	["DisableMountNotice"] = false,
-	["autodismount"] = true,
+	["DisableWaterFlight"] = true,
 	["DruidDisableInCombat"] = false,
 	["DisableUpdateNotice"] = false,
 	["RemoveBuffs"] = true,
@@ -92,7 +120,7 @@ GoGo_Prefs = {
 	["ShamanClickForm"] = false,
 	["ExtraPassengerMounts"] = {
 	},
-	["DisableWaterFlight"] = true,
+	["autodismount"] = true,
 }
 GoGo_DebugLog = {
 }

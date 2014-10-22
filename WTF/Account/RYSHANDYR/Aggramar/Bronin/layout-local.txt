@@ -35,16 +35,9 @@ Y: 153
 W: 410
 H: 60
 Frame: TipTac
-FrameLevel: 30
+FrameLevel: 28
 Anchor: BOTTOMRIGHT
 X: -97
 Y: 233
 W: 114
 H: 24
-Frame: BagnonFramevoidstorage
-FrameLevel: 20
-Anchor: TOP
-X: 471
-Y: -18
-W: 586
-H: 572

@@ -1,5 +1,15 @@
 
 Postal3DB = {
+	["profileKeys"] = {
+		["Stormslinger - Aggramar"] = "Stormslinger - Aggramar",
+		["Zapunzel - Aggramar"] = "Zapunzel - Aggramar",
+		["Feldspar - Aggramar"] = "Feldspar - Aggramar",
+		["Greenthorn - Aggramar"] = "Greenthorn - Aggramar",
+		["Ryjax - Aggramar"] = "Ryjax - Aggramar",
+		["Ryvok - Aggramar"] = "Ryvok - Aggramar",
+		["Kylosandrax - Aggramar"] = "Kylosandrax - Aggramar",
+		["Bronin - Aggramar"] = "Bronin - Aggramar",
+	},
 	["global"] = {
 		["BlackBook"] = {
 			["alts"] = {
@@ -14,16 +24,6 @@ Postal3DB = {
 			},
 		},
 	},
-	["profileKeys"] = {
-		["Stormslinger - Aggramar"] = "Stormslinger - Aggramar",
-		["Zapunzel - Aggramar"] = "Zapunzel - Aggramar",
-		["Feldspar - Aggramar"] = "Feldspar - Aggramar",
-		["Greenthorn - Aggramar"] = "Greenthorn - Aggramar",
-		["Ryjax - Aggramar"] = "Ryjax - Aggramar",
-		["Kylosandrax - Aggramar"] = "Kylosandrax - Aggramar",
-		["Ryvok - Aggramar"] = "Ryvok - Aggramar",
-		["Bronin - Aggramar"] = "Bronin - Aggramar",
-	},
 	["profiles"] = {
 		["Stormslinger - Aggramar"] = {
 		},
@@ -35,14 +35,14 @@ Postal3DB = {
 		},
 		["Ryjax - Aggramar"] = {
 		},
+		["Ryvok - Aggramar"] = {
+		},
 		["Kylosandrax - Aggramar"] = {
 			["BlackBook"] = {
 				["recent"] = {
 					"Bronin|Aggramar|Horde", -- [1]
 				},
 			},
-		},
-		["Ryvok - Aggramar"] = {
 		},
 		["Bronin - Aggramar"] = {
 		},

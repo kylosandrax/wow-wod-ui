@@ -9,43 +9,34 @@ AmrDb = {
 	["CharacterName"] = "Bronin",
 	["Race"] = "BloodElf",
 	["ActiveSpec"] = 1,
+	["Guild"] = "Auditors of Unreality",
 	["Level"] = 90,
 	["Equipped"] = {
 		{
-			"|cffa335ee|Hitem:104710:0:5030:4607:0:0:0:2032351872:90:493:0:0|h[Rage-Blind Greathelm]|h|r", -- [1]
+			"|cffa335ee|Hitem:104710:0:5030:4460:0:0:0:2032351872:90:493:0:0|h[Rage-Blind Greathelm]|h|r", -- [1]
 			"|cffa335ee|Hitem:104982:0:0:0:0:0:0:816670720:90:491:0:0|h[Choker of the Final Word]|h|r", -- [2]
-			"|cffa335ee|Hitem:105796:4912:4625:4527:0:0:0:778214400:90:505:0:0|h[Rossi's Rosin-Soaked Shoulderplates]|h|r", -- [3]
+			"|cffa335ee|Hitem:105796:4912:4622:4527:0:0:0:778214400:90:505:0:0|h[Rossi's Rosin-Soaked Shoulderplates]|h|r", -- [3]
 			nil, -- [4]
-			"|cffa335ee|Hitem:105769:4420:4625:4527:4527:0:0:2039737728:90:505:0:0|h[Omegal's Crushing Carapace]|h|r", -- [5]
-			"|cffa335ee|Hitem:104840:0:4625:4607:4607:0:0:2088394240:90:492:0:0|h[Untarnishable Greatbelt]|h|r", -- [6]
-			"|cffa335ee|Hitem:101943:4824:4625:0:0:0:-427:2066022531:90:493:0:0|h[Elder Tortoiseshell Legplates of the Mountainbed]|h|r", -- [7]
-			"|cffa335ee|Hitem:105165:4429:4625:0:0:0:0:1256235648:90:493:0:0|h[Treads of Unchained Hate]|h|r", -- [8]
+			"|cffa335ee|Hitem:105769:4420:4622:4527:4527:0:0:2039737728:90:505:0:0|h[Omegal's Crushing Carapace]|h|r", -- [5]
+			"|cffa335ee|Hitem:104840:0:4622:4460:4460:0:0:2088394240:90:492:0:0|h[Untarnishable Greatbelt]|h|r", -- [6]
+			"|cffa335ee|Hitem:101943:4824:4622:0:0:0:-427:2066022531:90:493:0:0|h[Elder Tortoiseshell Legplates of the Mountainbed]|h|r", -- [7]
+			"|cffa335ee|Hitem:105165:4429:4622:0:0:0:0:1256235648:90:493:0:0|h[Treads of Unchained Hate]|h|r", -- [8]
 			"|cffa335ee|Hitem:105786:4411:0:0:0:0:0:398130048:90:493:0:0|h[Ordosian Cultist's Bracers]|h|r", -- [9]
-			"|cffa335ee|Hitem:103790:4869:4625:4527:0:0:0:100966656:90:505:0:0|h[Shockstriker Gauntlets]|h|r", -- [10]
+			"|cffa335ee|Hitem:103790:4869:4622:4527:0:0:0:100966656:90:505:0:0|h[Shockstriker Gauntlets]|h|r", -- [10]
 			"|cff0070dd|Hitem:118745:0:0:0:0:0:0:0:90:0:0:0|h[Painweaver Seal]|h|r", -- [11]
-			"|cffa335ee|Hitem:104787:0:4607:0:0:0:0:2130904960:90:493:0:0|h[Bloodclaw Band]|h|r", -- [12]
+			"|cffa335ee|Hitem:104787:0:4650:0:0:0:0:2130904960:90:493:0:0|h[Bloodclaw Band]|h|r", -- [12]
 			"|cffa335ee|Hitem:118780:0:0:0:0:0:0:0:90:0:0:0|h[Bloodburn Protector]|h|r", -- [13]
-			"|cffa335ee|Hitem:104821:0:0:0:0:0:0:1529967616:90:505:0:0|h[Vial of Living Corruption]|h|r", -- [14]
-			"|cffff8000|Hitem:102250:4422:4625:0:0:0:0:2025131136:90:505:0:0|h[Qian-Ying, Fortitude of Niuzao]|h|r", -- [15]
+			"|cffa335ee|Hitem:103689:0:0:0:0:0:0:1177741312:90:491:0:0|h[Alacrity of Xuen]|h|r", -- [14]
+			"|cffff8000|Hitem:102249:4424:4646:0:0:0:0:1965822080:90:505:0:0|h[Gong-Lu, Strength of Xuen]|h|r", -- [15]
 			"|cffe6cc80|Hitem:105679:3368:4622:4622:0:0:0:0:90:0:3:0|h[Hellscream's Decapitator]|h|r", -- [16]
 		}, -- [1]
 	},
-	["Guild"] = "Auditors of Unreality",
-	["Glyphs"] = {
-		{
-			60200, -- [1]
-			62259, -- [2]
-			59309, -- [3]
-			63333, -- [4]
-			59307, -- [5]
-			58657, -- [6]
-		}, -- [1]
-		{
-			63335, -- [1]
-			58629, -- [2]
-			59307, -- [3]
-			58657, -- [4]
-		}, -- [2]
+	["SendSettings"] = {
+		["SendTo"] = "",
+		["SendGems"] = true,
+		["SendEnchants"] = true,
+		["SendEnchantMaterials"] = true,
+		["SendToType"] = "a friend",
 	},
 	["Specs"] = {
 		1, -- [1]
@@ -84,18 +75,18 @@ AmrDb = {
 		[515] = 5,
 		[392] = 213,
 		[614] = 7,
-		[-1] = 56611587,
+		[-1] = 40088488,
 		[241] = 12,
 	},
-	["Class"] = "DEATHKNIGHT",
+	["LastCharacterImport"] = "",
 	["LogData"] = {
 		["_wipes"] = {
 		},
 		["_autoLog"] = {
 			[1136] = "disabled",
 		},
-		["_lastZone"] = "Kalimdor",
 		["_lastDiff"] = 0,
+		["_lastZone"] = "Pandaria",
 	},
 	["BagItems"] = {
 		"|cffffffff|Hitem:6948:0:0:0:0:0:0:334864896:90:0:0:0|h[Hearthstone]|h|r", -- [1]
@@ -104,24 +95,19 @@ AmrDb = {
 		"|cffffffff|Hitem:76076:0:0:0:0:0:0:585325441:90:0:0:0|h[Mad Hozen Elixir]|h|r", -- [4]
 		"|cff0070dd|Hitem:86569:0:0:0:0:0:0:698540545:90:0:0:0|h[Crystal of Insanity]|h|r", -- [5]
 		"|cffffffff|Hitem:76093:0:0:0:0:0:0:160506752:90:0:0:0|h[Potion of the Jade Serpent]|h|r", -- [6]
-		"|cff0070dd|Hitem:76700:0:0:0:0:0:0:1669284608:90:0:0:0|h[Fractured Sun's Radiance]|h|r", -- [7]
-		"|cff0070dd|Hitem:118753:0:0:0:0:0:0:0:90:0:0:0|h[Plate of Shamanic Fury]|h|r", -- [8]
-		"|cffa335ee|Hitem:117363:0:0:0:0:0:0:0:90:0:1:1:573|h[Band of the Petrified Pumpkin]|h|r", -- [9]
-		"|cffffffff|Hitem:5512:0:0:0:0:0:0:0:90:0:3:0|h[Healthstone]|h|r", -- [10]
-		"|cffa335ee|Hitem:64402:0:0:0:0:0:0:0:90:0:0:0|h[Battle Standard of Coordination]|h|r", -- [11]
-		"|cffffffff|Hitem:5956:0:0:0:0:0:0:0:90:0:0:0|h[Blacksmith Hammer]|h|r", -- [12]
-		"|cffffffff|Hitem:39505:0:0:0:0:0:0:0:90:0:0:0|h[Virtuoso Inking Set]|h|r", -- [13]
-		"|cffff8000|Hitem:102249:4424:4646:0:0:0:0:1965822080:90:505:0:0|h[Gong-Lu, Strength of Xuen]|h|r", -- [14]
-		"|cffa335ee|Hitem:103990:0:0:0:0:0:0:0:90:492:0:0|h[Resolve of Niuzao]|h|r", -- [15]
-		"|cffa335ee|Hitem:103689:0:0:0:0:0:0:1177741312:90:491:0:0|h[Alacrity of Xuen]|h|r", -- [16]
-		"|cff0070dd|Hitem:118745:0:0:0:0:0:0:0:90:0:0:0|h[Painweaver Seal]|h|r", -- [17]
+		"|cffffffff|Hitem:37586:0:0:0:0:0:0:0:90:0:11:0|h[Handful of Treats]|h|r", -- [7]
+		"|cffa335ee|Hitem:64402:0:0:0:0:0:0:0:90:0:0:0|h[Battle Standard of Coordination]|h|r", -- [8]
+		"|cffffffff|Hitem:5956:0:0:0:0:0:0:0:90:0:0:0|h[Blacksmith Hammer]|h|r", -- [9]
+		"|cffffffff|Hitem:39505:0:0:0:0:0:0:0:90:0:0:0|h[Virtuoso Inking Set]|h|r", -- [10]
+		"|cffff8000|Hitem:102250:4422:4625:0:0:0:0:2025131136:90:505:0:0|h[Qian-Ying, Fortitude of Niuzao]|h|r", -- [11]
+		"|cffa335ee|Hitem:103990:0:0:0:0:0:0:0:90:492:0:0|h[Resolve of Niuzao]|h|r", -- [12]
+		"|cffa335ee|Hitem:104821:0:0:0:0:0:0:1529967616:90:505:0:0|h[Vial of Living Corruption]|h|r", -- [13]
+		"|cffa335ee|Hitem:104994:0:4607:0:0:0:0:1316704896:90:491:0:0|h[Galakrond Control Band]|h|r", -- [14]
+		"|cffa335ee|Hitem:117363:0:0:0:0:0:0:0:90:0:1:1:573|h[Band of the Petrified Pumpkin]|h|r", -- [15]
+		"|cff0070dd|Hitem:118753:0:0:0:0:0:0:0:90:0:0:0|h[Plate of Shamanic Fury]|h|r", -- [16]
 	},
-	["Professions"] = {
-		["Cooking"] = 1,
-		["Blacksmithing"] = 330,
-		["Archaeology"] = 1,
-		["First Aid"] = 409,
-		["Inscription"] = 600,
+	["IconInfo"] = {
+		["minimapPos"] = 257.265628098113,
 	},
 	["VoidItems"] = {
 		"|cffa335ee|Hitem:17074:0:0:0:0:0:0:1704947328:90:0:0:0|h[Shadowstrike]|h|r", -- [1]
@@ -245,16 +231,29 @@ AmrDb = {
 		[1270] = 5,
 	},
 	["Faction"] = "Horde",
-	["IconInfo"] = {
-		["minimapPos"] = 257.265628098113,
+	["Professions"] = {
+		["Cooking"] = 1,
+		["Blacksmithing"] = 330,
+		["Archaeology"] = 1,
+		["First Aid"] = 409,
+		["Inscription"] = 600,
 	},
-	["LastCharacterImport"] = "",
-	["SendSettings"] = {
-		["SendTo"] = "",
-		["SendGems"] = true,
-		["SendEnchants"] = true,
-		["SendEnchantMaterials"] = true,
-		["SendToType"] = "a friend",
+	["Class"] = "DEATHKNIGHT",
+	["Glyphs"] = {
+		{
+			60200, -- [1]
+			62259, -- [2]
+			59309, -- [3]
+			63333, -- [4]
+			59307, -- [5]
+			58657, -- [6]
+		}, -- [1]
+		{
+			63335, -- [1]
+			58629, -- [2]
+			59307, -- [3]
+			58657, -- [4]
+		}, -- [2]
 	},
 	["BankItemsAndCounts"] = {
 		[79731] = 47,
@@ -271,30 +270,30 @@ AmrDb = {
 		[89112] = 12,
 		[72988] = 7,
 		[76142] = 1,
-		[43117] = 1,
-		[99188] = 1,
+		[72234] = 3,
+		[76061] = 15,
 		[79253] = 1,
-		[99067] = 1,
-		[99059] = 1,
-		[99608] = 1,
+		[94222] = 1,
+		[21229] = 18,
+		[12602] = 1,
 		[42950] = 1,
 		[42952] = 1,
-		[21229] = 18,
+		[99059] = 1,
 		[48689] = 1,
-		[12602] = 1,
+		[99067] = 1,
 		[74249] = 7,
 		[72237] = 2,
-		[21230] = 1,
+		[3466] = 20,
 		[52983] = 4,
 		[74250] = 1,
-		[87779] = 1,
 		[69887] = 1,
+		[99188] = 1,
 		[79254] = 17,
-		[3466] = 20,
+		[21230] = 1,
 		[79010] = 2,
 		[99048] = 1,
-		[94222] = 1,
-		[76061] = 15,
-		[72234] = 3,
+		[99608] = 1,
+		[87779] = 1,
+		[43117] = 1,
 	},
 }
