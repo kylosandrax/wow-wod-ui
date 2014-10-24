@@ -1,2 +1,5 @@
 BloodShieldTracker: disabled
-TidyPlates: disabled
+TidyPlates: enabled
+AskMrRobot: disabled
+TidyPlates_Neon: disabled
+TidyPlates_Graphite: disabled

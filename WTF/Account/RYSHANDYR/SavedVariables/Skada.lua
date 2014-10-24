@@ -20,16 +20,20 @@ SkadaDB = {
 			["windows"] = {
 				{
 					["barheight"] = 20,
+					["background"] = {
+						["height"] = 216.000152587891,
+					},
 					["set"] = "total",
-					["y"] = 0,
-					["x"] = -427.000244140625,
+					["y"] = 187.999908447266,
+					["x"] = 3.00007653236389,
 					["title"] = {
 						["font"] = "ElvUI Font",
 					},
-					["point"] = "BOTTOMRIGHT",
+					["bartexture"] = "Armory",
+					["barwidth"] = 197.000396728516,
+					["point"] = "BOTTOMLEFT",
 					["barfontsize"] = 12,
 					["mode"] = "DPS",
-					["bartexture"] = "Armory",
 					["barfont"] = "ElvUI Font",
 				}, -- [1]
 			},

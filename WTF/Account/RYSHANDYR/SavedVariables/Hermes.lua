@@ -135,14 +135,14 @@ HermesDB2 = {
 			[108281] = {
 				["duration"] = "10",
 			},
-			[102351] = {
-				["duration"] = "30",
-			},
 			[64382] = {
 				["duration"] = "10",
 			},
 			[62618] = {
 				["duration"] = "10",
+			},
+			[102351] = {
+				["duration"] = "30",
 			},
 			[98008] = {
 				["duration"] = "6",
@@ -368,10 +368,10 @@ HermesDB2 = {
 					["level"] = 34,
 				}, -- [1]
 			},
-			[102351] = {
+			[64382] = {
 				{
-					["k"] = 25,
-					["talentIndex"] = 6,
+					["k"] = 10,
+					["level"] = 74,
 				}, -- [1]
 			},
 			[102342] = {
@@ -404,10 +404,10 @@ HermesDB2 = {
 					["level"] = 20,
 				}, -- [1]
 			},
-			[64382] = {
+			[62618] = {
 				{
-					["k"] = 10,
-					["level"] = 74,
+					["k"] = 30,
+					["specializationId"] = 256,
 				}, -- [1]
 			},
 			[114028] = {
@@ -482,10 +482,10 @@ HermesDB2 = {
 					["talentIndex"] = 1,
 				}, -- [1]
 			},
-			[62618] = {
+			[102351] = {
 				{
-					["k"] = 30,
-					["specializationId"] = 256,
+					["k"] = 25,
+					["talentIndex"] = 6,
 				}, -- [1]
 			},
 			[98008] = {
@@ -639,66 +639,678 @@ HermesDB2 = {
 		["classes"] = {
 			["DEATHKNIGHT"] = {
 				["talents"] = {
+					"Archimonde's Darkness", -- [1]
+					"Archimonde's Darkness", -- [2]
+					"Archimonde's Darkness", -- [3]
+					"Kil'jaeden's Cunning", -- [4]
+					"Kil'jaeden's Cunning", -- [5]
+					"Kil'jaeden's Cunning", -- [6]
+					"Mannoroth's Fury", -- [7]
+					"Mannoroth's Fury", -- [8]
+					"Mannoroth's Fury", -- [9]
+					"Archimonde's Darkness", -- [10]
+					"Archimonde's Darkness", -- [11]
+					"Archimonde's Darkness", -- [12]
+					"Kil'jaeden's Cunning", -- [13]
+					"Kil'jaeden's Cunning", -- [14]
+					"Kil'jaeden's Cunning", -- [15]
+					"Mannoroth's Fury", -- [16]
+					"Mannoroth's Fury", -- [17]
+					"Mannoroth's Fury", -- [18]
+					"Archimonde's Darkness", -- [19]
+					"Archimonde's Darkness", -- [20]
+					"Archimonde's Darkness", -- [21]
+					"Kil'jaeden's Cunning", -- [22]
+					"Kil'jaeden's Cunning", -- [23]
+					"Kil'jaeden's Cunning", -- [24]
+					"Mannoroth's Fury", -- [25]
+					"Mannoroth's Fury", -- [26]
+					"Mannoroth's Fury", -- [27]
+					"Archimonde's Darkness", -- [28]
+					"Archimonde's Darkness", -- [29]
+					"Archimonde's Darkness", -- [30]
+					"Kil'jaeden's Cunning", -- [31]
+					"Kil'jaeden's Cunning", -- [32]
+					"Kil'jaeden's Cunning", -- [33]
+					"Mannoroth's Fury", -- [34]
+					"Mannoroth's Fury", -- [35]
+					"Mannoroth's Fury", -- [36]
+					"Archimonde's Darkness", -- [37]
+					"Archimonde's Darkness", -- [38]
+					"Archimonde's Darkness", -- [39]
+					"Kil'jaeden's Cunning", -- [40]
+					"Kil'jaeden's Cunning", -- [41]
+					"Kil'jaeden's Cunning", -- [42]
+					"Mannoroth's Fury", -- [43]
+					"Mannoroth's Fury", -- [44]
+					"Mannoroth's Fury", -- [45]
+					"Archimonde's Darkness", -- [46]
+					"Archimonde's Darkness", -- [47]
+					"Archimonde's Darkness", -- [48]
+					"Kil'jaeden's Cunning", -- [49]
+					"Kil'jaeden's Cunning", -- [50]
+					"Kil'jaeden's Cunning", -- [51]
+					"Mannoroth's Fury", -- [52]
+					"Mannoroth's Fury", -- [53]
+					"Mannoroth's Fury", -- [54]
 				},
 				["schema"] = 60000,
 				["revision"] = 1,
 			},
 			["WARRIOR"] = {
 				["talents"] = {
+					"Archimonde's Darkness", -- [1]
+					"Archimonde's Darkness", -- [2]
+					"Archimonde's Darkness", -- [3]
+					"Kil'jaeden's Cunning", -- [4]
+					"Kil'jaeden's Cunning", -- [5]
+					"Kil'jaeden's Cunning", -- [6]
+					"Mannoroth's Fury", -- [7]
+					"Mannoroth's Fury", -- [8]
+					"Mannoroth's Fury", -- [9]
+					"Archimonde's Darkness", -- [10]
+					"Archimonde's Darkness", -- [11]
+					"Archimonde's Darkness", -- [12]
+					"Kil'jaeden's Cunning", -- [13]
+					"Kil'jaeden's Cunning", -- [14]
+					"Kil'jaeden's Cunning", -- [15]
+					"Mannoroth's Fury", -- [16]
+					"Mannoroth's Fury", -- [17]
+					"Mannoroth's Fury", -- [18]
+					"Archimonde's Darkness", -- [19]
+					"Archimonde's Darkness", -- [20]
+					"Archimonde's Darkness", -- [21]
+					"Kil'jaeden's Cunning", -- [22]
+					"Kil'jaeden's Cunning", -- [23]
+					"Kil'jaeden's Cunning", -- [24]
+					"Mannoroth's Fury", -- [25]
+					"Mannoroth's Fury", -- [26]
+					"Mannoroth's Fury", -- [27]
+					"Archimonde's Darkness", -- [28]
+					"Archimonde's Darkness", -- [29]
+					"Archimonde's Darkness", -- [30]
+					"Kil'jaeden's Cunning", -- [31]
+					"Kil'jaeden's Cunning", -- [32]
+					"Kil'jaeden's Cunning", -- [33]
+					"Mannoroth's Fury", -- [34]
+					"Mannoroth's Fury", -- [35]
+					"Mannoroth's Fury", -- [36]
+					"Archimonde's Darkness", -- [37]
+					"Archimonde's Darkness", -- [38]
+					"Archimonde's Darkness", -- [39]
+					"Kil'jaeden's Cunning", -- [40]
+					"Kil'jaeden's Cunning", -- [41]
+					"Kil'jaeden's Cunning", -- [42]
+					"Mannoroth's Fury", -- [43]
+					"Mannoroth's Fury", -- [44]
+					"Mannoroth's Fury", -- [45]
+					"Archimonde's Darkness", -- [46]
+					"Archimonde's Darkness", -- [47]
+					"Archimonde's Darkness", -- [48]
+					"Kil'jaeden's Cunning", -- [49]
+					"Kil'jaeden's Cunning", -- [50]
+					"Kil'jaeden's Cunning", -- [51]
+					"Mannoroth's Fury", -- [52]
+					"Mannoroth's Fury", -- [53]
+					"Mannoroth's Fury", -- [54]
 				},
 				["schema"] = 60000,
 				["revision"] = 1,
 			},
 			["ROGUE"] = {
 				["talents"] = {
+					"Archimonde's Darkness", -- [1]
+					"Archimonde's Darkness", -- [2]
+					"Archimonde's Darkness", -- [3]
+					"Kil'jaeden's Cunning", -- [4]
+					"Kil'jaeden's Cunning", -- [5]
+					"Kil'jaeden's Cunning", -- [6]
+					"Mannoroth's Fury", -- [7]
+					"Mannoroth's Fury", -- [8]
+					"Mannoroth's Fury", -- [9]
+					"Archimonde's Darkness", -- [10]
+					"Archimonde's Darkness", -- [11]
+					"Archimonde's Darkness", -- [12]
+					"Kil'jaeden's Cunning", -- [13]
+					"Kil'jaeden's Cunning", -- [14]
+					"Kil'jaeden's Cunning", -- [15]
+					"Mannoroth's Fury", -- [16]
+					"Mannoroth's Fury", -- [17]
+					"Mannoroth's Fury", -- [18]
+					"Archimonde's Darkness", -- [19]
+					"Archimonde's Darkness", -- [20]
+					"Archimonde's Darkness", -- [21]
+					"Kil'jaeden's Cunning", -- [22]
+					"Kil'jaeden's Cunning", -- [23]
+					"Kil'jaeden's Cunning", -- [24]
+					"Mannoroth's Fury", -- [25]
+					"Mannoroth's Fury", -- [26]
+					"Mannoroth's Fury", -- [27]
+					"Archimonde's Darkness", -- [28]
+					"Archimonde's Darkness", -- [29]
+					"Archimonde's Darkness", -- [30]
+					"Kil'jaeden's Cunning", -- [31]
+					"Kil'jaeden's Cunning", -- [32]
+					"Kil'jaeden's Cunning", -- [33]
+					"Mannoroth's Fury", -- [34]
+					"Mannoroth's Fury", -- [35]
+					"Mannoroth's Fury", -- [36]
+					"Archimonde's Darkness", -- [37]
+					"Archimonde's Darkness", -- [38]
+					"Archimonde's Darkness", -- [39]
+					"Kil'jaeden's Cunning", -- [40]
+					"Kil'jaeden's Cunning", -- [41]
+					"Kil'jaeden's Cunning", -- [42]
+					"Mannoroth's Fury", -- [43]
+					"Mannoroth's Fury", -- [44]
+					"Mannoroth's Fury", -- [45]
+					"Archimonde's Darkness", -- [46]
+					"Archimonde's Darkness", -- [47]
+					"Archimonde's Darkness", -- [48]
+					"Kil'jaeden's Cunning", -- [49]
+					"Kil'jaeden's Cunning", -- [50]
+					"Kil'jaeden's Cunning", -- [51]
+					"Mannoroth's Fury", -- [52]
+					"Mannoroth's Fury", -- [53]
+					"Mannoroth's Fury", -- [54]
 				},
 				["schema"] = 60000,
 				["revision"] = 1,
 			},
 			["MAGE"] = {
 				["talents"] = {
+					"Archimonde's Darkness", -- [1]
+					"Archimonde's Darkness", -- [2]
+					"Archimonde's Darkness", -- [3]
+					"Kil'jaeden's Cunning", -- [4]
+					"Kil'jaeden's Cunning", -- [5]
+					"Kil'jaeden's Cunning", -- [6]
+					"Mannoroth's Fury", -- [7]
+					"Mannoroth's Fury", -- [8]
+					"Mannoroth's Fury", -- [9]
+					"Archimonde's Darkness", -- [10]
+					"Archimonde's Darkness", -- [11]
+					"Archimonde's Darkness", -- [12]
+					"Kil'jaeden's Cunning", -- [13]
+					"Kil'jaeden's Cunning", -- [14]
+					"Kil'jaeden's Cunning", -- [15]
+					"Mannoroth's Fury", -- [16]
+					"Mannoroth's Fury", -- [17]
+					"Mannoroth's Fury", -- [18]
+					"Archimonde's Darkness", -- [19]
+					"Archimonde's Darkness", -- [20]
+					"Archimonde's Darkness", -- [21]
+					"Kil'jaeden's Cunning", -- [22]
+					"Kil'jaeden's Cunning", -- [23]
+					"Kil'jaeden's Cunning", -- [24]
+					"Mannoroth's Fury", -- [25]
+					"Mannoroth's Fury", -- [26]
+					"Mannoroth's Fury", -- [27]
+					"Archimonde's Darkness", -- [28]
+					"Archimonde's Darkness", -- [29]
+					"Archimonde's Darkness", -- [30]
+					"Kil'jaeden's Cunning", -- [31]
+					"Kil'jaeden's Cunning", -- [32]
+					"Kil'jaeden's Cunning", -- [33]
+					"Mannoroth's Fury", -- [34]
+					"Mannoroth's Fury", -- [35]
+					"Mannoroth's Fury", -- [36]
+					"Archimonde's Darkness", -- [37]
+					"Archimonde's Darkness", -- [38]
+					"Archimonde's Darkness", -- [39]
+					"Kil'jaeden's Cunning", -- [40]
+					"Kil'jaeden's Cunning", -- [41]
+					"Kil'jaeden's Cunning", -- [42]
+					"Mannoroth's Fury", -- [43]
+					"Mannoroth's Fury", -- [44]
+					"Mannoroth's Fury", -- [45]
+					"Archimonde's Darkness", -- [46]
+					"Archimonde's Darkness", -- [47]
+					"Archimonde's Darkness", -- [48]
+					"Kil'jaeden's Cunning", -- [49]
+					"Kil'jaeden's Cunning", -- [50]
+					"Kil'jaeden's Cunning", -- [51]
+					"Mannoroth's Fury", -- [52]
+					"Mannoroth's Fury", -- [53]
+					"Mannoroth's Fury", -- [54]
 				},
 				["schema"] = 60000,
 				["revision"] = 1,
 			},
 			["PRIEST"] = {
 				["talents"] = {
+					"Archimonde's Darkness", -- [1]
+					"Archimonde's Darkness", -- [2]
+					"Archimonde's Darkness", -- [3]
+					"Kil'jaeden's Cunning", -- [4]
+					"Kil'jaeden's Cunning", -- [5]
+					"Kil'jaeden's Cunning", -- [6]
+					"Mannoroth's Fury", -- [7]
+					"Mannoroth's Fury", -- [8]
+					"Mannoroth's Fury", -- [9]
+					"Archimonde's Darkness", -- [10]
+					"Archimonde's Darkness", -- [11]
+					"Archimonde's Darkness", -- [12]
+					"Kil'jaeden's Cunning", -- [13]
+					"Kil'jaeden's Cunning", -- [14]
+					"Kil'jaeden's Cunning", -- [15]
+					"Mannoroth's Fury", -- [16]
+					"Mannoroth's Fury", -- [17]
+					"Mannoroth's Fury", -- [18]
+					"Archimonde's Darkness", -- [19]
+					"Archimonde's Darkness", -- [20]
+					"Archimonde's Darkness", -- [21]
+					"Kil'jaeden's Cunning", -- [22]
+					"Kil'jaeden's Cunning", -- [23]
+					"Kil'jaeden's Cunning", -- [24]
+					"Mannoroth's Fury", -- [25]
+					"Mannoroth's Fury", -- [26]
+					"Mannoroth's Fury", -- [27]
+					"Archimonde's Darkness", -- [28]
+					"Archimonde's Darkness", -- [29]
+					"Archimonde's Darkness", -- [30]
+					"Kil'jaeden's Cunning", -- [31]
+					"Kil'jaeden's Cunning", -- [32]
+					"Kil'jaeden's Cunning", -- [33]
+					"Mannoroth's Fury", -- [34]
+					"Mannoroth's Fury", -- [35]
+					"Mannoroth's Fury", -- [36]
+					"Archimonde's Darkness", -- [37]
+					"Archimonde's Darkness", -- [38]
+					"Archimonde's Darkness", -- [39]
+					"Kil'jaeden's Cunning", -- [40]
+					"Kil'jaeden's Cunning", -- [41]
+					"Kil'jaeden's Cunning", -- [42]
+					"Mannoroth's Fury", -- [43]
+					"Mannoroth's Fury", -- [44]
+					"Mannoroth's Fury", -- [45]
+					"Archimonde's Darkness", -- [46]
+					"Archimonde's Darkness", -- [47]
+					"Archimonde's Darkness", -- [48]
+					"Kil'jaeden's Cunning", -- [49]
+					"Kil'jaeden's Cunning", -- [50]
+					"Kil'jaeden's Cunning", -- [51]
+					"Mannoroth's Fury", -- [52]
+					"Mannoroth's Fury", -- [53]
+					"Mannoroth's Fury", -- [54]
 				},
 				["schema"] = 60000,
 				["revision"] = 1,
 			},
 			["WARLOCK"] = {
 				["talents"] = {
+					"Archimonde's Darkness", -- [1]
+					"Archimonde's Darkness", -- [2]
+					"Archimonde's Darkness", -- [3]
+					"Kil'jaeden's Cunning", -- [4]
+					"Kil'jaeden's Cunning", -- [5]
+					"Kil'jaeden's Cunning", -- [6]
+					"Mannoroth's Fury", -- [7]
+					"Mannoroth's Fury", -- [8]
+					"Mannoroth's Fury", -- [9]
+					"Archimonde's Darkness", -- [10]
+					"Archimonde's Darkness", -- [11]
+					"Archimonde's Darkness", -- [12]
+					"Kil'jaeden's Cunning", -- [13]
+					"Kil'jaeden's Cunning", -- [14]
+					"Kil'jaeden's Cunning", -- [15]
+					"Mannoroth's Fury", -- [16]
+					"Mannoroth's Fury", -- [17]
+					"Mannoroth's Fury", -- [18]
+					"Archimonde's Darkness", -- [19]
+					"Archimonde's Darkness", -- [20]
+					"Archimonde's Darkness", -- [21]
+					"Kil'jaeden's Cunning", -- [22]
+					"Kil'jaeden's Cunning", -- [23]
+					"Kil'jaeden's Cunning", -- [24]
+					"Mannoroth's Fury", -- [25]
+					"Mannoroth's Fury", -- [26]
+					"Mannoroth's Fury", -- [27]
+					"Archimonde's Darkness", -- [28]
+					"Archimonde's Darkness", -- [29]
+					"Archimonde's Darkness", -- [30]
+					"Kil'jaeden's Cunning", -- [31]
+					"Kil'jaeden's Cunning", -- [32]
+					"Kil'jaeden's Cunning", -- [33]
+					"Mannoroth's Fury", -- [34]
+					"Mannoroth's Fury", -- [35]
+					"Mannoroth's Fury", -- [36]
+					"Archimonde's Darkness", -- [37]
+					"Archimonde's Darkness", -- [38]
+					"Archimonde's Darkness", -- [39]
+					"Kil'jaeden's Cunning", -- [40]
+					"Kil'jaeden's Cunning", -- [41]
+					"Kil'jaeden's Cunning", -- [42]
+					"Mannoroth's Fury", -- [43]
+					"Mannoroth's Fury", -- [44]
+					"Mannoroth's Fury", -- [45]
+					"Archimonde's Darkness", -- [46]
+					"Archimonde's Darkness", -- [47]
+					"Archimonde's Darkness", -- [48]
+					"Kil'jaeden's Cunning", -- [49]
+					"Kil'jaeden's Cunning", -- [50]
+					"Kil'jaeden's Cunning", -- [51]
+					"Mannoroth's Fury", -- [52]
+					"Mannoroth's Fury", -- [53]
+					"Mannoroth's Fury", -- [54]
 				},
 				["schema"] = 60000,
 				["revision"] = 1,
 			},
 			["HUNTER"] = {
 				["talents"] = {
+					"Archimonde's Darkness", -- [1]
+					"Archimonde's Darkness", -- [2]
+					"Archimonde's Darkness", -- [3]
+					"Kil'jaeden's Cunning", -- [4]
+					"Kil'jaeden's Cunning", -- [5]
+					"Kil'jaeden's Cunning", -- [6]
+					"Mannoroth's Fury", -- [7]
+					"Mannoroth's Fury", -- [8]
+					"Mannoroth's Fury", -- [9]
+					"Archimonde's Darkness", -- [10]
+					"Archimonde's Darkness", -- [11]
+					"Archimonde's Darkness", -- [12]
+					"Kil'jaeden's Cunning", -- [13]
+					"Kil'jaeden's Cunning", -- [14]
+					"Kil'jaeden's Cunning", -- [15]
+					"Mannoroth's Fury", -- [16]
+					"Mannoroth's Fury", -- [17]
+					"Mannoroth's Fury", -- [18]
+					"Archimonde's Darkness", -- [19]
+					"Archimonde's Darkness", -- [20]
+					"Archimonde's Darkness", -- [21]
+					"Kil'jaeden's Cunning", -- [22]
+					"Kil'jaeden's Cunning", -- [23]
+					"Kil'jaeden's Cunning", -- [24]
+					"Mannoroth's Fury", -- [25]
+					"Mannoroth's Fury", -- [26]
+					"Mannoroth's Fury", -- [27]
+					"Archimonde's Darkness", -- [28]
+					"Archimonde's Darkness", -- [29]
+					"Archimonde's Darkness", -- [30]
+					"Kil'jaeden's Cunning", -- [31]
+					"Kil'jaeden's Cunning", -- [32]
+					"Kil'jaeden's Cunning", -- [33]
+					"Mannoroth's Fury", -- [34]
+					"Mannoroth's Fury", -- [35]
+					"Mannoroth's Fury", -- [36]
+					"Archimonde's Darkness", -- [37]
+					"Archimonde's Darkness", -- [38]
+					"Archimonde's Darkness", -- [39]
+					"Kil'jaeden's Cunning", -- [40]
+					"Kil'jaeden's Cunning", -- [41]
+					"Kil'jaeden's Cunning", -- [42]
+					"Mannoroth's Fury", -- [43]
+					"Mannoroth's Fury", -- [44]
+					"Mannoroth's Fury", -- [45]
+					"Archimonde's Darkness", -- [46]
+					"Archimonde's Darkness", -- [47]
+					"Archimonde's Darkness", -- [48]
+					"Kil'jaeden's Cunning", -- [49]
+					"Kil'jaeden's Cunning", -- [50]
+					"Kil'jaeden's Cunning", -- [51]
+					"Mannoroth's Fury", -- [52]
+					"Mannoroth's Fury", -- [53]
+					"Mannoroth's Fury", -- [54]
 				},
 				["schema"] = 60000,
 				["revision"] = 1,
 			},
 			["SHAMAN"] = {
 				["talents"] = {
+					"Archimonde's Darkness", -- [1]
+					"Archimonde's Darkness", -- [2]
+					"Archimonde's Darkness", -- [3]
+					"Kil'jaeden's Cunning", -- [4]
+					"Kil'jaeden's Cunning", -- [5]
+					"Kil'jaeden's Cunning", -- [6]
+					"Mannoroth's Fury", -- [7]
+					"Mannoroth's Fury", -- [8]
+					"Mannoroth's Fury", -- [9]
+					"Archimonde's Darkness", -- [10]
+					"Archimonde's Darkness", -- [11]
+					"Archimonde's Darkness", -- [12]
+					"Kil'jaeden's Cunning", -- [13]
+					"Kil'jaeden's Cunning", -- [14]
+					"Kil'jaeden's Cunning", -- [15]
+					"Mannoroth's Fury", -- [16]
+					"Mannoroth's Fury", -- [17]
+					"Mannoroth's Fury", -- [18]
+					"Archimonde's Darkness", -- [19]
+					"Archimonde's Darkness", -- [20]
+					"Archimonde's Darkness", -- [21]
+					"Kil'jaeden's Cunning", -- [22]
+					"Kil'jaeden's Cunning", -- [23]
+					"Kil'jaeden's Cunning", -- [24]
+					"Mannoroth's Fury", -- [25]
+					"Mannoroth's Fury", -- [26]
+					"Mannoroth's Fury", -- [27]
+					"Archimonde's Darkness", -- [28]
+					"Archimonde's Darkness", -- [29]
+					"Archimonde's Darkness", -- [30]
+					"Kil'jaeden's Cunning", -- [31]
+					"Kil'jaeden's Cunning", -- [32]
+					"Kil'jaeden's Cunning", -- [33]
+					"Mannoroth's Fury", -- [34]
+					"Mannoroth's Fury", -- [35]
+					"Mannoroth's Fury", -- [36]
+					"Archimonde's Darkness", -- [37]
+					"Archimonde's Darkness", -- [38]
+					"Archimonde's Darkness", -- [39]
+					"Kil'jaeden's Cunning", -- [40]
+					"Kil'jaeden's Cunning", -- [41]
+					"Kil'jaeden's Cunning", -- [42]
+					"Mannoroth's Fury", -- [43]
+					"Mannoroth's Fury", -- [44]
+					"Mannoroth's Fury", -- [45]
+					"Archimonde's Darkness", -- [46]
+					"Archimonde's Darkness", -- [47]
+					"Archimonde's Darkness", -- [48]
+					"Kil'jaeden's Cunning", -- [49]
+					"Kil'jaeden's Cunning", -- [50]
+					"Kil'jaeden's Cunning", -- [51]
+					"Mannoroth's Fury", -- [52]
+					"Mannoroth's Fury", -- [53]
+					"Mannoroth's Fury", -- [54]
 				},
 				["schema"] = 60000,
 				["revision"] = 1,
 			},
 			["DRUID"] = {
 				["talents"] = {
+					"Archimonde's Darkness", -- [1]
+					"Archimonde's Darkness", -- [2]
+					"Archimonde's Darkness", -- [3]
+					"Archimonde's Darkness", -- [4]
+					"Kil'jaeden's Cunning", -- [5]
+					"Kil'jaeden's Cunning", -- [6]
+					"Kil'jaeden's Cunning", -- [7]
+					"Kil'jaeden's Cunning", -- [8]
+					"Mannoroth's Fury", -- [9]
+					"Mannoroth's Fury", -- [10]
+					"Mannoroth's Fury", -- [11]
+					"Mannoroth's Fury", -- [12]
+					"Archimonde's Darkness", -- [13]
+					"Archimonde's Darkness", -- [14]
+					"Archimonde's Darkness", -- [15]
+					"Archimonde's Darkness", -- [16]
+					"Kil'jaeden's Cunning", -- [17]
+					"Kil'jaeden's Cunning", -- [18]
+					"Kil'jaeden's Cunning", -- [19]
+					"Kil'jaeden's Cunning", -- [20]
+					"Mannoroth's Fury", -- [21]
+					"Mannoroth's Fury", -- [22]
+					"Mannoroth's Fury", -- [23]
+					"Mannoroth's Fury", -- [24]
+					"Archimonde's Darkness", -- [25]
+					"Archimonde's Darkness", -- [26]
+					"Archimonde's Darkness", -- [27]
+					"Archimonde's Darkness", -- [28]
+					"Kil'jaeden's Cunning", -- [29]
+					"Kil'jaeden's Cunning", -- [30]
+					"Kil'jaeden's Cunning", -- [31]
+					"Kil'jaeden's Cunning", -- [32]
+					"Mannoroth's Fury", -- [33]
+					"Mannoroth's Fury", -- [34]
+					"Mannoroth's Fury", -- [35]
+					"Mannoroth's Fury", -- [36]
+					"Archimonde's Darkness", -- [37]
+					"Archimonde's Darkness", -- [38]
+					"Archimonde's Darkness", -- [39]
+					"Archimonde's Darkness", -- [40]
+					"Kil'jaeden's Cunning", -- [41]
+					"Kil'jaeden's Cunning", -- [42]
+					"Kil'jaeden's Cunning", -- [43]
+					"Kil'jaeden's Cunning", -- [44]
+					"Mannoroth's Fury", -- [45]
+					"Mannoroth's Fury", -- [46]
+					"Mannoroth's Fury", -- [47]
+					"Mannoroth's Fury", -- [48]
+					"Archimonde's Darkness", -- [49]
+					"Archimonde's Darkness", -- [50]
+					"Archimonde's Darkness", -- [51]
+					"Archimonde's Darkness", -- [52]
+					"Kil'jaeden's Cunning", -- [53]
+					"Kil'jaeden's Cunning", -- [54]
+					"Kil'jaeden's Cunning", -- [55]
+					"Kil'jaeden's Cunning", -- [56]
+					"Mannoroth's Fury", -- [57]
+					"Mannoroth's Fury", -- [58]
+					"Mannoroth's Fury", -- [59]
+					"Mannoroth's Fury", -- [60]
+					"Archimonde's Darkness", -- [61]
+					"Archimonde's Darkness", -- [62]
+					"Archimonde's Darkness", -- [63]
+					"Archimonde's Darkness", -- [64]
+					"Kil'jaeden's Cunning", -- [65]
+					"Kil'jaeden's Cunning", -- [66]
+					"Kil'jaeden's Cunning", -- [67]
+					"Kil'jaeden's Cunning", -- [68]
+					"Mannoroth's Fury", -- [69]
+					"Mannoroth's Fury", -- [70]
+					"Mannoroth's Fury", -- [71]
+					"Mannoroth's Fury", -- [72]
 				},
 				["schema"] = 60000,
 				["revision"] = 1,
 			},
 			["MONK"] = {
 				["talents"] = {
+					"Archimonde's Darkness", -- [1]
+					"Archimonde's Darkness", -- [2]
+					"Archimonde's Darkness", -- [3]
+					"Kil'jaeden's Cunning", -- [4]
+					"Kil'jaeden's Cunning", -- [5]
+					"Kil'jaeden's Cunning", -- [6]
+					"Mannoroth's Fury", -- [7]
+					"Mannoroth's Fury", -- [8]
+					"Mannoroth's Fury", -- [9]
+					"Archimonde's Darkness", -- [10]
+					"Archimonde's Darkness", -- [11]
+					"Archimonde's Darkness", -- [12]
+					"Kil'jaeden's Cunning", -- [13]
+					"Kil'jaeden's Cunning", -- [14]
+					"Kil'jaeden's Cunning", -- [15]
+					"Mannoroth's Fury", -- [16]
+					"Mannoroth's Fury", -- [17]
+					"Mannoroth's Fury", -- [18]
+					"Archimonde's Darkness", -- [19]
+					"Archimonde's Darkness", -- [20]
+					"Archimonde's Darkness", -- [21]
+					"Kil'jaeden's Cunning", -- [22]
+					"Kil'jaeden's Cunning", -- [23]
+					"Kil'jaeden's Cunning", -- [24]
+					"Mannoroth's Fury", -- [25]
+					"Mannoroth's Fury", -- [26]
+					"Mannoroth's Fury", -- [27]
+					"Archimonde's Darkness", -- [28]
+					"Archimonde's Darkness", -- [29]
+					"Archimonde's Darkness", -- [30]
+					"Kil'jaeden's Cunning", -- [31]
+					"Kil'jaeden's Cunning", -- [32]
+					"Kil'jaeden's Cunning", -- [33]
+					"Mannoroth's Fury", -- [34]
+					"Mannoroth's Fury", -- [35]
+					"Mannoroth's Fury", -- [36]
+					"Archimonde's Darkness", -- [37]
+					"Archimonde's Darkness", -- [38]
+					"Archimonde's Darkness", -- [39]
+					"Kil'jaeden's Cunning", -- [40]
+					"Kil'jaeden's Cunning", -- [41]
+					"Kil'jaeden's Cunning", -- [42]
+					"Mannoroth's Fury", -- [43]
+					"Mannoroth's Fury", -- [44]
+					"Mannoroth's Fury", -- [45]
+					"Archimonde's Darkness", -- [46]
+					"Archimonde's Darkness", -- [47]
+					"Archimonde's Darkness", -- [48]
+					"Kil'jaeden's Cunning", -- [49]
+					"Kil'jaeden's Cunning", -- [50]
+					"Kil'jaeden's Cunning", -- [51]
+					"Mannoroth's Fury", -- [52]
+					"Mannoroth's Fury", -- [53]
+					"Mannoroth's Fury", -- [54]
 				},
 				["schema"] = 60000,
 				["revision"] = 1,
 			},
 			["PALADIN"] = {
 				["talents"] = {
+					"Archimonde's Darkness", -- [1]
+					"Archimonde's Darkness", -- [2]
+					"Archimonde's Darkness", -- [3]
+					"Kil'jaeden's Cunning", -- [4]
+					"Kil'jaeden's Cunning", -- [5]
+					"Kil'jaeden's Cunning", -- [6]
+					"Mannoroth's Fury", -- [7]
+					"Mannoroth's Fury", -- [8]
+					"Mannoroth's Fury", -- [9]
+					"Archimonde's Darkness", -- [10]
+					"Archimonde's Darkness", -- [11]
+					"Archimonde's Darkness", -- [12]
+					"Kil'jaeden's Cunning", -- [13]
+					"Kil'jaeden's Cunning", -- [14]
+					"Kil'jaeden's Cunning", -- [15]
+					"Mannoroth's Fury", -- [16]
+					"Mannoroth's Fury", -- [17]
+					"Mannoroth's Fury", -- [18]
+					"Archimonde's Darkness", -- [19]
+					"Archimonde's Darkness", -- [20]
+					"Archimonde's Darkness", -- [21]
+					"Kil'jaeden's Cunning", -- [22]
+					"Kil'jaeden's Cunning", -- [23]
+					"Kil'jaeden's Cunning", -- [24]
+					"Mannoroth's Fury", -- [25]
+					"Mannoroth's Fury", -- [26]
+					"Mannoroth's Fury", -- [27]
+					"Archimonde's Darkness", -- [28]
+					"Archimonde's Darkness", -- [29]
+					"Archimonde's Darkness", -- [30]
+					"Kil'jaeden's Cunning", -- [31]
+					"Kil'jaeden's Cunning", -- [32]
+					"Kil'jaeden's Cunning", -- [33]
+					"Mannoroth's Fury", -- [34]
+					"Mannoroth's Fury", -- [35]
+					"Mannoroth's Fury", -- [36]
+					"Archimonde's Darkness", -- [37]
+					"Archimonde's Darkness", -- [38]
+					"Archimonde's Darkness", -- [39]
+					"Kil'jaeden's Cunning", -- [40]
+					"Kil'jaeden's Cunning", -- [41]
+					"Kil'jaeden's Cunning", -- [42]
+					"Mannoroth's Fury", -- [43]
+					"Mannoroth's Fury", -- [44]
+					"Mannoroth's Fury", -- [45]
+					"Archimonde's Darkness", -- [46]
+					"Archimonde's Darkness", -- [47]
+					"Archimonde's Darkness", -- [48]
+					"Kil'jaeden's Cunning", -- [49]
+					"Kil'jaeden's Cunning", -- [50]
+					"Kil'jaeden's Cunning", -- [51]
+					"Mannoroth's Fury", -- [52]
+					"Mannoroth's Fury", -- [53]
+					"Mannoroth's Fury", -- [54]
 				},
 				["schema"] = 60000,
 				["revision"] = 1,
@@ -713,122 +1325,8 @@ HermesDB2 = {
 			["Pandaren"] = "Pandaren",
 			["Goblin"] = "Goblin",
 		},
-		["cooldowns"] = {
-			["Player-1325-03B9E297"] = {
-				[34477] = {
-					11608.753, -- [1]
-					30, -- [2]
-				},
-			},
-			["Player-1325-03BB8CFE"] = {
-			},
-			["Player-1325-03C5FE4F"] = {
-			},
-			["Player-1325-03BFA664"] = {
-				[22842] = {
-					12314.507, -- [1]
-					180, -- [2]
-				},
-				[20484] = {
-					11842.883, -- [1]
-					600, -- [2]
-				},
-				[5211] = {
-					10698.82, -- [1]
-					60, -- [2]
-				},
-				[61336] = {
-					12288.208, -- [1]
-					180, -- [2]
-				},
-				[22812] = {
-					12284.475, -- [1]
-					60, -- [2]
-				},
-			},
-			["Player-1325-03C00E1C"] = {
-				[108280] = {
-					11078.663, -- [1]
-					180, -- [2]
-				},
-				[5394] = {
-					11089.596, -- [1]
-					30, -- [2]
-				},
-				[98008] = {
-					9496.592, -- [1]
-					180, -- [2]
-				},
-			},
-			["Player-639-0664EF80"] = {
-				[64843] = {
-					12289.508, -- [1]
-					180, -- [2]
-				},
-				[47788] = {
-					11526.849, -- [1]
-					180, -- [2]
-				},
-			},
-			["Player-1084-063EC342"] = {
-				[740] = {
-					10992.331, -- [1]
-					180, -- [2]
-				},
-				[20484] = {
-					10305.063, -- [1]
-					600, -- [2]
-				},
-				[102342] = {
-					11087.963, -- [1]
-					120, -- [2]
-				},
-				[33891] = {
-					11088.796, -- [1]
-					180, -- [2]
-				},
-				[22812] = {
-					9462.199, -- [1]
-					60, -- [2]
-				},
-			},
-			["Player-1325-03B61CD4"] = {
-				[642] = {
-					10606.238, -- [1]
-					300, -- [2]
-				},
-				[853] = {
-					11082.446, -- [1]
-					60, -- [2]
-				},
-				[498] = {
-					12291.974, -- [1]
-					60, -- [2]
-				},
-				[633] = {
-					12305.874, -- [1]
-					600, -- [2]
-				},
-				[96231] = {
-					11500.246, -- [1]
-					10, -- [2]
-				},
-			},
-			["Player-1325-03C5D67A"] = {
-				[20707] = {
-					12415.941, -- [1]
-					786.4, -- [2]
-				},
-			},
-			["Player-1325-03B9EDB1"] = {
-				[80353] = {
-					12419.246, -- [1]
-					32.598, -- [2]
-				},
-			},
-		},
-		["clientTime"] = 13906.28,
-		["serverTime"] = 1414013173,
+		["clientTime"] = 8573.522,
+		["serverTime"] = 1414174932,
 		["adjustments"] = {
 			[740] = {
 				{
@@ -903,14 +1401,14 @@ HermesDB2 = {
 							},
 							["includeAll"] = true,
 							["filterdead"] = false,
-							["filter25man"] = true,
+							["abilities"] = {
+							},
 							["filterconnection"] = true,
 							["filterplayertype"] = "disabled",
 							["playerfilters"] = {
 							},
-							["abilities"] = {
-							},
 							["name"] = "Default",
+							["filter25man"] = true,
 						}, -- [1]
 					},
 				},
@@ -1502,7 +2000,8 @@ HermesDB2 = {
 							["filterrange"] = true,
 							["filter10man"] = true,
 							["filterself"] = false,
-							["filter25man"] = true,
+							["abilities"] = {
+							},
 							["profiles"] = {
 								["GridButtons"] = {
 									["merged"] = false,
@@ -1531,11 +2030,10 @@ HermesDB2 = {
 									},
 								},
 							},
-							["name"] = "Default",
+							["filter25man"] = true,
 							["playerfilters"] = {
 							},
-							["abilities"] = {
-							},
+							["name"] = "Default",
 							["filterplayertype"] = "disabled",
 							["filterconnection"] = true,
 							["filterdead"] = false,
@@ -2132,8 +2630,7 @@ HermesDB2 = {
 							["filterrange"] = true,
 							["filter10man"] = true,
 							["filterself"] = false,
-							["abilities"] = {
-							},
+							["name"] = "Default",
 							["profiles"] = {
 								["GridButtons"] = {
 									["merged"] = false,
@@ -2162,10 +2659,11 @@ HermesDB2 = {
 									},
 								},
 							},
-							["filter25man"] = true,
+							["abilities"] = {
+							},
 							["playerfilters"] = {
 							},
-							["name"] = "Default",
+							["filter25man"] = true,
 							["filterplayertype"] = "disabled",
 							["filterconnection"] = true,
 							["filterdead"] = false,
@@ -2793,14 +3291,14 @@ HermesDB2 = {
 							},
 							["includeAll"] = true,
 							["filterdead"] = false,
-							["abilities"] = {
-							},
+							["name"] = "Default",
 							["filterconnection"] = true,
 							["filterplayertype"] = "disabled",
 							["playerfilters"] = {
 							},
-							["name"] = "Default",
 							["filter25man"] = true,
+							["abilities"] = {
+							},
 						}, -- [1]
 					},
 				},
@@ -3392,7 +3890,7 @@ HermesDB2 = {
 							["filterrange"] = true,
 							["filter10man"] = true,
 							["filterself"] = false,
-							["name"] = "Default",
+							["filter25man"] = true,
 							["profiles"] = {
 								["GridButtons"] = {
 									["merged"] = false,
@@ -3421,11 +3919,11 @@ HermesDB2 = {
 									},
 								},
 							},
-							["abilities"] = {
-							},
+							["name"] = "Default",
 							["playerfilters"] = {
 							},
-							["filter25man"] = true,
+							["abilities"] = {
+							},
 							["filterplayertype"] = "disabled",
 							["filterconnection"] = true,
 							["filterdead"] = false,
@@ -4020,8 +4518,7 @@ HermesDB2 = {
 							["filterrange"] = true,
 							["filter10man"] = true,
 							["filterself"] = false,
-							["abilities"] = {
-							},
+							["name"] = "Default",
 							["profiles"] = {
 								["GridButtons"] = {
 									["merged"] = false,
@@ -4050,10 +4547,11 @@ HermesDB2 = {
 									},
 								},
 							},
-							["filter25man"] = true,
+							["abilities"] = {
+							},
 							["playerfilters"] = {
 							},
-							["name"] = "Default",
+							["filter25man"] = true,
 							["filterplayertype"] = "disabled",
 							["filterconnection"] = true,
 							["filterdead"] = false,
@@ -4683,14 +5181,14 @@ HermesDB2 = {
 							},
 							["includeAll"] = true,
 							["filterdead"] = false,
-							["name"] = "Default",
+							["filter25man"] = true,
 							["filterconnection"] = true,
 							["filterplayertype"] = "disabled",
 							["playerfilters"] = {
 							},
-							["filter25man"] = true,
 							["abilities"] = {
 							},
+							["name"] = "Default",
 						}, -- [1]
 					},
 				},
@@ -5279,7 +5777,7 @@ HermesDB2 = {
 					["icon"] = "Interface\\Icons\\Spell_Shadow_AntiMagicShell",
 				}, -- [2]
 				{
-					["enabled"] = false,
+					["enabled"] = true,
 					["name"] = "Anti-Magic Zone",
 					["id"] = 51052,
 					["class"] = "DEATHKNIGHT",
@@ -5314,7 +5812,7 @@ HermesDB2 = {
 					["icon"] = "Interface\\Icons\\Spell_Shadow_MindSteal",
 				}, -- [7]
 				{
-					["enabled"] = false,
+					["enabled"] = true,
 					["name"] = "Bloodlust",
 					["id"] = 2825,
 					["class"] = "SHAMAN",
@@ -5377,7 +5875,7 @@ HermesDB2 = {
 					["icon"] = "Interface\\Icons\\Spell_Shadow_DeathPact",
 				}, -- [16]
 				{
-					["enabled"] = false,
+					["enabled"] = true,
 					["name"] = "Devotion Aura",
 					["id"] = 31821,
 					["class"] = "PALADIN",
@@ -5433,7 +5931,7 @@ HermesDB2 = {
 					["icon"] = "Interface\\Icons\\Ability_BullRush",
 				}, -- [24]
 				{
-					["enabled"] = false,
+					["enabled"] = true,
 					["name"] = "Guardian Spirit",
 					["id"] = 47788,
 					["class"] = "PRIEST",
@@ -5475,7 +5973,7 @@ HermesDB2 = {
 					["icon"] = "Interface\\Icons\\Spell_Holy_SealOfWisdom",
 				}, -- [30]
 				{
-					["enabled"] = false,
+					["enabled"] = true,
 					["name"] = "Hand of Sacrifice",
 					["id"] = 6940,
 					["class"] = "PALADIN",
@@ -5545,7 +6043,7 @@ HermesDB2 = {
 					["icon"] = "Interface\\Icons\\Spell_Holy_AshesToAshes",
 				}, -- [40]
 				{
-					["enabled"] = false,
+					["enabled"] = true,
 					["name"] = "Lay on Hands",
 					["id"] = 633,
 					["class"] = "PALADIN",
@@ -5629,7 +6127,7 @@ HermesDB2 = {
 					["icon"] = "Interface\\Icons\\INV_Gauntlets_04",
 				}, -- [52]
 				{
-					["enabled"] = false,
+					["enabled"] = true,
 					["name"] = "Raise Ally",
 					["id"] = 61999,
 					["class"] = "DEATHKNIGHT",
@@ -5643,14 +6141,14 @@ HermesDB2 = {
 					["icon"] = "Interface\\Icons\\Spell_Shadow_AnimateDead",
 				}, -- [54]
 				{
-					["enabled"] = false,
+					["enabled"] = true,
 					["name"] = "Rallying Cry",
 					["id"] = 97462,
 					["class"] = "WARRIOR",
 					["icon"] = "INTERFACE\\ICONS\\ability_toughness",
 				}, -- [55]
 				{
-					["enabled"] = false,
+					["enabled"] = true,
 					["name"] = "Rebirth",
 					["id"] = 20484,
 					["class"] = "DRUID",
@@ -5678,7 +6176,7 @@ HermesDB2 = {
 					["icon"] = "Interface\\Icons\\Spell_Holy_PrayerOfHealing",
 				}, -- [59]
 				{
-					["enabled"] = false,
+					["enabled"] = true,
 					["name"] = "Revival",
 					["id"] = 115310,
 					["class"] = "MONK",
@@ -5734,7 +6232,7 @@ HermesDB2 = {
 					["icon"] = "Interface\\Icons\\Spell_Shaman_SpiritLink",
 				}, -- [67]
 				{
-					["enabled"] = false,
+					["enabled"] = true,
 					["name"] = "Spirit Shell",
 					["id"] = 109964,
 					["class"] = "PRIEST",
@@ -5769,14 +6267,14 @@ HermesDB2 = {
 					["icon"] = "Interface\\Icons\\Ability_Druid_TigersRoar",
 				}, -- [72]
 				{
-					["enabled"] = false,
+					["enabled"] = true,
 					["name"] = "Time Warp",
 					["id"] = 80353,
 					["class"] = "MAGE",
 					["icon"] = "INTERFACE\\ICONS\\ability_mage_timewarp",
 				}, -- [73]
 				{
-					["enabled"] = false,
+					["enabled"] = true,
 					["name"] = "Tranquility",
 					["id"] = 740,
 					["class"] = "DRUID",
@@ -5838,22 +6336,153 @@ HermesDB2 = {
 				["Hermes-UI"] = {
 					["views"] = {
 						{
-							["module"] = "GridButtons",
+							["module"] = "GridBars",
 							["filterrange"] = true,
 							["filter10man"] = true,
 							["filterself"] = false,
-							["abilities"] = {
-							},
+							["name"] = "Default",
 							["profiles"] = {
+								["GridBars"] = {
+									["barShowTime"] = true,
+									["npCCFont"] = true,
+									["barShowPlayerName"] = true,
+									["h"] = 152.602828979492,
+									["hideNoAvailSender"] = false,
+									["barColorC"] = {
+										["a"] = 0.74,
+										["b"] = 0.55,
+										["g"] = 0.55,
+										["r"] = 0.55,
+									},
+									["locked"] = true,
+									["barFont"] = "Friz Quadrata TT",
+									["barBGColorU"] = {
+										["a"] = 0.16,
+										["b"] = 0,
+										["g"] = 0,
+										["r"] = 0,
+									},
+									["hideNoSender"] = true,
+									["barTexture"] = "Blizzard",
+									["osCooldownStyle"] = "empty",
+									["barColorU"] = {
+										["a"] = 0.23,
+										["b"] = 0,
+										["g"] = 0,
+										["r"] = 0,
+									},
+									["y"] = 715.803283691406,
+									["x"] = 213.133148193359,
+									["barPadding"] = 1,
+									["scale"] = 1.25,
+									["npTexture"] = "Blizzard",
+									["barCooldownDirection"] = "right",
+									["barThickFont"] = false,
+									["barBGCCU"] = false,
+									["barColorCFont"] = {
+										["a"] = 1,
+										["b"] = 1,
+										["g"] = 1,
+										["r"] = 1,
+									},
+									["barCCAFont"] = false,
+									["barTextRatio"] = 65,
+									["cellAnchor"] = "TOPLEFT",
+									["padding"] = 0,
+									["barW"] = 150,
+									["barIcon"] = "none",
+									["barTextSide"] = "left",
+									["barCCA"] = true,
+									["barIconMerged"] = "left",
+									["npW"] = 120,
+									["barColorUFont"] = {
+										["a"] = 0.3,
+										["b"] = 1,
+										["g"] = 1,
+										["r"] = 1,
+									},
+									["barColorAFont"] = {
+										["a"] = 1,
+										["b"] = 0.94,
+										["g"] = 0.94,
+										["r"] = 0.94,
+									},
+									["w"] = 158.666687011719,
+									["osFGColor"] = {
+										["a"] = 1,
+										["b"] = 0,
+										["g"] = 1,
+										["r"] = 0,
+									},
+									["osCooldownDirection"] = "right",
+									["barColorA"] = {
+										["a"] = 1,
+										["b"] = 0.94,
+										["g"] = 0.94,
+										["r"] = 0.94,
+									},
+									["npFontColor"] = {
+										["a"] = 0.76,
+										["b"] = 0.92,
+										["g"] = 0.92,
+										["r"] = 0.92,
+									},
+									["barCCU"] = false,
+									["osEnabled"] = false,
+									["npIcon"] = "right",
+									["npShowLabel"] = true,
+									["npTextSide"] = "right",
+									["npFont"] = "Friz Quadrata TT",
+									["npUseNameplate"] = true,
+									["barCooldownStyle"] = "empty",
+									["barCCUFont"] = false,
+									["npThickFont"] = false,
+									["npOutlineFont"] = true,
+									["npH"] = 15,
+									["npTexColor"] = {
+										["a"] = 0.5,
+										["b"] = 0,
+										["g"] = 0,
+										["r"] = 0,
+									},
+									["npFontSize"] = 12,
+									["barH"] = 14,
+									["enableTooltip"] = true,
+									["barGap"] = 2,
+									["npCCBar"] = false,
+									["barShowSpellName"] = false,
+									["merged"] = false,
+									["npUseIcon"] = true,
+									["barOutlineFont"] = true,
+									["barBGCCC"] = true,
+									["barCCCFont"] = true,
+									["cellMax"] = 3,
+									["cellDir"] = false,
+									["barCCC"] = true,
+									["barFontSize"] = 12,
+									["cellBGColor"] = {
+										["a"] = 0,
+										["b"] = 0,
+										["g"] = 0,
+										["r"] = 0,
+									},
+									["cellSide"] = false,
+									["barBGColorC"] = {
+										["a"] = 0.16,
+										["b"] = 0,
+										["g"] = 0,
+										["r"] = 0,
+									},
+								},
 								["GridButtons"] = {
 									["merged"] = false,
 									["hideNoSender"] = false,
 									["scale"] = 1,
-									["h"] = 150.000030517578,
+									["h"] = 463.000122070313,
 									["coloredBorders"] = true,
 									["cellAnchor"] = "TOPLEFT",
-									["y"] = 157.00114440918,
-									["x"] = 610.000549316406,
+									["y"] = 839.000915527344,
+									["x"] = 308.000366210938,
 									["colorNS"] = {
 										["a"] = 0.75,
 										["b"] = 0.5,
@@ -5863,7 +6492,7 @@ HermesDB2 = {
 									["mergedicon"] = "Interface\\ICONS\\INV_Misc_QuestionMark",
 									["locked"] = false,
 									["padding"] = 5,
-									["w"] = 249.999938964844,
+									["w"] = 211.999923706055,
 									["colorU"] = {
 										["a"] = 1,
 										["b"] = 0.5,
@@ -5871,11 +6500,269 @@ HermesDB2 = {
 										["r"] = 0.5,
 									},
 								},
+								["CooldownBars"] = {
+									["barheight"] = 14,
+									["scale"] = 1,
+									["barTextSide"] = "left",
+									["fontsize"] = 12,
+									["locked"] = false,
+									["barCooldownDirection"] = "right",
+									["hideSelf"] = false,
+									["osFGColor"] = {
+										["a"] = 1,
+										["b"] = 0,
+										["g"] = 1,
+										["r"] = 0,
+									},
+									["barGap"] = 1,
+									["x"] = 559.000244140625,
+									["bartexture"] = "Blizzard",
+									["barwidth"] = 180,
+									["osCooldownDirection"] = "right",
+									["alpha"] = 1,
+									["barShowSpellName"] = false,
+									["y"] = 602.999877929688,
+									["font"] = "Friz Quadrata TT",
+									["barCooldownStyle"] = "full",
+									["osCooldownStyle"] = "full",
+									["osEnabled"] = false,
+									["barIcon"] = "left",
+									["growup"] = false,
+									["textratio"] = 60,
+								},
+								["Bars"] = {
+									["barIcon"] = "none",
+									["npCCFont"] = true,
+									["npUseNameplate"] = true,
+									["barTextSide"] = "left",
+									["barShowPlayerName"] = true,
+									["npUseIcon"] = true,
+									["osFGColor"] = {
+										["a"] = 1,
+										["b"] = 0,
+										["g"] = 1,
+										["r"] = 0,
+									},
+									["osCooldownDirection"] = "right",
+									["npTextSide"] = "right",
+									["barColorC"] = {
+										["a"] = 0.74,
+										["b"] = 0.55,
+										["g"] = 0.55,
+										["r"] = 0.55,
+									},
+									["locked"] = false,
+									["osEnabled"] = false,
+									["barLocation"] = "BOTTOM",
+									["barFont"] = "Friz Quadrata TT",
+									["npIcon"] = "right",
+									["npW"] = 120,
+									["barBGColorU"] = {
+										["a"] = 0.16,
+										["b"] = 0,
+										["g"] = 0,
+										["r"] = 0,
+									},
+									["hideNoSender"] = true,
+									["npShowLabel"] = true,
+									["barTexture"] = "Blizzard",
+									["osCooldownStyle"] = "empty",
+									["barColorU"] = {
+										["a"] = 0.23,
+										["b"] = 0,
+										["g"] = 0,
+										["r"] = 0,
+									},
+									["y"] = 889.999816894531,
+									["x"] = 264.999816894531,
+									["barColorAFont"] = {
+										["a"] = 1,
+										["b"] = 0.94,
+										["g"] = 0.94,
+										["r"] = 0.94,
+									},
+									["npThickFont"] = false,
+									["npOutlineFont"] = true,
+									["barPadding"] = 10,
+									["npFontSize"] = 12,
+									["barColorA"] = {
+										["a"] = 1,
+										["b"] = 0.94,
+										["g"] = 0.94,
+										["r"] = 0.94,
+									},
+									["npFontColor"] = {
+										["a"] = 0.76,
+										["b"] = 0.92,
+										["g"] = 0.92,
+										["r"] = 0.92,
+									},
+									["barCCU"] = false,
+									["barCooldownStyle"] = "empty",
+									["barCCCFont"] = true,
+									["scale"] = 1,
+									["npTexColor"] = {
+										["a"] = 0.5,
+										["b"] = 0,
+										["g"] = 0,
+										["r"] = 0,
+									},
+									["npFont"] = "Friz Quadrata TT",
+									["npH"] = 15,
+									["barShowTime"] = true,
+									["barCCUFont"] = false,
+									["barShowSpellName"] = false,
+									["barThickFont"] = false,
+									["npTexture"] = "Blizzard",
+									["barIconMerged"] = "left",
+									["barCooldownDirection"] = "right",
+									["barH"] = 14,
+									["barOutlineFont"] = true,
+									["barGap"] = 1,
+									["npCCBar"] = false,
+									["barBGCCU"] = false,
+									["merged"] = false,
+									["barColorCFont"] = {
+										["a"] = 1,
+										["b"] = 1,
+										["g"] = 1,
+										["r"] = 1,
+									},
+									["barColorUFont"] = {
+										["a"] = 0.3,
+										["b"] = 1,
+										["g"] = 1,
+										["r"] = 1,
+									},
+									["barBGCCC"] = true,
+									["barCCAFont"] = false,
+									["growUp"] = false,
+									["barTextRatio"] = 65,
+									["barBGColorC"] = {
+										["a"] = 0.16,
+										["b"] = 0,
+										["g"] = 0,
+										["r"] = 0,
+									},
+									["barCCC"] = true,
+									["barFontSize"] = 12,
+									["barCCA"] = true,
+									["barW"] = 150,
+								},
 							},
-							["filter25man"] = true,
+							["abilities"] = {
+								{
+									["id"] = 42650,
+									["enabled"] = false,
+								}, -- [1]
+								{
+									["id"] = 48792,
+									["enabled"] = false,
+								}, -- [2]
+								{
+									["id"] = 49028,
+									["enabled"] = false,
+								}, -- [3]
+								{
+									["id"] = 55233,
+									["enabled"] = false,
+								}, -- [4]
+								{
+									["id"] = 22812,
+									["enabled"] = false,
+								}, -- [5]
+								{
+									["id"] = 61336,
+									["enabled"] = false,
+								}, -- [6]
+								{
+									["id"] = 740,
+									["enabled"] = false,
+								}, -- [7]
+								{
+									["id"] = 80353,
+									["enabled"] = false,
+								}, -- [8]
+								{
+									["id"] = 116849,
+									["enabled"] = false,
+								}, -- [9]
+								{
+									["id"] = 31821,
+									["enabled"] = false,
+								}, -- [10]
+								{
+									["id"] = 31850,
+									["enabled"] = false,
+								}, -- [11]
+								{
+									["id"] = 86659,
+									["enabled"] = false,
+								}, -- [12]
+								{
+									["id"] = 6940,
+									["enabled"] = false,
+								}, -- [13]
+								{
+									["id"] = 1022,
+									["enabled"] = false,
+								}, -- [14]
+								{
+									["id"] = 633,
+									["enabled"] = false,
+								}, -- [15]
+								{
+									["id"] = 47788,
+									["enabled"] = false,
+								}, -- [16]
+								{
+									["id"] = 33206,
+									["enabled"] = false,
+								}, -- [17]
+								{
+									["id"] = 109964,
+									["enabled"] = false,
+								}, -- [18]
+								{
+									["id"] = 2825,
+									["enabled"] = false,
+								}, -- [19]
+								{
+									["id"] = 98008,
+									["enabled"] = false,
+								}, -- [20]
+								{
+									["id"] = 12975,
+									["enabled"] = false,
+								}, -- [21]
+								{
+									["id"] = 97462,
+									["enabled"] = false,
+								}, -- [22]
+								{
+									["id"] = 871,
+									["enabled"] = false,
+								}, -- [23]
+								{
+									["id"] = 51052,
+									["enabled"] = false,
+								}, -- [24]
+								{
+									["id"] = 61999,
+									["enabled"] = false,
+								}, -- [25]
+								{
+									["id"] = 20484,
+									["enabled"] = false,
+								}, -- [26]
+								{
+									["id"] = 115310,
+									["enabled"] = false,
+								}, -- [27]
+							},
 							["playerfilters"] = {
 							},
-							["name"] = "Default",
+							["filter25man"] = true,
 							["filterplayertype"] = "disabled",
 							["filterconnection"] = true,
 							["filterdead"] = false,
@@ -5885,7 +6772,6 @@ HermesDB2 = {
 					},
 				},
 			},
-			["configMode"] = false,
 			["pluginState"] = {
 				["UI"] = true,
 			},

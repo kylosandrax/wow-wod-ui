@@ -17,7 +17,7 @@ ElvDB = {
 			["Ryjax"] = 108628274,
 			["Zapunzel"] = 637932214,
 			["Stormslinger"] = 48747369,
-			["Bronin"] = 41183577,
+			["Bronin"] = 43522590,
 			["Kylosandrax"] = 79396837,
 			["Greenthorn"] = 22256407,
 		},
@@ -38,29 +38,29 @@ ElvDB = {
 		["Ryjax - Aggramar"] = {
 			["currentTutorial"] = 1,
 			["general"] = {
+				["autoAcceptInvite"] = true,
+				["bottomPanel"] = false,
+				["interruptAnnounce"] = "SAY",
 				["valuecolor"] = {
 					["b"] = 0.819,
 					["g"] = 0.513,
 					["r"] = 0.09,
 				},
-				["bottomPanel"] = false,
-				["interruptAnnounce"] = "SAY",
-				["vendorGrays"] = true,
 				["bordercolor"] = {
 					["b"] = 0.31,
 					["g"] = 0.31,
 					["r"] = 0.31,
 				},
 				["autoRepair"] = "PLAYER",
-				["autoAcceptInvite"] = true,
+				["vendorGrays"] = true,
 			},
 			["movers"] = {
 				["ElvUF_TargetTargetMover"] = "BOTTOMRIGHTElvUIParentBOTTOMRIGHT-547300",
-				["ElvUF_TargetCastbarMover"] = "BOTTOMElvUIParentBOTTOM300360",
+				["ElvAB_6"] = "BOTTOMElvUIParentBOTTOM04",
 				["ElvUF_PetMover"] = "BOTTOMLEFTElvUIParentBOTTOMLEFT638301",
 				["ElvUF_PlayerCastbarMover"] = "BOTTOMElvUIParentBOTTOM-300360",
 				["ElvUF_FocusMover"] = "BOTTOMRIGHTElvUIParentBOTTOMRIGHT-329423",
-				["ElvAB_2"] = "BOTTOMElvUIParentBOTTOM68230",
+				["ElvUF_TargetCastbarMover"] = "BOTTOMElvUIParentBOTTOM300360",
 				["TooltipMover"] = "BOTTOMRIGHTElvUIParentBOTTOMRIGHT-328307",
 				["ElvAB_3"] = "BOTTOMElvUIParentBOTTOM3154",
 				["MicrobarMover"] = "TOPElvUIParentTOP0-4",
@@ -68,7 +68,7 @@ ElvDB = {
 				["ElvAB_1"] = "BOTTOMElvUIParentBOTTOM-69230",
 				["BossButton"] = "BOTTOMElvUIParentBOTTOM045",
 				["ElvAB_5"] = "BOTTOMElvUIParentBOTTOM-3154",
-				["ElvAB_6"] = "BOTTOMElvUIParentBOTTOM04",
+				["ElvAB_2"] = "BOTTOMElvUIParentBOTTOM68230",
 				["ElvUF_TargetMover"] = "BOTTOMElvUIParentBOTTOM300300",
 			},
 			["layoutSet"] = "tank",
@@ -169,21 +169,21 @@ ElvDB = {
 		["Kylosandrax - Aggramar"] = {
 			["currentTutorial"] = 1,
 			["general"] = {
-				["vendorGrays"] = true,
+				["valuecolor"] = {
+					["b"] = 0.819,
+					["g"] = 0.513,
+					["r"] = 0.09,
+				},
 				["bottomPanel"] = false,
 				["interruptAnnounce"] = "SAY",
-				["autoAcceptInvite"] = true,
+				["vendorGrays"] = true,
 				["bordercolor"] = {
 					["b"] = 0.31,
 					["g"] = 0.31,
 					["r"] = 0.31,
 				},
 				["autoRepair"] = "PLAYER",
-				["valuecolor"] = {
-					["b"] = 0.819,
-					["g"] = 0.513,
-					["r"] = 0.09,
-				},
+				["autoAcceptInvite"] = true,
 			},
 			["movers"] = {
 				["ElvUF_PlayerCastbarMover"] = "BOTTOMElvUIParentBOTTOM-300360",
@@ -192,11 +192,11 @@ ElvDB = {
 				["BossButton"] = "BOTTOMElvUIParentBOTTOM045",
 				["ElvAB_5"] = "BOTTOMElvUIParentBOTTOM-3154",
 				["ElvUF_TargetTargetMover"] = "BOTTOMRIGHTElvUIParentBOTTOMRIGHT-630300",
-				["BossHeaderMover"] = "TOPRIGHTElvUIParentTOPRIGHT-451-236",
-				["ElvUF_FocusMover"] = "BOTTOMRIGHTElvUIParentBOTTOMRIGHT-329423",
 				["ElvUF_TargetCastbarMover"] = "BOTTOMElvUIParentBOTTOM300360",
-				["TooltipMover"] = "BOTTOMRIGHTElvUIParentBOTTOMRIGHT-328307",
+				["ElvUF_FocusMover"] = "BOTTOMRIGHTElvUIParentBOTTOMRIGHT-329423",
 				["ArenaHeaderMover"] = "TOPRIGHTElvUIParentTOPRIGHT-427-155",
+				["TooltipMover"] = "BOTTOMRIGHTElvUIParentBOTTOMRIGHT-328307",
+				["BossHeaderMover"] = "TOPRIGHTElvUIParentTOPRIGHT-451-236",
 				["MicrobarMover"] = "TOPElvUIParentTOP0-4",
 				["ElvUF_PetMover"] = "BOTTOMLEFTElvUIParentBOTTOMLEFT638301",
 				["ElvAB_6"] = "BOTTOMElvUIParentBOTTOM04",
@@ -239,14 +239,14 @@ ElvDB = {
 				["statusbar"] = "Armory",
 				["units"] = {
 					["player"] = {
+						["castbar"] = {
+							["enable"] = false,
+						},
 						["buffs"] = {
 							["anchorPoint"] = "BOTTOMLEFT",
 						},
 						["debuffs"] = {
 							["anchorPoint"] = "BOTTOMLEFT",
-						},
-						["castbar"] = {
-							["enable"] = false,
 						},
 						["aurabar"] = {
 							["anchorPoint"] = "BELOW",
@@ -262,15 +262,15 @@ ElvDB = {
 						},
 					},
 					["target"] = {
+						["castbar"] = {
+							["enable"] = false,
+						},
 						["buffs"] = {
 							["anchorPoint"] = "BOTTOMLEFT",
 						},
 						["debuffs"] = {
 							["anchorPoint"] = "TOPLEFT",
 							["attachTo"] = "FRAME",
-						},
-						["castbar"] = {
-							["enable"] = false,
 						},
 						["aurabar"] = {
 							["anchorPoint"] = "BELOW",
@@ -334,6 +334,7 @@ ElvDB = {
 				["interruptAnnounce"] = "SAY",
 			},
 			["movers"] = {
+				["ElvUF_Raid40Mover"] = "BOTTOMRIGHTElvUIParentBOTTOMRIGHT-4374",
 				["ElvUF_PlayerCastbarMover"] = "BOTTOMElvUIParentBOTTOM-300360",
 				["ElvAB_1"] = "BOTTOMElvUIParentBOTTOM-69230",
 				["ElvAB_2"] = "BOTTOMElvUIParentBOTTOM68230",
@@ -341,16 +342,19 @@ ElvDB = {
 				["ElvAB_5"] = "BOTTOMElvUIParentBOTTOM-3154",
 				["ElvUF_TargetMover"] = "BOTTOMElvUIParentBOTTOM300300",
 				["ElvAB_3"] = "BOTTOMElvUIParentBOTTOM3154",
+				["ElvUF_PetMover"] = "BOTTOMLEFTElvUIParentBOTTOMLEFT638301",
+				["LootFrameMover"] = "TOPLEFTElvUIParentTOPLEFT268-190",
+				["ElvAB_6"] = "BOTTOMElvUIParentBOTTOM04",
 				["ElvUF_FocusMover"] = "BOTTOMRIGHTElvUIParentBOTTOMRIGHT-329423",
 				["ElvUF_TargetCastbarMover"] = "BOTTOMElvUIParentBOTTOM300360",
 				["TooltipMover"] = "BOTTOMRIGHTElvUIParentBOTTOMRIGHT-328307",
-				["ElvUF_PetMover"] = "BOTTOMLEFTElvUIParentBOTTOMLEFT638301",
+				["BossHeaderMover"] = "TOPRIGHTElvUIParentTOPRIGHT-451-236",
 				["MicrobarMover"] = "TOPElvUIParentTOP0-4",
 				["ElvUF_PlayerMover"] = "BOTTOMElvUIParentBOTTOM-300300",
-				["ElvUF_FocusTargetMover"] = "BOTTOMRIGHTElvUIParentBOTTOMRIGHT-132427",
-				["ElvAB_6"] = "BOTTOMElvUIParentBOTTOM04",
-				["BossHeaderMover"] = "TOPRIGHTElvUIParentTOPRIGHT-451-236",
 				["ArenaHeaderMover"] = "TOPRIGHTElvUIParentTOPRIGHT-427-155",
+				["ElvUF_PartyMover"] = "BOTTOMLEFTElvUIParentBOTTOMLEFT4834",
+				["ElvUF_RaidMover"] = "BOTTOMRIGHTElvUIParentBOTTOMRIGHT-4374",
+				["ElvUF_FocusTargetMover"] = "BOTTOMRIGHTElvUIParentBOTTOMRIGHT-132427",
 				["ElvUF_TargetTargetMover"] = "BOTTOMRIGHTElvUIParentBOTTOMRIGHT-630300",
 			},
 			["hideTutorial"] = true,
@@ -562,6 +566,9 @@ ElvPrivateDB = {
 			},
 		},
 		["Bronin - Aggramar"] = {
+			["nameplate"] = {
+				["enable"] = false,
+			},
 			["bags"] = {
 				["enable"] = false,
 			},
@@ -574,8 +581,8 @@ ElvPrivateDB = {
 				["SkadaSkin"] = false,
 				["DBMSkin"] = false,
 				["CliqueSkin"] = false,
-				["OverachieverSkin"] = false,
 				["BugSackSkin"] = false,
+				["OverachieverSkin"] = false,
 				["PostalSkin"] = false,
 			},
 			["skins"] = {

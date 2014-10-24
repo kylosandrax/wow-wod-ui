@@ -47,22 +47,21 @@ TidyPlatesHubGlobal = {
 	["TextPlateFieldMode"] = 3,
 	["OpacityFilterPlayers"] = false,
 	["OpacityFilterInactive"] = false,
-	["WidgetsTotemIcon"] = false,
+	["FrameVerticalPosition"] = 0.7,
 	["TextColorFriendlyNPC"] = {
 		["r"] = 0.376470588235294,
 		["g"] = 0.87843137254902,
 		["b"] = 0.145098039215686,
 	},
-	["FrameVerticalPosition"] = 0.7,
-	["OpacitySpotlight"] = 1,
+	["WidgetAuraTrackCurse"] = true,
+	["TextUseBlizzardFont"] = false,
 	["TextNameColorMode"] = 1,
 	["UnitSpotlightBarEnable"] = true,
 	["WidgetsDebuffLookup"] = {
 	},
 	["ClassColorPartyMembers"] = false,
 	["WidgetsDebuffTrackList"] = "My Rake\nMy Rip\nMy Moonfire\nAll 339\nMy Regrowth\nMy Rejuvenation",
-	["OpacityFilterLookup"] = {
-	},
+	["OpacitySpotlight"] = 1,
 	["WidgetAuraTrackMagic"] = true,
 	["ColorFriendlyNameMode"] = 1,
 	["TextColorGuildMember"] = {
@@ -70,7 +69,8 @@ TidyPlatesHubGlobal = {
 		["g"] = 0.658823529411765,
 		["b"] = 1,
 	},
-	["TextUseBlizzardFont"] = false,
+	["OpacityFilterLookup"] = {
+	},
 	["StyleEnemyMode"] = 1,
 	["ClassEnemyIcon"] = false,
 	["ColorPartyAggro"] = {
@@ -105,21 +105,21 @@ TidyPlatesHubGlobal = {
 		["b"] = 0.125490196078431,
 	},
 	["WidgetAuraTrackPoison"] = true,
-	["OpacityFullNoTarget"] = true,
+	["ColorLowHealth"] = {
+		["r"] = 1,
+		["g"] = 0,
+		["b"] = 0,
+	},
 	["TextColorFriendlyPlayer"] = {
 		["r"] = 0.235294117647059,
 		["g"] = 0.658823529411765,
 		["b"] = 1,
 	},
 	["OpacityFilterMini"] = false,
-	["ColorLowHealth"] = {
-		["r"] = 1,
-		["g"] = 0,
-		["b"] = 0,
-	},
+	["OpacityFullNoTarget"] = true,
 	["OpacityFilterNPC"] = false,
 	["UnitSpotlightGlowEnable"] = true,
-	["UnitSpotlightOpacity"] = 1,
+	["ScaleIgnoreNonEliteUnits"] = false,
 	["WidgetsComboPoints"] = true,
 	["UseGlobalSet"] = false,
 	["ColorHighHealth"] = {
@@ -127,15 +127,15 @@ TidyPlatesHubGlobal = {
 		["g"] = 1,
 		["b"] = 0.2,
 	},
-	["ScaleIgnoreNonEliteUnits"] = false,
 	["OpacityFilterList"] = "Fanged Pit Viper",
+	["WidgetAuraTrackDispelFriendly"] = false,
 	["TextHealthTextMode"] = 1,
 	["ColorEnemyBarMode"] = 1,
 	["HeadlineFriendlyColor"] = 4,
 	["WidgetsDebuffPriority"] = {
 	},
 	["ScaleStandard"] = 1,
-	["WidgetAuraTrackDispelFriendly"] = false,
+	["UnitSpotlightOpacity"] = 1,
 	["ColorHostilePlayer"] = {
 		["r"] = 1,
 		["g"] = 0,
@@ -207,7 +207,7 @@ TidyPlatesHubGlobal = {
 	["UnitSpotlightOpacityEnable"] = true,
 	["WidgetTargetHighlight"] = true,
 	["ScaleCastingSpotlight"] = false,
-	["WidgetAuraTrackCurse"] = true,
+	["WidgetsTotemIcon"] = false,
 	["ScaleMiniMobs"] = true,
 	["OpacityFilterFriendlyNPC"] = false,
 }

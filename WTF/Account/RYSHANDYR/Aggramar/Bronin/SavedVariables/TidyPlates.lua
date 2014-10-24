@@ -4,7 +4,7 @@ TidyPlatesOptions = {
 	["WelcomeShown"] = true,
 	["FriendlyAutomation"] = "No Automation",
 	["EnemyAutomation"] = "No Automation",
-	["primary"] = "Threat Plates",
+	["primary"] = "Grey/|cFF3782D1Tank",
 	["CompatibilityMode"] = false,
-	["secondary"] = "Threat Plates",
+	["secondary"] = "Grey/|cFFFF4400Damage",
 }

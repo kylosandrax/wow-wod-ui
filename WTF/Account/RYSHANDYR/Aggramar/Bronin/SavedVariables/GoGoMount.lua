@@ -9,33 +9,12 @@ GoGo_Prefs = {
 	},
 	["DruidFormNotRandomize"] = false,
 	["Zones"] = {
-		["Vale of Eternal Blossoms"] = {
-			["Preferred"] = {
-			},
-			["Excluded"] = {
-			},
-			["ZoneID"] = -1,
-		},
 		["Eastern Plaguelands"] = {
 			["Preferred"] = {
 			},
 			["Excluded"] = {
 			},
 			["ZoneID"] = 13,
-		},
-		["Hall of Blackhand"] = {
-			["Preferred"] = {
-			},
-			["Excluded"] = {
-			},
-			["ZoneID"] = 862,
-		},
-		["Siege of Niuzao Temple"] = {
-			["Preferred"] = {
-			},
-			["Excluded"] = {
-			},
-			["ZoneID"] = 862,
 		},
 		["Shrine of Two Moons"] = {
 			["Preferred"] = {
@@ -44,12 +23,12 @@ GoGo_Prefs = {
 			},
 			["ZoneID"] = 13,
 		},
-		["Timeless Isle"] = {
+		["Siege of Orgrimmar"] = {
 			["Preferred"] = {
 			},
 			["Excluded"] = {
 			},
-			["ZoneID"] = 951,
+			["ZoneID"] = 811,
 		},
 		["Blasted Lands"] = {
 			["Preferred"] = {
@@ -65,12 +44,33 @@ GoGo_Prefs = {
 			},
 			["ZoneID"] = 862,
 		},
-		["Siege of Orgrimmar"] = {
+		["Mulgore"] = {
+			["Preferred"] = {
+			},
+			["Excluded"] = {
+			},
+			["ZoneID"] = 9,
+		},
+		["Orgrimmar"] = {
+			["Preferred"] = {
+			},
+			["Excluded"] = {
+			},
+			["ZoneID"] = 862,
+		},
+		["Vale of Eternal Blossoms"] = {
 			["Preferred"] = {
 			},
 			["Excluded"] = {
 			},
 			["ZoneID"] = 811,
+		},
+		["Hall of Blackhand"] = {
+			["Preferred"] = {
+			},
+			["Excluded"] = {
+			},
+			["ZoneID"] = 862,
 		},
 		["The Jade Forest"] = {
 			["Preferred"] = {
@@ -78,13 +78,6 @@ GoGo_Prefs = {
 			["Excluded"] = {
 			},
 			["ZoneID"] = 806,
-		},
-		["Thunder Bluff"] = {
-			["Preferred"] = {
-			},
-			["Excluded"] = {
-			},
-			["ZoneID"] = 362,
 		},
 		["Kun-Lai Summit"] = {
 			["Preferred"] = {
@@ -100,7 +93,42 @@ GoGo_Prefs = {
 			},
 			["ZoneID"] = 873,
 		},
-		["Orgrimmar"] = {
+		["Timeless Isle"] = {
+			["Preferred"] = {
+			},
+			["Excluded"] = {
+			},
+			["ZoneID"] = 951,
+		},
+		["Siege of Niuzao Temple"] = {
+			["Preferred"] = {
+			},
+			["Excluded"] = {
+			},
+			["ZoneID"] = 862,
+		},
+		["Thunder Bluff"] = {
+			["Preferred"] = {
+			},
+			["Excluded"] = {
+			},
+			["ZoneID"] = 362,
+		},
+		["Southern Barrens"] = {
+			["Preferred"] = {
+			},
+			["Excluded"] = {
+			},
+			["ZoneID"] = 607,
+		},
+		["Thousand Needles"] = {
+			["Preferred"] = {
+			},
+			["Excluded"] = {
+			},
+			["ZoneID"] = 61,
+		},
+		["Tanaris"] = {
 			["Preferred"] = {
 			},
 			["Excluded"] = {

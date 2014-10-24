@@ -252,8 +252,16 @@ WeakAurasSaved = {
 					["type"] = "none",
 				},
 			},
-			["id"] = "HPb",
+			["additional_triggers"] = {
+			},
 			["selfPoint"] = "CENTER",
+			["id"] = "HPb",
+			["discrete_rotation"] = 0,
+			["frameStrata"] = 1,
+			["width"] = 75.0003356933594,
+			["rotation"] = 0,
+			["desaturate"] = false,
+			["numTriggers"] = 1,
 			["trigger"] = {
 				["type"] = "status",
 				["power"] = "0",
@@ -269,14 +277,6 @@ WeakAurasSaved = {
 				["subeventSuffix"] = "_CAST_START",
 				["unit"] = "player",
 				["debuffType"] = "HELPFUL",
-			},
-			["discrete_rotation"] = 0,
-			["frameStrata"] = 1,
-			["width"] = 75.0003356933594,
-			["rotation"] = 0,
-			["desaturate"] = false,
-			["numTriggers"] = 1,
-			["additional_triggers"] = {
 			},
 			["height"] = 120,
 			["rotate"] = true,
@@ -617,28 +617,104 @@ WeakAurasSaved = {
 				1, -- [4]
 			},
 		},
-		["ScentOfBlood-GT-Stacks"] = {
-			["fontSize"] = 24,
-			["displayStacks"] = "%s",
-			["parent"] = "GRP-ScentOfBlood",
+		["HP4"] = {
+			["disjunctive"] = true,
+			["mirror"] = false,
+			["yOffset"] = 34,
+			["regionType"] = "texture",
+			["blendMode"] = "ADD",
+			["parent"] = "v0.91 Prot Pala Group",
 			["color"] = {
 				1, -- [1]
 				1, -- [2]
 				1, -- [3]
-				1, -- [4]
+				0.75, -- [4]
 			},
+			["xOffset"] = -56,
+			["actions"] = {
+				["start"] = {
+				},
+				["finish"] = {
+				},
+			},
+			["texture"] = "Interface\\Addons\\WeakAuras\\PowerAurasMedia\\Auras\\Aura74",
+			["anchorPoint"] = "CENTER",
+			["selfPoint"] = "CENTER",
+			["additional_triggers"] = {
+				{
+					["trigger"] = {
+						["type"] = "aura",
+						["subeventSuffix"] = "_CAST_START",
+						["ownOnly"] = true,
+						["event"] = "Health",
+						["subeventPrefix"] = "SPELL",
+						["custom_hide"] = "timed",
+						["names"] = {
+							"Divine Purpose", -- [1]
+						},
+						["unit"] = "player",
+						["debuffType"] = "HELPFUL",
+					},
+					["untrigger"] = {
+					},
+				}, -- [1]
+			},
+			["animation"] = {
+				["start"] = {
+					["duration_type"] = "seconds",
+					["type"] = "none",
+				},
+				["main"] = {
+					["duration_type"] = "seconds",
+					["type"] = "none",
+				},
+				["finish"] = {
+					["duration_type"] = "seconds",
+					["type"] = "none",
+				},
+			},
+			["trigger"] = {
+				["type"] = "status",
+				["power"] = "4",
+				["power_operator"] = ">=",
+				["use_power"] = true,
+				["event"] = "Holy Power",
+				["use_unit"] = true,
+				["custom_hide"] = "timed",
+				["subeventPrefix"] = "SPELL",
+				["names"] = {
+				},
+				["unevent"] = "auto",
+				["subeventSuffix"] = "_CAST_START",
+				["unit"] = "player",
+				["debuffType"] = "HELPFUL",
+			},
+			["discrete_rotation"] = 0,
+			["frameStrata"] = 1,
+			["desaturate"] = false,
+			["rotation"] = 0,
+			["width"] = 100,
+			["numTriggers"] = 2,
+			["id"] = "HP4",
+			["height"] = 40,
+			["rotate"] = true,
 			["load"] = {
 				["use_class"] = true,
 				["role"] = {
 					["multi"] = {
 					},
 				},
+				["use_spec"] = false,
+				["use_combat"] = true,
 				["spec"] = {
+					["single"] = 2,
 					["multi"] = {
+						[2] = true,
+						[3] = true,
 					},
 				},
 				["class"] = {
-					["single"] = "DEATHKNIGHT",
+					["single"] = "PALADIN",
 					["multi"] = {
 					},
 				},
@@ -648,72 +724,6 @@ WeakAurasSaved = {
 				},
 			},
 			["untrigger"] = {
-			},
-			["yOffset"] = 0,
-			["regionType"] = "icon",
-			["xOffset"] = -130,
-			["actions"] = {
-				["start"] = {
-					["do_glow"] = true,
-					["glow_frame"] = "WeakAuras:ScentOfBlood-GT-Stacks",
-					["glow_action"] = "show",
-				},
-				["finish"] = {
-				},
-			},
-			["inverse"] = false,
-			["customTextUpdate"] = "update",
-			["trigger"] = {
-				["type"] = "aura",
-				["subeventSuffix"] = "_CAST_START",
-				["event"] = "Health",
-				["unit"] = "player",
-				["useCount"] = true,
-				["count"] = "4",
-				["debuffType"] = "HELPFUL",
-				["names"] = {
-					"Scent of Blood", -- [1]
-				},
-				["subeventPrefix"] = "SPELL",
-				["countOperator"] = ">=",
-				["custom_hide"] = "timed",
-			},
-			["icon"] = true,
-			["fontFlags"] = "None",
-			["stacksContainment"] = "INSIDE",
-			["zoom"] = 0,
-			["auto"] = true,
-			["animation"] = {
-				["start"] = {
-					["type"] = "none",
-					["duration_type"] = "seconds",
-				},
-				["main"] = {
-					["type"] = "none",
-					["duration_type"] = "seconds",
-					["preset"] = "spiralandpulse",
-				},
-				["finish"] = {
-					["type"] = "none",
-					["duration_type"] = "seconds",
-				},
-			},
-			["id"] = "ScentOfBlood-GT-Stacks",
-			["desaturate"] = false,
-			["frameStrata"] = 5,
-			["stickyDuration"] = false,
-			["width"] = 48,
-			["font"] = "Friz Quadrata TT",
-			["numTriggers"] = 1,
-			["selfPoint"] = "CENTER",
-			["height"] = 48,
-			["anchorPoint"] = "CENTER",
-			["stacksPoint"] = "CENTER",
-			["textColor"] = {
-				1, -- [1]
-				1, -- [2]
-				1, -- [3]
-				1, -- [4]
 			},
 		},
 		["Bastion of Glory"] = {
@@ -956,8 +966,16 @@ WeakAurasSaved = {
 					["type"] = "none",
 				},
 			},
-			["id"] = "HPa",
+			["additional_triggers"] = {
+			},
 			["selfPoint"] = "CENTER",
+			["id"] = "HPa",
+			["discrete_rotation"] = 0,
+			["frameStrata"] = 1,
+			["width"] = 75.0003356933594,
+			["rotation"] = 0,
+			["desaturate"] = false,
+			["numTriggers"] = 1,
 			["trigger"] = {
 				["type"] = "status",
 				["power"] = "0",
@@ -973,14 +991,6 @@ WeakAurasSaved = {
 				["subeventSuffix"] = "_CAST_START",
 				["unit"] = "player",
 				["debuffType"] = "HELPFUL",
-			},
-			["discrete_rotation"] = 0,
-			["frameStrata"] = 1,
-			["width"] = 75.0003356933594,
-			["rotation"] = 0,
-			["desaturate"] = false,
-			["numTriggers"] = 1,
-			["additional_triggers"] = {
 			},
 			["height"] = 120,
 			["rotate"] = true,
@@ -1329,6 +1339,9 @@ WeakAurasSaved = {
 					["type"] = "none",
 				},
 			},
+			["additional_triggers"] = {
+			},
+			["selfPoint"] = "CENTER",
 			["trigger"] = {
 				["type"] = "status",
 				["power"] = "0",
@@ -1345,1018 +1358,13 @@ WeakAurasSaved = {
 				["unit"] = "player",
 				["debuffType"] = "HELPFUL",
 			},
-			["selfPoint"] = "CENTER",
+			["discrete_rotation"] = 0,
+			["frameStrata"] = 1,
+			["width"] = 75.0003356933594,
+			["rotation"] = 0,
+			["desaturate"] = false,
+			["numTriggers"] = 1,
 			["id"] = "HPe",
-			["discrete_rotation"] = 0,
-			["frameStrata"] = 1,
-			["width"] = 75.0003356933594,
-			["rotation"] = 0,
-			["desaturate"] = false,
-			["numTriggers"] = 1,
-			["additional_triggers"] = {
-			},
-			["height"] = 120,
-			["rotate"] = true,
-			["load"] = {
-				["use_class"] = true,
-				["role"] = {
-					["multi"] = {
-					},
-				},
-				["use_spec"] = false,
-				["spec"] = {
-					["single"] = 2,
-					["multi"] = {
-						[2] = true,
-						[3] = true,
-					},
-				},
-				["use_combat"] = true,
-				["class"] = {
-					["single"] = "PALADIN",
-					["multi"] = {
-					},
-				},
-				["size"] = {
-					["multi"] = {
-					},
-				},
-			},
-			["anchorPoint"] = "CENTER",
-		},
-		["PlagueLeechUseable"] = {
-			["fontSize"] = 12,
-			["displayStacks"] = " ",
-			["color"] = {
-				1, -- [1]
-				1, -- [2]
-				1, -- [3]
-				1, -- [4]
-			},
-			["yOffset"] = -119.999938964844,
-			["stacksPoint"] = "BOTTOMRIGHT",
-			["untrigger"] = {
-				["spellName"] = 123693,
-			},
-			["regionType"] = "icon",
-			["anchorPoint"] = "CENTER",
-			["selfPoint"] = "CENTER",
-			["id"] = "PlagueLeechUseable",
-			["customTextUpdate"] = "update",
-			["numTriggers"] = 1,
-			["actions"] = {
-				["start"] = {
-				},
-				["finish"] = {
-				},
-			},
-			["fontFlags"] = "OUTLINE",
-			["stacksContainment"] = "INSIDE",
-			["zoom"] = 0,
-			["auto"] = true,
-			["animation"] = {
-				["start"] = {
-					["duration_type"] = "seconds",
-					["type"] = "none",
-				},
-				["main"] = {
-					["type"] = "none",
-					["preset"] = "pulse",
-					["duration_type"] = "seconds",
-				},
-				["finish"] = {
-					["duration_type"] = "seconds",
-					["type"] = "none",
-				},
-			},
-			["trigger"] = {
-				["type"] = "status",
-				["use_targetRequired"] = false,
-				["event"] = "Action Usable",
-				["unit"] = "player",
-				["spellName"] = 123693,
-				["use_spellName"] = true,
-				["subeventSuffix"] = "_CAST_START",
-				["use_unit"] = true,
-				["unevent"] = "auto",
-				["subeventPrefix"] = "SPELL",
-				["names"] = {
-				},
-				["debuffType"] = "HELPFUL",
-			},
-			["width"] = 48,
-			["frameStrata"] = 1,
-			["desaturate"] = false,
-			["xOffset"] = -180,
-			["font"] = "Friz Quadrata TT",
-			["inverse"] = false,
-			["stickyDuration"] = false,
-			["height"] = 48,
-			["icon"] = true,
-			["load"] = {
-				["use_class"] = true,
-				["role"] = {
-					["multi"] = {
-					},
-				},
-				["spec"] = {
-					["multi"] = {
-					},
-				},
-				["class"] = {
-					["single"] = "DEATHKNIGHT",
-					["multi"] = {
-					},
-				},
-				["size"] = {
-					["multi"] = {
-					},
-				},
-			},
-			["textColor"] = {
-				1, -- [1]
-				1, -- [2]
-				1, -- [3]
-				1, -- [4]
-			},
-		},
-		["HP4"] = {
-			["disjunctive"] = true,
-			["mirror"] = false,
-			["yOffset"] = 34,
-			["regionType"] = "texture",
-			["blendMode"] = "ADD",
-			["parent"] = "v0.91 Prot Pala Group",
-			["color"] = {
-				1, -- [1]
-				1, -- [2]
-				1, -- [3]
-				0.75, -- [4]
-			},
-			["xOffset"] = -56,
-			["actions"] = {
-				["start"] = {
-				},
-				["finish"] = {
-				},
-			},
-			["texture"] = "Interface\\Addons\\WeakAuras\\PowerAurasMedia\\Auras\\Aura74",
-			["anchorPoint"] = "CENTER",
-			["selfPoint"] = "CENTER",
-			["additional_triggers"] = {
-				{
-					["trigger"] = {
-						["type"] = "aura",
-						["subeventSuffix"] = "_CAST_START",
-						["ownOnly"] = true,
-						["event"] = "Health",
-						["subeventPrefix"] = "SPELL",
-						["custom_hide"] = "timed",
-						["names"] = {
-							"Divine Purpose", -- [1]
-						},
-						["unit"] = "player",
-						["debuffType"] = "HELPFUL",
-					},
-					["untrigger"] = {
-					},
-				}, -- [1]
-			},
-			["animation"] = {
-				["start"] = {
-					["duration_type"] = "seconds",
-					["type"] = "none",
-				},
-				["main"] = {
-					["duration_type"] = "seconds",
-					["type"] = "none",
-				},
-				["finish"] = {
-					["duration_type"] = "seconds",
-					["type"] = "none",
-				},
-			},
-			["trigger"] = {
-				["type"] = "status",
-				["power"] = "4",
-				["power_operator"] = ">=",
-				["use_power"] = true,
-				["event"] = "Holy Power",
-				["use_unit"] = true,
-				["custom_hide"] = "timed",
-				["subeventPrefix"] = "SPELL",
-				["names"] = {
-				},
-				["unevent"] = "auto",
-				["subeventSuffix"] = "_CAST_START",
-				["unit"] = "player",
-				["debuffType"] = "HELPFUL",
-			},
-			["discrete_rotation"] = 0,
-			["frameStrata"] = 1,
-			["desaturate"] = false,
-			["rotation"] = 0,
-			["width"] = 100,
-			["numTriggers"] = 2,
-			["id"] = "HP4",
-			["height"] = 40,
-			["rotate"] = true,
-			["load"] = {
-				["use_class"] = true,
-				["role"] = {
-					["multi"] = {
-					},
-				},
-				["use_spec"] = false,
-				["use_combat"] = true,
-				["spec"] = {
-					["single"] = 2,
-					["multi"] = {
-						[2] = true,
-						[3] = true,
-					},
-				},
-				["class"] = {
-					["single"] = "PALADIN",
-					["multi"] = {
-					},
-				},
-				["size"] = {
-					["multi"] = {
-					},
-				},
-			},
-			["untrigger"] = {
-			},
-		},
-		["Devotion Aura"] = {
-			["xOffset"] = -176,
-			["yOffset"] = 0,
-			["anchorPoint"] = "CENTER",
-			["customTextUpdate"] = "update",
-			["icon"] = true,
-			["fontFlags"] = "OUTLINE",
-			["useTooltip"] = false,
-			["selfPoint"] = "CENTER",
-			["trigger"] = {
-				["rem"] = "5",
-				["subeventSuffix"] = "_CAST_START",
-				["ownOnly"] = true,
-				["event"] = "Health",
-				["names"] = {
-					"Devotion Aura", -- [1]
-				},
-				["debuffType"] = "HELPFUL",
-				["subeventPrefix"] = "SPELL",
-				["remOperator"] = "<",
-				["type"] = "aura",
-				["unit"] = "player",
-				["custom_hide"] = "timed",
-			},
-			["stickyDuration"] = false,
-			["font"] = "Friz Quadrata TT",
-			["height"] = 44,
-			["load"] = {
-				["use_class"] = true,
-				["role"] = {
-					["multi"] = {
-					},
-				},
-				["use_never"] = false,
-				["use_spec"] = true,
-				["use_combat"] = true,
-				["spec"] = {
-					["single"] = 2,
-					["multi"] = {
-						true, -- [1]
-					},
-				},
-				["class"] = {
-					["single"] = "PALADIN",
-					["multi"] = {
-					},
-				},
-				["size"] = {
-					["multi"] = {
-					},
-				},
-			},
-			["fontSize"] = 20,
-			["displayStacks"] = "%p",
-			["regionType"] = "icon",
-			["color"] = {
-				1, -- [1]
-				1, -- [2]
-				1, -- [3]
-				1, -- [4]
-			},
-			["stacksContainment"] = "INSIDE",
-			["zoom"] = 0,
-			["auto"] = true,
-			["parent"] = "v0.91 Prot Pala Group",
-			["additional_triggers"] = {
-			},
-			["untrigger"] = {
-			},
-			["frameStrata"] = 1,
-			["width"] = 44,
-			["actions"] = {
-				["start"] = {
-				},
-				["finish"] = {
-				},
-			},
-			["numTriggers"] = 1,
-			["inverse"] = false,
-			["animation"] = {
-				["start"] = {
-					["duration_type"] = "seconds",
-					["type"] = "none",
-				},
-				["main"] = {
-					["duration_type"] = "seconds",
-					["type"] = "none",
-				},
-				["finish"] = {
-					["duration_type"] = "seconds",
-					["type"] = "none",
-				},
-			},
-			["id"] = "Devotion Aura",
-			["desaturate"] = false,
-			["stacksPoint"] = "BOTTOM",
-			["textColor"] = {
-				1, -- [1]
-				1, -- [2]
-				1, -- [3]
-				1, -- [4]
-			},
-		},
-		["HPd"] = {
-			["xOffset"] = -56,
-			["mirror"] = false,
-			["yOffset"] = 34,
-			["regionType"] = "texture",
-			["blendMode"] = "ADD",
-			["parent"] = "v0.91 Prot Pala Group",
-			["color"] = {
-				1, -- [1]
-				1, -- [2]
-				1, -- [3]
-				0.75, -- [4]
-			},
-			["actions"] = {
-				["start"] = {
-				},
-				["finish"] = {
-				},
-			},
-			["texture"] = "Interface\\Addons\\WeakAuras\\PowerAurasMedia\\Auras\\Aura75",
-			["anchorPoint"] = "CENTER",
-			["animation"] = {
-				["start"] = {
-					["duration_type"] = "seconds",
-					["type"] = "none",
-				},
-				["main"] = {
-					["duration_type"] = "seconds",
-					["type"] = "none",
-				},
-				["finish"] = {
-					["duration_type"] = "seconds",
-					["type"] = "none",
-				},
-			},
-			["id"] = "HPd",
-			["selfPoint"] = "CENTER",
-			["trigger"] = {
-				["type"] = "status",
-				["power"] = "0",
-				["power_operator"] = ">=",
-				["use_power"] = true,
-				["event"] = "Holy Power",
-				["use_unit"] = true,
-				["custom_hide"] = "timed",
-				["subeventPrefix"] = "SPELL",
-				["names"] = {
-				},
-				["unevent"] = "auto",
-				["subeventSuffix"] = "_CAST_START",
-				["unit"] = "player",
-				["debuffType"] = "HELPFUL",
-			},
-			["discrete_rotation"] = 0,
-			["frameStrata"] = 1,
-			["width"] = 75.0003356933594,
-			["rotation"] = 0,
-			["desaturate"] = false,
-			["numTriggers"] = 1,
-			["additional_triggers"] = {
-			},
-			["height"] = 120,
-			["rotate"] = true,
-			["load"] = {
-				["use_class"] = true,
-				["role"] = {
-					["multi"] = {
-					},
-				},
-				["use_spec"] = false,
-				["spec"] = {
-					["single"] = 2,
-					["multi"] = {
-						[2] = true,
-						[3] = true,
-					},
-				},
-				["use_combat"] = true,
-				["class"] = {
-					["single"] = "PALADIN",
-					["multi"] = {
-					},
-				},
-				["size"] = {
-					["multi"] = {
-					},
-				},
-			},
-			["untrigger"] = {
-			},
-		},
-		["HP5"] = {
-			["disjunctive"] = true,
-			["mirror"] = false,
-			["yOffset"] = 34,
-			["regionType"] = "texture",
-			["blendMode"] = "ADD",
-			["parent"] = "v0.91 Prot Pala Group",
-			["color"] = {
-				1, -- [1]
-				1, -- [2]
-				1, -- [3]
-				0.75, -- [4]
-			},
-			["xOffset"] = -2,
-			["actions"] = {
-				["start"] = {
-				},
-				["finish"] = {
-				},
-			},
-			["texture"] = "Interface\\Addons\\WeakAuras\\PowerAurasMedia\\Auras\\Aura74",
-			["anchorPoint"] = "CENTER",
-			["animation"] = {
-				["start"] = {
-					["duration_type"] = "seconds",
-					["type"] = "none",
-				},
-				["main"] = {
-					["duration_type"] = "seconds",
-					["type"] = "none",
-				},
-				["finish"] = {
-					["duration_type"] = "seconds",
-					["type"] = "none",
-				},
-			},
-			["trigger"] = {
-				["type"] = "status",
-				["power"] = "5",
-				["power_operator"] = ">=",
-				["use_power"] = true,
-				["event"] = "Holy Power",
-				["use_unit"] = true,
-				["custom_hide"] = "timed",
-				["subeventPrefix"] = "SPELL",
-				["names"] = {
-				},
-				["unevent"] = "auto",
-				["subeventSuffix"] = "_CAST_START",
-				["unit"] = "player",
-				["debuffType"] = "HELPFUL",
-			},
-			["selfPoint"] = "CENTER",
-			["id"] = "HP5",
-			["discrete_rotation"] = 0,
-			["frameStrata"] = 1,
-			["desaturate"] = false,
-			["rotation"] = 0,
-			["width"] = 100,
-			["numTriggers"] = 2,
-			["additional_triggers"] = {
-				{
-					["trigger"] = {
-						["type"] = "aura",
-						["subeventSuffix"] = "_CAST_START",
-						["ownOnly"] = true,
-						["event"] = "Health",
-						["subeventPrefix"] = "SPELL",
-						["custom_hide"] = "timed",
-						["names"] = {
-							"Divine Purpose", -- [1]
-						},
-						["unit"] = "player",
-						["debuffType"] = "HELPFUL",
-					},
-					["untrigger"] = {
-					},
-				}, -- [1]
-			},
-			["height"] = 40,
-			["rotate"] = true,
-			["load"] = {
-				["use_class"] = true,
-				["role"] = {
-					["multi"] = {
-					},
-				},
-				["use_spec"] = false,
-				["use_combat"] = true,
-				["spec"] = {
-					["single"] = 2,
-					["multi"] = {
-						[2] = true,
-						[3] = true,
-					},
-				},
-				["class"] = {
-					["single"] = "PALADIN",
-					["multi"] = {
-					},
-				},
-				["size"] = {
-					["multi"] = {
-					},
-				},
-			},
-			["untrigger"] = {
-			},
-		},
-		["GRP-ScentOfBlood"] = {
-			["backdropColor"] = {
-				1, -- [1]
-				1, -- [2]
-				1, -- [3]
-				0.5, -- [4]
-			},
-			["controlledChildren"] = {
-				"ScendOfBlood", -- [1]
-				"ScentOfBlood-GT-Stacks", -- [2]
-				"ScentOfBlood-LT-Stacks", -- [3]
-			},
-			["borderBackdrop"] = "Blizzard Tooltip",
-			["xOffset"] = 0,
-			["border"] = false,
-			["yOffset"] = -120,
-			["anchorPoint"] = "CENTER",
-			["borderSize"] = 16,
-			["borderColor"] = {
-				1, -- [1]
-				1, -- [2]
-				1, -- [3]
-				0.5, -- [4]
-			},
-			["actions"] = {
-				["start"] = {
-				},
-				["finish"] = {
-				},
-			},
-			["borderOffset"] = 5,
-			["selfPoint"] = "BOTTOMLEFT",
-			["trigger"] = {
-				["names"] = {
-				},
-				["type"] = "aura",
-				["debuffType"] = "HELPFUL",
-				["unit"] = "player",
-			},
-			["frameStrata"] = 1,
-			["expanded"] = false,
-			["untrigger"] = {
-			},
-			["borderInset"] = 11,
-			["numTriggers"] = 1,
-			["animation"] = {
-				["start"] = {
-					["duration_type"] = "seconds",
-					["type"] = "none",
-				},
-				["main"] = {
-					["duration_type"] = "seconds",
-					["type"] = "none",
-				},
-				["finish"] = {
-					["duration_type"] = "seconds",
-					["type"] = "none",
-				},
-			},
-			["borderEdge"] = "None",
-			["id"] = "GRP-ScentOfBlood",
-			["load"] = {
-				["role"] = {
-					["multi"] = {
-					},
-				},
-				["class"] = {
-					["multi"] = {
-					},
-				},
-				["spec"] = {
-					["multi"] = {
-					},
-				},
-				["size"] = {
-					["multi"] = {
-					},
-				},
-			},
-			["regionType"] = "group",
-		},
-		["BoneShield"] = {
-			["color"] = {
-				1, -- [1]
-				0, -- [2]
-				0.0431372549019608, -- [3]
-				1, -- [4]
-			},
-			["fontSize"] = 12,
-			["displayStacks"] = "%s",
-			["stacksPoint"] = "CENTER",
-			["xOffset"] = 0,
-			["untrigger"] = {
-			},
-			["anchorPoint"] = "CENTER",
-			["yOffset"] = 125,
-			["regionType"] = "icon",
-			["actions"] = {
-				["start"] = {
-				},
-				["finish"] = {
-				},
-			},
-			["numTriggers"] = 2,
-			["selfPoint"] = "CENTER",
-			["customTextUpdate"] = "update",
-			["stickyDuration"] = false,
-			["icon"] = true,
-			["fontFlags"] = "OUTLINE",
-			["stacksContainment"] = "INSIDE",
-			["zoom"] = 0,
-			["auto"] = true,
-			["animation"] = {
-				["start"] = {
-					["duration_type"] = "seconds",
-					["type"] = "none",
-				},
-				["main"] = {
-					["duration_type"] = "seconds",
-					["type"] = "none",
-				},
-				["finish"] = {
-					["duration_type"] = "seconds",
-					["type"] = "none",
-				},
-			},
-			["trigger"] = {
-				["subeventPrefix"] = "SPELL",
-				["type"] = "aura",
-				["inverse"] = true,
-				["subeventSuffix"] = "_CAST_START",
-				["debuffType"] = "HELPFUL",
-				["names"] = {
-					"Bone Shield", -- [1]
-				},
-				["event"] = "Health",
-				["unit"] = "player",
-			},
-			["width"] = 64,
-			["frameStrata"] = 1,
-			["desaturate"] = false,
-			["id"] = "BoneShield",
-			["font"] = "Friz Quadrata TT",
-			["inverse"] = false,
-			["additional_triggers"] = {
-				{
-					["trigger"] = {
-						["type"] = "event",
-						["unevent"] = "timed",
-						["event"] = "Cooldown Ready (Spell)",
-						["subeventPrefix"] = "SPELL",
-						["use_spellName"] = true,
-						["use_unit"] = true,
-						["subeventSuffix"] = "_CAST_START",
-						["unit"] = "player",
-						["spellName"] = 49222,
-					},
-					["untrigger"] = {
-						["spellName"] = 49222,
-					},
-				}, -- [1]
-			},
-			["height"] = 64,
-			["displayIcon"] = "INTERFACE\\ICONS\\ability_deathknight_boneshield",
-			["load"] = {
-				["use_class"] = true,
-				["role"] = {
-					["multi"] = {
-					},
-				},
-				["use_never"] = false,
-				["use_spec"] = true,
-				["spec"] = {
-					["single"] = 1,
-					["multi"] = {
-						true, -- [1]
-					},
-				},
-				["class"] = {
-					["single"] = "DEATHKNIGHT",
-					["multi"] = {
-						["DEATHKNIGHT"] = true,
-					},
-				},
-				["size"] = {
-					["multi"] = {
-					},
-				},
-			},
-			["textColor"] = {
-				1, -- [1]
-				1, -- [2]
-				1, -- [3]
-				1, -- [4]
-			},
-		},
-		["BloodCharges"] = {
-			["fontSize"] = 24,
-			["displayStacks"] = "%s",
-			["color"] = {
-				1, -- [1]
-				1, -- [2]
-				1, -- [3]
-				1, -- [4]
-			},
-			["yOffset"] = -120,
-			["load"] = {
-				["use_class"] = true,
-				["role"] = {
-					["multi"] = {
-					},
-				},
-				["spec"] = {
-					["multi"] = {
-					},
-				},
-				["class"] = {
-					["single"] = "DEATHKNIGHT",
-					["multi"] = {
-					},
-				},
-				["size"] = {
-					["multi"] = {
-					},
-				},
-			},
-			["untrigger"] = {
-			},
-			["anchorPoint"] = "CENTER",
-			["actions"] = {
-				["start"] = {
-					["do_glow"] = true,
-					["glow_frame"] = "WeakAuras:BloodCharges",
-					["glow_action"] = "show",
-					["sound"] = "Interface\\AddOns\\WeakAuras\\Media\\Sounds\\Blast.mp3",
-					["do_sound"] = false,
-				},
-				["finish"] = {
-				},
-			},
-			["animation"] = {
-				["start"] = {
-					["type"] = "none",
-					["duration_type"] = "seconds",
-				},
-				["main"] = {
-					["type"] = "none",
-					["duration_type"] = "seconds",
-				},
-				["finish"] = {
-					["type"] = "none",
-					["duration_type"] = "seconds",
-				},
-			},
-			["desaturate"] = false,
-			["customTextUpdate"] = "update",
-			["inverse"] = false,
-			["icon"] = true,
-			["fontFlags"] = "OUTLINE",
-			["stacksContainment"] = "INSIDE",
-			["zoom"] = 0,
-			["auto"] = true,
-			["selfPoint"] = "CENTER",
-			["trigger"] = {
-				["type"] = "aura",
-				["subeventSuffix"] = "_CAST_START",
-				["event"] = "Health",
-				["unit"] = "player",
-				["useCount"] = true,
-				["count"] = "5",
-				["countOperator"] = ">=",
-				["names"] = {
-					"Blood Charge", -- [1]
-				},
-				["subeventPrefix"] = "SPELL",
-				["debuffType"] = "HELPFUL",
-			},
-			["stickyDuration"] = false,
-			["frameStrata"] = 1,
-			["width"] = 48,
-			["xOffset"] = 129.999633789063,
-			["font"] = "Friz Quadrata TT",
-			["numTriggers"] = 1,
-			["id"] = "BloodCharges",
-			["height"] = 48,
-			["regionType"] = "icon",
-			["stacksPoint"] = "CENTER",
-			["textColor"] = {
-				1, -- [1]
-				1, -- [2]
-				1, -- [3]
-				1, -- [4]
-			},
-		},
-		["HP1"] = {
-			["disjunctive"] = true,
-			["mirror"] = false,
-			["yOffset"] = 34,
-			["regionType"] = "texture",
-			["blendMode"] = "ADD",
-			["parent"] = "v0.91 Prot Pala Group",
-			["color"] = {
-				1, -- [1]
-				1, -- [2]
-				1, -- [3]
-				0.75, -- [4]
-			},
-			["xOffset"] = -218,
-			["actions"] = {
-				["start"] = {
-				},
-				["finish"] = {
-				},
-			},
-			["texture"] = "Interface\\Addons\\WeakAuras\\PowerAurasMedia\\Auras\\Aura74",
-			["anchorPoint"] = "CENTER",
-			["selfPoint"] = "CENTER",
-			["additional_triggers"] = {
-				{
-					["trigger"] = {
-						["names"] = {
-							"Divine Purpose", -- [1]
-						},
-						["type"] = "aura",
-						["debuffType"] = "HELPFUL",
-						["subeventSuffix"] = "_CAST_START",
-						["unit"] = "player",
-						["ownOnly"] = true,
-						["event"] = "Health",
-						["subeventPrefix"] = "SPELL",
-					},
-					["untrigger"] = {
-					},
-				}, -- [1]
-			},
-			["animation"] = {
-				["start"] = {
-					["duration_type"] = "seconds",
-					["type"] = "none",
-				},
-				["main"] = {
-					["duration_type"] = "seconds",
-					["type"] = "none",
-				},
-				["finish"] = {
-					["duration_type"] = "seconds",
-					["type"] = "none",
-				},
-			},
-			["trigger"] = {
-				["type"] = "status",
-				["unevent"] = "auto",
-				["power_operator"] = ">=",
-				["use_power"] = true,
-				["event"] = "Holy Power",
-				["use_unit"] = true,
-				["debuffType"] = "HELPFUL",
-				["names"] = {
-				},
-				["subeventPrefix"] = "SPELL",
-				["subeventSuffix"] = "_CAST_START",
-				["unit"] = "player",
-				["power"] = "1",
-				["custom_hide"] = "timed",
-			},
-			["discrete_rotation"] = 0,
-			["frameStrata"] = 1,
-			["desaturate"] = false,
-			["rotation"] = 0,
-			["width"] = 100,
-			["numTriggers"] = 2,
-			["id"] = "HP1",
-			["height"] = 40,
-			["rotate"] = true,
-			["load"] = {
-				["use_class"] = true,
-				["role"] = {
-					["multi"] = {
-					},
-				},
-				["size"] = {
-					["multi"] = {
-					},
-				},
-				["use_spec"] = false,
-				["use_combat"] = true,
-				["class"] = {
-					["single"] = "PALADIN",
-					["multi"] = {
-					},
-				},
-				["spec"] = {
-					["single"] = 2,
-					["multi"] = {
-						[2] = true,
-						[3] = true,
-					},
-				},
-				["use_talent"] = false,
-			},
-			["untrigger"] = {
-			},
-		},
-		["HPc"] = {
-			["xOffset"] = -110,
-			["mirror"] = false,
-			["yOffset"] = 34,
-			["regionType"] = "texture",
-			["blendMode"] = "ADD",
-			["parent"] = "v0.91 Prot Pala Group",
-			["untrigger"] = {
-			},
-			["actions"] = {
-				["start"] = {
-				},
-				["finish"] = {
-				},
-			},
-			["texture"] = "Interface\\Addons\\WeakAuras\\PowerAurasMedia\\Auras\\Aura75",
-			["color"] = {
-				1, -- [1]
-				1, -- [2]
-				1, -- [3]
-				0.75, -- [4]
-			},
-			["animation"] = {
-				["start"] = {
-					["duration_type"] = "seconds",
-					["type"] = "none",
-				},
-				["main"] = {
-					["duration_type"] = "seconds",
-					["type"] = "none",
-				},
-				["finish"] = {
-					["duration_type"] = "seconds",
-					["type"] = "none",
-				},
-			},
-			["trigger"] = {
-				["type"] = "status",
-				["power"] = "0",
-				["power_operator"] = ">=",
-				["use_power"] = true,
-				["event"] = "Holy Power",
-				["use_unit"] = true,
-				["custom_hide"] = "timed",
-				["subeventPrefix"] = "SPELL",
-				["names"] = {
-				},
-				["unevent"] = "auto",
-				["subeventSuffix"] = "_CAST_START",
-				["unit"] = "player",
-				["debuffType"] = "HELPFUL",
-			},
-			["selfPoint"] = "CENTER",
-			["id"] = "HPc",
-			["discrete_rotation"] = 0,
-			["frameStrata"] = 1,
-			["width"] = 75.0003356933594,
-			["rotation"] = 0,
-			["desaturate"] = false,
-			["numTriggers"] = 1,
-			["additional_triggers"] = {
-			},
 			["height"] = 120,
 			["rotate"] = true,
 			["load"] = {
@@ -2626,6 +1634,998 @@ WeakAurasSaved = {
 			["textFlags"] = "None",
 			["stacksFont"] = "Friz Quadrata TT",
 		},
+		["Devotion Aura"] = {
+			["xOffset"] = -176,
+			["yOffset"] = 0,
+			["anchorPoint"] = "CENTER",
+			["customTextUpdate"] = "update",
+			["icon"] = true,
+			["fontFlags"] = "OUTLINE",
+			["useTooltip"] = false,
+			["selfPoint"] = "CENTER",
+			["trigger"] = {
+				["rem"] = "5",
+				["subeventSuffix"] = "_CAST_START",
+				["ownOnly"] = true,
+				["event"] = "Health",
+				["names"] = {
+					"Devotion Aura", -- [1]
+				},
+				["debuffType"] = "HELPFUL",
+				["subeventPrefix"] = "SPELL",
+				["remOperator"] = "<",
+				["type"] = "aura",
+				["unit"] = "player",
+				["custom_hide"] = "timed",
+			},
+			["stickyDuration"] = false,
+			["font"] = "Friz Quadrata TT",
+			["height"] = 44,
+			["load"] = {
+				["use_class"] = true,
+				["role"] = {
+					["multi"] = {
+					},
+				},
+				["use_never"] = false,
+				["use_spec"] = true,
+				["use_combat"] = true,
+				["spec"] = {
+					["single"] = 2,
+					["multi"] = {
+						true, -- [1]
+					},
+				},
+				["class"] = {
+					["single"] = "PALADIN",
+					["multi"] = {
+					},
+				},
+				["size"] = {
+					["multi"] = {
+					},
+				},
+			},
+			["fontSize"] = 20,
+			["displayStacks"] = "%p",
+			["regionType"] = "icon",
+			["color"] = {
+				1, -- [1]
+				1, -- [2]
+				1, -- [3]
+				1, -- [4]
+			},
+			["stacksContainment"] = "INSIDE",
+			["zoom"] = 0,
+			["auto"] = true,
+			["parent"] = "v0.91 Prot Pala Group",
+			["additional_triggers"] = {
+			},
+			["untrigger"] = {
+			},
+			["frameStrata"] = 1,
+			["width"] = 44,
+			["actions"] = {
+				["start"] = {
+				},
+				["finish"] = {
+				},
+			},
+			["numTriggers"] = 1,
+			["inverse"] = false,
+			["animation"] = {
+				["start"] = {
+					["duration_type"] = "seconds",
+					["type"] = "none",
+				},
+				["main"] = {
+					["duration_type"] = "seconds",
+					["type"] = "none",
+				},
+				["finish"] = {
+					["duration_type"] = "seconds",
+					["type"] = "none",
+				},
+			},
+			["id"] = "Devotion Aura",
+			["desaturate"] = false,
+			["stacksPoint"] = "BOTTOM",
+			["textColor"] = {
+				1, -- [1]
+				1, -- [2]
+				1, -- [3]
+				1, -- [4]
+			},
+		},
+		["HPd"] = {
+			["xOffset"] = -56,
+			["mirror"] = false,
+			["yOffset"] = 34,
+			["regionType"] = "texture",
+			["blendMode"] = "ADD",
+			["parent"] = "v0.91 Prot Pala Group",
+			["color"] = {
+				1, -- [1]
+				1, -- [2]
+				1, -- [3]
+				0.75, -- [4]
+			},
+			["actions"] = {
+				["start"] = {
+				},
+				["finish"] = {
+				},
+			},
+			["texture"] = "Interface\\Addons\\WeakAuras\\PowerAurasMedia\\Auras\\Aura75",
+			["anchorPoint"] = "CENTER",
+			["animation"] = {
+				["start"] = {
+					["duration_type"] = "seconds",
+					["type"] = "none",
+				},
+				["main"] = {
+					["duration_type"] = "seconds",
+					["type"] = "none",
+				},
+				["finish"] = {
+					["duration_type"] = "seconds",
+					["type"] = "none",
+				},
+			},
+			["additional_triggers"] = {
+			},
+			["selfPoint"] = "CENTER",
+			["id"] = "HPd",
+			["discrete_rotation"] = 0,
+			["frameStrata"] = 1,
+			["width"] = 75.0003356933594,
+			["rotation"] = 0,
+			["desaturate"] = false,
+			["numTriggers"] = 1,
+			["trigger"] = {
+				["type"] = "status",
+				["power"] = "0",
+				["power_operator"] = ">=",
+				["use_power"] = true,
+				["event"] = "Holy Power",
+				["use_unit"] = true,
+				["custom_hide"] = "timed",
+				["subeventPrefix"] = "SPELL",
+				["names"] = {
+				},
+				["unevent"] = "auto",
+				["subeventSuffix"] = "_CAST_START",
+				["unit"] = "player",
+				["debuffType"] = "HELPFUL",
+			},
+			["height"] = 120,
+			["rotate"] = true,
+			["load"] = {
+				["use_class"] = true,
+				["role"] = {
+					["multi"] = {
+					},
+				},
+				["use_spec"] = false,
+				["spec"] = {
+					["single"] = 2,
+					["multi"] = {
+						[2] = true,
+						[3] = true,
+					},
+				},
+				["use_combat"] = true,
+				["class"] = {
+					["single"] = "PALADIN",
+					["multi"] = {
+					},
+				},
+				["size"] = {
+					["multi"] = {
+					},
+				},
+			},
+			["untrigger"] = {
+			},
+		},
+		["HP5"] = {
+			["disjunctive"] = true,
+			["mirror"] = false,
+			["yOffset"] = 34,
+			["regionType"] = "texture",
+			["blendMode"] = "ADD",
+			["parent"] = "v0.91 Prot Pala Group",
+			["color"] = {
+				1, -- [1]
+				1, -- [2]
+				1, -- [3]
+				0.75, -- [4]
+			},
+			["xOffset"] = -2,
+			["actions"] = {
+				["start"] = {
+				},
+				["finish"] = {
+				},
+			},
+			["texture"] = "Interface\\Addons\\WeakAuras\\PowerAurasMedia\\Auras\\Aura74",
+			["anchorPoint"] = "CENTER",
+			["animation"] = {
+				["start"] = {
+					["duration_type"] = "seconds",
+					["type"] = "none",
+				},
+				["main"] = {
+					["duration_type"] = "seconds",
+					["type"] = "none",
+				},
+				["finish"] = {
+					["duration_type"] = "seconds",
+					["type"] = "none",
+				},
+			},
+			["trigger"] = {
+				["type"] = "status",
+				["power"] = "5",
+				["power_operator"] = ">=",
+				["use_power"] = true,
+				["event"] = "Holy Power",
+				["use_unit"] = true,
+				["custom_hide"] = "timed",
+				["subeventPrefix"] = "SPELL",
+				["names"] = {
+				},
+				["unevent"] = "auto",
+				["subeventSuffix"] = "_CAST_START",
+				["unit"] = "player",
+				["debuffType"] = "HELPFUL",
+			},
+			["selfPoint"] = "CENTER",
+			["id"] = "HP5",
+			["discrete_rotation"] = 0,
+			["frameStrata"] = 1,
+			["desaturate"] = false,
+			["rotation"] = 0,
+			["width"] = 100,
+			["numTriggers"] = 2,
+			["additional_triggers"] = {
+				{
+					["trigger"] = {
+						["type"] = "aura",
+						["subeventSuffix"] = "_CAST_START",
+						["ownOnly"] = true,
+						["event"] = "Health",
+						["subeventPrefix"] = "SPELL",
+						["custom_hide"] = "timed",
+						["names"] = {
+							"Divine Purpose", -- [1]
+						},
+						["unit"] = "player",
+						["debuffType"] = "HELPFUL",
+					},
+					["untrigger"] = {
+					},
+				}, -- [1]
+			},
+			["height"] = 40,
+			["rotate"] = true,
+			["load"] = {
+				["use_class"] = true,
+				["role"] = {
+					["multi"] = {
+					},
+				},
+				["use_spec"] = false,
+				["use_combat"] = true,
+				["spec"] = {
+					["single"] = 2,
+					["multi"] = {
+						[2] = true,
+						[3] = true,
+					},
+				},
+				["class"] = {
+					["single"] = "PALADIN",
+					["multi"] = {
+					},
+				},
+				["size"] = {
+					["multi"] = {
+					},
+				},
+			},
+			["untrigger"] = {
+			},
+		},
+		["GRP-ScentOfBlood"] = {
+			["backdropColor"] = {
+				1, -- [1]
+				1, -- [2]
+				1, -- [3]
+				0.5, -- [4]
+			},
+			["controlledChildren"] = {
+				"ScendOfBlood", -- [1]
+				"ScentOfBlood-GT-Stacks", -- [2]
+				"ScentOfBlood-LT-Stacks", -- [3]
+			},
+			["borderBackdrop"] = "Blizzard Tooltip",
+			["xOffset"] = 0,
+			["border"] = false,
+			["yOffset"] = -120,
+			["anchorPoint"] = "CENTER",
+			["borderSize"] = 16,
+			["borderColor"] = {
+				1, -- [1]
+				1, -- [2]
+				1, -- [3]
+				0.5, -- [4]
+			},
+			["actions"] = {
+				["start"] = {
+				},
+				["finish"] = {
+				},
+			},
+			["borderOffset"] = 5,
+			["selfPoint"] = "BOTTOMLEFT",
+			["trigger"] = {
+				["names"] = {
+				},
+				["type"] = "aura",
+				["debuffType"] = "HELPFUL",
+				["unit"] = "player",
+			},
+			["frameStrata"] = 1,
+			["expanded"] = false,
+			["untrigger"] = {
+			},
+			["borderInset"] = 11,
+			["numTriggers"] = 1,
+			["animation"] = {
+				["start"] = {
+					["duration_type"] = "seconds",
+					["type"] = "none",
+				},
+				["main"] = {
+					["duration_type"] = "seconds",
+					["type"] = "none",
+				},
+				["finish"] = {
+					["duration_type"] = "seconds",
+					["type"] = "none",
+				},
+			},
+			["borderEdge"] = "None",
+			["id"] = "GRP-ScentOfBlood",
+			["load"] = {
+				["role"] = {
+					["multi"] = {
+					},
+				},
+				["class"] = {
+					["multi"] = {
+					},
+				},
+				["spec"] = {
+					["multi"] = {
+					},
+				},
+				["size"] = {
+					["multi"] = {
+					},
+				},
+			},
+			["regionType"] = "group",
+		},
+		["PlagueLeechUseable"] = {
+			["fontSize"] = 12,
+			["displayStacks"] = " ",
+			["color"] = {
+				1, -- [1]
+				1, -- [2]
+				1, -- [3]
+				1, -- [4]
+			},
+			["yOffset"] = -119.999938964844,
+			["stacksPoint"] = "BOTTOMRIGHT",
+			["untrigger"] = {
+				["spellName"] = 123693,
+			},
+			["regionType"] = "icon",
+			["anchorPoint"] = "CENTER",
+			["selfPoint"] = "CENTER",
+			["id"] = "PlagueLeechUseable",
+			["customTextUpdate"] = "update",
+			["numTriggers"] = 1,
+			["actions"] = {
+				["start"] = {
+				},
+				["finish"] = {
+				},
+			},
+			["fontFlags"] = "OUTLINE",
+			["stacksContainment"] = "INSIDE",
+			["zoom"] = 0,
+			["auto"] = true,
+			["animation"] = {
+				["start"] = {
+					["duration_type"] = "seconds",
+					["type"] = "none",
+				},
+				["main"] = {
+					["type"] = "none",
+					["preset"] = "pulse",
+					["duration_type"] = "seconds",
+				},
+				["finish"] = {
+					["duration_type"] = "seconds",
+					["type"] = "none",
+				},
+			},
+			["trigger"] = {
+				["type"] = "status",
+				["use_targetRequired"] = false,
+				["event"] = "Action Usable",
+				["unit"] = "player",
+				["spellName"] = 123693,
+				["use_spellName"] = true,
+				["subeventSuffix"] = "_CAST_START",
+				["use_unit"] = true,
+				["unevent"] = "auto",
+				["subeventPrefix"] = "SPELL",
+				["names"] = {
+				},
+				["debuffType"] = "HELPFUL",
+			},
+			["width"] = 48,
+			["frameStrata"] = 1,
+			["desaturate"] = false,
+			["xOffset"] = -180,
+			["font"] = "Friz Quadrata TT",
+			["inverse"] = false,
+			["stickyDuration"] = false,
+			["height"] = 48,
+			["icon"] = true,
+			["load"] = {
+				["use_class"] = true,
+				["role"] = {
+					["multi"] = {
+					},
+				},
+				["spec"] = {
+					["multi"] = {
+					},
+				},
+				["class"] = {
+					["single"] = "DEATHKNIGHT",
+					["multi"] = {
+					},
+				},
+				["size"] = {
+					["multi"] = {
+					},
+				},
+			},
+			["textColor"] = {
+				1, -- [1]
+				1, -- [2]
+				1, -- [3]
+				1, -- [4]
+			},
+		},
+		["BloodCharges"] = {
+			["fontSize"] = 24,
+			["displayStacks"] = "%s",
+			["color"] = {
+				1, -- [1]
+				1, -- [2]
+				1, -- [3]
+				1, -- [4]
+			},
+			["yOffset"] = -120,
+			["load"] = {
+				["use_class"] = true,
+				["role"] = {
+					["multi"] = {
+					},
+				},
+				["spec"] = {
+					["multi"] = {
+					},
+				},
+				["class"] = {
+					["single"] = "DEATHKNIGHT",
+					["multi"] = {
+					},
+				},
+				["size"] = {
+					["multi"] = {
+					},
+				},
+			},
+			["untrigger"] = {
+			},
+			["anchorPoint"] = "CENTER",
+			["actions"] = {
+				["start"] = {
+					["do_glow"] = true,
+					["glow_frame"] = "WeakAuras:BloodCharges",
+					["glow_action"] = "show",
+					["sound"] = "Interface\\AddOns\\WeakAuras\\Media\\Sounds\\Blast.mp3",
+					["do_sound"] = false,
+				},
+				["finish"] = {
+				},
+			},
+			["animation"] = {
+				["start"] = {
+					["type"] = "none",
+					["duration_type"] = "seconds",
+				},
+				["main"] = {
+					["type"] = "none",
+					["duration_type"] = "seconds",
+				},
+				["finish"] = {
+					["type"] = "none",
+					["duration_type"] = "seconds",
+				},
+			},
+			["desaturate"] = false,
+			["customTextUpdate"] = "update",
+			["inverse"] = false,
+			["icon"] = true,
+			["fontFlags"] = "OUTLINE",
+			["stacksContainment"] = "INSIDE",
+			["zoom"] = 0,
+			["auto"] = true,
+			["selfPoint"] = "CENTER",
+			["trigger"] = {
+				["type"] = "aura",
+				["subeventSuffix"] = "_CAST_START",
+				["event"] = "Health",
+				["unit"] = "player",
+				["useCount"] = true,
+				["count"] = "5",
+				["countOperator"] = ">=",
+				["names"] = {
+					"Blood Charge", -- [1]
+				},
+				["subeventPrefix"] = "SPELL",
+				["debuffType"] = "HELPFUL",
+			},
+			["stickyDuration"] = false,
+			["frameStrata"] = 1,
+			["width"] = 48,
+			["xOffset"] = 129.999633789063,
+			["font"] = "Friz Quadrata TT",
+			["numTriggers"] = 1,
+			["id"] = "BloodCharges",
+			["height"] = 48,
+			["regionType"] = "icon",
+			["stacksPoint"] = "CENTER",
+			["textColor"] = {
+				1, -- [1]
+				1, -- [2]
+				1, -- [3]
+				1, -- [4]
+			},
+		},
+		["HP1"] = {
+			["disjunctive"] = true,
+			["mirror"] = false,
+			["yOffset"] = 34,
+			["regionType"] = "texture",
+			["blendMode"] = "ADD",
+			["parent"] = "v0.91 Prot Pala Group",
+			["color"] = {
+				1, -- [1]
+				1, -- [2]
+				1, -- [3]
+				0.75, -- [4]
+			},
+			["xOffset"] = -218,
+			["actions"] = {
+				["start"] = {
+				},
+				["finish"] = {
+				},
+			},
+			["texture"] = "Interface\\Addons\\WeakAuras\\PowerAurasMedia\\Auras\\Aura74",
+			["anchorPoint"] = "CENTER",
+			["selfPoint"] = "CENTER",
+			["additional_triggers"] = {
+				{
+					["trigger"] = {
+						["names"] = {
+							"Divine Purpose", -- [1]
+						},
+						["type"] = "aura",
+						["debuffType"] = "HELPFUL",
+						["subeventSuffix"] = "_CAST_START",
+						["unit"] = "player",
+						["ownOnly"] = true,
+						["event"] = "Health",
+						["subeventPrefix"] = "SPELL",
+					},
+					["untrigger"] = {
+					},
+				}, -- [1]
+			},
+			["animation"] = {
+				["start"] = {
+					["duration_type"] = "seconds",
+					["type"] = "none",
+				},
+				["main"] = {
+					["duration_type"] = "seconds",
+					["type"] = "none",
+				},
+				["finish"] = {
+					["duration_type"] = "seconds",
+					["type"] = "none",
+				},
+			},
+			["trigger"] = {
+				["type"] = "status",
+				["unevent"] = "auto",
+				["power_operator"] = ">=",
+				["use_power"] = true,
+				["event"] = "Holy Power",
+				["use_unit"] = true,
+				["debuffType"] = "HELPFUL",
+				["names"] = {
+				},
+				["subeventPrefix"] = "SPELL",
+				["subeventSuffix"] = "_CAST_START",
+				["unit"] = "player",
+				["power"] = "1",
+				["custom_hide"] = "timed",
+			},
+			["discrete_rotation"] = 0,
+			["frameStrata"] = 1,
+			["desaturate"] = false,
+			["rotation"] = 0,
+			["width"] = 100,
+			["numTriggers"] = 2,
+			["id"] = "HP1",
+			["height"] = 40,
+			["rotate"] = true,
+			["load"] = {
+				["use_class"] = true,
+				["role"] = {
+					["multi"] = {
+					},
+				},
+				["size"] = {
+					["multi"] = {
+					},
+				},
+				["use_spec"] = false,
+				["spec"] = {
+					["single"] = 2,
+					["multi"] = {
+						[2] = true,
+						[3] = true,
+					},
+				},
+				["use_combat"] = true,
+				["class"] = {
+					["single"] = "PALADIN",
+					["multi"] = {
+					},
+				},
+				["use_talent"] = false,
+			},
+			["untrigger"] = {
+			},
+		},
+		["HPc"] = {
+			["xOffset"] = -110,
+			["mirror"] = false,
+			["yOffset"] = 34,
+			["regionType"] = "texture",
+			["blendMode"] = "ADD",
+			["parent"] = "v0.91 Prot Pala Group",
+			["untrigger"] = {
+			},
+			["actions"] = {
+				["start"] = {
+				},
+				["finish"] = {
+				},
+			},
+			["texture"] = "Interface\\Addons\\WeakAuras\\PowerAurasMedia\\Auras\\Aura75",
+			["color"] = {
+				1, -- [1]
+				1, -- [2]
+				1, -- [3]
+				0.75, -- [4]
+			},
+			["animation"] = {
+				["start"] = {
+					["duration_type"] = "seconds",
+					["type"] = "none",
+				},
+				["main"] = {
+					["duration_type"] = "seconds",
+					["type"] = "none",
+				},
+				["finish"] = {
+					["duration_type"] = "seconds",
+					["type"] = "none",
+				},
+			},
+			["additional_triggers"] = {
+			},
+			["selfPoint"] = "CENTER",
+			["trigger"] = {
+				["type"] = "status",
+				["power"] = "0",
+				["power_operator"] = ">=",
+				["use_power"] = true,
+				["event"] = "Holy Power",
+				["use_unit"] = true,
+				["custom_hide"] = "timed",
+				["subeventPrefix"] = "SPELL",
+				["names"] = {
+				},
+				["unevent"] = "auto",
+				["subeventSuffix"] = "_CAST_START",
+				["unit"] = "player",
+				["debuffType"] = "HELPFUL",
+			},
+			["discrete_rotation"] = 0,
+			["frameStrata"] = 1,
+			["width"] = 75.0003356933594,
+			["rotation"] = 0,
+			["desaturate"] = false,
+			["numTriggers"] = 1,
+			["id"] = "HPc",
+			["height"] = 120,
+			["rotate"] = true,
+			["load"] = {
+				["use_class"] = true,
+				["role"] = {
+					["multi"] = {
+					},
+				},
+				["use_spec"] = false,
+				["spec"] = {
+					["single"] = 2,
+					["multi"] = {
+						[2] = true,
+						[3] = true,
+					},
+				},
+				["use_combat"] = true,
+				["class"] = {
+					["single"] = "PALADIN",
+					["multi"] = {
+					},
+				},
+				["size"] = {
+					["multi"] = {
+					},
+				},
+			},
+			["anchorPoint"] = "CENTER",
+		},
+		["BoneShield"] = {
+			["color"] = {
+				1, -- [1]
+				0, -- [2]
+				0.0431372549019608, -- [3]
+				1, -- [4]
+			},
+			["fontSize"] = 12,
+			["displayStacks"] = "%s",
+			["stacksPoint"] = "CENTER",
+			["xOffset"] = 0,
+			["untrigger"] = {
+			},
+			["anchorPoint"] = "CENTER",
+			["yOffset"] = 125,
+			["regionType"] = "icon",
+			["actions"] = {
+				["start"] = {
+				},
+				["finish"] = {
+				},
+			},
+			["numTriggers"] = 2,
+			["selfPoint"] = "CENTER",
+			["customTextUpdate"] = "update",
+			["stickyDuration"] = false,
+			["icon"] = true,
+			["fontFlags"] = "OUTLINE",
+			["stacksContainment"] = "INSIDE",
+			["zoom"] = 0,
+			["auto"] = true,
+			["animation"] = {
+				["start"] = {
+					["duration_type"] = "seconds",
+					["type"] = "none",
+				},
+				["main"] = {
+					["duration_type"] = "seconds",
+					["type"] = "none",
+				},
+				["finish"] = {
+					["duration_type"] = "seconds",
+					["type"] = "none",
+				},
+			},
+			["id"] = "BoneShield",
+			["width"] = 64,
+			["frameStrata"] = 1,
+			["desaturate"] = false,
+			["additional_triggers"] = {
+				{
+					["trigger"] = {
+						["type"] = "event",
+						["unevent"] = "timed",
+						["event"] = "Cooldown Ready (Spell)",
+						["subeventPrefix"] = "SPELL",
+						["use_spellName"] = true,
+						["use_unit"] = true,
+						["subeventSuffix"] = "_CAST_START",
+						["unit"] = "player",
+						["spellName"] = 49222,
+					},
+					["untrigger"] = {
+						["spellName"] = 49222,
+					},
+				}, -- [1]
+			},
+			["font"] = "Friz Quadrata TT",
+			["inverse"] = false,
+			["trigger"] = {
+				["subeventPrefix"] = "SPELL",
+				["type"] = "aura",
+				["inverse"] = true,
+				["subeventSuffix"] = "_CAST_START",
+				["debuffType"] = "HELPFUL",
+				["names"] = {
+					"Bone Shield", -- [1]
+				},
+				["event"] = "Health",
+				["unit"] = "player",
+			},
+			["height"] = 64,
+			["displayIcon"] = "INTERFACE\\ICONS\\ability_deathknight_boneshield",
+			["load"] = {
+				["use_class"] = true,
+				["role"] = {
+					["multi"] = {
+					},
+				},
+				["use_never"] = false,
+				["use_spec"] = true,
+				["spec"] = {
+					["single"] = 1,
+					["multi"] = {
+						true, -- [1]
+					},
+				},
+				["class"] = {
+					["single"] = "DEATHKNIGHT",
+					["multi"] = {
+						["DEATHKNIGHT"] = true,
+					},
+				},
+				["size"] = {
+					["multi"] = {
+					},
+				},
+			},
+			["textColor"] = {
+				1, -- [1]
+				1, -- [2]
+				1, -- [3]
+				1, -- [4]
+			},
+		},
+		["ScentOfBlood-GT-Stacks"] = {
+			["fontSize"] = 24,
+			["displayStacks"] = "%s",
+			["parent"] = "GRP-ScentOfBlood",
+			["color"] = {
+				1, -- [1]
+				1, -- [2]
+				1, -- [3]
+				1, -- [4]
+			},
+			["load"] = {
+				["use_class"] = true,
+				["role"] = {
+					["multi"] = {
+					},
+				},
+				["spec"] = {
+					["multi"] = {
+					},
+				},
+				["class"] = {
+					["single"] = "DEATHKNIGHT",
+					["multi"] = {
+					},
+				},
+				["size"] = {
+					["multi"] = {
+					},
+				},
+			},
+			["untrigger"] = {
+			},
+			["yOffset"] = 0,
+			["regionType"] = "icon",
+			["xOffset"] = -130,
+			["actions"] = {
+				["start"] = {
+					["do_glow"] = true,
+					["glow_frame"] = "WeakAuras:ScentOfBlood-GT-Stacks",
+					["glow_action"] = "show",
+				},
+				["finish"] = {
+				},
+			},
+			["inverse"] = false,
+			["customTextUpdate"] = "update",
+			["trigger"] = {
+				["type"] = "aura",
+				["subeventSuffix"] = "_CAST_START",
+				["event"] = "Health",
+				["unit"] = "player",
+				["useCount"] = true,
+				["count"] = "4",
+				["debuffType"] = "HELPFUL",
+				["names"] = {
+					"Scent of Blood", -- [1]
+				},
+				["subeventPrefix"] = "SPELL",
+				["countOperator"] = ">=",
+				["custom_hide"] = "timed",
+			},
+			["icon"] = true,
+			["fontFlags"] = "None",
+			["stacksContainment"] = "INSIDE",
+			["zoom"] = 0,
+			["auto"] = true,
+			["animation"] = {
+				["start"] = {
+					["type"] = "none",
+					["duration_type"] = "seconds",
+				},
+				["main"] = {
+					["type"] = "none",
+					["duration_type"] = "seconds",
+					["preset"] = "spiralandpulse",
+				},
+				["finish"] = {
+					["type"] = "none",
+					["duration_type"] = "seconds",
+				},
+			},
+			["id"] = "ScentOfBlood-GT-Stacks",
+			["width"] = 48,
+			["frameStrata"] = 5,
+			["desaturate"] = false,
+			["stickyDuration"] = false,
+			["font"] = "Friz Quadrata TT",
+			["numTriggers"] = 1,
+			["selfPoint"] = "CENTER",
+			["height"] = 48,
+			["anchorPoint"] = "CENTER",
+			["stacksPoint"] = "CENTER",
+			["textColor"] = {
+				1, -- [1]
+				1, -- [2]
+				1, -- [3]
+				1, -- [4]
+			},
+		},
 		["Divine Protection"] = {
 			["xOffset"] = -132,
 			["untrigger"] = {
@@ -2780,10 +2780,10 @@ WeakAurasSaved = {
 				["countOperator"] = "<=",
 				["custom_hide"] = "timed",
 			},
-			["stickyDuration"] = false,
-			["frameStrata"] = 4,
-			["width"] = 48,
 			["desaturate"] = true,
+			["frameStrata"] = 4,
+			["stickyDuration"] = false,
+			["width"] = 48,
 			["font"] = "Friz Quadrata TT",
 			["inverse"] = false,
 			["animation"] = {

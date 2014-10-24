@@ -2,8 +2,8 @@
 TradeSkillMaster_AuctionDBDB = {
 	["realm"] = {
 		["Aggramar"] = {
-			["lastCompleteScan"] = 1414012357,
-			["appDataUpdate"] = 1414012357,
+			["lastCompleteScan"] = 1414174559,
+			["appDataUpdate"] = 1414174559,
 		},
 	},
 	["profileKeys"] = {

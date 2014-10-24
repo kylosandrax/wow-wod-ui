@@ -9,6 +9,7 @@ AmrDb = {
 	["CharacterName"] = "Bronin",
 	["Race"] = "BloodElf",
 	["ActiveSpec"] = 1,
+	["Guild"] = "Auditors of Unreality",
 	["Level"] = 90,
 	["Equipped"] = {
 		{
@@ -24,27 +25,18 @@ AmrDb = {
 			"|cffa335ee|Hitem:103790:4869:4622:4527:0:0:0:100966656:90:505:0:0|h[Shockstriker Gauntlets]|h|r", -- [10]
 			"|cff0070dd|Hitem:118745:0:0:0:0:0:0:0:90:0:0:0|h[Painweaver Seal]|h|r", -- [11]
 			"|cffa335ee|Hitem:104787:0:4650:0:0:0:0:2130904960:90:493:0:0|h[Bloodclaw Band]|h|r", -- [12]
-			"|cffa335ee|Hitem:118780:0:0:0:0:0:0:0:90:0:0:0|h[Bloodburn Protector]|h|r", -- [13]
-			"|cffa335ee|Hitem:104821:0:0:0:0:0:0:1529967616:90:505:0:0|h[Vial of Living Corruption]|h|r", -- [14]
+			"|cffa335ee|Hitem:103678:0:0:0:0:0:0:0:90:0:14:0|h[Time-Lost Artifact]|h|r", -- [13]
+			"|cffa335ee|Hitem:118780:0:0:0:0:0:0:0:90:0:0:0|h[Bloodburn Protector]|h|r", -- [14]
 			"|cffff8000|Hitem:102249:4424:4646:0:0:0:0:1965822080:90:505:0:0|h[Gong-Lu, Strength of Xuen]|h|r", -- [15]
 			"|cffe6cc80|Hitem:105679:3368:4622:4622:0:0:0:0:90:0:3:0|h[Hellscream's Decapitator]|h|r", -- [16]
 		}, -- [1]
 	},
-	["Glyphs"] = {
-		{
-			60200, -- [1]
-			62259, -- [2]
-			59309, -- [3]
-			63333, -- [4]
-			59307, -- [5]
-			58657, -- [6]
-		}, -- [1]
-		{
-			63335, -- [1]
-			58629, -- [2]
-			59307, -- [3]
-			58657, -- [4]
-		}, -- [2]
+	["SendSettings"] = {
+		["SendTo"] = "",
+		["SendGems"] = true,
+		["SendEnchants"] = true,
+		["SendEnchantMaterials"] = true,
+		["SendToType"] = "a friend",
 	},
 	["Specs"] = {
 		1, -- [1]
@@ -79,69 +71,51 @@ AmrDb = {
 	},
 	["Currencies"] = {
 		[402] = 3,
-		[241] = 12,
-		[515] = 5,
 		[615] = 1,
-		[614] = 7,
-		[-1] = 42239336,
+		[515] = 5,
 		[392] = 213,
+		[614] = 7,
+		[-1] = 43522590,
+		[241] = 12,
 	},
-	["Class"] = "DEATHKNIGHT",
+	["LastCharacterImport"] = "",
 	["LogData"] = {
 		["_wipes"] = {
 		},
 		["_autoLog"] = {
 			[1136] = "disabled",
 		},
-		["_lastZone"] = "Kalimdor",
 		["_lastDiff"] = 0,
+		["_lastZone"] = "Pandaria",
 	},
 	["BagItems"] = {
 		"|cffffffff|Hitem:6948:0:0:0:0:0:0:334864896:90:0:0:0|h[Hearthstone]|h|r", -- [1]
 		"|cffffffff|Hitem:76084:0:0:0:0:0:0:798603008:90:0:0:0|h[Flask of Spring Blossoms]|h|r", -- [2]
 		"|cffffffff|Hitem:81414:0:0:0:0:0:0:0:90:0:0:0|h[Pearl Milk Tea]|h|r", -- [3]
-		"|cff0070dd|Hitem:86569:0:0:0:0:0:0:698540545:90:0:0:0|h[Crystal of Insanity]|h|r", -- [4]
-		"|cffffffff|Hitem:76093:0:0:0:0:0:0:160506752:90:0:0:0|h[Potion of the Jade Serpent]|h|r", -- [5]
-		"|cff0070dd|Hitem:76061:0:0:0:0:0:0:0:90:0:0:0|h[Spirit of Harmony]|h|r", -- [6]
-		"|cff1eff00|Hitem:82274:0:0:0:0:0:-40:1521090586:90:0:0:0|h[Engraved Knuckles of the Bandit]|h|r", -- [7]
-		"|cff1eff00|Hitem:82247:0:0:0:0:0:-5:1998716974:90:0:0:0|h[Yak Spaulders of the Monkey]|h|r", -- [8]
+		"|cffffffff|Hitem:10056:0:0:0:0:0:0:746535552:90:0:0:0|h[Orange Mageweave Shirt]|h|r", -- [4]
+		"|cff0070dd|Hitem:86569:0:0:0:0:0:0:698540545:90:0:0:0|h[Crystal of Insanity]|h|r", -- [5]
+		"|cffffffff|Hitem:76093:0:0:0:0:0:0:160506752:90:0:0:0|h[Potion of the Jade Serpent]|h|r", -- [6]
+		"|cffffffff|Hitem:74841:0:0:0:0:0:0:0:90:0:0:0|h[Juicycrunch Carrot]|h|r", -- [7]
+		"|cff1eff00|Hitem:88567:0:0:0:0:0:0:0:90:0:5:0|h[Ghost Iron Lockbox]|h|r", -- [8]
 		"|cffffffff|Hitem:104286:0:0:0:0:0:0:0:90:0:0:0|h[Quivering Firestorm Egg]|h|r", -- [9]
 		"|cffa335ee|Hitem:64402:0:0:0:0:0:0:0:90:0:0:0|h[Battle Standard of Coordination]|h|r", -- [10]
 		"|cff0070dd|Hitem:104328:0:0:0:0:0:0:0:90:0:0:0|h[Cauterizing Core]|h|r", -- [11]
-		"|cff1eff00|Hitem:82257:0:0:0:0:0:-5:663027746:90:0:5:0|h[Vine Bindings of the Monkey]|h|r", -- [12]
-		"|cffa335ee|Hitem:112735:0:0:4460:0:0:0:0:90:0:5:1:449|h[Demolisher's Reinforced Belt]|h|r", -- [13]
-		"|cff9d9d9d|Hitem:81194:0:0:0:0:0:0:0:90:0:0:0|h[Sharp Fangs]|h|r", -- [14]
-		"|cffffffff|Hitem:74841:0:0:0:0:0:0:0:90:0:0:0|h[Juicycrunch Carrot]|h|r", -- [15]
-		"|cff1eff00|Hitem:82257:0:0:0:0:0:-40:911867938:90:0:5:0|h[Vine Bindings of the Bandit]|h|r", -- [16]
-		"|cff1eff00|Hitem:88567:0:0:0:0:0:0:0:90:0:5:0|h[Ghost Iron Lockbox]|h|r", -- [17]
-		"|cff9d9d9d|Hitem:90763:0:0:0:0:0:0:0:90:0:5:0|h[Shabby Bracers]|h|r", -- [18]
+		"|cff1eff00|Hitem:88567:0:0:0:0:0:0:0:90:0:0:0|h[Ghost Iron Lockbox]|h|r", -- [12]
+		"|cffa335ee|Hitem:117365:0:0:0:0:0:0:0:90:445:1:1:573|h[The Horseman's Ring]|h|r", -- [13]
+		"|cffa335ee|Hitem:102278:0:0:0:0:0:0:0:90:0:0:0|h[Timeless Leather Boots]|h|r", -- [14]
+		"|cffffffff|Hitem:116851:0:0:0:0:0:0:0:90:0:11:0|h[Hallowed Wand - Abomination]|h|r", -- [15]
+		"|cffa335ee|Hitem:102318:0:0:0:0:0:0:0:90:0:0:0|h[Timeless Cloak]|h|r", -- [16]
+		"|cffa335ee|Hitem:102268:0:0:0:0:0:0:0:90:0:0:0|h[Timeless Plate Spaulders]|h|r", -- [17]
+		"|cffffffff|Hitem:116850:0:0:0:0:0:0:0:90:0:11:0|h[Hallowed Wand - Ghoul]|h|r", -- [18]
 		"|cffffffff|Hitem:5956:0:0:0:0:0:0:0:90:0:0:0|h[Blacksmith Hammer]|h|r", -- [19]
 		"|cffffffff|Hitem:39505:0:0:0:0:0:0:0:90:0:0:0|h[Virtuoso Inking Set]|h|r", -- [20]
-		"|cffa335ee|Hitem:103678:0:0:0:0:0:0:0:90:0:14:0|h[Time-Lost Artifact]|h|r", -- [21]
-		"|cffff8000|Hitem:102249:4424:4646:0:0:0:0:1965822080:90:505:0:0|h[Gong-Lu, Strength of Xuen]|h|r", -- [22]
+		"|cffa335ee|Hitem:103689:0:0:0:0:0:0:1177741312:90:491:0:0|h[Alacrity of Xuen]|h|r", -- [21]
+		"|cffff8000|Hitem:102250:4422:4622:0:0:0:0:2025131136:90:505:0:0|h[Qian-Ying, Fortitude of Niuzao]|h|r", -- [22]
 		"|cffa335ee|Hitem:103990:0:0:0:0:0:0:0:90:492:0:0|h[Resolve of Niuzao]|h|r", -- [23]
-		"|cffa335ee|Hitem:103689:0:0:0:0:0:0:1177741312:90:491:0:0|h[Alacrity of Xuen]|h|r", -- [24]
-		"|cffa335ee|Hitem:104994:0:4607:0:0:0:0:1316704896:90:491:0:0|h[Galakrond Control Band]|h|r", -- [25]
-		"|cffa335ee|Hitem:117363:0:0:0:0:0:0:0:90:0:1:1:573|h[Band of the Petrified Pumpkin]|h|r", -- [26]
-		"|cff0070dd|Hitem:118753:0:0:0:0:0:0:0:90:0:0:0|h[Plate of Shamanic Fury]|h|r", -- [27]
+		"|cffa335ee|Hitem:104821:0:0:0:0:0:0:1529967616:90:505:0:0|h[Vial of Living Corruption]|h|r", -- [24]
 	},
 	["IconInfo"] = {
 		["minimapPos"] = 257.265628098113,
-	},
-	["LastCharacterImport"] = "",
-	["Reps"] = {
-		[1269] = 5,
-		[1337] = 4,
-		[1341] = 4,
-		[1375] = 4,
-		[1387] = 0,
-		[1376] = 0,
-		[1270] = 5,
-		[1388] = 4,
-		[1435] = 6,
-	},
-	["Faction"] = "Horde",
-	["Professions"] = {
 	},
 	["VoidItems"] = {
 		"|cffa335ee|Hitem:17074:0:0:0:0:0:0:1704947328:90:0:0:0|h[Shadowstrike]|h|r", -- [1]
@@ -267,12 +241,41 @@ AmrDb = {
 		"|cff0070dd|Hitem:13072:0:0:0:0:0:0:1639786624:90:0:0:0|h[Stonegrip Gauntlets]|h|r", -- [121]
 		"|cff0070dd|Hitem:27906:0:0:0:0:0:0:450690432:90:0:0:0|h[Crimsonforge Breastplate]|h|r", -- [122]
 	},
-	["SendSettings"] = {
-		["SendTo"] = "",
-		["SendGems"] = true,
-		["SendEnchants"] = true,
-		["SendEnchantMaterials"] = true,
-		["SendToType"] = "a friend",
+	["Reps"] = {
+		[1269] = 5,
+		[1337] = 4,
+		[1341] = 4,
+		[1375] = 4,
+		[1387] = 0,
+		[1376] = 0,
+		[1435] = 6,
+		[1388] = 4,
+		[1270] = 5,
+	},
+	["Faction"] = "Horde",
+	["Professions"] = {
+		["Cooking"] = 1,
+		["Blacksmithing"] = 330,
+		["Archaeology"] = 1,
+		["First Aid"] = 409,
+		["Inscription"] = 600,
+	},
+	["Class"] = "DEATHKNIGHT",
+	["Glyphs"] = {
+		{
+			60200, -- [1]
+			62259, -- [2]
+			59309, -- [3]
+			63333, -- [4]
+			59307, -- [5]
+			58657, -- [6]
+		}, -- [1]
+		{
+			63335, -- [1]
+			58629, -- [2]
+			59307, -- [3]
+			58657, -- [4]
+		}, -- [2]
 	},
 	["BankItemsAndCounts"] = {
 		[79731] = 47,
@@ -289,30 +292,30 @@ AmrDb = {
 		[89112] = 12,
 		[72988] = 7,
 		[76142] = 1,
-		[43117] = 1,
-		[99188] = 1,
+		[72234] = 3,
+		[76061] = 15,
 		[79253] = 1,
-		[99067] = 1,
-		[99059] = 1,
-		[99608] = 1,
+		[94222] = 1,
+		[21229] = 18,
+		[12602] = 1,
 		[42950] = 1,
 		[42952] = 1,
-		[21229] = 18,
+		[99059] = 1,
 		[48689] = 1,
-		[12602] = 1,
+		[99067] = 1,
 		[74249] = 7,
 		[72237] = 2,
-		[21230] = 1,
+		[3466] = 20,
 		[52983] = 4,
 		[74250] = 1,
-		[87779] = 1,
 		[69887] = 1,
+		[99188] = 1,
 		[79254] = 17,
-		[3466] = 20,
+		[21230] = 1,
 		[79010] = 2,
 		[99048] = 1,
-		[94222] = 1,
-		[76061] = 15,
-		[72234] = 3,
+		[99608] = 1,
+		[87779] = 1,
+		[43117] = 1,
 	},
 }
