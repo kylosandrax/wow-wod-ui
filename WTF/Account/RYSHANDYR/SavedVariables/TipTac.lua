@@ -8,10 +8,15 @@ TipTac_Config = {
 	["tipBackdropEdge"] = "Interface\\Tooltips\\UI-Tooltip-Border",
 	["modifyFonts"] = true,
 	["backdropEdgeSize"] = 14,
-	["powerBar"] = false,
+	["optionsLeft"] = 1067.99987792969,
 	["showTarget"] = "last",
-	["healthBarText"] = "value",
-	["tipBackdropBG"] = "Interface\\Buttons\\WHITE8X8",
+	["tipBorderColor"] = {
+		0.3, -- [1]
+		0.3, -- [2]
+		0.4, -- [3]
+		1, -- [4]
+	},
+	["powerBar"] = false,
 	["fontFlags"] = "",
 	["tipColor"] = {
 		0.0745098039215686, -- [1]
@@ -21,64 +26,59 @@ TipTac_Config = {
 	},
 	["hideDefaultBar"] = true,
 	["healthBar"] = true,
-	["colRace"] = "|cffffffff",
-	["showDebuffs"] = false,
+	["healthBarText"] = "value",
 	["barTexture"] = "Interface\\AddOns\\ElvUI\\media\\textures\\normTex2.tga",
+	["showDebuffs"] = false,
 	["classification_normal"] = "%s ",
 	["colLevel"] = "|cffc0c0c0",
 	["healthBarClassColor"] = true,
-	["preFadeTime"] = 0.1,
-	["hideWorldTips"] = true,
+	["fontSizeDelta"] = 1,
+	["if_itemQualityBorder"] = false,
 	["reactColoredBorder"] = false,
 	["classification_minus"] = "-%s ",
 	["barFontFlags"] = "OUTLINE",
-	["barFontFace"] = "Interface\\AddOns\\ElvUI\\media\\fonts\\PT_Sans_Narrow.ttf",
-	["classification_rare"] = "%s|r (Rare) ",
-	["top"] = 257.17431640625,
+	["gradientTip"] = true,
+	["left"] = 2349.4619140625,
+	["talentOnlyInParty"] = false,
 	["fontSize"] = 12,
-	["if_showItemLevelAndId"] = true,
+	["classification_rare"] = "%s|r (Rare) ",
 	["enableChatHoverTips"] = true,
 	["colorGuildByReaction"] = true,
 	["showBuffs"] = false,
 	["optionsBottom"] = 351,
-	["manaBar"] = false,
-	["colSameGuild"] = "|cffff32ff",
-	["reactColoredBackdrop"] = false,
-	["fadeTime"] = 0.1,
-	["classification_trivial"] = "~%s ",
-	["classification_worldboss"] = "%s|r (Boss) ",
-	["if_iconSize"] = 32,
+	["backdropInsets"] = 2.5,
 	["classification_rareelite"] = "+%s|r (Rare) ",
-	["if_borderlessIcons"] = true,
-	["showTalents"] = false,
-	["colorNameByClass"] = false,
-	["iconClass"] = false,
-	["classColoredBorder"] = false,
-	["gradientColor"] = {
-		0.647058823529412, -- [1]
-		0.647058823529412, -- [2]
-		0.647058823529412, -- [3]
-		0.200000047683716, -- [4]
-	},
+	["reactColoredBackdrop"] = false,
 	["healthBarColor"] = {
 		0.3, -- [1]
 		0.9, -- [2]
 		0.3, -- [3]
 		1, -- [4]
 	},
-	["targetYouText"] = "<<YOU>>",
-	["backdropInsets"] = 2.5,
-	["talentOnlyInParty"] = false,
-	["left"] = 2349.4619140625,
-	["gradientTip"] = true,
-	["if_itemQualityBorder"] = false,
-	["fontSizeDelta"] = 1,
-	["barFontSize"] = 10,
-	["tipBorderColor"] = {
-		0.3, -- [1]
-		0.3, -- [2]
-		0.4, -- [3]
-		1, -- [4]
+	["classification_trivial"] = "~%s ",
+	["classification_worldboss"] = "%s|r (Boss) ",
+	["gradientColor"] = {
+		0.647058823529412, -- [1]
+		0.647058823529412, -- [2]
+		0.647058823529412, -- [3]
+		0.200000047683716, -- [4]
 	},
-	["optionsLeft"] = 1067.99987792969,
+	["classColoredBorder"] = false,
+	["if_borderlessIcons"] = true,
+	["showTalents"] = false,
+	["manaBar"] = false,
+	["iconClass"] = false,
+	["colSameGuild"] = "|cffff32ff",
+	["colorNameByClass"] = false,
+	["fadeTime"] = 0.1,
+	["targetYouText"] = "<<YOU>>",
+	["if_iconSize"] = 32,
+	["top"] = 257.17431640625,
+	["if_showItemLevelAndId"] = true,
+	["barFontFace"] = "Interface\\AddOns\\ElvUI\\media\\fonts\\PT_Sans_Narrow.ttf",
+	["hideWorldTips"] = true,
+	["preFadeTime"] = 0.1,
+	["barFontSize"] = 10,
+	["colRace"] = "|cffffffff",
+	["tipBackdropBG"] = "Interface\\Buttons\\WHITE8X8",
 }

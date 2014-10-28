@@ -1,7 +1,7 @@
 
 BugGrabberDB = {
+	["session"] = 122,
 	["lastSanitation"] = 3,
-	["session"] = 61,
 	["errors"] = {
 		{
 			["message"] = "...e\\AddOns\\TidyPlates_ThreatPlates\\Widgets\\Widgets.lua:84: attempt to call field 'CreateTotemIconWidget' (a nil value)",
@@ -11,5 +11,36 @@ BugGrabberDB = {
 			["session"] = 59,
 			["counter"] = 3,
 		}, -- [1]
+		{
+			["message"] = "Interface\\AddOns\\TradeSkillDW\\tsdw.lua:88: attempt to index upvalue 'TradeSkillHorizontalBarRight' (a nil value)",
+			["time"] = "2014/10/25 13:39:54",
+			["locals"] = "expandButton = TradeSkillDWExpandButton {\n 0 = <userdata>\n collapseTooltip = \"Collapse to Single mode\"\n expanded = true\n expandTooltip = \"Expand to Double Wide mode\"\n}\nsetExpandButtonTextures = <function> defined @Interface\\AddOns\\TradeSkillDW\\tsdw.lua:162\nexpandButton_OnEnter = <function> defined @Interface\\AddOns\\TradeSkillDW\\tsdw.lua:149\nexpandButton_OnLeave = <function> defined @Interface\\AddOns\\TradeSkillDW\\tsdw.lua:158\nexpandButton_OnClick = <function> defined @Interface\\AddOns\\TradeSkillDW\\tsdw.lua:174\nresizeGripButton = TradeSkillDWResizeGripButton {\n 0 = <userdata>\n}\nresizeGripButton_OnMouseDown = <function> defined @Interface\\AddOns\\TradeSkillDW\\tsdw.lua:189\nresizeGripButton_OnMouseUp = <function> defined @Interface\\AddOns\\TradeSkillDW\\tsdw.lua:198\nHORZ_BAR_FNAME = \"Interface\\ClassTrainerFrame\\UI-ClassTrainer-HorizontalBar\"\nTradeSkillHorizontalBarRight = nil\nttsSlider_OnValueChanged = <function> defined @Interface\\AddOns\\TradeSkillDW\\tsdw.lua:57\nSetTabs = <function> defined @Interface\\AddOns\\TradeSkillDW\\tsdw.lua:316\ntradeskillDW_scriptsSet = nil\n",
+			["stack"] = "Interface\\AddOns\\TradeSkillDW\\tsdw.lua:88: in function <Interface\\AddOns\\TradeSkillDW\\tsdw.lua:57>\nInterface\\AddOns\\TradeSkillDW\\tsdw.lua:446: in function <Interface\\AddOns\\TradeSkillDW\\tsdw.lua:376>\nInterface\\AddOns\\TradeSkillDW\\tsdw.lua:497: in function <Interface\\AddOns\\TradeSkillDW\\tsdw.lua:487>\n[C]: in function `CastSpell'\nInterface\\FrameXML\\SpellBookFrame.lua:444: in function `SpellButton_OnClick'\n[string \"*:OnClick\"]:4: in function <[string \"*:OnClick\"]:1>",
+			["session"] = 82,
+			["counter"] = 2,
+		}, -- [2]
+		{
+			["message"] = "[ADDON_ACTION_FORBIDDEN] AddOn 'TradeSkillMaster_Crafting' tried to call the protected function 'CastSpell()'.",
+			["time"] = "2014/10/25 13:40:37",
+			["stack"] = "Interface\\AddOns\\!BugGrabber\\BugGrabber.lua:586: in function <Interface\\AddOns\\!BugGrabber\\BugGrabber.lua:586>\n[C]: in function `CastSpell'\nInterface\\FrameXML\\SpellBookFrame.lua:444: in function `SpellButton_OnClick'\n[string \"*:OnClick\"]:4: in function <[string \"*:OnClick\"]:1>",
+			["session"] = 82,
+			["counter"] = 1,
+		}, -- [3]
+		{
+			["message"] = "Interface\\FrameXML\\FloatingChatFrame.lua:1046: bad argument #1 to 'max' (number expected, got nil)",
+			["time"] = "2014/10/27 10:43:58",
+			["locals"] = "chatFrame = ChatFrame3 {\n 0 = <userdata>\n flashTimer = 0\n mouseOutTime = 0\n originalShow = <function> defined =[C]:-1\n tellTimer = 198.689\n button = CopyChatButton3 {\n }\n resizeButton = ChatFrame3ResizeButton {\n }\n buttonFrame = ChatFrame3ButtonFrame {\n }\n Hide = <function> defined @Interface\\FrameXML\\FrameLocks.lua:121\n channelList = <table> {\n }\n hasBeenFaded = true\n clickAnywhereButton = ChatFrame3ClickAnywhereButton {\n }\n buttonSide = \"left\"\n mouseInTime = 0.20000001043081\n editBox = ChatFrame3EditBox {\n }\n Show = <function> defined @Interface\\FrameXML\\FrameLocks.lua:125\n SetScript = <function> defined =[C]:-1\n name = \"Chat 3\"\n styled = true\n originalHide = <function> defined =[C]:-1\n zoneChannelList = <table> {\n }\n defaultLanguage = \"Orcish\"\n messageTypeList = <table> {\n }\n}\nframeName = \"ChatFrame3\"\n(for generator) = <function> defined =[C]:-1\n(for state) = <table> {\n 1 = \"Background\"\n 2 = \"TopLeftTexture\"\n 3 = \"BottomLeftTexture\"\n 4 = \"TopRightTexture\"\n 5 = \"BottomRightTexture\"\n 6 = \"LeftTexture\"\n 7 = \"RightTexture\"\n 8 = \"BottomTexture\"\n 9 = \"TopTexture\"\n 10 = \"ButtonFrameBackground\"\n 11 = \"ButtonFrameTopLeftTexture\"\n 12 = \"ButtonFrameBottomLeftTexture\"\n 13 = \"ButtonFrameTopRightTexture\"\n 14 = \"ButtonFrameBottomRightTexture\"\n 15 = \"ButtonFrameLeftTexture\"\n 16 = \"ButtonFrameRightTexture\"\n 17 = \"ButtonFrameBottomTexture\"\n 18 = \"ButtonFrameTopTexture\"\n}\n(for control) = 10\nindex = 10\nvalue = \"ButtonFrameBackground\"\nobject = ChatFrame3ButtonFrameBackground {\n 0 = <userdata>\n}\n(*temporary) = <function> defined @Interface\\FrameXML\\UIParent.lua:2941\n(*temporary) = ChatFrame3ButtonFrameBackground {\n 0 = <userdata>\n}\n(*temporary) = 0.15\n(*temporary) = 1\n",
+			["stack"] = "[C]: in function `max'\nInterface\\FrameXML\\FloatingChatFrame.lua:1046: in function `FCF_FadeInChatFrame'\nInterface\\FrameXML\\FloatingChatFrame.lua:1128: in function `FCF_OnUpdate'\n[string \"*:OnUpdate\"]:1: in function <[string \"*:OnUpdate\"]:1>",
+			["session"] = 118,
+			["counter"] = 2,
+		}, -- [4]
+		{
+			["message"] = "Interface\\FrameXML\\FloatingChatFrame.lua:1076: bad argument #2 to 'max' (number expected, got nil)",
+			["time"] = "2014/10/27 10:44:01",
+			["locals"] = "chatFrame = ChatFrame3 {\n 0 = <userdata>\n flashTimer = 0\n mouseOutTime = 1.029000043869\n originalShow = <function> defined =[C]:-1\n tellTimer = 198.689\n button = CopyChatButton3 {\n }\n resizeButton = ChatFrame3ResizeButton {\n }\n buttonFrame = ChatFrame3ButtonFrame {\n }\n Hide = <function> defined @Interface\\FrameXML\\FrameLocks.lua:121\n channelList = <table> {\n }\n clickAnywhereButton = ChatFrame3ClickAnywhereButton {\n }\n buttonSide = \"left\"\n mouseInTime = 0\n editBox = ChatFrame3EditBox {\n }\n Show = <function> defined @Interface\\FrameXML\\FrameLocks.lua:125\n SetScript = <function> defined =[C]:-1\n name = \"Chat 3\"\n styled = true\n originalHide = <function> defined =[C]:-1\n zoneChannelList = <table> {\n }\n defaultLanguage = \"Orcish\"\n messageTypeList = <table> {\n }\n}\nframeName = \"ChatFrame3\"\n(for generator) = <function> defined =[C]:-1\n(for state) = <table> {\n 1 = \"Background\"\n 2 = \"TopLeftTexture\"\n 3 = \"BottomLeftTexture\"\n 4 = \"TopRightTexture\"\n 5 = \"BottomRightTexture\"\n 6 = \"LeftTexture\"\n 7 = \"RightTexture\"\n 8 = \"BottomTexture\"\n 9 = \"TopTexture\"\n 10 = \"ButtonFrameBackground\"\n 11 = \"ButtonFrameTopLeftTexture\"\n 12 = \"ButtonFrameBottomLeftTexture\"\n 13 = \"ButtonFrameTopRightTexture\"\n 14 = \"ButtonFrameBottomRightTexture\"\n 15 = \"ButtonFrameLeftTexture\"\n 16 = \"ButtonFrameRightTexture\"\n 17 = \"ButtonFrameBottomTexture\"\n 18 = \"ButtonFrameTopTexture\"\n}\n(for control) = 10\nindex = 10\nvalue = \"ButtonFrameBackground\"\nobject = ChatFrame3ButtonFrameBackground {\n 0 = <userdata>\n}\n(*temporary) = <function> defined @Interface\\FrameXML\\UIParent.lua:2951\n(*temporary) = ChatFrame3ButtonFrameBackground {\n 0 = <userdata>\n}\n(*temporary) = 2\n",
+			["stack"] = "[C]: in function `max'\nInterface\\FrameXML\\FloatingChatFrame.lua:1076: in function `FCF_FadeOutChatFrame'\nInterface\\FrameXML\\FloatingChatFrame.lua:1137: in function `FCF_OnUpdate'\n[string \"*:OnUpdate\"]:1: in function <[string \"*:OnUpdate\"]:1>",
+			["session"] = 118,
+			["counter"] = 2,
+		}, -- [5]
 	},
 }

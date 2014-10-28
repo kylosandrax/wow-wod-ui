@@ -123,6 +123,14 @@ function AskMrRobot.IsSupportedInstance()
 	end
 end
 
+AskMrRobot.regionNames = {
+	[1] = "US",
+	[2] = "KR",
+	[3] = "EU",
+	[4] = "TW",
+	[5] = "CN"
+}
+
 AskMrRobot.classIds = {
     ["NONE"] = 0,
     ["DEATHKNIGHT"] = 1,

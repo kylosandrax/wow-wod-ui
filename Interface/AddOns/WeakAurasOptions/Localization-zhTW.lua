@@ -194,9 +194,9 @@ L["Group aura count description"] = [=[%s的成員總數必須受到一個或多
 |cFF00CC00> 0|r 會觸發當任何人在%s已被影響
 |cFF00CC00= 100%%|r 會觸發當所有人在%s已被影響
 |cFF00CC00!= 2|r 會觸發當%s人員數量已被影響不完全2
-|cFF00CC00<= 0.8|r 會觸發當%s已被影響的少於80% (4 of 5 隊伍成員， 8 of 10 or 20 of 25 團隊成員)
+|cFF00CC00<= 0.8|r 會觸發當%s已被影響的少於80%% (4 of 5 隊伍成員， 8 of 10 or 20 of 25 團隊成員)
 |cFF00CC00> 1/2|r 會觸發當超過一半以上的%s已被影響
-|cFF00CC00>= 0|r 總是觸發，不管怎樣]=]
+|cFF00CC00>= 0|r 總是觸發，不管怎樣]=] -- Needs review
 L["Group Member Count"] = "群組成員總數"
 L["Group (verb)"] = "群組"
 L["Height"] = "高度"
@@ -335,6 +335,7 @@ L["Text Color"] = "文字顏色"
 L["Text Position"] = "文字定位"
 L["Text Settings"] = "文字設定"
 L["Texture"] = "材質"
+L["Texture Info"] = "材質資訊" -- Needs review
 L["The children of this group have different display types, so their display options cannot be set as a group."] = "群組的子元素有不同的特效類型，所以特效的選項無法設定到群組。"
 L["The duration of the animation in seconds."] = "動畫的持續時間(秒)。"
 L["The type of trigger"] = "觸發類型"

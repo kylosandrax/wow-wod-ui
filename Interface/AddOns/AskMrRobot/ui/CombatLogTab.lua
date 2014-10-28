@@ -425,13 +425,11 @@ function AskMrRobot.CombatLogTab.InitializeVariable()
 	AmrDb.LogData._wipes = AmrDb.LogData._wipes or {}
 end
 
-local function GetPlayerExtraData(data, index)
-
-	local unitId = "raid" .. index
+local function GetPlayerExtraData(data, unitId, petId)
 
 	local guid = UnitGUID(unitId)
 	if guid == nil then
-		return nil
+		return
 	end
 	
 	local fields = {}
@@ -447,22 +445,23 @@ local function GetPlayerExtraData(data, index)
 		table.insert(fields, AskMrRobot.toCompressedNumberList(buffs))
 	end
 
-	local petGuid = UnitGUID("raidpet" .. index)
+	local petGuid = UnitGUID(petId)
 	if petGuid then
 		table.insert(fields, guid .. "," .. petGuid)
     else
 		table.insert(fields, '_')
 	end
 
-	local name = GetRaidRosterInfo(index)
+	local name = GetUnitName(unitId, true) -- GetRaidRosterInfo(rosterIndex)
     local realm = GetRealmName()
+    local region = AskMrRobot.regionNames[GetCurrentRegion()]
     local splitPos = string.find(name, "-")
     if splitPos ~= nil then
         realm = string.sub(name, splitPos + 1)
         name = string.sub(name, 1, splitPos - 1)
     end
 
-	data[realm .. ":" .. name] = table.concat(fields, ";")
+	data[region .. ":" .. realm .. ":" .. name] = table.concat(fields, ";")
 end
 
 function AskMrRobot.CombatLogTab.SaveExtras(timestamp)
@@ -471,15 +470,29 @@ function AskMrRobot.CombatLogTab.SaveExtras(timestamp)
 		return
 	end
 
-	-- we only get extra information for people if in a raid
-	if not IsInRaid() then 
-		return
-	end
+    local units = {}
+    local petUnits = {}
+    
+    if IsInRaid() then
+        for i = 1,40 do
+            table.insert(units, "raid" .. i)
+            table.insert(petUnits, "raidpet" .. i)
+        end
+    elseif IsInGroup() then
+        table.insert(units, "player")
+        table.insert(petUnits, "pet")
+        for i = 1,4 do
+            table.insert(units, "party" .. i)
+            table.insert(petUnits, "partypet" .. i)
+        end
+    else
+        return
+    end
 
 	local data = {}
-	for i = 1,40 do
-		GetPlayerExtraData(data, i)
-	end
+    for i = 1,#units do
+        GetPlayerExtraData(data, units[i], petUnits[i])
+    end
     
 	for name,val in pairs(data) do
 		-- record aura stuff, we never check for duplicates, need to know it at each point in time
@@ -493,15 +506,15 @@ end
 -- read a message sent to the addon channel with a player's info at the time an encounter started
 function AskMrRobot.CombatLogTab:ReadAddonMessage(message)
 
-    -- message will be of format: timestamp\nrealm\nname\n[stuff]
+    -- message will be of format: timestamp\nregion\nrealm\nname\n[stuff]
     local parts = {}
 	for part in string.gmatch(message, "([^\n]+)") do
 		tinsert(parts, part)
 	end
     
     local timestamp = parts[1]
-    local name = parts[2] .. ":" .. parts[3]
-    local data = parts[4]
+    local name = parts[2] .. ":" .. parts[3] .. ":" .. parts[4]
+    local data = parts[5]
     
     if (data == "done") then
         -- we have finished receiving this message; now process it to reduce the amount of duplicate data

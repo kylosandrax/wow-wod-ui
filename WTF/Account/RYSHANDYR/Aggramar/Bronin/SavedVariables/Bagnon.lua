@@ -26,14 +26,15 @@ BagnonFrameSettings = {
 				nil, -- [3]
 				1, -- [4]
 			},
-			["x"] = -661.444031515241,
+			["x"] = 467.778259277344,
+			["point"] = "BOTTOMLEFT",
 			["frameLayer"] = "TOPLEVEL",
 			["scale"] = 0.9,
-			["y"] = 817.277770996094,
+			["y"] = 819.000183105469,
 		},
 		["voidstorage"] = {
 			["y"] = 628.000061035156,
-			["point"] = "BOTTOMLEFT",
+			["x"] = -670.666687765241,
 			["frameLayer"] = "TOPLEVEL",
 			["scale"] = 0.9,
 			["itemFrameColumns"] = 14,
@@ -53,5 +54,5 @@ BagnonFrameSettings = {
 			["itemFrameColumns"] = 14,
 		},
 	},
-	["version"] = "6.0.12",
+	["version"] = "6.0.13",
 }

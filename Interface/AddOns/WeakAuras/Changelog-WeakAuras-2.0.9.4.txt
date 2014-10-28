@@ -1,0 +1,69 @@
+tag 2.0.9.4
+149979d06adc6cb0b0223fafe43c3068d8635a2e
+Benjamin Staneck <staneck@gmail.com>
+2014-10-28 20:18:21 +0100
+
+
+
+--------------------
+
+JTF195:
+	- Add custom trigger funtion to dynamically change the texture property of displays.
+Infus:
+	- Fix spellname
+Benjamin Staneck:
+	- more indenting and trying to get localization to work
+	- new enUS export
+	- import base (enUS) locale from Wowace, too
+	- indent change to trigger translations
+	- Never lose an end, this time it's okay.
+	- Use LibBabble-Race-3.0 for race translations.
+Infus:
+	- Add more support for spellIds in buff names
+	SpellIds are now also supported without a full scan.
+	Since this still uses UnitAura mutliple spells with the same name
+	will trip up without full scans. On importing triggers with spellIds
+	the spellName is reset, so that sharing auras with spellIds works
+	across languages.
+	
+	Note: We might want to reset the spellname also if the client
+	language changed, (If we can detect that.) but this patch doesn't
+	do that.
+	- Load option for realm
+	The name by itself is not necesarily unique.
+	- Add a load option for race.
+	E.g. useful for racial abilities
+	- Fix UnitPower triggers not working on initial log on
+	E.g. for me shadow orbs, runic power and monk's energy bar would
+	not correctly show up after logging in. Add the same event that is
+	used by stances to trigger all UnitPower related prototypes 0.5s
+	after login.
+	- ModelPaths: Update to 6.0 models
+	Used the file list from
+	http://www.zezula.net/en/casc/main.html
+	
+	and converted it via a small Qt/C++ program, source at
+	http://pastebin.com/ETsvzWJm
+	
+	Adds tons of new models. :)
+Benjamin Staneck:
+	- just set the frame height to 500 when being <= 40 before when unminimizing so people can't end up stuck in mini mode anymore.
+	- don't change from a generic name to a correct one for now so user configs don't reset.
+Infus:
+	- Fix hiding auras in rare cases
+	The problematic case was reported via a wowace message thread and
+	involved a Cooldown Progress Dark Soul aura in a dynamic group,
+	which wouldn't hide even though the progress was done.
+	See: http://pastebin.com/1KPwbrt3
+	
+	Collpase should also reset region.show so that a previous Expand,
+	that hasn't yet happened is canceled. Do the same for Expand after
+	Collapse.
+Benjamin Staneck:
+	- Next round of indenting fixes
+	- more indent fixes
+	- indenting fixes
+	- Simplify the rest of the secondary ressources
+	- Simplify Holy Power tracking and actually use UNIT_POWER for ComboPoints
+	- Whitespace cleanup
+	- Tentative fix for transitioning animations, nobody understands this code, it's sad.

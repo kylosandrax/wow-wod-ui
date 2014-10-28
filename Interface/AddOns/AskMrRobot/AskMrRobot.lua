@@ -139,7 +139,6 @@ function AskMrRobot.InitializeSettings()
 
     -- global settings
     if not AmrSettings then AmrSettings = {} end
-    if not AmrSettings.Logins then AmrSettings.Logins = {} end
     
     -- per-character settings
     if not AmrDb then AmrDb = {} end
@@ -179,37 +178,11 @@ end
 -- record logins when the addon starts up, used to help figure out which character logged which parts of a log file
 function AskMrRobot.RecordLogin()
 
-    -- delete entries that are more than 10 days old to prevent the table from growing indefinitely
-    if AmrSettings.Logins and #AmrSettings.Logins > 0 then
-        local now = time()
-        local oldDuration = 60 * 60 * 24 * 10
-        local entryTime
-        repeat
-            -- parse entry and get time
-            local parts = {}
-            for part in string.gmatch(AmrSettings.Logins[1], "([^;]+)") do
-                tinsert(parts, part)
-            end
-            entryTime = tonumber(parts[3])
+	-- only need to record the region now (only thing we can't get from the log file still)
+	AmrSettings.Region = AskMrRobot.regionNames[GetCurrentRegion()]
 
-            -- entries are in order, remove first entry if it is old
-            if difftime(now, entryTime) > oldDuration then
-                tremove(AmrSettings.Logins, 1)
-            end
-        until #AmrSettings.Logins == 0 or difftime(now, entryTime) <= oldDuration
-    end
-
-    -- record the time a player logs in, used to figure out which player logged which parts of their log file
-    local key = AmrDb.RealmName .. ";" .. AmrDb.CharacterName .. ";"
-    local loginData = key .. time()
-    if AmrSettings.Logins and #AmrSettings.Logins > 0 then
-        local last = AmrSettings.Logins[#AmrSettings.Logins]
-        if string.len(last) >= string.len(key) and string.sub(last, 1, string.len(key)) ~= key then
-            table.insert(AmrSettings.Logins, loginData)
-        end
-    else
-        table.insert(AmrSettings.Logins, loginData)
-    end
+	-- remove the old Logins data, don't need it anymore
+	AmrSettings.Logins = nil
 end
 
 function AskMrRobot.InitializeMinimap()
@@ -271,6 +244,7 @@ end
 
 -- gets all basic character properties
 function AskMrRobot.ScanCharacter()
+	AmrDb.Region = AskMrRobot.regionNames[GetCurrentRegion()]
     AmrDb.RealmName = GetRealmName()
     AmrDb.CharacterName = UnitName("player")
 	AmrDb.Guild = GetGuildInfo("player")
@@ -632,6 +606,7 @@ function AskMrRobot.ExportToCompressedString(complete)
     
     -- compressed string uses a fixed order rather than inserting identifiers
     table.insert(fields, GetAddOnMetadata(AskMrRobot.AddonName, "Version"))
+	table.insert(fields, AmrDb.Region)
     table.insert(fields, AmrDb.RealmName)
     table.insert(fields, AmrDb.CharacterName)
 
@@ -766,7 +741,7 @@ end
 
 function AskMrRobot.ExportToAddonChat(timestamp)
     local msg = AskMrRobot.ExportToCompressedString(false)
-    local msgPrefix = timestamp .. "\n" .. AmrDb.RealmName .. "\n" .. AmrDb.CharacterName .. "\n"
+    local msgPrefix = timestamp .. "\n" .. AmrDb.Region .. "\n" .. AmrDb.RealmName .. "\n" .. AmrDb.CharacterName .. "\n"
     
     -- break the data into 250 character chunks (to deal with the short limit on addon message size)
     local chunks = {}
@@ -832,10 +807,11 @@ function AskMrRobot.ImportCharacter(data, isTest)
         return L.AMR_IMPORT_ERROR_VERSION
     end
     
-    -- require realm/name match
+    -- require name match (don't match realm due to language issues for now)
     if not isTest then
-        local realm = parts[2]
-        local name = parts[3]
+		local region = parts[2]
+        local realm = parts[3]
+        local name = parts[4]
         if name ~= AmrDb.CharacterName then
             local badPers = name .. " (" .. realm .. ")"
             local goodPers = AmrDb.CharacterName .. " (" .. AmrDb.RealmName .. ")"
@@ -843,42 +819,42 @@ function AskMrRobot.ImportCharacter(data, isTest)
         end
         
         -- require race match
-        local race = tonumber(parts[5])
+        local race = tonumber(parts[6])
         if race ~= AskMrRobot.raceIds[AmrDb.Race] then
             return L.AMR_IMPORT_ERROR_RACE
         end
         
         -- require faction match
-        local faction = tonumber(parts[6])
+        local faction = tonumber(parts[7])
         if faction ~= AskMrRobot.factionIds[AmrDb.Faction] then
             return L.AMR_IMPORT_ERROR_FACTION
         end
         
         -- require level match
-        local level = tonumber(parts[7])
+        local level = tonumber(parts[8])
         if level ~= AmrDb.Level then
             return L.AMR_IMPORT_ERROR_LEVEL
         end
 
         -- require spec match
-        local spec = tonumber(parts[11])
+        local spec = tonumber(parts[12])
         if spec ~= AmrDb.Specs[AmrDb.ActiveSpec] then
-            print(AmrDb.ActiveSpec)
-            print(spec)
-            print(AmrDb.Specs[AmrDb.ActiveSpec])
+            --print(AmrDb.ActiveSpec)
+            --print(spec)
+            --print(AmrDb.Specs[AmrDb.ActiveSpec])
             local _, specName = GetSpecializationInfoByID(AskMrRobot.gameSpecIds[spec])
             return L.AMR_IMPORT_ERROR_SPEC:format(specName)
         end
         
         -- require talent match
-        local talents = parts[12]
+        local talents = parts[13]
         if talents ~= AmrDb.Talents[AmrDb.ActiveSpec] then
             return L.AMR_IMPORT_ERROR_TALENT
         end
         
         -- require glyph match
         -- TODO: re-enable this check when glyphs are more consistent
-        --local glyphs = parts[13]
+        --local glyphs = parts[14]
         --if glyphs ~= AskMrRobot.toCompressedNumberList(AmrDb.Glyphs[AmrDb.ActiveSpec]) then
         --    return L.AMR_IMPORT_ERROR_GLYPH
         --end
@@ -910,7 +886,7 @@ function AskMrRobot.ImportCharacter(data, isTest)
         ["8"] = true,
         ["9"] = true,
     }
-    for i = 15, #parts do
+    for i = 16, #parts do
         local itemString = parts[i]
         if itemString ~= "" and itemString ~= "_" then
             local tokens = {}

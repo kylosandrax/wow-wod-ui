@@ -2,6 +2,7 @@
 ElvCharacterDB = {
 	["ChatEditHistory"] = {
 		"/reload", -- [1]
+		"/macro", -- [2]
 	},
 	["ChatLog"] = {
 		["1414012046.749"] = {
@@ -268,19 +269,19 @@ ElvCharacterDB = {
 			nil, -- [19]
 			"CHAT_MSG_GUILD", -- [20]
 		},
-		["1414012211.963"] = {
-			"I don't have any left", -- [1]
-			"Azymyrta-Aggramar", -- [2]
+		["1414011855.836"] = {
+			"gn  :)", -- [1]
+			"Sorrowlifter-Aggramar", -- [2]
 			"Orcish", -- [3]
 			"", -- [4]
-			"Azymyrta", -- [5]
+			"Sorrowlifter", -- [5]
 			"", -- [6]
 			0, -- [7]
 			0, -- [8]
 			"", -- [9]
 			0, -- [10]
-			1288, -- [11]
-			"Player-1325-03C5D67A", -- [12]
+			1253, -- [11]
+			"Player-1325-03B61CD4", -- [12]
 			0, -- [13]
 			false, -- [14]
 			false, -- [15]
@@ -290,19 +291,19 @@ ElvCharacterDB = {
 			nil, -- [19]
 			"CHAT_MSG_GUILD", -- [20]
 		},
-		["1414012224.429"] = {
-			"ehm", -- [1]
-			"Moriaz-Aggramar", -- [2]
+		["1414012044.532"] = {
+			"I've got a reasonable amount and I heard I'm not the only one", -- [1]
+			"Azymyrta-Aggramar", -- [2]
 			"Orcish", -- [3]
 			"", -- [4]
-			"Moriaz", -- [5]
+			"Azymyrta", -- [5]
 			"", -- [6]
 			0, -- [7]
 			0, -- [8]
 			"", -- [9]
 			0, -- [10]
-			1289, -- [11]
-			"Player-1325-03C4A16F", -- [12]
+			1268, -- [11]
+			"Player-1325-03C5D67A", -- [12]
 			0, -- [13]
 			false, -- [14]
 			false, -- [15]
@@ -378,8 +379,8 @@ ElvCharacterDB = {
 			nil, -- [19]
 			"CHAT_MSG_GUILD", -- [20]
 		},
-		["1414012044.532"] = {
-			"I've got a reasonable amount and I heard I'm not the only one", -- [1]
+		["1414012010.383"] = {
+			"y", -- [1]
 			"Azymyrta-Aggramar", -- [2]
 			"Orcish", -- [3]
 			"", -- [4]
@@ -389,7 +390,7 @@ ElvCharacterDB = {
 			0, -- [8]
 			"", -- [9]
 			0, -- [10]
-			1268, -- [11]
+			1264, -- [11]
 			"Player-1325-03C5D67A", -- [12]
 			0, -- [13]
 			false, -- [14]
@@ -422,19 +423,19 @@ ElvCharacterDB = {
 			nil, -- [19]
 			"CHAT_MSG_GUILD", -- [20]
 		},
-		["1414011855.836"] = {
-			"gn  :)", -- [1]
-			"Sorrowlifter-Aggramar", -- [2]
+		["1414012224.429"] = {
+			"ehm", -- [1]
+			"Moriaz-Aggramar", -- [2]
 			"Orcish", -- [3]
 			"", -- [4]
-			"Sorrowlifter", -- [5]
+			"Moriaz", -- [5]
 			"", -- [6]
 			0, -- [7]
 			0, -- [8]
 			"", -- [9]
 			0, -- [10]
-			1253, -- [11]
-			"Player-1325-03B61CD4", -- [12]
+			1289, -- [11]
+			"Player-1325-03C4A16F", -- [12]
 			0, -- [13]
 			false, -- [14]
 			false, -- [15]
@@ -444,8 +445,8 @@ ElvCharacterDB = {
 			nil, -- [19]
 			"CHAT_MSG_GUILD", -- [20]
 		},
-		["1414012010.383"] = {
-			"y", -- [1]
+		["1414012211.963"] = {
+			"I don't have any left", -- [1]
 			"Azymyrta-Aggramar", -- [2]
 			"Orcish", -- [3]
 			"", -- [4]
@@ -455,7 +456,7 @@ ElvCharacterDB = {
 			0, -- [8]
 			"", -- [9]
 			0, -- [10]
-			1264, -- [11]
+			1288, -- [11]
 			"Player-1325-03C5D67A", -- [12]
 			0, -- [13]
 			false, -- [14]

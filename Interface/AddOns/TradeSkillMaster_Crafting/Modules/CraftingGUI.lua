@@ -242,20 +242,20 @@ function GUI:UpdateTradeSkills()
 	end
 
 	--tidy up crafts if player unlearned a profession
-	for spellid, data in pairs(TSM.db.factionrealm.crafts) do
-		for player in pairs(data.players) do
-			if not TSM.db.factionrealm.tradeSkills[player] or not TSM.db.factionrealm.tradeSkills[player][data.profession] then
-				TSM.db.factionrealm.crafts[spellid].players[player] = nil
-			end
-		end
-	end
+--	for spellid, data in pairs(TSM.db.factionrealm.crafts) do
+--		for player in pairs(data.players) do
+--			if not TSM.db.factionrealm.tradeSkills[player] or not TSM.db.factionrealm.tradeSkills[player][data.profession] then
+--				TSM.db.factionrealm.crafts[spellid].players[player] = nil
+--			end
+--		end
+--	end
 
 	--remove craft if no players
-	for spellid, data in pairs(TSM.db.factionrealm.crafts) do
-		if not next(data.players) then
-			TSM.db.factionrealm.crafts[spellid] = nil
-		end
-	end
+--	for spellid, data in pairs(TSM.db.factionrealm.crafts) do
+--		if not next(data.players) then
+--			TSM.db.factionrealm.crafts[spellid] = nil
+--		end
+--	end
 end
 
 function GUI:SaveFilters()

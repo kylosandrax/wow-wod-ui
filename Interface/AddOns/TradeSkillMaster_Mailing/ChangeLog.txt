@@ -1,3 +1,9 @@
+v2.2.8
+*Fixed another issue with mailing groups.
+
+v2.2.7
+*Fixed issues with mailing groups.
+
 v2.2.6
 *Fixed issue with mailing disenchantables.
 

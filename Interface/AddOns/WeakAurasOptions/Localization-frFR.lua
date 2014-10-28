@@ -206,7 +206,7 @@ Si le nombre entré est decimal (par ex. 0.5), une fraction (par ex. 1/2), ou un
 |cFF00CC00<= 0.8|r le déclenchera quand quand moins de 80%% du %s est affecté (4 sur 5 membres du groupe, 8 sur 10 ou 20 sur 25 du raid )
 |cFF00CC00> 1/2|r le déclenchera quand plus de la moitié du %s est affecté
 |cFF00CC00>= 0|r le déclenchera toujours, quoi qu'il arrive
-]=]
+]=] -- Needs review
 L["Group Member Count"] = "Nombre de membres du groupe"
 L["Group (verb)"] = "Grouper"
 L["Height"] = "Hauteur"
@@ -348,6 +348,7 @@ L["Text Color"] = "Couleur Texte"
 L["Text Position"] = "Position Texte"
 L["Text Settings"] = "Réglages de Texte"
 L["Texture"] = "Texture"
+-- L["Texture Info"] = ""
 L["The children of this group have different display types, so their display options cannot be set as a group."] = "Les enfants de ce groupe ont différent types de graphiques, leurs options de graphique ne peuvent donc pas être changées en groupe."
 L["The duration of the animation in seconds."] = "La durée de l'animation en secondes."
 L["The type of trigger"] = "Le type de déclencheur"

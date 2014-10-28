@@ -6,12 +6,13 @@ SkadaDB = {
 	},
 	["hasUpgraded"] = true,
 	["profileKeys"] = {
-		["Stormslinger - Aggramar"] = "Default",
 		["Zapunzel - Aggramar"] = "Default",
-		["Feldspar - Aggramar"] = "Default",
 		["Greenthorn - Aggramar"] = "Default",
 		["Ryjax - Aggramar"] = "Default",
 		["Kylosandrax - Aggramar"] = "Default",
+		["Feldspar - Aggramar"] = "Default",
+		["Kylozandrax - Earthen Ring"] = "Default",
+		["Stormslinger - Aggramar"] = "Default",
 		["Ryvok - Aggramar"] = "Default",
 		["Bronin - Aggramar"] = "Default",
 	},
@@ -20,20 +21,20 @@ SkadaDB = {
 			["windows"] = {
 				{
 					["barheight"] = 20,
-					["background"] = {
-						["height"] = 216.000152587891,
-					},
 					["set"] = "total",
 					["y"] = 187.999908447266,
-					["x"] = 3.00007653236389,
+					["x"] = 3.00007677078247,
 					["title"] = {
 						["font"] = "ElvUI Font",
 					},
+					["mode"] = "DPS",
 					["bartexture"] = "Armory",
 					["barwidth"] = 197.000396728516,
 					["point"] = "BOTTOMLEFT",
 					["barfontsize"] = 12,
-					["mode"] = "DPS",
+					["background"] = {
+						["height"] = 216.000152587891,
+					},
 					["barfont"] = "ElvUI Font",
 				}, -- [1]
 			},

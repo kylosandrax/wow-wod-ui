@@ -1,3 +1,6 @@
+v2.6.7
+*Temporarily disable clear-up of unlearned professions due to blizzard bug.
+
 v2.6.6
 *Fixed issues with sorting on crafting > crafts tab when adding or removing queue.
 *Fixed issues with queuing intermediate crafts.

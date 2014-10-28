@@ -13,3 +13,17 @@ X: -164
 Y: -116
 W: 32
 H: 32
+Frame: TSMMainFrame1
+FrameLevel: 74
+Anchor: CENTER
+X: 22
+Y: 17
+W: 823
+H: 686
+Frame: BagnonFramebank
+FrameLevel: 1
+Anchor: TOP
+X: 326
+Y: -27
+W: 668
+H: 550

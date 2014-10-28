@@ -16,6 +16,13 @@ GoGo_Prefs = {
 			},
 			["ZoneID"] = 606,
 		},
+		["Orgrimmar"] = {
+			["Preferred"] = {
+			},
+			["Excluded"] = {
+			},
+			["ZoneID"] = 321,
+		},
 	},
 	["DisableMountNotice"] = false,
 	["autodismount"] = true,

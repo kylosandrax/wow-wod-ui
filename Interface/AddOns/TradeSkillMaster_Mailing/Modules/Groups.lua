@@ -71,15 +71,6 @@ function private:StartSending()
 	for bag, slot, itemString, quantity, locked in TSMAPI:GetBagIterator(true) do
 		inventoryItems[itemString] = (inventoryItems[itemString] or 0) + quantity
 	end
-	-- add reagent bank count
-	for slot = 1, 98 do
-		local link = GetContainerItemLink(-3, slot)
-		local itemString = TSMAPI:GetItemString(link)
-		if itemString then
-			local _, quantity = GetContainerItemInfo(-3, slot)
-			inventoryItems[itemString] = (inventoryItems[itemString] or 0) + quantity
-		end
-	end
 
 	local badOperations = {}
 	local targets = {}
@@ -92,13 +83,15 @@ function private:StartSending()
 				for itemString in pairs(data.items) do
 					local numAvailable = (inventoryItems[itemString] or 0) - operation.keepQty
 					if numAvailable > 0 then
-						local quantity = 0
+						local quantity, reserveQty = 0, 0
 						if operation.maxQtyEnabled then
-							if TSMAPI:IsPlayer(operation.target) or not operation.restock then
+							if not operation.restock then
 								quantity = min(numAvailable, operation.maxQty)
 							else
 								local targetQty = private:GetTargetQuantity(operation.target, itemString, operation.restockGBank)
 								quantity = min(numAvailable, operation.maxQty - targetQty)
+								-- if using restock ensure that subsequent operations don't take reserved bag inventory
+								reserveQty = numAvailable - (targetQty - operation.maxQty)
 							end
 						else
 							quantity = numAvailable
@@ -107,7 +100,11 @@ function private:StartSending()
 							inventoryItems[itemString] = inventoryItems[itemString] - quantity
 							targets[operation.target] = targets[operation.target] or {}
 							targets[operation.target][itemString] = quantity
+						elseif reserveQty > 0 then -- some of the bag inventory is reserved so make unavailable for next operation
+							inventoryItems[itemString] = inventoryItems[itemString] - reserveQty
 						end
+					else -- as available quantity was used up by this operation make sure its not available for any subsequent operations
+						inventoryItems[itemString] = nil
 					end
 				end
 			end

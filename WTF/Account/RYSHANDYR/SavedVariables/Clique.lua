@@ -2,6 +2,12 @@
 CliqueDB = nil
 CliqueDB3 = {
 	["char"] = {
+		["Stormslinger - Aggramar"] = {
+			["alerthidden"] = true,
+		},
+		["Ryvok - Aggramar"] = {
+			["alerthidden"] = true,
+		},
 		["Kylosandrax - Aggramar"] = {
 			["alerthidden"] = true,
 		},
@@ -10,61 +16,24 @@ CliqueDB3 = {
 		},
 	},
 	["profileKeys"] = {
-		["Stormslinger - Aggramar"] = "Stormslinger - Aggramar",
 		["Zapunzel - Aggramar"] = "Zapunzel - Aggramar",
-		["Feldspar - Aggramar"] = "Feldspar - Aggramar",
 		["Greenthorn - Aggramar"] = "Greenthorn - Aggramar",
 		["Ryjax - Aggramar"] = "Ryjax - Aggramar",
 		["Kylosandrax - Aggramar"] = "Kylosandrax - Aggramar",
+		["Feldspar - Aggramar"] = "Feldspar - Aggramar",
+		["Kylozandrax - Earthen Ring"] = "Kylozandrax - Earthen Ring",
+		["Stormslinger - Aggramar"] = "Stormslinger - Aggramar",
 		["Ryvok - Aggramar"] = "Ryvok - Aggramar",
 		["Bronin - Aggramar"] = "Bronin - Aggramar",
 	},
 	["profiles"] = {
-		["Stormslinger - Aggramar"] = {
-			["bindings"] = {
-				{
-					["type"] = "target",
-					["sets"] = {
-						["default"] = true,
-					},
-					["key"] = "BUTTON1",
-					["unit"] = "mouseover",
-				}, -- [1]
-				{
-					["type"] = "menu",
-					["key"] = "BUTTON2",
-					["sets"] = {
-						["default"] = true,
-					},
-				}, -- [2]
-			},
-		},
 		["Zapunzel - Aggramar"] = {
 			["bindings"] = {
 				{
-					["sets"] = {
-						["default"] = true,
-					},
 					["type"] = "target",
-					["key"] = "BUTTON1",
-					["unit"] = "mouseover",
-				}, -- [1]
-				{
-					["type"] = "menu",
-					["key"] = "BUTTON2",
 					["sets"] = {
 						["default"] = true,
 					},
-				}, -- [2]
-			},
-		},
-		["Feldspar - Aggramar"] = {
-			["bindings"] = {
-				{
-					["sets"] = {
-						["default"] = true,
-					},
-					["type"] = "target",
 					["key"] = "BUTTON1",
 					["unit"] = "mouseover",
 				}, -- [1]
@@ -80,10 +49,10 @@ CliqueDB3 = {
 		["Greenthorn - Aggramar"] = {
 			["bindings"] = {
 				{
-					["type"] = "target",
 					["sets"] = {
 						["default"] = true,
 					},
+					["type"] = "target",
 					["key"] = "BUTTON1",
 					["unit"] = "mouseover",
 				}, -- [1]
@@ -99,10 +68,10 @@ CliqueDB3 = {
 		["Ryjax - Aggramar"] = {
 			["bindings"] = {
 				{
+					["type"] = "target",
 					["sets"] = {
 						["default"] = true,
 					},
-					["type"] = "target",
 					["key"] = "BUTTON1",
 					["unit"] = "mouseover",
 				}, -- [1]
@@ -118,10 +87,10 @@ CliqueDB3 = {
 		["Kylosandrax - Aggramar"] = {
 			["bindings"] = {
 				{
+					["type"] = "target",
 					["sets"] = {
 						["default"] = true,
 					},
-					["type"] = "target",
 					["key"] = "BUTTON1",
 					["unit"] = "mouseover",
 				}, -- [1]
@@ -152,7 +121,7 @@ CliqueDB3 = {
 				}, -- [4]
 			},
 		},
-		["Ryvok - Aggramar"] = {
+		["Feldspar - Aggramar"] = {
 			["bindings"] = {
 				{
 					["type"] = "target",
@@ -169,15 +138,162 @@ CliqueDB3 = {
 						["default"] = true,
 					},
 				}, -- [2]
+				{
+					["spell"] = "Renew",
+					["key"] = "SHIFT-BUTTON2",
+					["sets"] = {
+						["default"] = true,
+					},
+					["icon"] = "Interface\\Icons\\Spell_Holy_Renew",
+					["type"] = "spell",
+				}, -- [3]
+				{
+					["spell"] = "Power Word: Shield",
+					["key"] = "SHIFT-BUTTON4",
+					["sets"] = {
+						["default"] = true,
+					},
+					["icon"] = "Interface\\Icons\\Spell_Holy_PowerWordShield",
+					["type"] = "spell",
+				}, -- [4]
+				{
+					["spell"] = "Flash Heal",
+					["key"] = "SHIFT-BUTTON1",
+					["sets"] = {
+						["default"] = true,
+					},
+					["icon"] = "Interface\\Icons\\Spell_Holy_FlashHeal",
+					["type"] = "spell",
+				}, -- [5]
+				{
+					["spell"] = "Heal",
+					["key"] = "CTRL-BUTTON1",
+					["sets"] = {
+						["default"] = true,
+					},
+					["icon"] = "Interface\\Icons\\Spell_Holy_GreaterHeal",
+					["type"] = "spell",
+				}, -- [6]
 			},
 		},
-		["Bronin - Aggramar"] = {
+		["Kylozandrax - Earthen Ring"] = {
 			["bindings"] = {
 				{
 					["sets"] = {
 						["default"] = true,
 					},
 					["type"] = "target",
+					["key"] = "BUTTON1",
+					["unit"] = "mouseover",
+				}, -- [1]
+				{
+					["type"] = "menu",
+					["key"] = "BUTTON2",
+					["sets"] = {
+						["default"] = true,
+					},
+				}, -- [2]
+			},
+		},
+		["Stormslinger - Aggramar"] = {
+			["bindings"] = {
+				{
+					["sets"] = {
+						["default"] = true,
+					},
+					["type"] = "target",
+					["key"] = "BUTTON1",
+					["unit"] = "mouseover",
+				}, -- [1]
+				{
+					["type"] = "menu",
+					["key"] = "BUTTON2",
+					["sets"] = {
+						["default"] = true,
+					},
+				}, -- [2]
+				{
+					["spell"] = "Cleanse Spirit",
+					["key"] = "SHIFT-BUTTON3",
+					["sets"] = {
+						["default"] = true,
+					},
+					["icon"] = "Interface\\Icons\\Ability_Shaman_CleanseSpirit",
+					["type"] = "spell",
+				}, -- [3]
+				{
+					["spell"] = "Healing Surge",
+					["key"] = "SHIFT-BUTTON1",
+					["sets"] = {
+						["default"] = true,
+					},
+					["icon"] = "Interface\\Icons\\Spell_Nature_HealingWay",
+					["type"] = "spell",
+				}, -- [4]
+			},
+		},
+		["Ryvok - Aggramar"] = {
+			["bindings"] = {
+				{
+					["sets"] = {
+						["default"] = true,
+					},
+					["type"] = "target",
+					["key"] = "BUTTON1",
+					["unit"] = "mouseover",
+				}, -- [1]
+				{
+					["spell"] = "Cleanse",
+					["key"] = "SHIFT-BUTTON3",
+					["sets"] = {
+						["default"] = true,
+					},
+					["icon"] = "Interface\\Icons\\Spell_Holy_Purify",
+					["type"] = "spell",
+				}, -- [2]
+				{
+					["type"] = "menu",
+					["key"] = "BUTTON2",
+					["sets"] = {
+						["default"] = true,
+					},
+				}, -- [3]
+				{
+					["spell"] = "Hand of Sacrifice",
+					["key"] = "SHIFT-BUTTON2",
+					["sets"] = {
+						["default"] = true,
+					},
+					["icon"] = "Interface\\Icons\\Spell_Holy_SealOfSacrifice",
+					["type"] = "spell",
+				}, -- [4]
+				{
+					["spell"] = "Flash of Light",
+					["key"] = "SHIFT-BUTTON1",
+					["sets"] = {
+						["default"] = true,
+					},
+					["icon"] = "Interface\\Icons\\Spell_Holy_FlashHeal",
+					["type"] = "spell",
+				}, -- [5]
+				{
+					["spell"] = "Hand of Protection",
+					["key"] = "SHIFT-BUTTON4",
+					["sets"] = {
+						["default"] = true,
+					},
+					["icon"] = "Interface\\Icons\\Spell_Holy_SealOfProtection",
+					["type"] = "spell",
+				}, -- [6]
+			},
+		},
+		["Bronin - Aggramar"] = {
+			["bindings"] = {
+				{
+					["type"] = "target",
+					["sets"] = {
+						["default"] = true,
+					},
 					["key"] = "BUTTON1",
 					["unit"] = "mouseover",
 				}, -- [1]

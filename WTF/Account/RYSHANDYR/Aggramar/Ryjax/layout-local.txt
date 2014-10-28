@@ -8,8 +8,8 @@ W: 365
 H: 240
 Frame: DBMMinimapButton
 FrameLevel: 5
-Anchor: TOPRIGHT
-X: -164
-Y: -116
+Anchor: RIGHT
+X: -534
+Y: 252
 W: 32
 H: 32

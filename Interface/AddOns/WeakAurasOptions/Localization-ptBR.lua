@@ -298,6 +298,7 @@ L["Start"] = "Início" -- Needs review
 -- L["Text Position"] = ""
 -- L["Text Settings"] = ""
 -- L["Texture"] = ""
+-- L["Texture Info"] = ""
 -- L["The children of this group have different display types, so their display options cannot be set as a group."] = ""
 -- L["The duration of the animation in seconds."] = ""
 -- L["The type of trigger"] = ""

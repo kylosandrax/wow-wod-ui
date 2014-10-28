@@ -1,0 +1,51 @@
+VER 3 010000000000001A "Divine-Prot" "INV_Misc_QuestionMark"
+#showtooltip
+/raid --- Divine Protectionl ACTIVE ---
+/cast Divine Protection
+/in 8 /raid --- Divine Protection ENDING ---
+/dbm broadcast timer 00:10 Ryvok's Divine Protection
+END
+VER 3 010000000000001F "MO-DivLight" "INV_MISC_QUESTIONMARK"
+#showtooltip
+/cast [target=mouseover,help] Divine Light; [help] Divine Light; Divine Light
+END
+VER 3 0100000000000024 "MO-ES" "INV_MISC_QUESTIONMARK"
+#showtooltip
+/cast [target=mouseover,help] Execution Sentence; [help] Execution Sentence; Execution Sentence
+END
+VER 3 0100000000000026 "MO-HoP" "INV_MISC_QUESTIONMARK"
+#showtooltip
+/cast [target=mouseover,help] Hand of Purity; [help] Hand of Purity; Hand of Purity
+END
+VER 3 0100000000000023 "MO-HoP" "INV_MISC_QUESTIONMARK"
+#showtooltip
+/cast [target=mouseover,help] Hand of Protection; [help] Hand of Protection; Hand of Protection
+END
+VER 3 0100000000000022 "MO-HoSac" "INV_MISC_QUESTIONMARK"
+#showtooltip
+/cast [target=mouseover,help] Hand of Sacrifice; [help] Hand of Sacrifice; Hand of Sacrifice
+END
+VER 3 0100000000000021 "MO-Radiance" "INV_MISC_QUESTIONMARK"
+#showtooltip
+/cast [target=mouseover,help] Holy Radiance; [help] Holy Radiance; Holy Radiance
+END
+VER 3 0100000000000020 "MO-Shield" "INV_MISC_QUESTIONMARK"
+#showtooltip
+/cast [target=mouseover,help] Sacred Shield; [help] Sacred Shield; Sacred Shield
+END
+VER 3 010000000000001D "MO-Shock" "INV_MISC_QUESTIONMARK"
+#showtooltip
+/cast [target=mouseover,help] Holy Shock; [help] Holy Shock; Holy Shock
+END
+VER 3 010000000000001E "MO-WoG" "INV_MISC_QUESTIONMARK"
+#showtooltip
+/cast [target=mouseover,help] Word of Glory; [help] Word of Glory; Word of Glory
+END
+VER 3 0100000000000025 "Uber-Judge" "INV_MISC_QUESTIONMARK"
+#showtooltip Judgment
+/script UIErrorsFrame:UnregisterEvent("UI_ERROR_MESSAGE");
+/use 13
+/use 14
+/cast Judgment
+/script UIErrorsFrame:RegisterEvent("UI_ERROR_MESSAGE");
+END

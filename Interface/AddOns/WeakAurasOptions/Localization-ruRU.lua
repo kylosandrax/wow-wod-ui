@@ -198,7 +198,7 @@ L["Group aura count description"] = [=[Кол-во из %s человек, к к
 |cFF00CC00!= 2|r будет срабатывать когда %s человек под воздействием и их кол-во не равно 2
 |cFF00CC00<= 0.8|r сработает когда менее 80%% из %s, под воздействием (4 из 5 сопартийцев, 8 из 10 или 20 из 25 членов рейда)
 |cFF00CC00> 1/2|r сработает если затронуто больше половины из %s человек
-|cFF00CC00>= 0|r всегда срабатывает, несмотря ни на что]=]
+|cFF00CC00>= 0|r всегда срабатывает, несмотря ни на что]=] -- Needs review
 L["Group Member Count"] = "Кол-во Элементов Группы"
 L["Group (verb)"] = "Группировать"
 L["Height"] = "Высота"
@@ -337,6 +337,7 @@ L["Text Color"] = "Цвет Текста"
 L["Text Position"] = "Позиция Текста"
 L["Text Settings"] = "Настройки Текста"
 L["Texture"] = "Текстура"
+-- L["Texture Info"] = ""
 L["The children of this group have different display types, so their display options cannot be set as a group."] = "Элементы этой группы содержат разные типы индикаций, по этому их настройки не могут быть групповыми"
 L["The duration of the animation in seconds."] = "Длительность анимации в секугдах"
 L["The type of trigger"] = "Тип Триггера"

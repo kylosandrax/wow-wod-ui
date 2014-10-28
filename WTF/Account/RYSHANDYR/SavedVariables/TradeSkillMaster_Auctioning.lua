@@ -1,8 +1,34 @@
 
 TradeSkillMaster_AuctioningDB = {
-	["profiles"] = {
-		["Default"] = {
+	["factionrealm"] = {
+		["Horde - Aggramar"] = {
+			["player"] = {
+				["Ryvok"] = true,
+				["Bronin"] = true,
+				["Ryjax"] = true,
+				["Greenthorn"] = true,
+				["Stormslinger"] = true,
+				["Zapunzel"] = true,
+				["Kylosandrax"] = true,
+				["Feldspar"] = true,
+			},
 		},
+		["Horde - Earthen Ring"] = {
+			["player"] = {
+				["Kylozandrax"] = true,
+			},
+		},
+	},
+	["profileKeys"] = {
+		["Zapunzel - Aggramar"] = "Default",
+		["Greenthorn - Aggramar"] = "Default",
+		["Ryjax - Aggramar"] = "Default",
+		["Kylosandrax - Aggramar"] = "Default",
+		["Feldspar - Aggramar"] = "Default",
+		["Kylozandrax - Earthen Ring"] = "Default",
+		["Stormslinger - Aggramar"] = "Default",
+		["Ryvok - Aggramar"] = "Default",
+		["Bronin - Aggramar"] = "Default",
 	},
 	["global"] = {
 		["optionsTreeStatus"] = {
@@ -10,24 +36,14 @@ TradeSkillMaster_AuctioningDB = {
 				["1"] = true,
 			},
 			["scrollvalue"] = 0,
-			["treesizable"] = true,
-			["selected"] = 1,
-			["treewidth"] = 175,
 			["fullwidth"] = 782.999816894531,
+			["treesizable"] = true,
+			["treewidth"] = 175,
+			["selected"] = 1,
 		},
 	},
-	["profileKeys"] = {
-		["Ryjax - Aggramar"] = "Default",
-		["Kylosandrax - Aggramar"] = "Default",
-		["Bronin - Aggramar"] = "Default",
-	},
-	["factionrealm"] = {
-		["Horde - Aggramar"] = {
-			["player"] = {
-				["Bronin"] = true,
-				["Ryjax"] = true,
-				["Kylosandrax"] = true,
-			},
+	["profiles"] = {
+		["Default"] = {
 		},
 	},
 }
