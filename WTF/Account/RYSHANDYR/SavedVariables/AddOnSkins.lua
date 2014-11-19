@@ -1,2 +1,0 @@
-
-AddOnSkins_Options = nil
