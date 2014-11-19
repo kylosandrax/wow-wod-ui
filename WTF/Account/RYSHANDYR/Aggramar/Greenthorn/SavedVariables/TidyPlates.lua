@@ -1,10 +1,14 @@
 
 TidyPlatesOptions = {
-	["EnemyAutomation"] = "No Automation",
-	["CompatibilityMode"] = false,
+	["PrimaryProfile"] = "Damage",
 	["FriendlyAutomation"] = "No Automation",
-	["DisableSoftTransitions"] = false,
+	["EnemyAutomation"] = "No Automation",
 	["primary"] = "Threat Plates",
+	["CompatibilityMode"] = false,
+	["PrimaryTheme"] = "Threat Plates",
+	["SecondaryProfile"] = "Damage",
+	["DisableSoftTransitions"] = false,
+	["SecondaryTheme"] = "Threat Plates",
 	["WelcomeShown"] = true,
 	["secondary"] = "Threat Plates",
 }

@@ -90,8 +90,10 @@ TradeSkillMaster_ShoppingDB = {
 			["item:14343:0:0:0:0:0:0"] = "Small Brilliant Shard",
 			["item:11084:0:0:0:0:0:0"] = "Large Glimmering Shard",
 			["item:52721:0:0:0:0:0:0"] = "Heavenly Shard",
+			["item:114931:0:0:0:0:0:0"] = "Cerulean Pigment",
 			["item:61979:0:0:0:0:0:0"] = "Ashen Pigment",
 			["item:43105:0:0:0:0:0:0"] = "Indigo Pigment",
+			["item:113111:0:0:0:0:0:0"] = "Warbinder's Ink",
 			["item:16204:0:0:0:0:0:0"] = "Illusion Dust",
 			["item:52180:0:0:0:0:0:0"] = "Nightstone",
 			["item:12799:0:0:0:0:0:0"] = "Large Opal",
@@ -104,20 +106,20 @@ TradeSkillMaster_ShoppingDB = {
 			["item:39151:0:0:0:0:0:0"] = "Alabaster Pigment",
 			["item:21929:0:0:0:0:0:0"] = "Flame Spessarite",
 			["item:43126:0:0:0:0:0:0"] = "Ink of the Sea",
-			["item:43117:0:0:0:0:0:0"] = "Dawnstar Ink",
+			["item:43119:0:0:0:0:0:0"] = "Royal Ink",
 			["item:52719:0:0:0:0:0:0"] = "Greater Celestial Essence",
 			["item:1705:0:0:0:0:0:0"] = "Lesser Moonstone",
 			["item:36918:0:0:0:0:0:0"] = "Scarlet Ruby",
-			["item:43119:0:0:0:0:0:0"] = "Royal Ink",
+			["item:43117:0:0:0:0:0:0"] = "Dawnstar Ink",
 			["item:76130:0:0:0:0:0:0"] = "Tiger Opal",
 			["item:34057:0:0:0:0:0:0"] = "Abyss Crystal",
 			["item:34055:0:0:0:0:0:0"] = "Greater Cosmic Essence",
 			["item:52722:0:0:0:0:0:0"] = "Maelstrom Crystal",
 			["item:11135:0:0:0:0:0:0"] = "Greater Mystic Essence",
-			["item:11139:0:0:0:0:0:0"] = "Large Glowing Shard",
+			["item:74247:0:0:0:0:0:0"] = "Ethereal Shard",
 			["item:76133:0:0:0:0:0:0"] = "Lapis Lazuli",
 			["item:43106:0:0:0:0:0:0"] = "Ruby Pigment",
-			["item:74247:0:0:0:0:0:0"] = "Ethereal Shard",
+			["item:11139:0:0:0:0:0:0"] = "Large Glowing Shard",
 			["item:43125:0:0:0:0:0:0"] = "Darkflame Ink",
 			["item:39342:0:0:0:0:0:0"] = "Nether Pigment",
 			["item:61978:0:0:0:0:0:0"] = "Blackfallow Ink",
@@ -141,8 +143,14 @@ TradeSkillMaster_ShoppingDB = {
 			["item:3864:0:0:0:0:0:0"] = "Citrine",
 		},
 		["previousSearches"] = {
-			"imbued netherweave bag", -- [1]
-			"living steel", -- [2]
+			"rain poppy", -- [1]
+			"flask", -- [2]
+			"elixir", -- [3]
+			"ginseng", -- [4]
+			"withberries", -- [5]
+			"ghost iron bar", -- [6]
+			"imbued netherweave bag", -- [7]
+			"living steel", -- [8]
 		},
 		["optionsTreeStatus"] = {
 			["groups"] = {
@@ -163,6 +171,7 @@ TradeSkillMaster_ShoppingDB = {
 		["Kylosandrax - Aggramar"] = "Kylosandrax - Aggramar",
 		["Feldspar - Aggramar"] = "Feldspar - Aggramar",
 		["Kylozandrax - Earthen Ring"] = "Kylozandrax - Earthen Ring",
+		["Banjax - Aggramar"] = "Banjax - Aggramar",
 		["Stormslinger - Aggramar"] = "Stormslinger - Aggramar",
 		["Ryvok - Aggramar"] = "Ryvok - Aggramar",
 		["Bronin - Aggramar"] = "Bronin - Aggramar",
@@ -179,6 +188,8 @@ TradeSkillMaster_ShoppingDB = {
 		["Feldspar - Aggramar"] = {
 		},
 		["Kylozandrax - Earthen Ring"] = {
+		},
+		["Banjax - Aggramar"] = {
 		},
 		["Stormslinger - Aggramar"] = {
 		},

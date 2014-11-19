@@ -578,6 +578,8 @@ do
     local name, _, _, _, _, _, _, _, _, icon = GetItemInfo(itemId or 0);
     if(lastSwingMain) then
       return swingDurationMain, lastSwingMain + swingDurationMain, name, icon;
+    elseif (lastSwingRange) then
+      return swingDurationRange, lastSwingRange + swingDurationRange, name, icon;
     else
       return 0, math.huge, name, icon;
     end
@@ -1026,12 +1028,13 @@ do
       startTime = startTime or 0;
       duration = duration or 0;
 
+      spellCharges[id] = charges;
+
       if(duration > 1.51) then
         local time = GetTime();
         local endTime = startTime + duration;
         spellCdDurs[id] = duration;
         spellCdExps[id] = endTime;
-        spellCharges[id] = charges;
         if not(spellCdHandles[id]) then
           spellCdHandles[id] = timer:ScheduleTimer(SpellCooldownFinished, endTime - time, id);
         end
@@ -1481,7 +1484,11 @@ function WeakAuras.ConstructFunction(prototype, data, triggernum, subPrefix, sub
               test = "(";
               local any = false;
               for value, _ in pairs(trigger[name].multi) do
-                test = test..name.."=="..(tonumber(value) or "\""..value.."\"").." or ";
+                if not arg.test then
+                  test = test..name.."=="..(tonumber(value) or "\""..value.."\"").." or ";
+                else
+                  test = test..arg.test:format(tonumber(value) or "\""..value.."\"").." or ";
+                end
                 any = true;
               end
               if(any) then
@@ -1492,7 +1499,11 @@ function WeakAuras.ConstructFunction(prototype, data, triggernum, subPrefix, sub
               test = test..")";
             elseif(trigger["use_"..name]) then
               local value = trigger[name].single;
-              test = trigger[name].single and "("..name.."=="..(tonumber(value) or "\""..value.."\"")..")";
+              if not arg.test then
+                test = trigger[name].single and "("..name.."=="..(tonumber(value) or "\""..value.."\"")..")";
+              else
+                test = trigger[name].single and "("..arg.test:format(tonumber(value) or "\""..value.."\"")..")";
+              end
             end
           elseif(arg.type == "toggle") then
             if(trigger["use_"..name]) then
@@ -3006,6 +3017,16 @@ function WeakAuras.Modernize(data)
       load[protoname] = nil;
     end
   end
+
+  -- upgrade from singleselecting talents to multi select, see ticket 52
+  if (type(load.talent) == number) then
+    local talent = load.talent;
+    load.talent = {};
+    load.talent.single = talent;
+    load.talent.multi = {}
+  end
+
+  load.use_talent = load.use_talent and true or nil
 
   -- Add status/event information to triggers
   for triggernum=0,(data.numTriggers or 9) do

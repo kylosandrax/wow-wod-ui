@@ -170,6 +170,10 @@ function AskMrRobot.SummaryTab:new(parent)
 	tab.instructions = tab:CreateFontString(nil, "ARTWORK", "GameFontWhite")
 	tab.instructions:SetPoint("TOPLEFT", tab.enchantCount, "BOTTOMLEFT", 0, -15)
 	tab.instructions:SetText(L.AMR_SUMMARYTAB_VIEW_TABS)
+	tab.instructions:SetPoint("RIGHT", -20, 0)
+	tab.instructions:SetWidth(tab.instructions:GetWidth())
+	tab.instructions:SetWordWrap(true)
+	tab.instructions:SetJustifyH("LEFT")
 	tab.instructions:Hide()
 
 	return tab

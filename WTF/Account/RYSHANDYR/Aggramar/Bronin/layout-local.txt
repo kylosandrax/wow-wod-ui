@@ -13,10 +13,10 @@ X: -534
 Y: 252
 W: 32
 H: 32
-Frame: DBM_GUI_OptionsFrame
-FrameLevel: 5
-Anchor: CENTER
-X: 0
-Y: 0
-W: 800
-H: 510
+Frame: TomTomBlock
+FrameLevel: 8
+Anchor: TOPRIGHT
+X: -104
+Y: -209
+W: 100
+H: 30

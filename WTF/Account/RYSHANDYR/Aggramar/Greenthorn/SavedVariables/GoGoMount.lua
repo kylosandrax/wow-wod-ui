@@ -7,8 +7,23 @@ GoGo_Prefs = {
 	},
 	["UnknownMounts"] = {
 	},
+	["AutoExcludeFlyingMounts"] = false,
 	["DruidFormNotRandomize"] = false,
 	["Zones"] = {
+		["The Vortex Pinnacle"] = {
+			["Preferred"] = {
+			},
+			["Excluded"] = {
+			},
+			["ZoneID"] = 13,
+		},
+		["Uldum"] = {
+			["Preferred"] = {
+			},
+			["Excluded"] = {
+			},
+			["ZoneID"] = 13,
+		},
 		["Orgrimmar"] = {
 			["Preferred"] = {
 			},
@@ -22,7 +37,7 @@ GoGo_Prefs = {
 	["DruidDisableInCombat"] = false,
 	["DisableUpdateNotice"] = false,
 	["RemoveBuffs"] = true,
-	["version"] = "6.0.6",
+	["version"] = "6.0.14",
 	["DruidClickForm"] = true,
 	["GlobalPrefMounts"] = {
 	},

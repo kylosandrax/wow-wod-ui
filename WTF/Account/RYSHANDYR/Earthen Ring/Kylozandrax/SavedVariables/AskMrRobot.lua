@@ -42,18 +42,25 @@ AmrDb = {
 	["Region"] = "EU",
 	["Currencies"] = {
 	},
-	["Glyphs"] = {
-	},
+	["RealmName"] = "Earthen Ring",
 	["LogData"] = {
 		["_wipes"] = {
 		},
 		["_autoLog"] = {
 			[1136] = "disabled",
 		},
-		["_lastDiff"] = 0,
 		["_lastZone"] = "Kalimdor",
+		["_lastDiff"] = 0,
 	},
 	["BagItems"] = {
+	},
+	["Professions"] = {
+	},
+	["LastCharacterImport"] = "",
+	["Reps"] = {
+	},
+	["Faction"] = "Horde",
+	["IconInfo"] = {
 	},
 	["BankItems"] = {
 		"|cff0070dd|Hitem:37892:0:0:0:0:0:0:1248838144:71:0:0:0|h[Green Brewfest Stein]|h|r", -- [1]
@@ -64,20 +71,8 @@ AmrDb = {
 		"|cffffffff|Hitem:4305:0:0:0:0:0:0:664835000:71:0:0:0|h[Bolt of Silk Cloth]|h|r", -- [6]
 		"|cff1eff00|Hitem:21886:0:0:0:0:0:0:1191215488:71:0:0:0|h[Primal Life]|h|r", -- [7]
 	},
-	["LastCharacterImport"] = "",
-	["Reps"] = {
+	["Glyphs"] = {
 	},
-	["Faction"] = "Horde",
-	["IconInfo"] = {
-	},
-	["Professions"] = {
-		["Cooking"] = 248,
-		["Herbalism"] = 363,
-		["Inscription"] = 247,
-		["First Aid"] = 396,
-		["Fishing"] = 1,
-	},
-	["RealmName"] = "Earthen Ring",
 	["BankItemsAndCounts"] = {
 		[27671] = 10,
 		[21877] = 133,
@@ -100,18 +95,18 @@ AmrDb = {
 		[43011] = 23,
 		[43013] = 9,
 		[39489] = 1,
-		[21886] = 1,
+		[8150] = 19,
 		[21213] = 5,
 		[38682] = 27,
-		[6470] = 2,
+		[4306] = 90,
 		[13444] = 5,
 		[5469] = 9,
 		[4603] = 8,
 		[3685] = 12,
 		[7974] = 13,
 		[22250] = 1,
-		[4306] = 90,
+		[6470] = 2,
 		[4305] = 1,
-		[8150] = 19,
+		[21886] = 1,
 	},
 }

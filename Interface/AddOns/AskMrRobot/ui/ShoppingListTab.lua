@@ -24,6 +24,7 @@ function AskMrRobot.ShoppingListTab:new(parent)
 	tab:RegisterEvent("AUCTION_HOUSE_SHOW")
 	tab:RegisterEvent("MAIL_SHOW")
 	tab:RegisterEvent("MAIL_CLOSED")
+	tab:RegisterEvent("GET_ITEM_INFO_RECEIVED")
 
 	tab.isAuctionHouseVisible = false
 
@@ -58,7 +59,7 @@ function AskMrRobot.ShoppingListTab:new(parent)
 	local text3 = getglobal(tab.enchantMaterialsCheckbox:GetName() .. 'Text')
 	text3:SetFontObject("GameFontHighlightLarge")
 	text3:SetText(L.AMR_SHOPPINGLISTTAB_ENCHANT_MATERIALS)
-	text3:SetWidth(150)
+	text3:SetPoint("RIGHT", tab, "RIGHT", -20, 0)
 	text3:SetPoint("TOPLEFT", tab.enchantMaterialsCheckbox, "TOPRIGHT", 2, -4)
 
 
@@ -69,7 +70,7 @@ function AskMrRobot.ShoppingListTab:new(parent)
 	local text2 = getglobal(tab.enchantsCheckbox:GetName() .. 'Text')
 	text2:SetFontObject("GameFontHighlightLarge")
 	text2:SetText(L.AMR_SHOPPINGLISTTAB_ENCHANTS)
-	text2:SetWidth(150)
+	text2:SetPoint("RIGHT", tab, "RIGHT", -20, 0)
 	text2:SetPoint("TOPLEFT", tab.enchantsCheckbox, "TOPRIGHT", 2, -4)
 
 
@@ -81,7 +82,7 @@ function AskMrRobot.ShoppingListTab:new(parent)
 	local text = getglobal(tab.gemsCheckbox:GetName() .. 'Text')
 	text:SetFontObject("GameFontHighlightLarge")
 	text:SetText(L.AMR_SHOPPINGLISTTAB_GEMS)
-	text:SetWidth(150)
+	text:SetPoint("RIGHT", tab, "RIGHT", -20, 0)
 	text:SetPoint("TOPLEFT", tab.gemsCheckbox, "TOPRIGHT", 2, -4)
 
 
@@ -216,6 +217,8 @@ function AskMrRobot.ShoppingListTab:new(parent)
 	end)
 
 	tab.messageQueue = {}
+
+	tab.itemNames = {}
 	return tab
 end
 
@@ -584,7 +587,7 @@ function AskMrRobot.ShoppingListTab:CalculateItems()
 		if qty then
 			qty.total = qty.total + 1
 		else
-			qty = { count = 0, total = 1, optimized = enchantData.optimized }
+			qty = { count = 0, total = 1, optimized = enchantData.optimized, itemId = extraData and extraData.itemId }
 			enchantList[id] = qty
 		end
 	end
@@ -680,9 +683,20 @@ function AskMrRobot.ShoppingListTab:Update()
 		self.enchantsHeader:SetPoint("TOPLEFT", self.scrollParent, "TOPLEFT", 0, 0)
 	end
 
+	self.enchantNames = {}
 	row = 1
 	for slot, enchant in AskMrRobot.spairs(enchantList) do
 		self:SetEnchantIcon(row, enchant.optimized)
+		local row2 = row
+		self.enchantIcons[row2].itemName = nil
+		if not enchant.itemId then
+            self.enchantIcons[row2].itemText:SetText("unknown")
+        else
+            self:GetItemName(enchant.itemId, function(name) 
+                self.enchantIcons[row2].itemName = name 
+                self.enchantIcons[row2].itemText:SetText(name)
+            end)
+        end
 		self:SetEnchantQuantity(row, enchant.count, enchant.total)
 		lastControl = self.enchantIcons[row]
 		row = row + 1
@@ -747,6 +761,24 @@ function AskMrRobot.ShoppingListTab:Update()
 	end
 end
 
+function AskMrRobot.ShoppingListTab:GetItemName(itemId, func)
+	local name = GetItemInfo(itemId)
+	if name then
+		func(name)
+	else
+		tinsert(self.itemNames, { itemId = itemId, func = func })
+	end
+end
+
+function AskMrRobot.ShoppingListTab:On_GET_ITEM_INFO_RECEIVED()
+	for i = #self.itemNames, 1, -1 do
+		local name = GetItemInfo(self.itemNames[i].itemId)
+	    if name then
+	    	self.itemNames[i].func(name)
+	    	tremove(self.itemNames, i)
+	    end
+	end
+end
 
 function AskMrRobot.ShoppingListTab:OnEvent(frame, event, ...)
 	local handler = self["On_" .. event]

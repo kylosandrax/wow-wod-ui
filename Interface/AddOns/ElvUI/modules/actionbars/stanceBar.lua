@@ -2,6 +2,7 @@ local E, L, V, P, G = unpack(select(2, ...)); --Inport: Engine, Locales, Private
 local AB = E:GetModule('ActionBars');
 
 local ceil = math.ceil;
+local lower = string.lower;
 
 local bar = CreateFrame('Frame', 'ElvUI_StanceBar', E.UIParent, 'SecureHandlerStateTemplate');
 
@@ -23,6 +24,7 @@ function AB:StyleShapeShift(event)
 	local numForms = GetNumShapeshiftForms();
 	local texture, name, isActive, isCastable, _;
 	local buttonName, button, icon, cooldown;
+	local stance = GetShapeshiftForm();
 
 	for i = 1, NUM_STANCE_SLOTS do
 		buttonName = "ElvUI_StanceBarButton"..i;
@@ -33,19 +35,50 @@ function AB:StyleShapeShift(event)
 		if i <= numForms then
 			texture, name, isActive, isCastable = GetShapeshiftFormInfo(i);
 
-			if(isActive) then
+			if not texture then
 				texture = "Interface\\Icons\\Spell_Nature_WispSplode"
-			else
-				_, _, texture = GetSpellInfo(name)
-			end			
+			end
 
+			if (type(texture) == "string" and (lower(texture) == "interface\\icons\\spell_nature_wispsplode" or lower(texture) == "interface\\icons\\ability_rogue_envelopingshadows")) and self.db.stanceBar.style == 'darkenInactive' then
+				_, _, texture = GetSpellInfo(name)
+			end
+			
 			icon:SetTexture(texture);
 
-			if(isCastable) then
-				icon:SetDesaturated(false);
+			if texture then
+				cooldown:SetAlpha(1);
 			else
-				icon:SetDesaturated(true);
-			end			
+				cooldown:SetAlpha(0);
+			end
+
+			if isActive then
+				StanceBarFrame.lastSelected = button:GetID();
+				if numForms == 1 then
+					button.checked:SetTexture(1, 1, 1, 0.5) 
+					button:SetChecked(true);
+				else
+					button.checked:SetTexture(1, 1, 1, 0.5)
+					button:SetChecked(self.db.stanceBar.style ~= 'darkenInactive');
+				end
+			else
+				if numForms == 1 or stance == 0 then
+					button:SetChecked(false);
+				else
+					button:SetChecked(self.db.stanceBar.style == 'darkenInactive');
+					button.checked:SetAlpha(1)
+					if self.db.stanceBar.style == 'darkenInactive' then
+						button.checked:SetTexture(0, 0, 0, 0.5)
+					else
+						button.checked:SetTexture(1, 1, 1, 0.5)
+					end
+				end
+			end
+
+			if isCastable then
+				icon:SetVertexColor(1.0, 1.0, 1.0);
+			else
+				icon:SetVertexColor(0.4, 0.4, 0.4);
+			end
 		end
 	end
 end
@@ -118,6 +151,8 @@ function AB:PositionAndSizeBarShapeShift()
 		
 		if self.db['stanceBar'].mouseover == true then
 			bar:SetAlpha(0);
+			button.cooldown:SetSwipeColor(0, 0, 0, 0)
+			button.cooldown:SetDrawBling(false)
 			if not self.hooks[bar] then
 				self:HookScript(bar, 'OnEnter', 'Bar_OnEnter');
 				self:HookScript(bar, 'OnLeave', 'Bar_OnLeave');	
@@ -129,6 +164,8 @@ function AB:PositionAndSizeBarShapeShift()
 			end
 		else
 			bar:SetAlpha(bar.db.alpha);
+			button.cooldown:SetSwipeColor(0, 0, 0, 1)
+			button.cooldown:SetDrawBling(true)
 			if self.hooks[bar] then
 				self:Unhook(bar, 'OnEnter');
 				self:Unhook(bar, 'OnLeave');

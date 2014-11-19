@@ -1,7 +1,6 @@
 local AS = unpack(AddOnSkins)
 if not AS:CheckAddOn('ElvUI') then return end
 
-local name = 'ParchmentRemover'
 function AS:ParchmentRemover(event, addon)
 	if ElvUI[1].private.skins.blizzard.enable ~= true then return end
 	if addon == 'Blizzard_ArchaeologyUI' and ElvUI[1].private.skins.blizzard.archaeology == true then
@@ -119,27 +118,28 @@ function AS:ParchmentRemover(event, addon)
 		if ElvUI[1].private.skins.blizzard.quest == true then
 			QuestScrollFrame:HookScript('OnUpdate', function(self)
 				if self.spellTex and self.spellTex2 then
-					self.spellTex:Hide()
-					self.spellTex2:Hide()
+					self.spellTex:SetTexture("")
+					self.spellTex:SetTexture("")
 				end
 			end)
 			QuestDetailScrollFrame:HookScript('OnUpdate', function(self)
-				self.spellTex:Hide()
+				self.spellTex:SetTexture("")
 			end)
 			QuestRewardScrollFrame:HookScript('OnUpdate', function(self)
-				self.spellTex:Hide()
+				self.spellTex:SetTexture("")
+			end)
+			QuestLogPopupDetailFrameScrollFrame:HookScript('OnUpdate', function(self)
+				self.spellTex:SetTexture("")
 			end)
 
-			if QuestDetailScrollFrame.spellTex then
-				QuestDetailScrollFrame.spellTex:Hide()
-			end
+			QuestMapFrame.DetailsFrame:StripTextures(true)
 
 			if QuestProgressScrollFrame.spellTex then
-				QuestProgressScrollFrame.spellTex:Hide()
+				QuestProgressScrollFrame.spellTex:SetTexture("")
 			end
 
 			if QuestGreetingScrollFrame.spellTex then
-				QuestGreetingScrollFrame.spellTex:Hide()
+				QuestGreetingScrollFrame.spellTex:SetTexture("")
 			end
 
 			hooksecurefunc('QuestInfoItem_OnClick', function(self)
@@ -287,4 +287,4 @@ function AS:ParchmentRemover(event, addon)
 	end
 end
 
-AS:RegisterSkin(name, AS.ParchmentRemover, 'ADDON_LOADED')
+AS:RegisterSkin('ParchmentRemover', AS.ParchmentRemover, 'ADDON_LOADED')

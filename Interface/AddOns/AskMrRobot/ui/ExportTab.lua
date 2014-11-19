@@ -52,7 +52,7 @@ function AskMrRobot.ExportTab:new(parent)
     
     btn = CreateFrame("Button", "AmrUpdateExportString", tab, "UIPanelButtonTemplate")
 	btn:SetPoint("TOPLEFT", text, "BOTTOMLEFT", -2, -10)
-	btn:SetText("Update")
+	btn:SetText(L.AMR_EXPORTTAB_UPDATE)
 	btn:SetWidth(110)
 	btn:SetHeight(30)
     

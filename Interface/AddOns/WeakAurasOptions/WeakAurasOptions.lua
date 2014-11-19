@@ -414,6 +414,39 @@ AceGUI:RegisterLayout("AbsoluteList", function(content, children)
   end
 end);
 
+AceGUI:RegisterLayout("ButtonsScrollLayout", function(content, children)
+  local yOffset = 0;
+
+  local scrollTop, scrollBottom = content.obj:GetScrollPos();
+  for i = 1, #children do
+    local child = children[i]
+
+    local frame = child.frame;
+    local frameHeight = (frame.height or frame:GetHeight() or 0);
+
+    frame:ClearAllPoints();
+    if (-yOffset + frameHeight > scrollTop and -yOffset - frameHeight < scrollBottom) then
+        frame:Show();
+
+        frame:SetPoint("LEFT", content);
+        frame:SetPoint("RIGHT", content);
+        frame:SetPoint("TOP", content, "TOP", 0, yOffset)
+    else
+        frame:Hide();
+        frame.yOffset = yOffset
+    end
+
+    if child.DoLayout then
+        child:DoLayout()
+    end
+
+    yOffset = yOffset - (frameHeight + 2);
+  end
+  if(content.obj.LayoutFinished) then
+    content.obj:LayoutFinished(nil, yOffset * -1);
+  end
+end);
+
 -- Builds a cache of name/icon pairs from existing spell data
 -- Why? Because if you call GetSpellInfo with a spell name, it only works if the spell is an actual castable ability,
 -- but if you call it with a spell id, you can get buffs, talents, etc. This is useful for displaying faux aura information
@@ -5432,6 +5465,11 @@ function WeakAuras.ReloadTriggerOptions(data)
       args = regionOption
     };
     
+    data.load.use_class = getAll(data, {"load", "use_class"});
+    local single_class = getAll(data, {"load", "class"});
+    data.load.class = {}
+    data.load.class.single = single_class;
+
     displayOptions[id].args.load.args = WeakAuras.ConstructOptions(WeakAuras.load_prototype, data, 10, nil, nil, optionTriggerChoices[id], "load");
     removeFuncs(displayOptions[id].args.load);
     replaceNameDescFuncs(displayOptions[id].args.load, data);
@@ -6082,8 +6120,10 @@ function WeakAuras.CreateFrame()
   minimizebutton:SetScript("OnClick", function()
     if(frame.minimized) then
       frame.minimized = nil;
-      if db.frame.height <= 40 then
-        db.frame.height = 500
+      if db.frame then
+        if db.frame.height <= 40 then
+          db.frame.height = 500
+        end
       end
       frame:SetHeight(db.frame and db.frame.height or 500);
       if(frame.window == "default") then
@@ -7088,7 +7128,7 @@ function WeakAuras.CreateFrame()
   filterInputClear:Hide();
   
   local buttonsScroll = AceGUI:Create("ScrollFrame");
-  buttonsScroll:SetLayout("AbsoluteList");
+  buttonsScroll:SetLayout("ButtonsScrollLayout");
   buttonsScroll.width = "fill";
   buttonsScroll.height = "fill";
   buttonsContainer:SetLayout("fill");
@@ -7104,40 +7144,20 @@ function WeakAuras.CreateFrame()
   end
   frame.buttonsScroll = buttonsScroll;
   
-  function buttonsScroll:IsChildInView(child)
-    if(child) then
-      if not(child.GetParent) then
-        child = child.frame;
-      end
-      if(child:GetParent() == buttonsScroll.content) then
-        if(child:IsVisible()) then
-          local _, _, _, _, childTop = child:GetPoint(1);
-          childTop = childTop * -1;
-          local childBottom = childTop + child:GetHeight();
-          local scrollTop, scrollBottom = self:GetScrollPos();
-          if(childTop < scrollTop) then
-            return "above";
-          elseif(childBottom > scrollBottom) then
-            return "below";
-          else
-            return true;
-          end
-        else
-          return "hidden";
-        end
-      else
-        return nil;
-      end
-    else
-      return nil;
-    end
-  end
-  
   function buttonsScroll:GetScrollPos()
     local status = self.status or self.localstatus;
     return status.offset, status.offset + self.scrollframe:GetHeight();
   end
-  
+
+  -- override SetScroll to make childrens visible as needed
+  local oldSetScroll = buttonsScroll.SetScroll;
+  buttonsScroll.SetScroll = function(self, value)
+    if (self:GetScrollPos() ~= value) then
+      oldSetScroll(self, value);
+      self:DoLayout();
+    end
+  end
+
   function buttonsScroll:SetScrollPos(top, bottom)
     local status = self.status or self.localstatus;
     local viewheight = self.scrollframe:GetHeight();
@@ -7690,12 +7710,6 @@ function WeakAuras.CreateFrame()
   local newButton = AceGUI:Create("WeakAurasNewHeaderButton");
   newButton:SetText(L["New"]);
   newButton:SetClick(function() frame:PickOption("New") end);
-  newButton.frame:SetScript("OnUpdate", function()
-    if(pickonupdate) then
-      frame:PickDisplay(pickonupdate);
-      pickonupdate = nil;
-    end
-  end);
   frame.newButton = newButton;
   
   local numAddons = 0;
@@ -7951,6 +7965,9 @@ tXmdmY4fDE5]];
       WeakAuras.regions[id].region:Expand();
       self.moversizer:SetToRegion(WeakAuras.regions[id].region, db.displays[id]);
       local _, _, _, _, yOffset = displayButtons[id].frame:GetPoint(1);
+      if (not yOffset) then
+        yOffset = displayButtons[id].frame.yOffset;
+      end
       self.buttonsScroll:SetScrollPos(yOffset, yOffset - 32);
       if(data.controlledChildren) then
         for index, childId in pairs(data.controlledChildren) do
@@ -8080,7 +8097,9 @@ function WeakAuras.NewDisplayButton(data)
   WeakAuras.AddOption(id, data);
   WeakAuras.SetIconNames(data);
   WeakAuras.SortDisplayButtons();
-  pickonupdate = id;
+
+  frame:PickDisplay(id);
+
   displayButtons[id].callbacks.OnRenameClick();
 end
 

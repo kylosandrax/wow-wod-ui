@@ -2,8 +2,7 @@ local AS = unpack(AddOnSkins)
 
 if not AS:CheckAddOn('Skada') then return end
 
-local name = 'SkadaSkin'
-function AS:SkinSkada()
+function AS:Skada()
 	local L = LibStub('AceLocale-3.0'):GetLocale('Skada', false)
 
 	function Skada:ShowPopup()
@@ -37,8 +36,13 @@ function AS:SkinSkada()
 		end
 		if Backdrop then
 			Backdrop:ClearAllPoints()
-			Backdrop:Point('TOPLEFT', win.db.enabletitle and skada.button or skada, 'TOPLEFT', -2, 2)
-			Backdrop:Point('BOTTOMRIGHT', skada, 'BOTTOMRIGHT', 2, -2)
+			if win.db.reversegrowth then
+				Backdrop:Point('TOPLEFT', skada, 'TOPLEFT', -2, 2)
+				Backdrop:Point('BOTTOMRIGHT', win.db.enabletitle and skada.button or skada, 'BOTTOMRIGHT', 2, -2)
+			else
+				Backdrop:Point('TOPLEFT', win.db.enabletitle and skada.button or skada, 'TOPLEFT', -2, 2)
+				Backdrop:Point('BOTTOMRIGHT', skada, 'BOTTOMRIGHT', 2, -2)
+			end
 		end
 	end)
 
@@ -70,4 +74,4 @@ function AS:SkinSkada()
 	end)
 end
 
-AS:RegisterSkin(name, AS.SkinSkada)
+AS:RegisterSkin('Skada', AS.Skada)

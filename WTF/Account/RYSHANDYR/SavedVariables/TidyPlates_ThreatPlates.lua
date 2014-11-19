@@ -51,7 +51,7 @@ ThreatPlatesDB = {
 					["role"] = "TANK",
 				}, -- [1]
 				{
-					["name"] = "Arms",
+					["name"] = "Fury",
 					["role"] = "DAMAGER",
 				}, -- [2]
 			},
@@ -85,6 +85,19 @@ ThreatPlatesDB = {
 				true, -- [1]
 			},
 		},
+		["Banjax - Aggramar"] = {
+			["welcome"] = true,
+			["specInfo"] = {
+				{
+					["name"] = "Unknown",
+					["role"] = "DAMAGER",
+				}, -- [1]
+				{
+					["name"] = "Unknown",
+					["role"] = "DAMAGER",
+				}, -- [2]
+			},
+		},
 		["Stormslinger - Aggramar"] = {
 			["specInfo"] = {
 				{
@@ -99,20 +112,20 @@ ThreatPlatesDB = {
 			["welcome"] = true,
 		},
 		["Ryvok - Aggramar"] = {
-			["welcome"] = true,
 			["specInfo"] = {
 				{
 					["name"] = "Protection",
 					["role"] = "TANK",
 				}, -- [1]
 				{
-					["name"] = "Retribution",
-					["role"] = "DAMAGER",
+					["name"] = "Holy",
+					["role"] = "HEALER",
 				}, -- [2]
 			},
 			["spec"] = {
 				true, -- [1]
 			},
+			["welcome"] = true,
 		},
 		["Bronin - Aggramar"] = {
 			["welcome"] = true,
@@ -135,6 +148,7 @@ ThreatPlatesDB = {
 		["Kylosandrax - Aggramar"] = "Default",
 		["Feldspar - Aggramar"] = "Default",
 		["Kylozandrax - Earthen Ring"] = "Default",
+		["Banjax - Aggramar"] = "Default",
 		["Stormslinger - Aggramar"] = "Default",
 		["Ryvok - Aggramar"] = "Default",
 		["Bronin - Aggramar"] = "Default",

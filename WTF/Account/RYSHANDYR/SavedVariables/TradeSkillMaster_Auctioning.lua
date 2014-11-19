@@ -3,14 +3,15 @@ TradeSkillMaster_AuctioningDB = {
 	["factionrealm"] = {
 		["Horde - Aggramar"] = {
 			["player"] = {
-				["Ryvok"] = true,
 				["Bronin"] = true,
 				["Ryjax"] = true,
-				["Greenthorn"] = true,
-				["Stormslinger"] = true,
 				["Zapunzel"] = true,
 				["Kylosandrax"] = true,
+				["Greenthorn"] = true,
+				["Stormslinger"] = true,
 				["Feldspar"] = true,
+				["Ryvok"] = true,
+				["Banjax"] = true,
 			},
 		},
 		["Horde - Earthen Ring"] = {
@@ -26,6 +27,7 @@ TradeSkillMaster_AuctioningDB = {
 		["Kylosandrax - Aggramar"] = "Default",
 		["Feldspar - Aggramar"] = "Default",
 		["Kylozandrax - Earthen Ring"] = "Default",
+		["Banjax - Aggramar"] = "Default",
 		["Stormslinger - Aggramar"] = "Default",
 		["Ryvok - Aggramar"] = "Default",
 		["Bronin - Aggramar"] = "Default",

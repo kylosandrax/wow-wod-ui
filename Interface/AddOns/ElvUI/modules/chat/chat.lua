@@ -473,7 +473,7 @@ end
 function CH:PositionChat(override)
 	if not self.db.lockPositions or ((InCombatLockdown() and not override and self.initialMove) or (IsMouseButtonDown("LeftButton") and not override)) then return end
 	if not RightChatPanel or not LeftChatPanel then return; end
-	RightChatPanel:SetSize(E.db.chat.panelWidth, E.db.chat.panelHeight)
+	RightChatPanel:SetSize(E.db.chat.separateSizes and E.db.chat.panelWidthRight or E.db.chat.panelWidth, E.db.chat.separateSizes and E.db.chat.panelHeightRight or E.db.chat.panelHeight)
 	LeftChatPanel:SetSize(E.db.chat.panelWidth, E.db.chat.panelHeight)	
 	
 	if E.private.chat.enable ~= true then return end
@@ -518,7 +518,6 @@ function CH:PositionChat(override)
 				isDocked = false
 			end	
 		end	
-
 		
 		if point == "BOTTOMRIGHT" and chat:IsShown() and not (id > NUM_CHAT_WINDOWS) and id == self.RightChatWindowID then
 			chat:ClearAllPoints()
@@ -529,12 +528,11 @@ function CH:PositionChat(override)
 				chat:SetPoint("BOTTOMLEFT", RightChatDataPanel, "BOTTOMLEFT", 1, 1)
 			end
 			if id ~= 2 then
-				chat:SetSize(E.db.chat.panelWidth - 11, (E.db.chat.panelHeight - BASE_OFFSET))
+				chat:SetSize((E.db.chat.separateSizes and E.db.chat.panelWidthRight or E.db.chat.panelWidth) - 11, (E.db.chat.separateSizes and E.db.chat.panelHeightRight or E.db.chat.panelHeight) - BASE_OFFSET)
 			else
 				chat:SetSize(E.db.chat.panelWidth - 11, (E.db.chat.panelHeight - BASE_OFFSET) - CombatLogQuickButtonFrame_Custom:GetHeight())				
 			end
-			
-			
+
 			FCF_SavePositionAndDimensions(chat)			
 			
 			tab:SetParent(RightChatPanel)
@@ -734,20 +732,35 @@ end
 
 
 
-local function GetBNFriendColor(name, id)
-	local _, _, game, _, _, _, _, class = BNGetToonInfo(id)
-
-	if game ~= BNET_CLIENT_WOW or not class then
-		return name
-	else
-		for k,v in pairs(LOCALIZED_CLASS_NAMES_MALE) do if class == v then class = k end end
-		for k,v in pairs(LOCALIZED_CLASS_NAMES_FEMALE) do if class == v then class = k end end
-
-		if RAID_CLASS_COLORS[class] then
-			return "|c"..RAID_CLASS_COLORS[class].colorStr..name.."|r"
-		else
-			return name
+function CH:GetBNFriendColor(name, id)
+	local _, _, _, _, _, _, _, class = BNGetToonInfo(id)
+	if(not class or class == "") then
+		local toonName, toonID
+		for i=1, BNGetNumFriends() do
+			_, presenceName, _, _, _, toonID = BNGetFriendInfo(i)
+			if(presenceName == name) then
+				_, _, _, _, _, _, _, class = BNGetToonInfo(toonID)
+				if(class) then
+					break;
+				end
+			end
 		end
+	end
+
+	if(class) then
+		for k,v in pairs(LOCALIZED_CLASS_NAMES_MALE) do if class == v then class = k end end
+		for k,v in pairs(LOCALIZED_CLASS_NAMES_FEMALE) do if class == v then class = k end end	
+	end
+
+	if(not class or not RAID_CLASS_COLORS[class]) then
+		return name
+	end
+
+
+	if RAID_CLASS_COLORS[class] then
+		return "|c"..RAID_CLASS_COLORS[class].colorStr..name.."|r"
+	else
+		return name
 	end
 end
 
@@ -1072,7 +1085,7 @@ function CH:ChatFrame_MessageEventHandler(event, ...)
 			if ( type ~= "BN_WHISPER" and type ~= "BN_WHISPER_INFORM" and type ~= "BN_CONVERSATION" ) then
 				playerLink = "|Hplayer:"..arg2..":"..arg11..":"..chatGroup..(chatTarget and ":"..chatTarget or "").."|h";
 			else
-				coloredName = GetBNFriendColor(arg2, arg13)
+				coloredName = CH:GetBNFriendColor(arg2, arg13)
 				playerLink = "|HBNplayer:"..arg2..":"..arg13..":"..arg11..":"..chatGroup..(chatTarget and ":"..chatTarget or "").."|h";
 			end
 			
@@ -1116,7 +1129,7 @@ function CH:ChatFrame_MessageEventHandler(event, ...)
 			
 			local accessID = ChatHistory_GetAccessID(chatGroup, chatTarget);
 			local typeID = ChatHistory_GetAccessID(infoType, chatTarget, arg12 == "" and arg13 or arg12);
-			if CH.db.shortChannels then
+			if CH.db.shortChannels and type ~= "EMOTE" and type ~= "TEXT_EMOTE" then
 				body = body:gsub("|Hchannel:(.-)|h%[(.-)%]|h", CH.ShortChannel)
 				body = body:gsub('CHANNEL:', '')
 				body = body:gsub("^(.-|h) "..L['whispers'], "%1")
@@ -1201,20 +1214,23 @@ function CH:SetupChat(event, ...)
 		frame:SetShadowOffset((E.mult or 1), -(E.mult or 1))	
 		frame:SetFading(self.db.fade)
 		
-		frame:SetScript("OnHyperlinkClick", URLChatFrame_OnHyperlinkShow)
-		frame:SetScript("OnMouseWheel", ChatFrame_OnMouseScroll)
-		
-		if id > NUM_CHAT_WINDOWS then
-			frame:SetScript("OnEvent", CH.FloatingChatFrame_OnEvent)
-		elseif id ~= 2 then
-			frame:SetScript("OnEvent", CH.ChatFrame_OnEvent)
-		end
-		
-		hooksecurefunc(frame, "SetScript", function(f, script, func)
-			if script == "OnMouseWheel" and func ~= ChatFrame_OnMouseScroll then
-				f:SetScript(script, ChatFrame_OnMouseScroll)
+		if not frame.scriptsSet then
+			frame:SetScript("OnHyperlinkClick", URLChatFrame_OnHyperlinkShow)
+			frame:SetScript("OnMouseWheel", ChatFrame_OnMouseScroll)
+			
+			if id > NUM_CHAT_WINDOWS then
+				frame:SetScript("OnEvent", CH.FloatingChatFrame_OnEvent)
+			elseif id ~= 2 then
+				frame:SetScript("OnEvent", CH.ChatFrame_OnEvent)
 			end
-		end)
+			
+			hooksecurefunc(frame, "SetScript", function(f, script, func)
+				if script == "OnMouseWheel" and func ~= ChatFrame_OnMouseScroll then
+					f:SetScript(script, ChatFrame_OnMouseScroll)
+				end
+			end)
+			frame.scriptsSet = true
+		end
 	
 		if not _G[frameName.."Tab"].glow.anim then
 			E:SetUpAnimGroup(_G[frameName.."Tab"].glow)

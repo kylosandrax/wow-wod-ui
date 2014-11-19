@@ -327,7 +327,7 @@ Border:SetBackdrop(
             insets = { left = 4, right = 4, top = 4, bottom = 4 }});
 Border:SetBackdropColor(0,0,0,1);
 Border:SetPoint("TOPLEFT", DropDownMenuFrame, "TOPLEFT")
-Border:SetPoint("TOPRIGHT", DropDownMenuFrame, "TOPRIGHT")
+--Border:SetPoint("TOPRIGHT", DropDownMenuFrame, "TOPRIGHT")
 
 
 for i = 1, MaxDropdownItems do
@@ -393,19 +393,29 @@ local function ShowDropdownMenu(sourceFrame, menu, script)
 
 		if item then
 			local itemText = item.text
-			if currentSelection == i then
+
+			local region1, region2 = button:GetRegions()
+			--print(region1:GetObjectType(), region2:GetObjectType() )
+
+			if currentSelection == i or itemText == currentSelection then
 				-- Selected Item
-				--button:SetAlpha(1)
+				--button:SetAlpha(.8)
+				region1:SetTextColor(1, .8, 0)
+				region1:SetFont(1, .8, 0)
+
+
 				--button:SetBackdrop( { bgFile = "Interface\\QuestFrame\\UI-QuestTitleHighlight", })
 				--button:SetBackdropColor(1,1,1,.7)
-				itemText = "|cffffdd00"..itemText
+				--itemText = "|cffffdd00"..itemText
 			else
 				-- Non-Selected Items
 				--button:SetAlpha(1)
+				region1:SetTextColor(1, 1, 1)
 				--button:SetBackdrop( { bgFile = nil, })
 			end
 
 			button:SetText(itemText)
+			--button:SetText
 			maxWidth = max(maxWidth, button:GetTextWidth())
 			numOfItems = numOfItems + 1
 			button:SetScript("OnClick", script)
@@ -418,8 +428,8 @@ local function ShowDropdownMenu(sourceFrame, menu, script)
 
 	end
 
-	DropDownMenuFrame:SetWidth(maxWidth + 40)
-	Border:SetPoint("BOTTOM", DropDownMenuFrame["Button"..numOfItems], "BOTTOM", 0, -12)
+	DropDownMenuFrame:SetWidth(maxWidth + 20)
+	Border:SetPoint("BOTTOMRIGHT", DropDownMenuFrame["Button"..numOfItems], "BOTTOMRIGHT", 10, -12)
 	DropDownMenuFrame:SetPoint("TOPLEFT", sourceFrame, "BOTTOM")
 	DropDownMenuFrame:Show()
 	DropDownMenuFrame:Raise()
@@ -448,6 +458,8 @@ local function CreateDropdownFrame(helpertable, reference, parent, menu, default
 	local drawer = CreateFrame("Frame", reference, parent, "TidyPlatesDropdownDrawerTemplate" )
 	local index, item
 	drawer.Text = _G[reference.."Text"]
+	drawer.Button = _G[reference.."Button"]
+
 	if byName then drawer.Text:SetText(default) else drawer.Text:SetText(menu[default].text) end
 	drawer.Text:SetWidth(100)
 	drawer:SetWidth(120)
@@ -460,21 +472,6 @@ local function CreateDropdownFrame(helpertable, reference, parent, menu, default
 
 
 	drawer.Value = default
-
---[[
-	-- Old Dropdown Method
-	dropdown.initialize = function(self, level)		-- Replaces the default init function
-		--print("Dropdown Init", reference)
-		--print("Plog")
-		for index, item in pairs(menu) do
-			item.value = index
-			item.func = OnClickDropdownItem
-
-			UIDropDownMenu_AddButton(item)
-		end
-	end
-
---]]
 
 	drawer.SetValue = function (self, value)
 		if byName and value then drawer.Text:SetText(value) else
@@ -494,11 +491,12 @@ local function CreateDropdownFrame(helpertable, reference, parent, menu, default
 	-- New Dropdown Method
 	------------------------------------------------
 
+	--function drawer.Disable(self)	end
 
 	local function OnClickItem(self)
 		drawer.Text:SetText(self:GetText())
 		drawer.Value = self._ButtonIndex
-		if drawer.OnValueChanged then drawer.OnValueChanged() end
+		if drawer.OnValueChanged then drawer.OnValueChanged(drawer) end
 		PlaySound("igMainMenuOptionCheckBoxOn");
 		HideDropdownMenu()
 	end

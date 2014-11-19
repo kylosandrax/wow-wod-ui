@@ -1,0 +1,18 @@
+tag 6.0.23
+334621ecbd3bb4566a69d928ab8a9dc304e0c246
+Johnny C. Lam <jlam88@gmail.com>
+2014-11-19 15:40:58 -0500
+
+Tagging as 6.0.23 release.
+
+
+--------------------
+
+Johnny C. Lam:
+	- Druid: Glyph of Savage Roar buffs the Rake used from Prowl.
+	Implement this by having Prowl (or Incarnation) grant Savage Roar's 40%
+	increased damage bonus unless Savage Roar is active.
+	- Allow run-time checks in SpellDamageBuff() declarations.
+	- Aura start and ending times may not always be printable numbers.
+	- Rename "compiler.pl" to "lint.pl" to more accurately reflect its purpose.
+	- Avoid creating a closure using string.gmatch() unless needed.

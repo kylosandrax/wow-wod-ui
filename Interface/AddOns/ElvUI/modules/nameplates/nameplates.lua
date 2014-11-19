@@ -10,6 +10,11 @@ local band = bit.band
 local gsub = string.gsub
 local tolower = string.lower
 local targetIndicator
+local _G = _G
+
+--Pattern to remove cross realm label added to the end of plate names
+--Taken from http://www.wowace.com/addons/libnameplateregistry-1-0/
+local FSPAT = "%s*"..((_G.FOREIGN_SERVER_LABEL:gsub("^%s", "")):gsub("[%*()]", "%%%1")).."$"
 
 NP.NumTargetChecks = -1
 NP.CreatedPlates = {};
@@ -189,7 +194,7 @@ function NP:OnUpdate(elapsed)
 end
 
 function NP:CheckFilterAndHealers(myPlate)
-	local name = gsub(self.name:GetText(), '%s%(%*%)','')
+	local name = gsub(self.name:GetText(), FSPAT,'')
 	local db = E.global.nameplate["filter"][name]
 
 	if db and db.enable then
@@ -269,29 +274,40 @@ function NP:UpdateLevelAndName(myPlate)
 	if region and region:GetObjectType() == 'FontString' then
 		self.level = region
 	end
-
-	if self.level:IsShown() then
-		local level, elite, boss, mylevel = self.level:GetObjectType() == 'FontString' and tonumber(self.level:GetText()) or nil, self.eliteIcon:IsShown(), self.bossIcon:IsShown(), UnitLevel("player")
-		if boss then
-			myPlate.level:SetText("??")
-			myPlate.level:SetTextColor(0.8, 0.05, 0)
-		elseif level then
-			myPlate.level:SetText(level..(elite and "+" or ""))
-			myPlate.level:SetTextColor(self.level:GetTextColor())
-		end
-	elseif self.bossIcon:IsShown() and myPlate.level:GetText() ~= '??' then
-		myPlate.level:SetText("??")
-		myPlate.level:SetTextColor(0.8, 0.05, 0)
-	end
-
-	if self.isSmall then
+	
+	if not NP.db.showLevel then
 		myPlate.level:SetText("")
 		myPlate.level:Hide()
-	elseif not myPlate.level:IsShown() then
-		myPlate.level:Show()
+	else
+		if self.level:IsShown() then
+			local level, elite, boss, mylevel = self.level:GetObjectType() == 'FontString' and tonumber(self.level:GetText()) or nil, self.eliteIcon:IsShown(), self.bossIcon:IsShown(), UnitLevel("player")
+			if boss then
+				myPlate.level:SetText("??")
+				myPlate.level:SetTextColor(0.8, 0.05, 0)
+			elseif level then
+				myPlate.level:SetText(level..(elite and "+" or ""))
+				myPlate.level:SetTextColor(self.level:GetTextColor())
+			end
+		elseif self.bossIcon:IsShown() and myPlate.level:GetText() ~= '??' then
+			myPlate.level:SetText("??")
+			myPlate.level:SetTextColor(0.8, 0.05, 0)
+		end
+
+		if self.isSmall then
+			myPlate.level:SetText("")
+			myPlate.level:Hide()
+		elseif not myPlate.level:IsShown() then
+			myPlate.level:Show()
+		end
 	end
 
-	myPlate.name:SetText(self.name:GetText())
+	if not NP.db.showName then
+		myPlate.name:SetText("")
+		myPlate.name:Hide()
+	else
+		myPlate.name:SetText(self.name:GetText())
+		if not myPlate.name:IsShown() then myPlate.name:Show() end
+	end
 end
 
 function NP:GetReaction(frame)
@@ -451,7 +467,7 @@ function NP:SetAlpha(myPlate)
 end
 
 function NP:SetUnitInfo(myPlate)
-	local plateName = gsub(self.name:GetText(), '%s%(%*%)','')
+	local plateName = gsub(self.name:GetText(), FSPAT,'')
 	if self:GetAlpha() == 1 and NP.targetName and (NP.targetName == plateName) then
 		self.guid = UnitGUID("target")
 		self.unit = "target"
@@ -479,7 +495,6 @@ function NP:SetUnitInfo(myPlate)
 		myPlate.overlay:Hide()
 		self.unit = nil
 	end
-
 end
 
 function NP:PLAYER_ENTERING_WORLD()
@@ -645,7 +660,7 @@ function NP:OnShow()
 	NP.ColorizeAndScale(self, myPlate)	
 
 	NP.HealthBar_OnValueChanged(self.healthBar, self.healthBar:GetValue())
-	myPlate.nameText = gsub(self.name:GetText(), '%s%(%*%)','')
+	myPlate.nameText = gsub(self.name:GetText(), FSPAT,'')
 
 	--Check to see if its possible to update auras/comboPoints via raid icon or class color when a plate is shown.
 	if(not self.isSmall) then
@@ -1639,7 +1654,7 @@ function NP:UpdateAuras(frame)
 	if not guid then
 		-- Attempt to ID widget via Name or Raid Icon
 		if RAID_CLASS_COLORS[frame.unitType] then 
-			local name = gsub(frame.name:GetText(), '%s%(%*%)','')
+			local name = gsub(frame.name:GetText(), FSPAT,'')
 			guid = NP.ByName[name]
 		elseif frame.raidIcon:IsShown() then 
 			guid = NP.ByRaidIcon[frame.raidIconType] 

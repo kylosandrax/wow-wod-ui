@@ -8,8 +8,8 @@ BagnonFrameSettings = {
 		["bank"] = {
 			["point"] = "BOTTOMRIGHT",
 			["y"] = 503,
-			["x"] = -620,
+			["x"] = -620.000122070313,
 		},
 	},
-	["version"] = "6.0.12",
+	["version"] = "6.0.14",
 }

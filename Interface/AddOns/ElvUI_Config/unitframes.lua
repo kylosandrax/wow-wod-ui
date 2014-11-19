@@ -402,7 +402,7 @@ local function GetOptionsTable_Auras(friendlyUnitOnly, auraType, isGroupFrame, u
 				type = 'range',
 				order = 3,
 				name = L['Num Rows'],
-				min = 1, max = 4, step = 1,					
+				min = 1, max = 10, step = 1,
 			},	
 			sizeOverride = {
 				type = 'range',
@@ -435,7 +435,14 @@ local function GetOptionsTable_Auras(friendlyUnitOnly, auraType, isGroupFrame, u
 				name = L["Font Size"],
 				type = "range",
 				min = 6, max = 22, step = 1,
-			},	
+			},
+			spacing = {
+				order = 14,
+				type = 'range',
+				name = L["Aura Spacing"],
+				desc = L["Set space between each aura icon."],
+				min = 0, max = 10, step = 1,
+			},
 			clickThrough = {
 				order = 15,
 				name = L['Click Through'],
@@ -1561,7 +1568,8 @@ E.Options.args.unitframe = {
 							name = HEALTH,
 							get = function(info)
 								local t = E.db.unitframe.colors[ info[#info] ]
-								return t.r, t.g, t.b, t.a
+								local d = P.unitframe.colors[ info[#info] ]
+								return t.r, t.g, t.b, t.a, d.r, d.g, d.b
 							end,
 							set = function(info, r, g, b)
 								E.db.general[ info[#info] ] = {}
@@ -1639,7 +1647,8 @@ E.Options.args.unitframe = {
 							name = L['Powers'],
 							get = function(info)
 								local t = E.db.unitframe.colors.power[ info[#info] ]
-								return t.r, t.g, t.b, t.a
+								local d = P.unitframe.colors.power[ info[#info] ]
+								return t.r, t.g, t.b, t.a, d.r, d.g, d.b
 							end,
 							set = function(info, r, g, b)
 								E.db.general[ info[#info] ] = {}
@@ -1698,7 +1707,8 @@ E.Options.args.unitframe = {
 							name = L['Reactions'],
 							get = function(info)
 								local t = E.db.unitframe.colors.reaction[ info[#info] ]
-								return t.r, t.g, t.b, t.a
+								local d = P.unitframe.colors.reaction[ info[#info] ]
+								return t.r, t.g, t.b, t.a, d.r, d.g, d.b
 							end,
 							set = function(info, r, g, b)
 								E.db.general[ info[#info] ] = {}
@@ -1731,7 +1741,8 @@ E.Options.args.unitframe = {
 							name = L['Castbar'],
 							get = function(info)
 								local t = E.db.unitframe.colors[ info[#info] ]
-								return t.r, t.g, t.b, t.a
+								local d = P.unitframe.colors[ info[#info] ]
+								return t.r, t.g, t.b, t.a, d.r, d.g, d.b
 							end,
 							set = function(info, r, g, b)
 								E.db.general[ info[#info] ] = {}
@@ -1800,7 +1811,8 @@ E.Options.args.unitframe = {
 									type = 'color',
 									get = function(info)
 										local t = E.db.unitframe.colors.auraBarBuff
-										return t.r, t.g, t.b, t.a
+										local d = P.unitframe.colors.auraBarBuff
+										return t.r, t.g, t.b, t.a, d.r, d.g, d.b
 									end,
 									set = function(info, r, g, b)
 										if E:CheckClassColor(r, g, b) then
@@ -1822,7 +1834,8 @@ E.Options.args.unitframe = {
 									type = 'color',
 									get = function(info)
 										local t = E.db.unitframe.colors.auraBarDebuff
-										return t.r, t.g, t.b, t.a
+										local d = P.unitframe.colors.auraBarDebuff
+										return t.r, t.g, t.b, t.a, d.r, d.g, d.b
 									end,
 									set = function(info, r, g, b)
 										E.db.general[ info[#info] ] = {}
@@ -1837,7 +1850,8 @@ E.Options.args.unitframe = {
 									type = 'color',
 									get = function(info)
 										local t = E.db.unitframe.colors.auraBarTurtleColor
-										return t.r, t.g, t.b, t.a
+										local d = P.unitframe.colors.auraBarTurtleColor
+										return t.r, t.g, t.b, t.a, d.r, d.g, d.b
 									end,
 									set = function(info, r, g, b)
 										E.db.general[ info[#info] ] = {}
@@ -1854,7 +1868,8 @@ E.Options.args.unitframe = {
 							type = 'group',
 							get = function(info)
 								local t = E.db.unitframe.colors.healPrediction[ info[#info] ]
-								return t.r, t.g, t.b, t.a
+								local d = P.unitframe.colors.healPrediction[ info[#info] ]
+								return t.r, t.g, t.b, t.a, d.r, d.g, d.b, d.a
 							end,
 							set = function(info, r, g, b, a)
 								local t = E.db.unitframe.colors.healPrediction[ info[#info] ]
@@ -2193,6 +2208,52 @@ E.Options.args.unitframe.args.target = {
 			name = L['Threat Display Mode'],
 			values = threatValues,
 		},		
+		combobar = {
+			order = 800,
+			type = 'group',
+			name = L['Combobar'],
+			get = function(info) return E.db.unitframe.units['target']['combobar'][ info[#info] ] end,
+			set = function(info, value) E.db.unitframe.units['target']['combobar'][ info[#info] ] = value; UF:CreateAndUpdateUF('target') end,
+			args = {
+				enable = {
+					type = 'toggle',
+					order = 1,
+					name = L['Enable'],
+				},
+				height = {
+					type = 'range',
+					order = 2,
+					name = L['Height'],
+					min = 5, max = 15, step = 1,
+				},	
+				fill = {
+					type = 'select',
+					order = 3,
+					name = L['Fill'],
+					values = {
+						['fill'] = L['Filled'],
+						['spaced'] = L['Spaced'],
+					},
+				},		
+				autoHide = {
+					type = 'toggle',
+					name = L['Auto-Hide'],
+					order = 4,
+				},		
+				detachFromFrame = {
+					type = 'toggle',
+					order = 5,
+					name = L['Detach From Frame'],
+				},	
+				detachedWidth = {
+					type = 'range',
+					order = 6,
+					name = L['Detached Width'],
+					disabled = function() return not E.db.unitframe.units['target']['combobar'].detachFromFrame end,
+					min = 15, max = 450, step = 1,
+				},				
+			},
+		},	
 		customText = GetOptionsTable_CustomText(UF.CreateAndUpdateUF, 'target'),
 		health = GetOptionsTable_Health(false, UF.CreateAndUpdateUF, 'target'),
 		power = GetOptionsTable_Power(true, UF.CreateAndUpdateUF, 'target'),	
@@ -2791,7 +2852,7 @@ E.Options.args.unitframe.args.boss = {
 			order = 3,
 			name = L['Display Frames'],
 			desc = L['Force the frames to show, they will act as if they are the player frame.'],
-			func = function() UF:ToggleForceShowGroupFrames('boss', 4) end,
+			func = function() UF:ToggleForceShowGroupFrames('boss', MAX_BOSS_FRAMES) end,
 		},
 		width = {
 			order = 4,
@@ -3396,7 +3457,44 @@ E.Options.args.unitframe.args.party = {
 					name = L['yOffset'],
 					desc = L['An Y offset (in pixels) to be used when anchoring new frames.'],
 					min = -500, max = 500, step = 1,		
-				},					
+				},
+				name = {
+					order = 8,
+					type = 'group',
+					guiInline = true,
+					get = function(info) return E.db.unitframe.units['party']['petsGroup']['name'][ info[#info] ] end,
+					set = function(info, value) E.db.unitframe.units['party']['petsGroup']['name'][ info[#info] ] = value; UF:CreateAndUpdateHeaderGroup('party') end,
+					name = L['Name'],
+					args = {
+						position = {
+							type = 'select',
+							order = 1,
+							name = L['Text Position'],
+							values = positionValues,
+						},	
+						xOffset = {
+							order = 2,
+							type = 'range',
+							name = L['Text xOffset'],
+							desc = L['Offset position for text.'],
+							min = -300, max = 300, step = 1,
+						},		
+						yOffset = {
+							order = 3,
+							type = 'range',
+							name = L['Text yOffset'],
+							desc = L['Offset position for text.'],
+							min = -300, max = 300, step = 1,
+						},				
+						text_format = {
+							order = 100,
+							name = L['Text Format'],
+							type = 'input',
+							width = 'full',
+							desc = L['TEXT_FORMAT_DESC'],
+						},					
+					},
+				},
 			},
 		},
 		targetsGroup = {
@@ -3404,7 +3502,7 @@ E.Options.args.unitframe.args.party = {
 			type = 'group',
 			name = L['Party Targets'],
 			get = function(info) return E.db.unitframe.units['party']['targetsGroup'][ info[#info] ] end,
-			set = function(info, value) E.db.unitframe.units['party']['targetsGroup'][ info[#info] ] = value; UF:CreateAndUpdateHeaderGroup('party') end,	
+			set = function(info, value) E.db.unitframe.units['party']['targetsGroup'][ info[#info] ] = value; UF:CreateAndUpdateHeaderGroup('party') end,
 			args = {		
 				enable = {
 					type = 'toggle',
@@ -3443,7 +3541,44 @@ E.Options.args.unitframe.args.party = {
 					name = L['yOffset'],
 					desc = L['An Y offset (in pixels) to be used when anchoring new frames.'],
 					min = -500, max = 500, step = 1,	
-				},					
+				},
+				name = {
+					order = 8,
+					type = 'group',
+					guiInline = true,
+					get = function(info) return E.db.unitframe.units['party']['targetsGroup']['name'][ info[#info] ] end,
+					set = function(info, value) E.db.unitframe.units['party']['targetsGroup']['name'][ info[#info] ] = value; UF:CreateAndUpdateHeaderGroup('party') end,
+					name = L['Name'],
+					args = {
+						position = {
+							type = 'select',
+							order = 1,
+							name = L['Text Position'],
+							values = positionValues,
+						},	
+						xOffset = {
+							order = 2,
+							type = 'range',
+							name = L['Text xOffset'],
+							desc = L['Offset position for text.'],
+							min = -300, max = 300, step = 1,
+						},		
+						yOffset = {
+							order = 3,
+							type = 'range',
+							name = L['Text yOffset'],
+							desc = L['Offset position for text.'],
+							min = -300, max = 300, step = 1,
+						},				
+						text_format = {
+							order = 100,
+							name = L['Text Format'],
+							type = 'input',
+							width = 'full',
+							desc = L['TEXT_FORMAT_DESC'],
+						},					
+					},
+				},
 			},
 		},	
 		raidicon = GetOptionsTable_RaidIcon(UF.CreateAndUpdateHeaderGroup, 'party'),	
@@ -4723,13 +4858,14 @@ E.Options.args.unitframe.args.assist = {
 
 --MORE COLORING STUFF YAY
 E.Options.args.unitframe.args.general.args.allColorsGroup.args.classResourceGroup = {
-	order = -1,
+	order = -10,
 	type = 'group',
 	guiInline = true,
 	name = L['Class Resources'],
 	get = function(info)
 		local t = E.db.unitframe.colors.classResources[ info[#info] ]
-		return t.r, t.g, t.b, t.a
+		local d = P.unitframe.colors.classResources[ info[#info] ]
+		return t.r, t.g, t.b, t.a, d.r, d.g, d.b
 	end,
 	set = function(info, r, g, b)
 		E.db.unitframe.colors.classResources[ info[#info] ] = {}
@@ -4741,53 +4877,95 @@ E.Options.args.unitframe.args.general.args.allColorsGroup.args.classResourceGrou
 }
 
 E.Options.args.unitframe.args.general.args.allColorsGroup.args.classResourceGroup.args.bgColor = {
+	order = 1,
 	type = 'color',
 	name = L['Backdrop Color'],
 	hasAlpha = false,
 }	
 
+E.Options.args.unitframe.args.general.args.allColorsGroup.args.classResourceGroup.args.spacer = {
+	order = 2,
+	name = ' ',
+	type = 'description',
+	width = 'full',
+}
 
 for i = 1, 5 do
-	E.Options.args.unitframe.args.general.args.allColorsGroup.args.classResourceGroup.args["comboBar"..i] = {
+	E.Options.args.unitframe.args.general.args.allColorsGroup.args.classResourceGroup.args['combo'..i] = {
+		order = i + 2,
 		type = 'color',
-		name = L['ComboBar']..' #'..i,
+		name = L['Combo Point']..' #'..i,
 		get = function(info)
-			local t = E.db.unitframe.colors.classResources.comboBar[i]
-			return t.r, t.g, t.b, t.a
+			local t = E.db.unitframe.colors.classResources.comboPoints[i]
+			local d = P.unitframe.colors.classResources.comboPoints[i]
+			return t.r, t.g, t.b, t.a, d.r, d.g, d.b
 		end,
 		set = function(info, r, g, b)
-			E.db.unitframe.colors.classResources.comboBar[i] = {}
-			local t = E.db.unitframe.colors.classResources.comboBar[i]
+			E.db.unitframe.colors.classResources.comboPoints[i] = {}
+			local t = E.db.unitframe.colors.classResources.comboPoints[i]
 			t.r, t.g, t.b = r, g, b
 			UF:Update_AllFrames()
 		end,			
 	}
 end		
 
-if P.unitframe.colors.classResources[E.myclass] then
+
+if P.unitframe.colors.classResources[E.myclass] then	
+	E.Options.args.unitframe.args.general.args.allColorsGroup.args.classResourceGroup.args.spacer2 = {
+		order = 10,
+		name = ' ',
+		type = 'description',
+		width = 'full',
+	}
+
+	local ORDER = 20
 	if E.myclass == 'PALADIN' then
 		E.Options.args.unitframe.args.general.args.allColorsGroup.args.classResourceGroup.args[E.myclass] = {
 			type = 'color',
 			name = L['Holy Power'],
+			order = ORDER,
 		}
 	elseif E.myclass == 'MAGE' then
 		E.Options.args.unitframe.args.general.args.allColorsGroup.args.classResourceGroup.args[E.myclass] = {
 			type = 'color',
 			name = L['Arcane Charges'],
+			order = ORDER,
 		}
+	elseif E.myclass == 'ROGUE' then
+		for i = 1, 5 do
+			E.Options.args.unitframe.args.general.args.allColorsGroup.args.classResourceGroup.args['resource'..i] = {
+				type = 'color',
+				name = L['Anticipation']..' #'..i,
+				order = ORDER + i,
+				get = function(info)
+					local t = E.db.unitframe.colors.classResources.ROGUE[i]
+					local d = P.unitframe.colors.classResources.ROGUE[i]
+					return t.r, t.g, t.b, t.a, d.r, d.g, d.b
+				end,
+				set = function(info, r, g, b)
+					E.db.unitframe.colors.classResources.ROGUE[i] = {}
+					local t = E.db.unitframe.colors.classResources.ROGUE[i]
+					t.r, t.g, t.b = r, g, b
+					UF:Update_AllFrames()
+				end,			
+			}
+		end		
 	elseif E.myclass == 'PRIEST' then
 		E.Options.args.unitframe.args.general.args.allColorsGroup.args.classResourceGroup.args[E.myclass] = {
 			type = 'color',
 			name = L['Shadow Orbs'],
+			order = ORDER,
 		}	
 	elseif E.myclass == 'MONK' then
 		for i = 1, 5 do
 			E.Options.args.unitframe.args.general.args.allColorsGroup.args.classResourceGroup.args['resource'..i] = {
 				type = 'color',
 				name = L['Harmony']..' #'..i,
+				order = ORDER + i,
 				get = function(info)
 					local t = E.db.unitframe.colors.classResources.MONK[i]
-					return t.r, t.g, t.b, t.a
+					local d = P.unitframe.colors.classResources.MONK[i]
+					return t.r, t.g, t.b, t.a, d.r, d.g, d.b
 				end,
 				set = function(info, r, g, b)
 					E.db.unitframe.colors.classResources.MONK[i] = {}
@@ -4807,9 +4985,11 @@ if P.unitframe.colors.classResources[E.myclass] then
 			E.Options.args.unitframe.args.general.args.allColorsGroup.args.classResourceGroup.args['resource'..i] = {
 				type = 'color',
 				name = names[i],
+				order = ORDER + i,
 				get = function(info)
 					local t = E.db.unitframe.colors.classResources.WARLOCK[i]
-					return t.r, t.g, t.b, t.a
+					local d = P.unitframe.colors.classResources.WARLOCK[i]
+					return t.r, t.g, t.b, t.a, d.r, d.g, d.b
 				end,
 				set = function(info, r, g, b)
 					E.db.unitframe.colors.classResources.WARLOCK[i] = {}
@@ -4828,9 +5008,11 @@ if P.unitframe.colors.classResources[E.myclass] then
 			E.Options.args.unitframe.args.general.args.allColorsGroup.args.classResourceGroup.args['resource'..i] = {
 				type = 'color',
 				name = names[i],
+				order = ORDER + i,
 				get = function(info)
 					local t = E.db.unitframe.colors.classResources.DRUID[i]
-					return t.r, t.g, t.b, t.a
+					local d = P.unitframe.colors.classResources.DRUID[i]
+					return t.r, t.g, t.b, t.a, d.r, d.g, d.b
 				end,
 				set = function(info, r, g, b)
 					E.db.unitframe.colors.classResources.DRUID[i] = {}
@@ -4851,9 +5033,11 @@ if P.unitframe.colors.classResources[E.myclass] then
 			E.Options.args.unitframe.args.general.args.allColorsGroup.args.classResourceGroup.args['resource'..i] = {
 				type = 'color',
 				name = names[i],
+				order = ORDER + i,
 				get = function(info)
 					local t = E.db.unitframe.colors.classResources.DEATHKNIGHT[i]
-					return t.r, t.g, t.b, t.a
+					local d = P.unitframe.colors.classResources.DEATHKNIGHT[i]
+					return t.r, t.g, t.b, t.a, d.r, d.g, d.b
 				end,
 				set = function(info, r, g, b)
 					E.db.unitframe.colors.classResources.DEATHKNIGHT[i] = {}

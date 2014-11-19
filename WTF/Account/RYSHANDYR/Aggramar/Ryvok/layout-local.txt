@@ -1,6 +1,6 @@
 Version: 1
 Frame: ColorPickerFrame
-FrameLevel: 1
+FrameLevel: 12
 Anchor: CENTER
 X: 0
 Y: 0
@@ -13,3 +13,10 @@ X: -534
 Y: 252
 W: 32
 H: 32
+Frame: TomTomBlock
+FrameLevel: 8
+Anchor: TOPLEFT
+X: 118
+Y: -8
+W: 100
+H: 30

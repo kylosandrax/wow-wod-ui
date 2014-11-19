@@ -11,14 +11,15 @@ TradeSkillMaster_AuctionDBDB = {
 		["Kylosandrax - Aggramar"] = "Default",
 		["Feldspar - Aggramar"] = "Default",
 		["Kylozandrax - Earthen Ring"] = "Default",
+		["Banjax - Aggramar"] = "Default",
 		["Stormslinger - Aggramar"] = "Default",
 		["Ryvok - Aggramar"] = "Default",
 		["Bronin - Aggramar"] = "Default",
 	},
 	["realm"] = {
 		["Aggramar"] = {
-			["lastCompleteScan"] = 1414446479,
-			["appDataUpdate"] = 1414446479,
+			["lastCompleteScan"] = 1416430882,
+			["appDataUpdate"] = 1416430882,
 		},
 	},
 }

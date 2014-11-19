@@ -338,7 +338,17 @@ local function BuildABConfig()
 				name = L['Alpha'],
 				isPercent = true,
 				min = 0, max = 1, step = 0.01,
-			},	
+			},
+			style = {
+				order = 13,
+				type = 'select',
+				name = L['Style'],
+				desc = L["This setting will be updated upon changing stances."],
+				values = {
+					['darkenInactive'] = L['Darken Inactive'],
+					['classic'] = L['Classic'],
+				},
+			},
 		},
 	}
 end
@@ -411,7 +421,8 @@ E.Options.args.actionbar = {
 			desc = L['Color of the actionbutton when out of range.'],
 			get = function(info)
 				local t = E.db.actionbar[ info[#info] ]
-				return t.r, t.g, t.b, t.a
+				local d = P.actionbar[info[#info]]
+				return t.r, t.g, t.b, t.a, d.r, d.g, d.b
 			end,
 			set = function(info, r, g, b)
 				E.db.actionbar[ info[#info] ] = {}
@@ -427,7 +438,8 @@ E.Options.args.actionbar = {
 			desc = L['Color of the actionbutton when out of power (Mana, Rage, Focus, Holy Power).'],
 			get = function(info)
 				local t = E.db.actionbar[ info[#info] ]
-				return t.r, t.g, t.b, t.a
+				local d = P.actionbar[info[#info]]
+				return t.r, t.g, t.b, t.a, d.r, d.g, d.b
 			end,
 			set = function(info, r, g, b)
 				E.db.actionbar[ info[#info] ] = {}

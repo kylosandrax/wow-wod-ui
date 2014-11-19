@@ -2,8 +2,7 @@ local AS = unpack(AddOnSkins)
 
 if not AS:CheckAddOn('GHI') then return end
 
-local name = 'GryphonHeartItemsSkin'
-function AS:SkinGryphonheartItems()
+function AS:GryphonheartItems()
 	hooksecurefunc('GHI_ButtonUI', function()
 		AS:SkinIconButton(GHI_ButtonSquared)
 	end)
@@ -51,9 +50,8 @@ function AS:SkinGryphonheartItems()
 					backdrop:SetBackdropBorderColor(unpack(AS.BorderColor))
 				end
 			end)
-			if IsAddOnLoaded('ElvUI') then ElvUI[1]:RegisterCooldown(_G[name.."Item".. j.."Cooldown"]) end
 		end
 	end)
 end
 
-AS:RegisterSkin(name, AS.SkinGryphonheartItems)
+AS:RegisterSkin('GryphonHeartItems', AS.GryphonheartItems)

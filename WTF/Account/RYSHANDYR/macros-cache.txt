@@ -5,6 +5,46 @@ END
 VER 3 000000000000003A "Clear-Spells" "SPELL_FROST_ARCTICWINDS"
 /run for i = 1,120 do PickupAction(i) ClearCursor() end
 END
+VER 3 0000000000000041 "Eggs1" "INV_HELMET_23"
+/way 65.08, 26.20
+/way 66.64, 28.69
+/way 67.12, 24.94
+/way 65.18, 24.77
+/way 67.05, 33.81
+/way 66.61, 31.58
+/way 66.54, 32.20
+/way 63.09, 29.31
+/way 69.65, 31.64
+/way 70.53, 28.99
+/way 61.89, 30.20
+/way 66.18, 33.43
+/way 62.40, 32.36
+/way 65.63, 25.07
+END
+VER 3 0000000000000042 "Eggs2" "INV_HELMET_23"
+/way 64.18, 23.92
+/way 63.39, 21.62
+/way 62.98, 21.95
+/way 62.37, 32.84
+/way 62.17, 31.75
+/way 62.19, 31.21
+/way 67.02, 32.68
+/way 62.46, 28.77
+/way 62.21, 29.29
+/way 62.00, 29.54
+/way 63.73, 21.90
+/way 62.30, 28.12
+/way 62.71, 29.78
+/way 66.43, 29.55
+END
+VER 3 0000000000000043 "Eggs3" "INV_HELMET_23"
+/way 65.18, 24.77
+/way 65.24, 23.91
+/way 70.33, 28.63
+/way 67.06, 30.25
+/way 66.00, 30.71
+/way 62.82, 28,93
+END
 VER 3 000000000000003B "Extra" "INV_MISC_QUESTIONMARK"
 /click ExtraActionButton1
 END
@@ -45,6 +85,14 @@ VER 3 0000000000000038 "MountSpecial" "INV_Weapon_Bow_52"
 END
 VER 3 0000000000000040 "Pull" "ACHIEVEMENT_GUILDPERK_FASTTRACK_RANK2"
 /dbm pull 10
+END
+VER 3 0000000000000044 "Quester" "INV_SCROLL_11"
+/script SelectGossipAvailableQuest(1)
+/script SelectGossipActiveQuest(1)
+/script CompleteQuest()
+/script SelectGossipOption(1)
+/script AcceptQuest()
+/script GetQuestReward(1)
 END
 VER 3 0000000000000017 "Ready-Check" "INV_Misc_QuestionMark"
 /readycheck

@@ -454,7 +454,7 @@ WeakAuras.load_prototype = {
     {
       name = "talent",
       display = L["Talent selected"],
-      type = "select",
+      type = "multiselect",
       values = function(trigger)
         return function()
           local single_class;
@@ -533,7 +533,8 @@ WeakAuras.event_prototypes = {
     events = {
       "UNIT_POWER",
       "PLAYER_TARGET_CHANGED",
-      "PLAYER_FOCUS_CHANGED"
+      "PLAYER_FOCUS_CHANGED",
+      "UNIT_COMBO_POINTS"
     },
     force_events = true,
     name = L["Combo Points"],
@@ -542,14 +543,22 @@ WeakAuras.event_prototypes = {
         name = "combopoints",
         display = L["Combo Points"],
         type = "number",
-        init = "UnitPower(UnitInVehicle('player') and 'vehicle' or 'player', 4)"
+        init = "UnitInVehicle('player') and GetComboPoints('vehicle', 'target') or UnitPower('player', 4)"
       }
     },
     durationFunc = function(trigger)
-      return UnitPower(UnitInVehicle('player') and 'vehicle' or 'player', 4), UnitPowerMax('player', 4), true;
+      if UnitInVehicle('player') then
+        return GetComboPoints('vehicle', 'target'), 5, true;
+      else
+        return UnitPower('player', 4), 5, true;
+      end
     end,
     stacksFunc = function(trigger)
-      return UnitPower(UnitInVehicle('player') and 'vehicle' or 'player', 4), UnitPowerMax('player', 4), true;
+      if UnitInVehicle('player') then 
+        return GetComboPoints('vehicle', 'target');
+      else
+        return UnitPower('player', 4);
+      end
     end,
     automatic = true
   },
@@ -1385,7 +1394,8 @@ WeakAuras.event_prototypes = {
       "SPELL_COOLDOWN_READY",
       "SPELL_COOLDOWN_CHANGED",
       "SPELL_COOLDOWN_STARTED",
-      "COOLDOWN_REMAINING_CHECK"
+      "COOLDOWN_REMAINING_CHECK",
+      "WA_DELAYED_PLAYER_ENTERING_WORLD"
     },
     force_events = "SPELL_COOLDOWN_FORCE",
     name = L["Cooldown Progress (Spell)"],
@@ -2225,7 +2235,8 @@ WeakAuras.event_prototypes = {
       "RUNE_COOLDOWN_READY",
       "RUNE_COOLDOWN_CHANGED",
       "RUNE_COOLDOWN_STARTED",
-      "COOLDOWN_REMAINING_CHECK"
+      "COOLDOWN_REMAINING_CHECK",
+      "WA_DELAYED_PLAYER_ENTERING_WORLD"
     },
     force_events = "RUNE_COOLDOWN_FORCE",
     name = L["Death Knight Rune"],
@@ -2376,7 +2387,8 @@ WeakAuras.event_prototypes = {
   ["Item Equipped"] = {
     type = "status",
     events = {
-      "UNIT_INVENTORY_CHANGED"
+      "UNIT_INVENTORY_CHANGED",
+      "WA_DELAYED_PLAYER_ENTERING_WORLD"
     },
     force_events = true,
     name = L["Item Equipped"],
@@ -2660,7 +2672,8 @@ WeakAuras.event_prototypes = {
     type = "status",
     events = {
       "PET_BAR_UPDATE",
-      "UNIT_PET"
+      "UNIT_PET",
+      "WA_DELAYED_PLAYER_ENTERING_WORLD"
     },
     force_events = true,
     name = L["Pet Behavior"],

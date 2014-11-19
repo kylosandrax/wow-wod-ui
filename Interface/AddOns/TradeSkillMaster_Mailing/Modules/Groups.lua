@@ -34,6 +34,7 @@ function Groups:CreateTab(parent)
 			private:StartSending()
 		end
 	end
+
 	Groups:RegisterEvent("MAIL_CLOSED", function() TSMAPI:CancelFrame("mailingResendDelay") end)
 
 	local button = TSMAPI.GUI:CreateButton(frame, 15)
@@ -89,9 +90,15 @@ function private:StartSending()
 								quantity = min(numAvailable, operation.maxQty)
 							else
 								local targetQty = private:GetTargetQuantity(operation.target, itemString, operation.restockGBank)
-								quantity = min(numAvailable, operation.maxQty - targetQty)
-								-- if using restock ensure that subsequent operations don't take reserved bag inventory
-								reserveQty = numAvailable - (targetQty - operation.maxQty)
+								if TSMAPI:IsPlayer(operation.target) and targetQty <= operation.maxQty then
+									quantity = numAvailable
+								else
+									quantity = min(numAvailable, operation.maxQty - targetQty)
+								end
+								if TSMAPI:IsPlayer(operation.target) then
+									-- if using restock and target == player ensure that subsequent operations don't take reserved bag inventory
+									reserveQty = numAvailable - (targetQty - operation.maxQty)
+								end
 							end
 						else
 							quantity = numAvailable
@@ -116,7 +123,7 @@ function private:StartSending()
 			targets[target] = nil
 		end
 	end
-	
+
 	private.targets = targets
 	private:SendNextTarget()
 end

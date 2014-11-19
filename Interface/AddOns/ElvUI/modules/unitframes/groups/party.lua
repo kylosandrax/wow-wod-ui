@@ -125,8 +125,10 @@ function UF:Update_PartyFrames(frame, db)
 
 	if frame.isChild then
 		local childDB = db.petsGroup
+		local childType = "pet"
 		if frame == _G[frame.originalParent:GetName()..'Target'] then
 			childDB = db.targetsGroup
+			childType = "target"
 		end
 		
 		if not frame.originalParent.childList then
@@ -186,12 +188,7 @@ function UF:Update_PartyFrames(frame, db)
 		end
 		
 		--Name
-		do
-			local name = frame.Name
-			name:ClearAllPoints()
-			name:SetPoint('CENTER', frame.Health, 'CENTER')
-			frame:Tag(name, '[namecolor][name:short]')
-		end			
+		UF:UpdateNameSettings(frame, childType)		
 	else
 		if not InCombatLockdown() then
 			frame:Size(UNIT_WIDTH, UNIT_HEIGHT)
@@ -570,9 +567,29 @@ function UF:Update_PartyFrames(frame, db)
 		end
 		
 		UF:UpdateAuraWatch(frame)
+		frame:EnableElement('ReadyCheck')
+
+		if db.customTexts then
+			local customFont = UF.LSM:Fetch("font", UF.db.font)
+			for objectName, _ in pairs(db.customTexts) do
+				if not frame[objectName] then
+					frame[objectName] = frame.RaisedElementParent:CreateFontString(nil, 'OVERLAY')
+				end
+				
+				local objectDB = db.customTexts[objectName]
+
+				if objectDB.font then
+					customFont = UF.LSM:Fetch("font", objectDB.font)
+				end
+							
+				frame[objectName]:FontTemplate(customFont, objectDB.size or UF.db.fontSize, objectDB.fontOutline or UF.db.fontOutline)
+				frame:Tag(frame[objectName], objectDB.text_format or '')
+				frame[objectName]:SetJustifyH(objectDB.justifyH or 'CENTER')
+				frame[objectName]:ClearAllPoints()
+				frame[objectName]:SetPoint(objectDB.justifyH or 'CENTER', frame, objectDB.justifyH or 'CENTER', objectDB.xOffset, objectDB.yOffset)
+			end
+		end	
 	end
-	
-	frame:EnableElement('ReadyCheck')
 
 	--Range
 	do
@@ -589,27 +606,6 @@ function UF:Update_PartyFrames(frame, db)
 			end				
 		end
 	end
-	
-	if db.customTexts then
-		local customFont = UF.LSM:Fetch("font", UF.db.font)
-		for objectName, _ in pairs(db.customTexts) do
-			if not frame[objectName] then
-				frame[objectName] = frame.RaisedElementParent:CreateFontString(nil, 'OVERLAY')
-			end
-			
-			local objectDB = db.customTexts[objectName]
-
-			if objectDB.font then
-				customFont = UF.LSM:Fetch("font", objectDB.font)
-			end
-						
-			frame[objectName]:FontTemplate(customFont, objectDB.size or UF.db.fontSize, objectDB.fontOutline or UF.db.fontOutline)
-			frame:Tag(frame[objectName], objectDB.text_format or '')
-			frame[objectName]:SetJustifyH(objectDB.justifyH or 'CENTER')
-			frame[objectName]:ClearAllPoints()
-			frame[objectName]:SetPoint(objectDB.justifyH or 'CENTER', frame, objectDB.justifyH or 'CENTER', objectDB.xOffset, objectDB.yOffset)
-		end
-	end	
 
 	UF:ToggleTransparentStatusBar(UF.db.colors.transparentHealth, frame.Health, frame.Health.bg, true)
 	if frame.Power then

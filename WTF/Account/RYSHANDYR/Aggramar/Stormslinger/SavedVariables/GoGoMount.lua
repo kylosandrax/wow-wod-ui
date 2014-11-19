@@ -7,14 +7,57 @@ GoGo_Prefs = {
 	},
 	["UnknownMounts"] = {
 	},
+	["AutoExcludeFlyingMounts"] = false,
 	["DruidFormNotRandomize"] = false,
 	["Zones"] = {
+		["Timeless Isle"] = {
+			["Preferred"] = {
+			},
+			["Excluded"] = {
+			},
+			["ZoneID"] = 951,
+		},
 		["Scarlet Monastery"] = {
 			["Preferred"] = {
 			},
 			["Excluded"] = {
 			},
 			["ZoneID"] = 13,
+		},
+		["Vale of Eternal Blossoms"] = {
+			["Preferred"] = {
+			},
+			["Excluded"] = {
+			},
+			["ZoneID"] = 811,
+		},
+		["Valley of the Four Winds"] = {
+			["Preferred"] = {
+			},
+			["Excluded"] = {
+			},
+			["ZoneID"] = 807,
+		},
+		["Shrine of Two Moons"] = {
+			["Preferred"] = {
+			},
+			["Excluded"] = {
+			},
+			["ZoneID"] = 811,
+		},
+		["The Jade Forest"] = {
+			["Preferred"] = {
+			},
+			["Excluded"] = {
+			},
+			["ZoneID"] = 806,
+		},
+		["Blackguard's Forgotten Cove"] = {
+			["Preferred"] = {
+			},
+			["Excluded"] = {
+			},
+			["ZoneID"] = 951,
 		},
 		["Orgrimmar"] = {
 			["Preferred"] = {
@@ -29,7 +72,7 @@ GoGo_Prefs = {
 	["DruidDisableInCombat"] = false,
 	["DisableUpdateNotice"] = false,
 	["RemoveBuffs"] = true,
-	["version"] = "6.0.6",
+	["version"] = "6.0.15",
 	["DruidClickForm"] = true,
 	["GlobalPrefMounts"] = {
 	},

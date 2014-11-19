@@ -154,9 +154,14 @@ function AskMrRobot.InitializeSettings()
             SendGems = true,
             SendEnchants = true,
             SendEnchantMaterials = true,
-            SendToType = "a friend",
+            SendToType = L.AMR_SHOPPINGLISTTAB_DROPDOWN_FRIEND,
             SendTo = ""
         }
+    end
+
+    -- fix a translation bug in a previous version
+    if L.AMR_SHOPPINGLISTTAB_DROPDOWN_FRIEND ~= "a friend" and AmrDb.SendSettings.SendToType == "a friend" then
+    	AmrDb.SendSettings.SendToType = L.AMR_SHOPPINGLISTTAB_DROPDOWN_FRIEND
     end
     
     -- character stuff
@@ -780,7 +785,7 @@ AskMrRobot.ExtraEnchantData = {}  -- keyed by enchant id
 -- the data that was last imported
 AskMrRobot.ImportData = nil       -- keyed by slot id
 
-local MIN_IMPORT_VERSION = 2
+local MIN_IMPORT_VERSION = 13
 
 --
 -- Import a character, returning nil on success, otherwise an error message, import result stored in AskMrRobot.ImportData

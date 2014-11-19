@@ -1,3 +1,9 @@
+v2.2.10
+*Fixed an issue with mailing groups where bag inventory was incorrectly being reserved when target not the current player.
+
+v2.2.9
+*Fixed another issue with mailing groups if current player = target player.
+
 v2.2.8
 *Fixed another issue with mailing groups.
 

@@ -6,7 +6,7 @@ Sh_DB = {
 			"Default", -- [2]
 			["info"] = {
 				["spe2"] = "Fury",
-				["time"] = 1395,
+				["time"] = 1409,
 				["classe"] = "WARRIOR",
 				["level"] = 71,
 				["spe1"] = "Arms",
@@ -16,11 +16,11 @@ Sh_DB = {
 			"Default", -- [1]
 			"Default", -- [2]
 			["info"] = {
-				["spe2"] = "none",
-				["time"] = 1394,
+				["spe2"] = "Fury",
+				["time"] = 1416,
 				["classe"] = "WARRIOR",
-				["level"] = 90,
-				["spe1"] = "none",
+				["level"] = 91,
+				["spe1"] = "Arms",
 			},
 		},
 		["Zapunzel-Aggramar"] = {
@@ -28,7 +28,7 @@ Sh_DB = {
 			"Default", -- [2]
 			["info"] = {
 				["spe2"] = "none",
-				["time"] = 1393,
+				["time"] = 1415,
 				["classe"] = "MAGE",
 				["level"] = 76,
 				["spe1"] = "none",
@@ -39,8 +39,19 @@ Sh_DB = {
 			"Default", -- [2]
 			["info"] = {
 				["spe2"] = "none",
-				["time"] = 1393,
+				["time"] = 1412,
 				["classe"] = "SHAMAN",
+				["level"] = 90,
+				["spe1"] = "none",
+			},
+		},
+		["Ryvok-Aggramar"] = {
+			"Default", -- [1]
+			"Default", -- [2]
+			["info"] = {
+				["spe2"] = "none",
+				["time"] = 1410,
+				["classe"] = "PALADIN",
 				["level"] = 90,
 				["spe1"] = "none",
 			},
@@ -49,22 +60,22 @@ Sh_DB = {
 			"Default", -- [1]
 			"Default", -- [2]
 			["info"] = {
-				["spe2"] = "Frost",
-				["time"] = 1396,
+				["spe2"] = "none",
+				["time"] = 1418,
 				["classe"] = "DEATHKNIGHT",
-				["level"] = 90,
-				["spe1"] = "Blood",
+				["level"] = 100,
+				["spe1"] = "none",
 			},
 		},
-		["Ryvok-Aggramar"] = {
+		["Banjax-Aggramar"] = {
 			"Default", -- [1]
 			"Default", -- [2]
 			["info"] = {
-				["spe2"] = "Protection",
-				["time"] = 1393,
-				["classe"] = "PALADIN",
-				["level"] = 90,
-				["spe1"] = "Holy",
+				["spe2"] = "none",
+				["time"] = 1415,
+				["classe"] = "MONK",
+				["level"] = 4,
+				["spe1"] = "none",
 			},
 		},
 		["Feldspar-Aggramar"] = {
@@ -72,33 +83,33 @@ Sh_DB = {
 			"Default", -- [2]
 			["info"] = {
 				["spe2"] = "none",
-				["time"] = 1395,
+				["time"] = 1418,
 				["classe"] = "PRIEST",
 				["level"] = 81,
 				["spe1"] = "none",
 			},
 		},
+		["version"] = 2.35,
 		["Ryjax-Aggramar"] = {
 			"Default", -- [1]
 			"Default", -- [2]
 			["info"] = {
-				["spe2"] = "Feral",
-				["time"] = 1393,
+				["spe2"] = "none",
+				["time"] = 1416,
 				["classe"] = "DRUID",
 				["level"] = 90,
-				["spe1"] = "Balance",
+				["spe1"] = "none",
 			},
 		},
-		["version"] = 2.35,
 		["Greenthorn-Aggramar"] = {
 			"Default", -- [1]
 			"Default", -- [2]
 			["info"] = {
-				["spe2"] = "Marksmanship",
-				["time"] = 1393,
+				["spe2"] = "none",
+				["time"] = 1410,
 				["classe"] = "HUNTER",
 				["level"] = 82,
-				["spe1"] = "Beast Mastery",
+				["spe1"] = "none",
 			},
 		},
 	},
@@ -108,15 +119,15 @@ Sh_DB = {
 			["13:b"] = 0,
 			["11:r"] = 0.8,
 			["f:hauteur"] = 30,
-			["f:SBC:b"] = 1,
+			["f:largeur"] = 210,
 			["level"] = 1,
 			["border:size"] = 4,
 			["10:b"] = 0.3,
 			["show_only_in_combat"] = false,
 			["b:a"] = 100,
-			["f:pos:3"] = "CENTER",
+			["f:pos:3"] = "BOTTOM",
 			["13:v"] = 1,
-			["f:pos:1"] = "CENTER",
+			["f:pos:1"] = "BOTTOM",
 			["14:r"] = 0.7,
 			["14:b"] = 0.7,
 			["10:r"] = 1,
@@ -139,11 +150,11 @@ Sh_DB = {
 			["font:val"] = "Fonts\\FRIZQT__.TTF",
 			["insets:left"] = 2,
 			["font:val:a"] = 1,
-			["f:pos:5"] = -100,
+			["f:pos:5"] = 51,
 			["3:v"] = 0.2,
 			["insets:top"] = 2,
 			["font:val:size"] = 18,
-			["f:largeur"] = 210,
+			["f:SBC:b"] = 1,
 			["contour"] = false,
 			["insets:right"] = 2,
 			["f:tex:border"] = "Interface\\Tooltips\\UI-Tooltip-Border",
@@ -163,7 +174,7 @@ Sh_DB = {
 			["4:b"] = 1,
 			["3:b"] = 1,
 			["2:b"] = 0,
-			["f:pos:4"] = 0,
+			["f:pos:4"] = 5.00061845779419,
 			["11:b"] = 1,
 			["font:val:v"] = 1,
 			["5:r"] = 1,
@@ -187,7 +198,7 @@ Sh_DB = {
 			["13:b"] = 0,
 			["11:r"] = 0.8,
 			["f:hauteur"] = 30,
-			["f:SBC:b"] = 1,
+			["f:largeur"] = 210,
 			["level"] = 1,
 			["border:size"] = 4,
 			["10:b"] = 0.3,
@@ -218,11 +229,11 @@ Sh_DB = {
 			["font:val"] = "Fonts\\FRIZQT__.TTF",
 			["insets:left"] = 2,
 			["font:val:a"] = 1,
-			["f:pos:5"] = -76.0000915527344,
+			["f:pos:5"] = -168.999893188477,
 			["3:v"] = 0.2,
 			["insets:top"] = 2,
 			["font:val:size"] = 18,
-			["f:largeur"] = 210,
+			["f:SBC:b"] = 1,
 			["contour"] = false,
 			["insets:right"] = 2,
 			["f:tex:border"] = "Interface\\Tooltips\\UI-Tooltip-Border",
@@ -242,7 +253,7 @@ Sh_DB = {
 			["4:b"] = 1,
 			["3:b"] = 1,
 			["2:b"] = 0,
-			["f:pos:4"] = 1.00004100799561,
+			["f:pos:4"] = -302.000183105469,
 			["11:b"] = 1,
 			["font:val:v"] = 1,
 			["5:r"] = 1,

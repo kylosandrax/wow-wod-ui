@@ -5,3 +5,10 @@ TidyPlates_Neon: disabled
 TidyPlates_Graphite: disabled
 WeakAuras: enabled
 oqueue: disabled
+Hermes: disabled
+Hermes-UI: disabled
+TipTac: disabled
+TipTacItemRef: disabled
+TipTacOptions: disabled
+TipTacTalents: disabled
+ogear: enabled

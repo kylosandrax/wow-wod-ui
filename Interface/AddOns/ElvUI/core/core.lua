@@ -168,7 +168,9 @@ function E:GetColorTable(data)
 	end
 end
 
-function E:UpdateMedia()	
+function E:UpdateMedia()
+	if not self.db['general'] or not self.private['general'] then return end --Prevent rare nil value errors
+	
 	--Fonts
 	self["media"].normFont = LSM:Fetch("font", self.db['general'].font)
 	self["media"].combatFont = LSM:Fetch("font", self.db['general'].dmgfont)
@@ -466,10 +468,14 @@ local function SendRecieve(self, event, prefix, message, channel, sender)
 	if event == "CHAT_MSG_ADDON" then
 		if(sender == myName) then return end
 
-		if prefix == "ELVUI_VERSIONCHK" and myName ~= "Elv-ShatteredHand" and not E.recievedOutOfDateMessage then
+		if prefix == "ELVUI_VERSIONCHK" and not E.recievedOutOfDateMessage then
 			if(tonumber(message) ~= nil and tonumber(message) > tonumber(E.version)) then
 				E:Print(L["ElvUI is out of date. You can download the newest version from www.tukui.org. Get premium membership and have ElvUI automatically updated with the Tukui Client!"])
-				E:StaticPopup_Show("ELVUI_UPDATE_AVAILABLE")
+				
+				if((tonumber(message) - tonumber(E.version)) >= 0.05) then
+					E:StaticPopup_Show("ELVUI_UPDATE_AVAILABLE")
+				end
+
 				E.recievedOutOfDateMessage = true
 			end
 		end
@@ -716,6 +722,15 @@ function E:DBConversions()
 
 	self.db.unitframe.units.raid10 = nil
 	self.db.unitframe.units.raid25 = nil
+	
+	if not E.db.bagsOffsetFixed then
+		if E.db.bags.xOffset ~= P['bags']['xOffset'] then
+			E.db.bags.xOffsetBank = E.db.bags.xOffset
+			E.db.bags.yOffsetBank = E.db.bags.yOffset
+			E.db.bags.xOffset = E.db.bags.xOffset * (-1) --Change positive value to negative or vice versa
+		end
+		E.db.bagsOffsetFixed = true
+	end
 end
 
 function E:StopMassiveShake()

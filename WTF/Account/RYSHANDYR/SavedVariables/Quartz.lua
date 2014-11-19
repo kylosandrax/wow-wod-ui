@@ -61,6 +61,7 @@ Quartz3DB = {
 		["Kylosandrax - Aggramar"] = "Default",
 		["Feldspar - Aggramar"] = "Default",
 		["Kylozandrax - Earthen Ring"] = "Default",
+		["Banjax - Aggramar"] = "Default",
 		["Stormslinger - Aggramar"] = "Default",
 		["Ryvok - Aggramar"] = "Default",
 		["Bronin - Aggramar"] = "Default",

@@ -1,14 +1,106 @@
 
 GoGo_Prefs = {
 	["AspectPack"] = false,
-	["GlobalPrefMount"] = false,
+	["GlobalPrefMount"] = true,
 	["DruidFlightForm"] = false,
 	["GlobalExclude"] = {
 	},
 	["UnknownMounts"] = {
 	},
+	["AutoExcludeFlyingMounts"] = true,
 	["DruidFormNotRandomize"] = false,
 	["Zones"] = {
+		["Blackrock Mountain"] = {
+			["Preferred"] = {
+			},
+			["Excluded"] = {
+			},
+			["ZoneID"] = 29,
+		},
+		["Skyreach"] = {
+			["Preferred"] = {
+			},
+			["Excluded"] = {
+			},
+			["ZoneID"] = 962,
+		},
+		["Terokkar Forest"] = {
+			["Preferred"] = {
+			},
+			["Excluded"] = {
+			},
+			["ZoneID"] = 466,
+		},
+		["Black Temple"] = {
+			["Preferred"] = {
+			},
+			["Excluded"] = {
+			},
+			["ZoneID"] = 862,
+		},
+		["Grimrail Depot"] = {
+			["Preferred"] = {
+			},
+			["Excluded"] = {
+			},
+			["ZoneID"] = 949,
+		},
+		["Orgrimmar"] = {
+			["Preferred"] = {
+			},
+			["Excluded"] = {
+			},
+			["ZoneID"] = 321,
+		},
+		["Tanaris"] = {
+			["Preferred"] = {
+			},
+			["Excluded"] = {
+			},
+			["ZoneID"] = 862,
+		},
+		["Tanaan Jungle"] = {
+			["Preferred"] = {
+			},
+			["Excluded"] = {
+			},
+			["ZoneID"] = 945,
+		},
+		["Mana-Tombs"] = {
+			["Preferred"] = {
+			},
+			["Excluded"] = {
+			},
+			["ZoneID"] = 478,
+		},
+		["Warspear"] = {
+			["Preferred"] = {
+			},
+			["Excluded"] = {
+			},
+			["ZoneID"] = 1011,
+		},
+		["Swamp of Sorrows"] = {
+			["Preferred"] = {
+			},
+			["Excluded"] = {
+			},
+			["ZoneID"] = 38,
+		},
+		["Town Hall"] = {
+			["Preferred"] = {
+			},
+			["Excluded"] = {
+			},
+			["ZoneID"] = 976,
+		},
+		["Shadowmoon Burial Grounds"] = {
+			["Preferred"] = {
+			},
+			["Excluded"] = {
+			},
+			["ZoneID"] = 947,
+		},
 		["Shadow Labyrinth"] = {
 			["Preferred"] = {
 			},
@@ -21,14 +113,14 @@ GoGo_Prefs = {
 			},
 			["Excluded"] = {
 			},
-			["ZoneID"] = 13,
+			["ZoneID"] = 23,
 		},
 		["Shrine of Two Moons"] = {
 			["Preferred"] = {
 			},
 			["Excluded"] = {
 			},
-			["ZoneID"] = 811,
+			["ZoneID"] = 13,
 		},
 		["Siege of Orgrimmar"] = {
 			["Preferred"] = {
@@ -37,40 +129,19 @@ GoGo_Prefs = {
 			},
 			["ZoneID"] = 811,
 		},
-		["Proving Grounds"] = {
+		["Shadowmoon Valley"] = {
 			["Preferred"] = {
 			},
 			["Excluded"] = {
 			},
-			["ZoneID"] = 809,
+			["ZoneID"] = 962,
 		},
-		["Terokkar Forest"] = {
+		["Sethekk Halls"] = {
 			["Preferred"] = {
 			},
 			["Excluded"] = {
 			},
-			["ZoneID"] = 466,
-		},
-		["Blasted Lands"] = {
-			["Preferred"] = {
-			},
-			["Excluded"] = {
-			},
-			["ZoneID"] = 13,
-		},
-		["Scarlet Monastery"] = {
-			["Preferred"] = {
-			},
-			["Excluded"] = {
-			},
-			["ZoneID"] = 13,
-		},
-		["Black Temple"] = {
-			["Preferred"] = {
-			},
-			["Excluded"] = {
-			},
-			["ZoneID"] = 862,
+			["ZoneID"] = 478,
 		},
 		["Mulgore"] = {
 			["Preferred"] = {
@@ -79,28 +150,70 @@ GoGo_Prefs = {
 			},
 			["ZoneID"] = 9,
 		},
-		["Stormstout Brewery"] = {
+		["Spires of Arak"] = {
+			["Preferred"] = {
+			},
+			["Excluded"] = {
+			},
+			["ZoneID"] = 962,
+		},
+		["Auchindoun"] = {
+			["Preferred"] = {
+			},
+			["Excluded"] = {
+			},
+			["ZoneID"] = 962,
+		},
+		["Burning Steppes"] = {
+			["Preferred"] = {
+			},
+			["Excluded"] = {
+			},
+			["ZoneID"] = 29,
+		},
+		["Gorgrond"] = {
+			["Preferred"] = {
+			},
+			["Excluded"] = {
+			},
+			["ZoneID"] = 949,
+		},
+		["Warspear Hold"] = {
+			["Preferred"] = {
+			},
+			["Excluded"] = {
+			},
+			["ZoneID"] = 978,
+		},
+		["The Jade Forest"] = {
+			["Preferred"] = {
+			},
+			["Excluded"] = {
+			},
+			["ZoneID"] = 806,
+		},
+		["Storehouse"] = {
+			["Preferred"] = {
+			},
+			["Excluded"] = {
+			},
+			["ZoneID"] = 976,
+		},
+		["Timeless Isle"] = {
+			["Preferred"] = {
+			},
+			["Excluded"] = {
+			},
+			["ZoneID"] = 951,
+		},
+		["Thunder Bluff"] = {
 			["Preferred"] = {
 			},
 			["Excluded"] = {
 			},
 			["ZoneID"] = 862,
 		},
-		["Unga Ingoo"] = {
-			["Preferred"] = {
-			},
-			["Excluded"] = {
-			},
-			["ZoneID"] = 862,
-		},
-		["Valley of the Four Winds"] = {
-			["Preferred"] = {
-			},
-			["Excluded"] = {
-			},
-			["ZoneID"] = 807,
-		},
-		["Orgrimmar"] = {
+		["Ulduar"] = {
 			["Preferred"] = {
 			},
 			["Excluded"] = {
@@ -114,54 +227,54 @@ GoGo_Prefs = {
 			},
 			["ZoneID"] = 862,
 		},
-		["Sethekk Halls"] = {
+		["Thousand Needles"] = {
 			["Preferred"] = {
 			},
 			["Excluded"] = {
 			},
-			["ZoneID"] = 478,
+			["ZoneID"] = 61,
 		},
-		["Vale of Eternal Blossoms"] = {
+		["Talador"] = {
 			["Preferred"] = {
 			},
 			["Excluded"] = {
 			},
-			["ZoneID"] = 811,
+			["ZoneID"] = 946,
 		},
-		["Shadowmoon Valley"] = {
+		["Trading Post"] = {
 			["Preferred"] = {
 			},
 			["Excluded"] = {
 			},
-			["ZoneID"] = 466,
+			["ZoneID"] = 976,
 		},
-		["Hall of Blackhand"] = {
+		["Scarlet Monastery"] = {
 			["Preferred"] = {
 			},
 			["Excluded"] = {
 			},
-			["ZoneID"] = 862,
+			["ZoneID"] = 13,
 		},
-		["Tanaris"] = {
+		["Frostwall"] = {
 			["Preferred"] = {
 			},
 			["Excluded"] = {
 			},
-			["ZoneID"] = 862,
+			["ZoneID"] = 976,
 		},
-		["Siege of Niuzao Temple"] = {
+		["Temple of the Jade Serpent"] = {
 			["Preferred"] = {
 			},
 			["Excluded"] = {
 			},
-			["ZoneID"] = 862,
+			["ZoneID"] = 806,
 		},
-		["Mana-Tombs"] = {
+		["Valley of the Four Winds"] = {
 			["Preferred"] = {
 			},
 			["Excluded"] = {
 			},
-			["ZoneID"] = 478,
+			["ZoneID"] = 807,
 		},
 		["Kun-Lai Summit"] = {
 			["Preferred"] = {
@@ -177,12 +290,131 @@ GoGo_Prefs = {
 			},
 			["ZoneID"] = 873,
 		},
-		["Timeless Isle"] = {
+		["Stormstout Brewery"] = {
 			["Preferred"] = {
 			},
 			["Excluded"] = {
 			},
-			["ZoneID"] = 951,
+			["ZoneID"] = 862,
+		},
+		["Frostfire Ridge"] = {
+			["Preferred"] = {
+			},
+			["Excluded"] = {
+			},
+			["ZoneID"] = 941,
+		},
+		["Icecrown"] = {
+			["Preferred"] = {
+			},
+			["Excluded"] = {
+			},
+			["ZoneID"] = 492,
+		},
+		["Unga Ingoo"] = {
+			["Preferred"] = {
+			},
+			["Excluded"] = {
+			},
+			["ZoneID"] = 862,
+		},
+		["Gate of the Setting Sun"] = {
+			["Preferred"] = {
+			},
+			["Excluded"] = {
+			},
+			["ZoneID"] = 862,
+		},
+		["Wor'gol"] = {
+			["Preferred"] = {
+			},
+			["Excluded"] = {
+			},
+			["ZoneID"] = 941,
+		},
+		["Redridge Mountains"] = {
+			["Preferred"] = {
+			},
+			["Excluded"] = {
+			},
+			["ZoneID"] = 36,
+		},
+		["Scholomance"] = {
+			["Preferred"] = {
+			},
+			["Excluded"] = {
+			},
+			["ZoneID"] = 862,
+		},
+		["Ashran"] = {
+			["Preferred"] = {
+			},
+			["Excluded"] = {
+			},
+			["ZoneID"] = 978,
+		},
+		["Siege of Niuzao Temple"] = {
+			["Preferred"] = {
+			},
+			["Excluded"] = {
+			},
+			["ZoneID"] = 862,
+		},
+		["Grulloc's Grotto"] = {
+			["Preferred"] = {
+			},
+			["Excluded"] = {
+			},
+			["ZoneID"] = 941,
+		},
+		["The Storm Peaks"] = {
+			["Preferred"] = {
+			},
+			["Excluded"] = {
+			},
+			["ZoneID"] = 485,
+		},
+		["Vale of Eternal Blossoms"] = {
+			["Preferred"] = {
+			},
+			["Excluded"] = {
+			},
+			["ZoneID"] = -1,
+		},
+		["Crystalsong Forest"] = {
+			["Preferred"] = {
+			},
+			["Excluded"] = {
+			},
+			["ZoneID"] = 510,
+		},
+		["Hall of Blackhand"] = {
+			["Preferred"] = {
+			},
+			["Excluded"] = {
+			},
+			["ZoneID"] = 962,
+		},
+		["Bloodmaul Slag Mines"] = {
+			["Preferred"] = {
+			},
+			["Excluded"] = {
+			},
+			["ZoneID"] = 962,
+		},
+		["Proving Grounds"] = {
+			["Preferred"] = {
+			},
+			["Excluded"] = {
+			},
+			["ZoneID"] = 899,
+		},
+		["Bladespire Citadel"] = {
+			["Preferred"] = {
+			},
+			["Excluded"] = {
+			},
+			["ZoneID"] = 941,
 		},
 		["Shattrath City"] = {
 			["Preferred"] = {
@@ -191,19 +423,26 @@ GoGo_Prefs = {
 			},
 			["ZoneID"] = 481,
 		},
-		["Thunder Bluff"] = {
+		["Shado-Pan Monastery"] = {
 			["Preferred"] = {
 			},
 			["Excluded"] = {
 			},
-			["ZoneID"] = 862,
+			["ZoneID"] = 877,
 		},
-		["The Jade Forest"] = {
+		["Blasted Lands"] = {
 			["Preferred"] = {
 			},
 			["Excluded"] = {
 			},
-			["ZoneID"] = 806,
+			["ZoneID"] = -1,
+		},
+		["Blackwing Lair"] = {
+			["Preferred"] = {
+			},
+			["Excluded"] = {
+			},
+			["ZoneID"] = 755,
 		},
 		["Southern Barrens"] = {
 			["Preferred"] = {
@@ -212,27 +451,44 @@ GoGo_Prefs = {
 			},
 			["ZoneID"] = 607,
 		},
-		["Thousand Needles"] = {
+		["Dalaran"] = {
 			["Preferred"] = {
 			},
 			["Excluded"] = {
 			},
-			["ZoneID"] = 61,
+			["ZoneID"] = 13,
+		},
+		["Hillsbrad Foothills"] = {
+			["Preferred"] = {
+			},
+			["Excluded"] = {
+			},
+			["ZoneID"] = 962,
+		},
+		["Nagrand"] = {
+			["Preferred"] = {
+			},
+			["Excluded"] = {
+			},
+			["ZoneID"] = 962,
 		},
 	},
-	["DisableMountNotice"] = false,
-	["autodismount"] = true,
+	["DisableMountNotice"] = true,
+	["DisableWaterFlight"] = true,
 	["DruidDisableInCombat"] = false,
 	["DisableUpdateNotice"] = false,
 	["RemoveBuffs"] = true,
-	["version"] = "6.0.13",
+	["version"] = "6.0.15",
 	["DruidClickForm"] = true,
 	["GlobalPrefMounts"] = {
+		97493, -- [1]
+		123993, -- [2]
+		43927, -- [3]
 	},
 	["ShamanClickForm"] = false,
 	["ExtraPassengerMounts"] = {
 	},
-	["DisableWaterFlight"] = true,
+	["autodismount"] = true,
 }
 GoGo_DebugLog = {
 }

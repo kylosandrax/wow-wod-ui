@@ -2,8 +2,7 @@ local AS = unpack(AddOnSkins)
 
 if not (AS:CheckAddOn('CLCProt') and AS.MyClass == 'PALADIN') then return end
 
-local name = 'CLCProtSkin'
-function AS:SkinCLCProt()
+function AS:CLCProt()
 	local function UpdateButtonLayout(frame, button, opt)
 		button:Size(opt.size)
 		button:ClearAllPoints()
@@ -22,12 +21,12 @@ function AS:SkinCLCProt()
 		local button
 		if isChecked then
 			button = CreateFrame('CheckButton', name , parent)
-			button:CreateBackdrop('Default')
 			button:StyleButton(true)
 		else
 			button = CreateFrame('Button', name , parent)
-			button:CreateBackdrop('Default')
 		end
+		AS:SkinButton(button)
+
 		local Backdrop = button.backdrop or button.Backdrop
 		Backdrop:SetAllPoints()
 		button:EnableMouse(false)
@@ -40,18 +39,12 @@ function AS:SkinCLCProt()
 		button.texture.OldSetTexture = button.texture.SetTexture
 		button.texture.SetTexture = function(frame, tex, ...)
 			button.texture.OldSetTexture(frame, tex, ...)
-			if tex ~= nil then
-				button.backdrop:Show();
-			else
-				button.backdrop:Hide()
-			end
 		end
 
 		button.border = button:CreateTexture(nil, 'BORDER')
 		button.border:Kill()
-		button.cooldown = CreateFrame('Cooldown', '$parentCooldown', button)
+		button.cooldown = CreateFrame('Cooldown', '$parentCooldown', button, "CooldownFrameTemplate")
 		button.cooldown:SetInside()
-		if IsAddOnLoaded('ElvUI') then ElvUI[1]:RegisterCooldown(button.cooldown) end
 		button.stack = button:CreateFontString('$parentCount', 'OVERLAY', 'TextStatusBarText')
 		local fontFace, _, fontFlags = button.stack:GetFont()
 		button.stack:SetFont(fontFace, 30, fontFlags)
@@ -75,4 +68,4 @@ function AS:SkinCLCProt()
 	clcprot.UpdateButtonLayout = UpdateButtonLayout
 end
 
-AS:RegisterSkin(name, AS.SkinCLCProt)
+AS:RegisterSkin('CLCProt', AS.CLCProt)

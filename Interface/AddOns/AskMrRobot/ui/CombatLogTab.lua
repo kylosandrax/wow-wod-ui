@@ -56,7 +56,7 @@ function AskMrRobot.CombatLogTab:new(parent)
 	-- tab header
 	local text = tab:CreateFontString(nil, "ARTWORK", "GameFontNormalLarge")
 	text:SetPoint("TOPLEFT", 0, -5)
-	text:SetText("Combat Logging")
+	text:SetText(L.AMR_COMBATLOGTAB_COMBAT_LOGGING)
 
 	--scrollframe 
 	tab.scrollframe = AskMrRobot.ScrollFrame:new(nil, tab)

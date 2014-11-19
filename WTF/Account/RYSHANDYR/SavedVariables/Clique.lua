@@ -22,6 +22,7 @@ CliqueDB3 = {
 		["Kylosandrax - Aggramar"] = "Kylosandrax - Aggramar",
 		["Feldspar - Aggramar"] = "Feldspar - Aggramar",
 		["Kylozandrax - Earthen Ring"] = "Kylozandrax - Earthen Ring",
+		["Banjax - Aggramar"] = "Banjax - Aggramar",
 		["Stormslinger - Aggramar"] = "Stormslinger - Aggramar",
 		["Ryvok - Aggramar"] = "Ryvok - Aggramar",
 		["Bronin - Aggramar"] = "Bronin - Aggramar",
@@ -195,6 +196,25 @@ CliqueDB3 = {
 				}, -- [2]
 			},
 		},
+		["Banjax - Aggramar"] = {
+			["bindings"] = {
+				{
+					["type"] = "target",
+					["sets"] = {
+						["default"] = true,
+					},
+					["key"] = "BUTTON1",
+					["unit"] = "mouseover",
+				}, -- [1]
+				{
+					["type"] = "menu",
+					["key"] = "BUTTON2",
+					["sets"] = {
+						["default"] = true,
+					},
+				}, -- [2]
+			},
+		},
 		["Stormslinger - Aggramar"] = {
 			["bindings"] = {
 				{
@@ -243,12 +263,12 @@ CliqueDB3 = {
 					["unit"] = "mouseover",
 				}, -- [1]
 				{
-					["spell"] = "Cleanse",
-					["key"] = "SHIFT-BUTTON3",
+					["spell"] = "Word of Glory",
+					["key"] = "SHIFT-F",
 					["sets"] = {
 						["default"] = true,
 					},
-					["icon"] = "Interface\\Icons\\Spell_Holy_Purify",
+					["icon"] = "INTERFACE\\ICONS\\inv_helmet_96",
 					["type"] = "spell",
 				}, -- [2]
 				{
@@ -259,12 +279,12 @@ CliqueDB3 = {
 					},
 				}, -- [3]
 				{
-					["spell"] = "Hand of Sacrifice",
-					["key"] = "SHIFT-BUTTON2",
+					["spell"] = "Sacred Shield",
+					["key"] = "SHIFT-BUTTON4",
 					["sets"] = {
 						["default"] = true,
 					},
-					["icon"] = "Interface\\Icons\\Spell_Holy_SealOfSacrifice",
+					["icon"] = "Interface\\Icons\\Ability_Paladin_BlessedMending",
 					["type"] = "spell",
 				}, -- [4]
 				{
@@ -277,14 +297,95 @@ CliqueDB3 = {
 					["type"] = "spell",
 				}, -- [5]
 				{
-					["spell"] = "Hand of Protection",
-					["key"] = "SHIFT-BUTTON4",
+					["spell"] = "Holy Light",
+					["key"] = "SHIFT-BUTTON2",
 					["sets"] = {
 						["default"] = true,
+						["sectalent"] = true,
+					},
+					["icon"] = "Interface\\Icons\\Spell_Holy_SurgeOfLight",
+					["type"] = "spell",
+				}, -- [6]
+				{
+					["spell"] = "Cleanse",
+					["key"] = "SHIFT-BUTTON3",
+					["sets"] = {
+						["default"] = true,
+						["sectalent"] = true,
+					},
+					["icon"] = "Interface\\Icons\\Spell_Holy_Purify",
+					["type"] = "spell",
+				}, -- [7]
+				{
+					["spell"] = "Holy Radiance",
+					["key"] = "SHIFT-W",
+					["sets"] = {
+						["default"] = true,
+						["sectalent"] = true,
+					},
+					["icon"] = "INTERFACE\\ICONS\\spell_paladin_divinecircle",
+					["type"] = "spell",
+				}, -- [8]
+				{
+					["spell"] = "Holy Shock",
+					["key"] = "SPACE",
+					["sets"] = {
+						["default"] = true,
+						["sectalent"] = true,
+					},
+					["icon"] = "Interface\\Icons\\Spell_Holy_SearingLight",
+					["type"] = "spell",
+				}, -- [9]
+				{
+					["spell"] = "Beacon of Light",
+					["key"] = "SHIFT-A",
+					["sets"] = {
+						["default"] = true,
+						["sectalent"] = true,
+					},
+					["icon"] = "Interface\\Icons\\Ability_Paladin_BeaconofLight",
+					["type"] = "spell",
+				}, -- [10]
+				{
+					["spell"] = "Hand of Freedom",
+					["key"] = "SHIFT-3",
+					["sets"] = {
+						["default"] = true,
+						["sectalent"] = true,
+					},
+					["icon"] = "Interface\\Icons\\Spell_Holy_SealOfValor",
+					["type"] = "spell",
+				}, -- [11]
+				{
+					["spell"] = "Hand of Protection",
+					["key"] = "SHIFT-2",
+					["sets"] = {
+						["default"] = true,
+						["sectalent"] = true,
 					},
 					["icon"] = "Interface\\Icons\\Spell_Holy_SealOfProtection",
 					["type"] = "spell",
-				}, -- [6]
+				}, -- [12]
+				{
+					["spell"] = "Execution Sentence",
+					["key"] = "SHIFT-3",
+					["sets"] = {
+						["default"] = true,
+						["sectalent"] = true,
+					},
+					["icon"] = "Interface\\Icons\\spell_paladin_executionsentence",
+					["type"] = "spell",
+				}, -- [13]
+				{
+					["spell"] = "Hand of Sacrifice",
+					["key"] = "SHIFT-1",
+					["sets"] = {
+						["default"] = true,
+						["sectalent"] = true,
+					},
+					["icon"] = "Interface\\Icons\\Spell_Holy_SealOfSacrifice",
+					["type"] = "spell",
+				}, -- [14]
 			},
 		},
 		["Bronin - Aggramar"] = {

@@ -4,7 +4,7 @@ if not AS:CheckAddOn('Tukui') then return end
 local select = select
 local T, C
 
-AddOnSkins_Options = {
+AddOnSkinsOptions = {
 -- Embeds
 	['EmbedOoC'] = false,
 	['EmbedOoCDelay'] = 10,
@@ -15,8 +15,10 @@ AddOnSkins_Options = {
 	['EmbedMain'] = 'Skada',
 	['EmbedLeft'] = 'Skada',
 	['EmbedRight'] = 'Skada',
+	['EmbedRightChat'] = 'Skada',
 	['EmbedLeftWidth'] = 200,
 	['EmbedBelowTop'] = false,
+	['EmbedIsHidden'] = false,
 	['TransparentEmbed'] = false,
 -- Misc
 	['RecountBackdrop'] = true,
@@ -27,9 +29,7 @@ AddOnSkins_Options = {
 	['DBMFont'] = 'Tukui',
 	['DBMFontSize'] = 12,
 	['DBMFontFlag'] = 'OUTLINE',
-	['EmbedLeftChat'] = false,
 	['WeakAuraAuraBar'] = false,
-	['WeakAuraIconCooldown'] = true,
 	['AuctionHouse'] = true,
 	['SkinTemplate'] = 'Transparent',
 	['HideChatFrame'] = 'NONE',
@@ -73,11 +73,11 @@ function AS:CheckOption(optionName, ...)
 		if not addon then break end
 		if not IsAddOnLoaded(addon) then return false end
 	end
-	return AddOnSkins_Options[optionName]
+	return AddOnSkinsOptions[optionName]
 end
 
 function AS:SetOption(optionName, value)
-	AddOnSkins_Options[optionName] = value
+	AddOnSkinsOptions[optionName] = value
 end
 
 function AS:DisableOption(optionName)
@@ -89,7 +89,7 @@ function AS:EnableOption(optionName)
 end
 
 function AS:ToggleOption(optionName)
-	AddOnSkins_Options[optionName] = not AddOnSkins_Options[optionName]
+	AddOnSkinsOptions[optionName] = not AddOnSkinsOptions[optionName]
 end
 
 function AS:CreateEmbedSystem()
@@ -106,17 +106,18 @@ function AS:CreateEmbedSystem()
 		EmbedSystem_MainWindow:SetScript('OnShow', AS.Embed_Show)
 		EmbedSystem_MainWindow:SetScript('OnHide', AS.Embed_Hide)
 
-		AS:CreateToggleButton('RightToggleButton', '►', AS.InfoRight, AS.ChatBackgroundRight, ASL.EmbedSystem.ToggleRightChat, ASL.EmbedSystem.Toggle)
+		AS:CreateToggleButton('RightToggleButton', '►', AS.InfoRight, AS.ChatBackgroundRight, ASL.EmbedSystem.ToggleRightChat, ASL.EmbedSystem.ToggleEmbed)
 		RightToggleButton:Point('RIGHT', AS.InfoRight, 'RIGHT', -2, 0)
-
 		RightToggleButton:HookScript('OnClick', function(self, button)
 			if button == 'RightButton' then
 				if EmbedSystem_MainWindow:IsShown() then
 					EmbedSystem_MainWindow:Hide()
+					AS:SetOption('EmbedIsHidden', true)
 					if AS:CheckOption('HideChatFrame') ~= 'NONE' then
 						_G[AS:CheckOption('HideChatFrame')]:SetAlpha(1)
 					end
 				else
+					AS:SetOption('EmbedIsHidden', false)
 					EmbedSystem_MainWindow:Show()
 					if AS:CheckOption('HideChatFrame') ~= 'NONE' then
 						_G[AS:CheckOption('HideChatFrame')]:SetAlpha(0)
@@ -134,6 +135,22 @@ function AS:CreateEmbedSystem()
 				end
 			end
 		end)
+
+		UIParent:HookScript('OnShow', function()
+			if AS:CheckOption('EmbedIsHidden') then
+				AS:Embed_Hide();
+			else
+				AS:Embed_Show();
+			end
+		end)
+
+		if not UnitAffectingCombat('player') then
+			if AS:CheckOption('EmbedIsHidden') or AS:CheckOption('EmbedOoC') then
+				AS:Embed_Hide();
+			else
+				AS:Embed_Show();
+			end
+		end
 
 		AS.EmbedSystemCreated = true
 	end
