@@ -41,7 +41,7 @@ local API_UnitIsDead = UnitIsDead
 local DEFAULT_CHAT_FRAME = DEFAULT_CHAT_FRAME
 local LE_PARTY_CATEGORY_INSTANCE = LE_PARTY_CATEGORY_INSTANCE
 
-local OVALE_VERSION = "6.0.23"
+local OVALE_VERSION = "6.0.27"
 local REPOSITORY_KEYWORD = "@" .. "project-version" .. "@"
 
 -- Table of strings to display once per session.

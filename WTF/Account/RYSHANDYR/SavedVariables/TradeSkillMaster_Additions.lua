@@ -11,16 +11,6 @@ TradeSkillMaster_AdditionsDB = {
 				},
 			},
 		},
-		["Zapunzel - Aggramar"] = {
-			["auctionMessages"] = {
-				["A buyer has been found for your auction of Casque of Defiance."] = "|cff0070dd|Hitem:118857:0:0:0:0:0:0:0:76:0:0:0|h[Casque of Defiance]|h|r",
-			},
-			["auctionPrices"] = {
-				["|cff0070dd|Hitem:118857:0:0:0:0:0:0:0:76:0:0:0|h[Casque of Defiance]|h|r"] = {
-					24990000, -- [1]
-				},
-			},
-		},
 	},
 	["profileKeys"] = {
 		["Zapunzel - Aggramar"] = "Default",

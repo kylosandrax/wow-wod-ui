@@ -1,3 +1,10 @@
+v2.6.13
+*Ink must be in your bags to use for vendor trade so gather from bank if needed.
+
+v2.6.12
+*Fixed an issue with gathering and soulbound mats.
+*Added an option for gathering to ignore ink vendor trading (until blizzard fix the vendor).
+
 v2.6.11
 *Change the workaround for the blizzard bug in GetTradeSkillInfo to avoid localization issues - ticket #511
 

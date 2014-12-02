@@ -85,7 +85,9 @@ local function ttsSlider_OnValueChanged(self, value)
 	if expandButton.expanded then
 		TradeSkillFrame:SetHeight(TRADE_SKILL_HEIGHT * TRADE_SKILLS_DISPLAYED + DEFAULT_HEADER_FRAME_HEIGHT)
 		TradeSkillHorizontalBarLeft:Hide()
-		TradeSkillHorizontalBarRight:Hide()
+		if TradeSkillHorizontalBarRight then
+			TradeSkillHorizontalBarRight:Hide()
+		end
 	else
 		TradeSkillFrame:SetHeight(TRADE_SKILL_HEIGHT * TRADE_SKILLS_DISPLAYED + DEFAULT_HEADER_FRAME_HEIGHT + 8 + DEFAULT_DETAIL_FRAME_HEIGHT)
 		TradeSkillHorizontalBarLeft:ClearAllPoints()
@@ -93,7 +95,9 @@ local function ttsSlider_OnValueChanged(self, value)
 		TradeSkillHorizontalBarLeft:SetPoint("RIGHT", -80, 0)
 		TradeSkillHorizontalBarLeft:SetTexCoord(0, 1.0, 0, 0.25)
 		TradeSkillHorizontalBarLeft:Show()
-		TradeSkillHorizontalBarRight:Show()
+		if TradeSkillHorizontalBarRight then
+			TradeSkillHorizontalBarRight:Show()
+		end
 	end
 
 	TradeSkillListScrollFrame:ClearAllPoints()
@@ -434,7 +438,7 @@ local function Update()
 		if region:IsObjectType("Texture") then
 			if (region:GetTexture() == HORZ_BAR_FNAME) then
 				--print("region found", region:GetName())
-				if not(region:GetName()) then
+				if not(region:GetName()) then --right bar has no name
 					TradeSkillHorizontalBarRight = region
 					--print("right bar found")
 					break

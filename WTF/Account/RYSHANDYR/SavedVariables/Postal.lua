@@ -1,5 +1,21 @@
 
 Postal3DB = {
+	["global"] = {
+		["BlackBook"] = {
+			["alts"] = {
+				"Banjax|Aggramar|Horde|6|MONK", -- [1]
+				"Bronin|Aggramar|Horde|100|DEATHKNIGHT", -- [2]
+				"Feldspar|Aggramar|Horde|81|PRIEST", -- [3]
+				"Greenthorn|Aggramar|Horde|82|HUNTER", -- [4]
+				"Kylosandrax|Aggramar|Horde|93|WARRIOR", -- [5]
+				"Kylozandrax|Earthen Ring|Horde|71|WARRIOR", -- [6]
+				"Ryjax|Aggramar|Horde|90|DRUID", -- [7]
+				"Ryvok|Aggramar|Horde|90|PALADIN", -- [8]
+				"Stormslinger|Aggramar|Horde|90|SHAMAN", -- [9]
+				"Zapunzel|Aggramar|Horde|76|MAGE", -- [10]
+			},
+		},
+	},
 	["profileKeys"] = {
 		["Zapunzel - Aggramar"] = "Zapunzel - Aggramar",
 		["Greenthorn - Aggramar"] = "Greenthorn - Aggramar",
@@ -11,22 +27,6 @@ Postal3DB = {
 		["Stormslinger - Aggramar"] = "Stormslinger - Aggramar",
 		["Ryvok - Aggramar"] = "Ryvok - Aggramar",
 		["Bronin - Aggramar"] = "Bronin - Aggramar",
-	},
-	["global"] = {
-		["BlackBook"] = {
-			["alts"] = {
-				"Banjax|Aggramar|Horde|4|MONK", -- [1]
-				"Bronin|Aggramar|Horde|100|DEATHKNIGHT", -- [2]
-				"Feldspar|Aggramar|Horde|81|PRIEST", -- [3]
-				"Greenthorn|Aggramar|Horde|82|HUNTER", -- [4]
-				"Kylosandrax|Aggramar|Horde|91|WARRIOR", -- [5]
-				"Kylozandrax|Earthen Ring|Horde|71|WARRIOR", -- [6]
-				"Ryjax|Aggramar|Horde|90|DRUID", -- [7]
-				"Ryvok|Aggramar|Horde|90|PALADIN", -- [8]
-				"Stormslinger|Aggramar|Horde|90|SHAMAN", -- [9]
-				"Zapunzel|Aggramar|Horde|76|MAGE", -- [10]
-			},
-		},
 	},
 	["profiles"] = {
 		["Zapunzel - Aggramar"] = {
@@ -94,9 +94,9 @@ Postal3DB = {
 		["Bronin - Aggramar"] = {
 			["BlackBook"] = {
 				["recent"] = {
-					"Zapunzel|Aggramar|Horde", -- [1]
+					"Ryjax|Aggramar|Horde", -- [1]
 					"Kylosandrax|Aggramar|Horde", -- [2]
-					"Ryjax|Aggramar|Horde", -- [3]
+					"Zapunzel|Aggramar|Horde", -- [3]
 					"Meiji|Aggramar|Horde", -- [4]
 					"Feldspar|Aggramar|Horde", -- [5]
 					"Ryvok|Aggramar|Horde", -- [6]

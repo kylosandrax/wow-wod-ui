@@ -341,6 +341,13 @@ function Options:LoadGeneralSettings(container)
 						},
 						{
 							type = "CheckBox",
+							relativeWidth = 0.5,
+							label = L["Disable Ink Vendor Trading"],
+							settingInfo = { TSM.db.global, "ignoreInkTrader" },
+							tooltip = L["If checked, Gathering will not suggest to trade inks at the vendor."],
+						},
+						{
+							type = "CheckBox",
 							label = L["Gather All Professions by Default if Only One Crafter"],
 							settingInfo = { TSM.db.factionrealm.gathering, "gatherAll" },
 							relativeWidth = 1,

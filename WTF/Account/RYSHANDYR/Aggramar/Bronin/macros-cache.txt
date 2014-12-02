@@ -1,3 +1,8 @@
+VER 3 0100000000000033 "BloodTap" "INV_MISC_QUESTIONMARK"
+#showtooltip Blood Tap
+/cast Blood Tap
+/cast Blood Tap
+END
 VER 3 010000000000002D "Def-Check" "ABILITY_DUALWIELD"
 /run d=GetDodgeChance() n=3.22 b=5.01 if UnitRace("player")=="Gnome" then n=n-.01 end if UnitRace("player")=="Night Elf" then b=b+2 end p=235.5*d/90.6425-((235.5/90.6425)*b-n)+4 DEFAULT_CHAT_FRAME:AddMessage("Ideal parry: "..string.format("%.2f",p))
 END

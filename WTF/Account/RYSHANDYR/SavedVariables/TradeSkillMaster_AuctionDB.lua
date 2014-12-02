@@ -1,7 +1,9 @@
 
 TradeSkillMaster_AuctionDBDB = {
-	["profiles"] = {
-		["Default"] = {
+	["realm"] = {
+		["Aggramar"] = {
+			["lastCompleteScan"] = 1417549461,
+			["appDataUpdate"] = 1417549461,
 		},
 	},
 	["profileKeys"] = {
@@ -16,10 +18,8 @@ TradeSkillMaster_AuctionDBDB = {
 		["Ryvok - Aggramar"] = "Default",
 		["Bronin - Aggramar"] = "Default",
 	},
-	["realm"] = {
-		["Aggramar"] = {
-			["lastCompleteScan"] = 1416430882,
-			["appDataUpdate"] = 1416430882,
+	["profiles"] = {
+		["Default"] = {
 		},
 	},
 }

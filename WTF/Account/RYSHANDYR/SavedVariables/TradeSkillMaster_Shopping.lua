@@ -1,5 +1,17 @@
 
 TradeSkillMaster_ShoppingDB = {
+	["profileKeys"] = {
+		["Zapunzel - Aggramar"] = "Zapunzel - Aggramar",
+		["Greenthorn - Aggramar"] = "Greenthorn - Aggramar",
+		["Ryjax - Aggramar"] = "Ryjax - Aggramar",
+		["Kylosandrax - Aggramar"] = "Kylosandrax - Aggramar",
+		["Feldspar - Aggramar"] = "Feldspar - Aggramar",
+		["Kylozandrax - Earthen Ring"] = "Kylozandrax - Earthen Ring",
+		["Banjax - Aggramar"] = "Banjax - Aggramar",
+		["Stormslinger - Aggramar"] = "Stormslinger - Aggramar",
+		["Ryvok - Aggramar"] = "Ryvok - Aggramar",
+		["Bronin - Aggramar"] = "Bronin - Aggramar",
+	},
 	["global"] = {
 		["destroyingTargetItems"] = {
 			["item:36926:0:0:0:0:0:0"] = "Shadow Crystal",
@@ -33,6 +45,7 @@ TradeSkillMaster_ShoppingDB = {
 			["item:36930:0:0:0:0:0:0"] = "Monarch Topaz",
 			["item:22450:0:0:0:0:0:0"] = "Void Crystal",
 			["item:76131:0:0:0:0:0:0"] = "Primordial Ruby",
+			["item:109693:0:0:0:0:0:0"] = "Draenic Dust",
 			["item:7909:0:0:0:0:0:0"] = "Aquamarine",
 			["item:23439:0:0:0:0:0:0"] = "Noble Topaz",
 			["item:43124:0:0:0:0:0:0"] = "Ethereal Ink",
@@ -43,6 +56,7 @@ TradeSkillMaster_ShoppingDB = {
 			["item:39774:0:0:0:0:0:0"] = "Midnight Ink",
 			["item:23079:0:0:0:0:0:0"] = "Deep Peridot",
 			["item:74248:0:0:0:0:0:0"] = "Sha Crystal",
+			["item:111245:0:0:0:0:0:0"] = "Luminous Shard",
 			["item:76137:0:0:0:0:0:0"] = "Alexandrite",
 			["item:10940:0:0:0:0:0:0"] = "Strange Dust",
 			["item:43108:0:0:0:0:0:0"] = "Ebon Pigment",
@@ -90,67 +104,57 @@ TradeSkillMaster_ShoppingDB = {
 			["item:14343:0:0:0:0:0:0"] = "Small Brilliant Shard",
 			["item:11084:0:0:0:0:0:0"] = "Large Glimmering Shard",
 			["item:52721:0:0:0:0:0:0"] = "Heavenly Shard",
-			["item:114931:0:0:0:0:0:0"] = "Cerulean Pigment",
+			["item:3864:0:0:0:0:0:0"] = "Citrine",
 			["item:61979:0:0:0:0:0:0"] = "Ashen Pigment",
 			["item:43105:0:0:0:0:0:0"] = "Indigo Pigment",
-			["item:113111:0:0:0:0:0:0"] = "Warbinder's Ink",
-			["item:16204:0:0:0:0:0:0"] = "Illusion Dust",
+			["item:23077:0:0:0:0:0:0"] = "Blood Garnet",
+			["item:36929:0:0:0:0:0:0"] = "Huge Citrine",
 			["item:52180:0:0:0:0:0:0"] = "Nightstone",
-			["item:12799:0:0:0:0:0:0"] = "Large Opal",
-			["item:43115:0:0:0:0:0:0"] = "Hunter's Ink",
-			["item:1210:0:0:0:0:0:0"] = "Shadowgem",
-			["item:36917:0:0:0:0:0:0"] = "Bloodstone",
-			["item:11137:0:0:0:0:0:0"] = "Vision Dust",
-			["item:43122:0:0:0:0:0:0"] = "Shimmering Ink",
-			["item:16203:0:0:0:0:0:0"] = "Greater Eternal Essence",
+			["item:36924:0:0:0:0:0:0"] = "Sky Sapphire",
+			["item:52194:0:0:0:0:0:0"] = "Demonseye",
+			["item:52191:0:0:0:0:0:0"] = "Ocean Sapphire",
+			["item:52190:0:0:0:0:0:0"] = "Inferno Ruby",
+			["item:23107:0:0:0:0:0:0"] = "Shadow Draenite",
 			["item:39151:0:0:0:0:0:0"] = "Alabaster Pigment",
-			["item:21929:0:0:0:0:0:0"] = "Flame Spessarite",
+			["item:16203:0:0:0:0:0:0"] = "Greater Eternal Essence",
+			["item:43122:0:0:0:0:0:0"] = "Shimmering Ink",
 			["item:43126:0:0:0:0:0:0"] = "Ink of the Sea",
-			["item:43119:0:0:0:0:0:0"] = "Royal Ink",
-			["item:52719:0:0:0:0:0:0"] = "Greater Celestial Essence",
+			["item:21929:0:0:0:0:0:0"] = "Flame Spessarite",
+			["item:43123:0:0:0:0:0:0"] = "Ink of the Sky",
+			["item:76136:0:0:0:0:0:0"] = "Pandarian Garnet",
 			["item:1705:0:0:0:0:0:0"] = "Lesser Moonstone",
 			["item:36918:0:0:0:0:0:0"] = "Scarlet Ruby",
 			["item:43117:0:0:0:0:0:0"] = "Dawnstar Ink",
-			["item:76130:0:0:0:0:0:0"] = "Tiger Opal",
-			["item:34057:0:0:0:0:0:0"] = "Abyss Crystal",
-			["item:34055:0:0:0:0:0:0"] = "Greater Cosmic Essence",
-			["item:52722:0:0:0:0:0:0"] = "Maelstrom Crystal",
-			["item:11135:0:0:0:0:0:0"] = "Greater Mystic Essence",
-			["item:74247:0:0:0:0:0:0"] = "Ethereal Shard",
-			["item:76133:0:0:0:0:0:0"] = "Lapis Lazuli",
-			["item:43106:0:0:0:0:0:0"] = "Ruby Pigment",
-			["item:11139:0:0:0:0:0:0"] = "Large Glowing Shard",
-			["item:43125:0:0:0:0:0:0"] = "Darkflame Ink",
-			["item:39342:0:0:0:0:0:0"] = "Nether Pigment",
-			["item:61978:0:0:0:0:0:0"] = "Blackfallow Ink",
-			["item:76141:0:0:0:0:0:0"] = "Imperial Amethyst",
-			["item:11083:0:0:0:0:0:0"] = "Soul Dust",
-			["item:37101:0:0:0:0:0:0"] = "Ivory Ink",
 			["item:39469:0:0:0:0:0:0"] = "Moonglow Ink",
+			["item:37101:0:0:0:0:0:0"] = "Ivory Ink",
+			["item:34055:0:0:0:0:0:0"] = "Greater Cosmic Essence",
+			["item:11083:0:0:0:0:0:0"] = "Soul Dust",
+			["item:43106:0:0:0:0:0:0"] = "Ruby Pigment",
+			["item:61978:0:0:0:0:0:0"] = "Blackfallow Ink",
+			["item:76133:0:0:0:0:0:0"] = "Lapis Lazuli",
+			["item:11135:0:0:0:0:0:0"] = "Greater Mystic Essence",
+			["item:39342:0:0:0:0:0:0"] = "Nether Pigment",
+			["item:43125:0:0:0:0:0:0"] = "Darkflame Ink",
+			["item:11139:0:0:0:0:0:0"] = "Large Glowing Shard",
+			["item:74247:0:0:0:0:0:0"] = "Ethereal Shard",
+			["item:76141:0:0:0:0:0:0"] = "Imperial Amethyst",
+			["item:52722:0:0:0:0:0:0"] = "Maelstrom Crystal",
+			["item:34057:0:0:0:0:0:0"] = "Abyss Crystal",
+			["item:76130:0:0:0:0:0:0"] = "Tiger Opal",
 			["item:23117:0:0:0:0:0:0"] = "Azure Moonstone",
-			["item:76136:0:0:0:0:0:0"] = "Pandarian Garnet",
-			["item:43123:0:0:0:0:0:0"] = "Ink of the Sky",
+			["item:52719:0:0:0:0:0:0"] = "Greater Celestial Essence",
+			["item:43119:0:0:0:0:0:0"] = "Royal Ink",
 			["item:52181:0:0:0:0:0:0"] = "Hessonite",
 			["item:23440:0:0:0:0:0:0"] = "Dawnstone",
-			["item:23107:0:0:0:0:0:0"] = "Shadow Draenite",
-			["item:52190:0:0:0:0:0:0"] = "Inferno Ruby",
-			["item:52191:0:0:0:0:0:0"] = "Ocean Sapphire",
-			["item:52194:0:0:0:0:0:0"] = "Demonseye",
-			["item:36924:0:0:0:0:0:0"] = "Sky Sapphire",
+			["item:11137:0:0:0:0:0:0"] = "Vision Dust",
+			["item:36917:0:0:0:0:0:0"] = "Bloodstone",
+			["item:1210:0:0:0:0:0:0"] = "Shadowgem",
+			["item:43115:0:0:0:0:0:0"] = "Hunter's Ink",
+			["item:12799:0:0:0:0:0:0"] = "Large Opal",
 			["item:39338:0:0:0:0:0:0"] = "Golden Pigment",
-			["item:36929:0:0:0:0:0:0"] = "Huge Citrine",
-			["item:23077:0:0:0:0:0:0"] = "Blood Garnet",
-			["item:3864:0:0:0:0:0:0"] = "Citrine",
-		},
-		["previousSearches"] = {
-			"rain poppy", -- [1]
-			"flask", -- [2]
-			"elixir", -- [3]
-			"ginseng", -- [4]
-			"withberries", -- [5]
-			"ghost iron bar", -- [6]
-			"imbued netherweave bag", -- [7]
-			"living steel", -- [8]
+			["item:16204:0:0:0:0:0:0"] = "Illusion Dust",
+			["item:113111:0:0:0:0:0:0"] = "Warbinder's Ink",
+			["item:114931:0:0:0:0:0:0"] = "Cerulean Pigment",
 		},
 		["optionsTreeStatus"] = {
 			["groups"] = {
@@ -158,23 +162,32 @@ TradeSkillMaster_ShoppingDB = {
 				[2] = false,
 			},
 			["scrollvalue"] = 0,
-			["fullwidth"] = 782.999816894531,
+			["selected"] = 1,
 			["treesizable"] = true,
 			["treewidth"] = 175,
-			["selected"] = 1,
+			["fullwidth"] = 782.999816894531,
 		},
-	},
-	["profileKeys"] = {
-		["Zapunzel - Aggramar"] = "Zapunzel - Aggramar",
-		["Greenthorn - Aggramar"] = "Greenthorn - Aggramar",
-		["Ryjax - Aggramar"] = "Ryjax - Aggramar",
-		["Kylosandrax - Aggramar"] = "Kylosandrax - Aggramar",
-		["Feldspar - Aggramar"] = "Feldspar - Aggramar",
-		["Kylozandrax - Earthen Ring"] = "Kylozandrax - Earthen Ring",
-		["Banjax - Aggramar"] = "Banjax - Aggramar",
-		["Stormslinger - Aggramar"] = "Stormslinger - Aggramar",
-		["Ryvok - Aggramar"] = "Ryvok - Aggramar",
-		["Bronin - Aggramar"] = "Bronin - Aggramar",
+		["previousSearches"] = {
+			"forgotten peacekeeper", -- [1]
+			"ragveil", -- [2]
+			"thistle", -- [3]
+			"felweed", -- [4]
+			"dreaming glory", -- [5]
+			"lichen", -- [6]
+			"nightmare", -- [7]
+			"pigment", -- [8]
+			"ethereal ink", -- [9]
+			"ink of the sea", -- [10]
+			"blackfallow ink", -- [11]
+			"rain poppy", -- [12]
+			"flask", -- [13]
+			"elixir", -- [14]
+			"ginseng", -- [15]
+			"withberries", -- [16]
+			"ghost iron bar", -- [17]
+			"imbued netherweave bag", -- [18]
+			"living steel", -- [19]
+		},
 	},
 	["profiles"] = {
 		["Zapunzel - Aggramar"] = {

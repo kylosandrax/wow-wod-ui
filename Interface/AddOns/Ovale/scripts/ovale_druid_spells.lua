@@ -3,7 +3,7 @@ local OvaleScripts = Ovale.OvaleScripts
 
 do
 	local name = "ovale_druid_spells"
-	local desc = "[6.0.2] Ovale: Druid spells"
+	local desc = "[6.0.3] Ovale: Druid spells"
 	local code = [[
 # Druid spells and functions.
 
@@ -16,6 +16,9 @@ Define(balance_of_power 152220)
 Define(barkskin 22812)
 	SpellInfo(barkskin cd=60 gcd=0)
 	SpellInfo(barkskin buff_cdr=cooldown_reduction_tank_buff specialization=guardian)
+	SpellAddBuff(barkskin barkskin_buff=1)
+Define(barkskin_buff 22812)
+	SpellInfo(barkskin_buff duration=12)
 Define(bear_form 5487)
 	SpellInfo(bear_form rage=-10 to_stance=druid_bear_form)
 	SpellInfo(bear_form unusable=1 if_stance=druid_bear_form)
@@ -36,6 +39,11 @@ Define(bloodtalons 155672)
 Define(bloodtalons_buff 145152)
 	SpellInfo(bloodtalons_buff duration=30 max_stacks=2)
 Define(bloodtalons_talent 20)
+Define(bristling_fur 155835)
+	SpellInfo(bristling_fur cd=60 gcd=0)
+	SpellAddBuff(bristling_fur bristling_fur_buff=1)
+Define(bristling_fur_buff 155835)
+	SpellInfo(bristling_fur_buff duration=3)
 Define(cat_form 768)
 	SpellInfo(cat_form replace=claws_of_shirvallah if_spell=claws_of_shirvallah)
 	SpellInfo(cat_form to_stance=druid_cat_form)
@@ -222,7 +230,7 @@ Define(pulverize 80313)
 	SpellAddBuff(pulverize pulverize_buff=1)
 	SpellAddTargetDebuff(pulverize lacerate_debuff=0)
 Define(pulverize_buff 158792)
-	SpellInfo(pulverize_buff duration=12)
+	SpellInfo(pulverize_buff duration=12 tick=1)
 Define(pulverize_talent 20)
 Define(rake 1822)
 	SpellInfo(rake combo=1 energy=35 stance=druid_cat_form if_spell=!claws_of_shirvallah)

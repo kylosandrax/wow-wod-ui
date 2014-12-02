@@ -1,6 +1,6 @@
 Version: 1
 Frame: ColorPickerFrame
-FrameLevel: 12
+FrameLevel: 11
 Anchor: CENTER
 X: 0
 Y: 0
@@ -20,3 +20,10 @@ X: 118
 Y: -8
 W: 100
 H: 30
+Frame: ResolveStatus_StatusBar
+FrameLevel: 1
+Anchor: CENTER
+X: -269
+Y: -252
+W: 200
+H: 20

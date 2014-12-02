@@ -474,7 +474,7 @@ do
 		regions.highlight:Hide()
 
 		-- Widgets/Extensions
-		if activetheme.OnInitialize then activetheme.OnInitialize(extended) end
+		if activetheme.OnInitialize then activetheme.OnInitialize(extended, activetheme) end
 
 		-- Initial Data Gather
 		-- 6.12.Beta3: Disabled initial Data Gather because certain units are showing up with Target Alpha on the first cycle.
@@ -694,7 +694,7 @@ do
 		unit.isInCombat = GetUnitCombatStatus(regions.name:GetTextColor())
 		unit.class = ClassReference[ColorToString(unit.red, unit.green, unit.blue)] or "UNKNOWN"
 
-		unit.health = bars.health:GetValue() or 0
+		unit.health = tonumber(bars.health:GetValue()) or 0
 		unit.healthmax = select(2, bars.health:GetMinMaxValues())
 
 		unit.isMarked = regions.raidicon:IsShown() or false
@@ -912,7 +912,6 @@ do
 		local castbar = extended.visual.castbar
 
 		if not unit.health then return end
-		--if unit.reaction == "FRIENDLY" then	return end
 
 		OnUpdateCastbar(bar)
 		castbar:Show()

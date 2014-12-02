@@ -273,7 +273,7 @@ function TSM:RegisterModule()
 
 	TSM.priceSources = {}
 	-- Auctioneer
-	if select(4, GetAddOnInfo("Auc-Advanced")) == true and AucAdvanced then
+	if select(4, GetAddOnInfo("Auc-Advanced")) and AucAdvanced then
 		if AucAdvanced.Modules.Util.Appraiser and AucAdvanced.Modules.Util.Appraiser.GetPrice then
 			tinsert(TSM.priceSources, { key = "AucAppraiser", label = L["Auctioneer - Appraiser"], callback = AucAdvanced.Modules.Util.Appraiser.GetPrice })
 		end
@@ -284,10 +284,19 @@ function TSM:RegisterModule()
 			tinsert(TSM.priceSources, { key = "AucMarket", label = L["Auctioneer - Market Value"], callback = AucAdvanced.API.GetMarketValue })
 		end
 	end
+	
 	-- Auctionator
-	if select(4, GetAddOnInfo("Auctionator")) == true and Atr_GetAuctionBuyout then
+	if select(4, GetAddOnInfo("Auctionator")) and Atr_GetAuctionBuyout then
 		tinsert(TSM.priceSources, { key = "AtrValue", label = L["Auctionator - Auction Value"], callback = Atr_GetAuctionBuyout })
 	end
+	
+	-- TheUndermineJournal
+	if select(4, GetAddOnInfo("TheUndermineJournal")) and TUJMarketInfo then
+		tinsert(TSM.priceSources, { key = "TUJMarket", label = L["TUJ Realm Price"], callback = function(itemLink) return (TUJMarketInfo(TSMAPI:GetItemID(itemLink)) or {}).market end })
+		tinsert(TSM.priceSources, { key = "TUJGlobalMean", label = L["TUJ Global Mean"], callback = function(itemLink) return (TUJMarketInfo(TSMAPI:GetItemID(itemLink)) or {}).globalMean end })
+		tinsert(TSM.priceSources, { key = "TUJGlobalMedian", label = L["TUJ Global Median"], callback = function(itemLink) return (TUJMarketInfo(TSMAPI:GetItemID(itemLink)) or {}).globalMedian end })
+	end
+	
 	-- Vendor Buy Price
 	tinsert(TSM.priceSources, { key = "VendorBuy", label = L["Buy from Vendor"], callback = function(itemLink) return TSMAPI:GetVendorCost(TSMAPI:GetItemString(itemLink)) end })
 
@@ -296,7 +305,6 @@ function TSM:RegisterModule()
 
 	-- Disenchant Value
 	tinsert(TSM.priceSources, { key = "Disenchant", label = L["Disenchant Value"], callback = "GetDisenchantValue" })
-
 
 	TSM.slashCommands = {
 		{ key = "version", label = L["Prints out the version numbers of all installed modules"], callback = function() TSM:Print(L["TSM Version Info:"]) local chatFrame = TSMAPI:GetChatFrame() for _, module in ipairs(TSM.Modules:GetInfo()) do chatFrame:AddMessage(module.name.." |cff99ffff"..module.version.."|r") end end },
@@ -419,7 +427,7 @@ function TSM:GetTooltip(itemString, quantity)
 	-- add disenchant value info
 	if TSM.db.profile.deTooltip then
 		local deValue = TSM:GetDisenchantValue(itemString)
-		if deValue > 0 then
+		if deValue then
 			if moneyCoinsTooltip then
 				if IsShiftKeyDown() then
 					tinsert(text, { left = "  " .. format(L["Disenchant Value x%s:"], quantity), right = TSMAPI:FormatTextMoneyIcon(deValue * quantity, "|cffffffff", true) })
@@ -469,7 +477,7 @@ function TSM:GetTooltip(itemString, quantity)
 	-- add mill value info
 	if TSM.db.profile.millTooltip then
 		local millValue = TSM:GetMillValue(itemString)
-		if millValue > 0 then
+		if millValue then
 			if moneyCoinsTooltip then
 				if IsShiftKeyDown() then
 					tinsert(text, { left = "  " .. format(L["Mill Value x%s:"], quantity), right = TSMAPI:FormatTextMoneyIcon(millValue * quantity, "|cffffffff", true) })
@@ -509,7 +517,7 @@ function TSM:GetTooltip(itemString, quantity)
 	-- add prospect value info
 	if TSM.db.profile.prospectTooltip then
 		local prospectValue = TSM:GetProspectValue(itemString)
-		if prospectValue > 0 then
+		if prospectValue then
 			if moneyCoinsTooltip then
 				if IsShiftKeyDown() then
 					tinsert(text, { left = "  " .. format(L["Prospect Value x%s:"], quantity), right = TSMAPI:FormatTextMoneyIcon(prospectValue * quantity, "|cffffffff", true) })
@@ -611,7 +619,7 @@ function TSM:GetDisenchantValue(link)
 	local _, itemLink, quality, ilvl, _, iType = TSMAPI:GetSafeItemInfo(link)
 	local itemString = TSMAPI:GetItemString(itemLink)
 	local WEAPON, ARMOR = GetAuctionItemClasses()
-	if not itemString or TSMAPI.DisenchantingData.notDisenchantable[itemString] or not (iType == ARMOR or iType == WEAPON) then return 0 end
+	if not itemString or TSMAPI.DisenchantingData.notDisenchantable[itemString] or not (iType == ARMOR or iType == WEAPON) then return end
 
 	local value = 0
 	for _, data in ipairs(TSMAPI.DisenchantingData.disenchant) do
@@ -626,8 +634,9 @@ function TSM:GetDisenchantValue(link)
 			end
 		end
 	end
-
-	return value
+	
+	value = floor(value)
+	return value > 0 and value or nil
 end
 
 function TSM:GetMillValue(itemString)
@@ -641,7 +650,8 @@ function TSM:GetMillValue(itemString)
 		end
 	end
 	
-	return value
+	value = floor(value)
+	return value > 0 and value or nil
 end
 
 function TSM:GetProspectValue(itemString)
@@ -655,7 +665,8 @@ function TSM:GetProspectValue(itemString)
 		end
 	end
 	
-	return value
+	value = floor(value)
+	return value > 0 and value or nil
 end
 
 function TSM:PrintPriceSources()
@@ -715,7 +726,7 @@ function TSM:GetAuctionPlayer(player, player_full)
 end
 
 function TSM:ScanBMAH()
-	TSM.appDB.factionrealm.bmah = nil
+	TSM.appDB.realm.bmah = nil
 	local items = {}
 	for i=1, C_BlackMarket.GetNumItems() do
 		local quantity, minBid, minIncr, currBid, numBids, itemLink, bmId = TSMAPI:Select({3, 9, 10, 11, 13, 15, 16}, C_BlackMarket.GetItemInfoByIndex(i))
@@ -732,5 +743,5 @@ function TSM:ScanBMAH()
 			end
 		end
 	end
-	TSM.appDB.factionrealm.blackMarket = {lastUpdate=time(), items=items, version=1}
+	TSM.appDB.realm.blackMarket = {lastUpdate=time(), items=items, version=1}
 end

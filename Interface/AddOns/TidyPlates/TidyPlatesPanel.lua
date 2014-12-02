@@ -52,6 +52,12 @@ TidyPlatesOptions = {
 	WelcomeShown = false,
 }
 
+local AutomationDropdownItems = {
+					{ text = NO_AUTOMATION, value = NO_AUTOMATION } ,
+					{ text = DURING_COMBAT, value = DURING_COMBAT } ,
+					{ text = OUT_OF_COMBAT, value = OUT_OF_COMBAT } ,
+					}
+
 local ProfileList = {
 	{ text = "Damage", r = 1 , g =.1 , b = 0, value = "Damage" },
 	{ text = "Healer", value = "Healer"},
@@ -109,7 +115,7 @@ local function LoadTheme(incomingtheme)
 
 	local theme, style, stylename, newvalue, propertyname, oldvalue
 
-	-- Sends a notification to all available themes, if possible.
+	-- Sends a reset notification to all available themes, if possible.
 	for themename, themetable in pairs(TidyPlatesThemeList) do
 		if themetable.OnActivateTheme then themetable.OnActivateTheme(nil, nil) end
 	end
@@ -126,7 +132,11 @@ local function LoadTheme(incomingtheme)
 		if theme.SetStyle and type(theme.SetStyle) == "function" then
 			-- Multi-Style Theme
 			for stylename, style in pairs(theme) do
-				if type(style) == "table" then theme[stylename] = mergetable(TidyPlates.Template, style) end
+				if type(style) == "table" and style._meta then						-- _meta tag skips parsing
+					theme[stylename] = copytable(style)
+				elseif type(style) == "table" then									-- merge style with template style
+					theme[stylename] = mergetable(TidyPlates.Template, style)		-- ie. fill in the blanks
+				end
 			end
 		else
 			-- Single-Style Theme
@@ -333,14 +343,6 @@ local titleString = addonString			-- .." |cFF444444"..versionString
 local firstShow = true
 
 
-local AutomationDropdownItems = {
-					{ text = NO_AUTOMATION, notCheckable = 1 } ,
-					{ text = DURING_COMBAT, notCheckable = 1 } ,
-					{ text = OUT_OF_COMBAT, notCheckable = 1 } ,
-					}
-
-
-
 local function CreateMenuTables()
 	-- Convert the Theme List into a Menu List
 	local themecount = 1
@@ -354,7 +356,7 @@ local function CreateMenuTables()
 			themecount = themecount + 1
 		end
 		-- Theme Choices
-		for index, name in pairs(TidyPlatesThemeNames) do ThemeDropdownMenuItems[index] = {text = name, notCheckable = 1 } end
+		for index, name in pairs(TidyPlatesThemeNames) do ThemeDropdownMenuItems[index] = {text = name, value = name } end
 	end
 	sort(ThemeDropdownMenuItems, function (a,b)
 	  return (a.text < b.text)

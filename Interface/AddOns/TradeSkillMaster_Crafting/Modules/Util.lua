@@ -158,21 +158,21 @@ function Util:ScanCurrentProfession()
 	end
 	
 	-- search for and remove any spells that we can't craft anymore
-	for spellID, data in pairs(TSM.db.factionrealm.crafts) do
-		if data.profession == currentTradeSkill then
-			local hasCrafters = false
-			for player in pairs(data.players) do
-				if player ~= playerName or newCrafts[spellID] then
-					hasCrafters = true
-					break
-				end
-			end
-			
-			if not hasCrafters then
-				TSM.db.factionrealm.crafts[spellID] = nil
-			end
-		end
-	end
+--	for spellID, data in pairs(TSM.db.factionrealm.crafts) do
+--		if data.profession == currentTradeSkill then
+--			local hasCrafters = false
+--			for player in pairs(data.players) do
+--				if player ~= playerName or newCrafts[spellID] then
+--					hasCrafters = true
+--					break
+--				end
+--			end
+--
+--			if not hasCrafters then
+--				TSM.db.factionrealm.crafts[spellID] = nil
+--			end
+--		end
+--	end
 	
 	-- save the new craft info
 	for spellID, data in pairs(newCrafts) do
@@ -272,21 +272,21 @@ function Util.ScanSyncedProfessionThread(self)
 	end
 	
 	-- search for and remove any spells that we can't craft anymore
-	for spellID, data in pairs(TSM.db.factionrealm.crafts) do
-		if data.profession == currentTradeSkill then
-			local hasCrafters = false
-			for player in pairs(data.players) do
-				if player ~= playerName or newCrafts[spellID] then
-					hasCrafters = true
-					break
-				end
-			end
-			
-			if not hasCrafters then
-				TSM.db.factionrealm.crafts[spellID] = nil
-			end
-		end
-	end
+--	for spellID, data in pairs(TSM.db.factionrealm.crafts) do
+--		if data.profession == currentTradeSkill then
+--			local hasCrafters = false
+--			for player in pairs(data.players) do
+--				if player ~= playerName or newCrafts[spellID] then
+--					hasCrafters = true
+--					break
+--				end
+--			end
+--
+--			if not hasCrafters then
+--				TSM.db.factionrealm.crafts[spellID] = nil
+--			end
+--		end
+--	end
 	
 	-- save the new craft info
 	for spellID, data in pairs(newCrafts) do

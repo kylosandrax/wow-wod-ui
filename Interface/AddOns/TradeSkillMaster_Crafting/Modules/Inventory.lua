@@ -28,19 +28,21 @@ end
 -- gets the number of an item in the current player's bank and reagent bank
 function Inventory:GetPlayerBankNum(itemString)
 	if not itemString then return end
+	local reagentBank = TSMAPI:ModuleAPI("ItemTracker", "playerreagentbank", UnitName("player")) or {}
 
 	if TSMAPI.SOULBOUND_MATS[itemString] then
-		return GetItemCount(itemString)
+		local soulboundBagCount = GetItemCount(itemString)
+		local soulboundBankCount = GetItemCount(itemString, true) - soulboundBagCount
+		return soulboundBankCount
 	else
 		local tmp = {}
-		local reagentBank = TSMAPI:ModuleAPI("ItemTracker", "playerreagentbank", UnitName("player")) or {}
-		--local bank = TSMAPI:ModuleAPI("ItemTracker", "playerbank", UnitName("player")) or {}
+		local bank = TSMAPI:ModuleAPI("ItemTracker", "playerbank", UnitName("player")) or {}
 		for itemString, quantity in pairs(reagentBank) do
 			tmp[itemString] = (tmp[itemString] or 0) + quantity
 		end
-		--		for itemString, quantity in pairs(bank) do
-		--			tmp[itemString] = (tmp[itemString] or 0) + quantity
-		--		end
+		for itemString, quantity in pairs(bank) do
+			tmp[itemString] = (tmp[itemString] or 0) + quantity
+		end
 		return tmp and tmp[itemString] or 0
 	end
 end
@@ -153,6 +155,10 @@ function Inventory:GetTotalQuantity(itemString)
 
 	if TSMAPI.SOULBOUND_MATS[itemString] then
 		count = count + GetItemCount(itemString, true)
+		local reagentBank = TSMAPI:ModuleAPI("ItemTracker", "playerreagentbank", UnitName("player")) or {}
+		if reagentBank[itemString] then
+			count = count - reagentBank[itemString]
+		end
 	end
 
 	return count
@@ -167,6 +173,7 @@ function Inventory:GetItemSources(crafter, neededMats)
 	local crafterMail = TSMAPI:ModuleAPI("ItemTracker", "playermail", crafter) or {}
 	local crafterBank = TSMAPI:ModuleAPI("ItemTracker", "playerbank", crafter) or {}
 	local crafterReagentBank = TSMAPI:ModuleAPI("ItemTracker", "playerreagentbank", crafter) or {}
+	local inkTradeItem = nil
 
 	-- add vendor items
 	local task = {}
@@ -178,13 +185,14 @@ function Inventory:GetItemSources(crafter, neededMats)
 			if vendorNeed > 0 then
 				items[itemString] = vendorNeed
 			end
-		elseif TSMAPI.Conversions[itemString] and TSMAPI.InkConversions[itemString] then
+		elseif TSMAPI.Conversions[itemString] and TSMAPI.InkConversions[itemString] and not TSM.db.global.ignoreInkTrader then
 			local tradeItem, data = next(TSMAPI.Conversions[itemString])
 			if data.source == "vendortrade" then
 				local num = floor(Inventory:GetTotalQuantity(tradeItem) * data.rate)
 				if quantity > Inventory:GetTotalQuantity(itemString) and num >= (quantity - Inventory:GetTotalQuantity(itemString)) then
 					items[itemString] = quantity - Inventory:GetTotalQuantity(itemString)
-					neededMats[tradeItem] = (neededMats[tradeItem] or 0) + quantity / data.rate -- add the qty of IOD to needed mats
+					inkTradeItem = tradeItem
+					neededMats[tradeItem] = (neededMats[tradeItem] or 0) + quantity / data.rate -- add the qty of Warbinders ink to needed mats
 				end
 			end
 		end
@@ -197,12 +205,12 @@ function Inventory:GetItemSources(crafter, neededMats)
 	-- double check if crafter already has all the items needed
 	local shortItems = {}
 	for itemString, quantity in pairs(neededMats) do
-		local soulboundBagCount
-		if TSMAPI.SOULBOUND_MATS[itemString] then
+		local soulboundBagCount, soulboundBankCount
+		if UnitName("player") == crafter and TSMAPI.SOULBOUND_MATS[itemString] then
 			soulboundBagCount = GetItemCount(itemString)
 		end
 		local need
-		if itemString == TSM.VELLUM_ID then
+		if itemString == TSM.VELLUM_ID or itemString == inkTradeItem then -- you need the ink in your bags to trade at the ink vendor
 			need = max(quantity - ((crafterBags[itemString] or 0) + (soulboundBagCount or 0)), 0)
 		else
 			--need = max(quantity - ((crafterBags[itemString] or 0) + (crafterBank[itemString] or 0) + (crafterReagentBank[itemString] or 0) + (soulboundBagCount or 0)), 0)
@@ -234,14 +242,17 @@ function Inventory:GetItemSources(crafter, neededMats)
 
 			for itemString in pairs(neededMats) do
 				local soulboundBagCount, soulboundBankCount
-				if TSMAPI.SOULBOUND_MATS[itemString] then
+				if player == crafter and TSMAPI.SOULBOUND_MATS[itemString] then
 					soulboundBagCount = GetItemCount(itemString)
-					soulboundBankCount = GetItemCount(itemString, true) - soulboundBagCount
+					soulboundBankCount = GetItemCount(itemString, true) - soulboundBagCount - (reagent[itemString] or 0)
+					if soulboundBankCount == 0 then
+						soulboundBankCount = nil
+					end
 				end
 				if (bank[itemString] or reagent[itemString] or (soulboundBankCount and soulboundBankCount > 0)) and shortItems[itemString] then
 					if shortItems[itemString] - (crafterMail[itemString] or 0) - (player ~= crafter and bags[itemString] or 0) > 0 then
 						bankItems[itemString] = bank[itemString] or soulboundBankCount
-						if itemString == TSM.VELLUM_ID or crafter ~= player then
+						if itemString == TSM.VELLUM_ID or itemString == inkTradeItem or crafter ~= player then
 							if bankItems[itemString] and reagent[itemString] then
 								bankItems[itemString] = bankItems[itemString] + (reagent[itemString] or 0)
 							elseif reagent[itemString] then

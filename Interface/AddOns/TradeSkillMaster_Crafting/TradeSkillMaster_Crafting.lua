@@ -29,6 +29,7 @@ local savedDBDefaults = {
 		frameQueueOpen = nil,
 		showingDefaultFrame = nil,
 		matsInTooltip = true,
+		ignoreInkTrader = nil,
 	},
 	factionrealm = {
 		tradeSkills = {},

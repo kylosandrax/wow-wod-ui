@@ -153,7 +153,7 @@ function Gather:ShoppingSearch(itemString, need, ignoreMaxQty)
 				convertSource = data.source
 				break
 			end
-			if convertSource == "mill" or convertSource == "prospect" then
+			if convertSource == "mill" or convertSource == "prospect" or convertSource == "transform" then
 				if TSM.db.factionrealm.gathering.evenStacks then
 					if ignoreMaxQty then
 						TSMAPI:ModuleAPI("Shopping", "runDestroySearch", TSMAPI:GetSafeItemInfo(itemString) .. "/even", ShoppingCallback)

@@ -1,0 +1,24 @@
+2014-11-28  TuhMuffinMan <TuhMuffinMan>  <TuhMuffinMan>
+
+[6f1bb8fcf64d] [v18]
+* AskMrRobot.toc, AskMrRobotUi.lua, amr-constants.lua, config.lua, localization/localization.en.lua, ui/CombatLogTab.lua, ui/SettingsTab.lua:
+
+AskMrRobot.toc
+   - Added line for new SettingsTab file
+AskMrRobotUi.lua
+   - Added code for new Settings menu
+amr-constants.lua
+   - Added instance IDs for all WoD 6.0 5-mans and Raids.
+   - Removed legacy SoO IDs.
+config.lua
+   - Removed "Interface/Addons" options area,
+     migrated all settings to main addon window.
+localization/localization.en.lua
+   - Added new strings for new Settings tab and new Raid auto-logging
+ui/CombatLogTab.lua
+   - Removed legacy SoO code
+   - Added auto-logging settings for Highmaul and Blackrock Foundry.
+ui/SettingsTab.lua
+   - new main window tab for Minimap and Auction House settings options
+
+

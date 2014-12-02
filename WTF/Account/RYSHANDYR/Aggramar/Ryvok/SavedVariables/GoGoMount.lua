@@ -17,14 +17,7 @@ GoGo_Prefs = {
 			},
 			["ZoneID"] = 13,
 		},
-		["Siege of Orgrimmar"] = {
-			["Preferred"] = {
-			},
-			["Excluded"] = {
-			},
-			["ZoneID"] = 862,
-		},
-		["Shrine of Two Moons"] = {
+		["Bloodmaul Slag Mines"] = {
 			["Preferred"] = {
 			},
 			["Excluded"] = {
@@ -37,6 +30,20 @@ GoGo_Prefs = {
 			["Excluded"] = {
 			},
 			["ZoneID"] = 806,
+		},
+		["Shrine of Two Moons"] = {
+			["Preferred"] = {
+			},
+			["Excluded"] = {
+			},
+			["ZoneID"] = 13,
+		},
+		["Siege of Orgrimmar"] = {
+			["Preferred"] = {
+			},
+			["Excluded"] = {
+			},
+			["ZoneID"] = 862,
 		},
 		["Timeless Isle"] = {
 			["Preferred"] = {
@@ -54,18 +61,18 @@ GoGo_Prefs = {
 		},
 	},
 	["DisableMountNotice"] = false,
-	["autodismount"] = true,
+	["DisableWaterFlight"] = true,
 	["DruidDisableInCombat"] = false,
 	["DisableUpdateNotice"] = false,
 	["RemoveBuffs"] = true,
-	["version"] = "6.0.14",
+	["version"] = "6.0.15",
 	["DruidClickForm"] = true,
 	["GlobalPrefMounts"] = {
 	},
 	["ShamanClickForm"] = false,
 	["ExtraPassengerMounts"] = {
 	},
-	["DisableWaterFlight"] = true,
+	["autodismount"] = true,
 }
 GoGo_DebugLog = {
 }

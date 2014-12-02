@@ -8,7 +8,7 @@
 ## LoadOnDemand: 0
 ## SavedVariablesPerCharacter: AmrDb
 ## SavedVariables: AmrSettings
-## X-Curse-Packaged-Version: v17
+## X-Curse-Packaged-Version: v18
 ## X-Curse-Project-Name: AskMrRobot
 ## X-Curse-Project-ID: askmrrobot
 ## X-Curse-Repository-ID: wow/askmrrobot/mainline
@@ -54,6 +54,7 @@ ui\ImportTab.lua
 ui\ShoppingListTab.lua
 ui\GearComparisonTab.lua
 ui\CombatLogTab.lua
+ui\SettingsTab.lua
 
 AskMrRobot.xml
 

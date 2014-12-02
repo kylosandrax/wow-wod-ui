@@ -292,49 +292,49 @@ local function UpdateDetails()
 	end
 	
 	local skillName = GetTradeSkillInfo(tidx)
-	
-	queueFrame.df.cf.Name:SetText(skillName)
-	queueFrame.df.cf.Name:Show()
+	local cf = queueFrame.df.cf
+	cf.Name:SetText(skillName)
+	cf.Name:Show()
 	local cooldown, isDayCooldown = GetTradeSkillCooldown(tidx)
 	if not(cooldown) then
-		queueFrame.df.cf.Cooldown:SetText("")
+		cf.Cooldown:SetText("")
 	elseif not(isDayCooldown) then
-		queueFrame.df.cf.Cooldown:SetText(COOLDOWN_REMAINING.." "..SecondsToTime(cooldown))
+		cf.Cooldown:SetText(COOLDOWN_REMAINING.." "..SecondsToTime(cooldown))
 	elseif ( cooldown > 60 * 60 * 24 ) then	--Cooldown is greater than 1 day.
-		queueFrame.df.cf.Cooldown:SetText(COOLDOWN_REMAINING.." "..SecondsToTime(cooldown, true, false, 1, true))
+		cf.Cooldown:SetText(COOLDOWN_REMAINING.." "..SecondsToTime(cooldown, true, false, 1, true))
 	else
-		queueFrame.df.cf.Cooldown:SetText(COOLDOWN_EXPIRES_AT_MIDNIGHT)
+		cf.Cooldown:SetText(COOLDOWN_EXPIRES_AT_MIDNIGHT)
 	end
-	queueFrame.df.cf.Cooldown:Show()
-	queueFrame.df.cf.Icon:SetNormalTexture(GetTradeSkillIcon(tidx))
-	queueFrame.df.cf.Icon:Show()
-	queueFrame.df.cf.HeaderLeft:Show()
+	cf.Cooldown:Show()
+	cf.Icon:SetNormalTexture(GetTradeSkillIcon(tidx))
+	cf.Icon:Show()
+	cf.HeaderLeft:Show()
 	local minMade, maxMade = GetTradeSkillNumMade(tidx)
 	if ( maxMade > 1 ) then
 		if ( minMade == maxMade ) then
-			queueFrame.df.cf.Icon.countText:SetText(minMade);
+			cf.Icon.countText:SetText(minMade);
 		else
-			queueFrame.df.cf.Icon.countText:SetText(minMade.."-"..maxMade)
+			cf.Icon.countText:SetText(minMade.."-"..maxMade)
 		end
-		if ( queueFrame.df.cf.Icon.countText:GetWidth() > 39 ) then
-			queueFrame.df.cf.Icon.countText:SetText("~"..floor((minMade + maxMade)/2))
+		if ( cf.Icon.countText:GetWidth() > 39 ) then
+			cf.Icon.countText:SetText("~"..floor((minMade + maxMade)/2))
 		end
 	else
-		queueFrame.df.cf.Icon.countText:SetText("")
+		cf.Icon.countText:SetText("")
 	end 
 
 	-- Reagents
 	local numReagents = GetTradeSkillNumReagents(tidx)
 	if (numReagents > 0) then
-		queueFrame.df.cf.ReagentLabel:Show()
+		cf.ReagentLabel:Show()
 	else
-		queueFrame.df.cf.ReagentLabel:Hide()
+		cf.ReagentLabel:Hide()
 	end
 	for i = 1, numReagents do
 		local reagentName, reagentTexture, reagentCount, playerReagentCount = GetTradeSkillReagentInfo(tidx, i)
-		local reagent = queueFrame.df.cf.Reagents[i]
-		local name = _G[queueFrame.df.cf.Reagents[i]:GetName().."Name"]
-		local count = _G[queueFrame.df.cf.Reagents[i]:GetName().."Count"]
+		local reagent = cf.Reagents[i]
+		local name = _G[cf.Reagents[i]:GetName().."Name"]
+		local count = _G[cf.Reagents[i]:GetName().."Count"]
 		if ( not reagentName or not reagentTexture ) then
 			reagent:Hide()
 		else
@@ -358,6 +358,12 @@ local function UpdateDetails()
 				reagentCount = reagentCount * v[2]
 			end
 			count:SetText(playerReagentCount.." /"..reagentCount)
+			--fix text overflow when the reagent count is too high
+			if (math.floor(count:GetStringWidth()) > math.floor(reagent.Icon:GetWidth() + .5)) then 
+				--round count width down because the leftmost number can overflow slightly without looking bad
+				--round icon width because it should always be an int, but sometimes it's a slightly off float
+				count:SetText(playerReagentCount.."\n/"..reagentCount)
+			end
 		end
 	end
 	-- Place reagent label
@@ -367,27 +373,27 @@ local function UpdateDetails()
 	end
 	
 	for i = numReagents + 1, MAX_TRADE_SKILL_REAGENTS do
-		queueFrame.df.cf.Reagents[i]:Hide()
+		cf.Reagents[i]:Hide()
 	end
 
 	local spellFocus = BuildColoredListString(GetTradeSkillTools(tidx));
 	if ( spellFocus ) then
-		queueFrame.df.cf.RequirementLabel:Show();
-		queueFrame.df.cf.RequirementText:SetText(spellFocus);
+		cf.RequirementLabel:Show();
+		cf.RequirementText:SetText(spellFocus);
 	else
-		queueFrame.df.cf.RequirementLabel:Hide();
-		queueFrame.df.cf.RequirementText:SetText("");
+		cf.RequirementLabel:Hide();
+		cf.RequirementText:SetText("");
 	end
 
 	local descr = GetTradeSkillDescription(tidx)
 	if ( descr ) then
-		queueFrame.df.cf.Description:Show()
-		queueFrame.df.cf.Description:SetText(descr)
-		queueFrame.df.cf.ReagentLabel:SetPoint("TOPLEFT", queueFrame.df.cf.Description, "BOTTOMLEFT", 0, -10);
+		cf.Description:Show()
+		cf.Description:SetText(descr)
+		cf.ReagentLabel:SetPoint("TOPLEFT", cf.Description, "BOTTOMLEFT", 0, -10);
 	else
-		queueFrame.df.cf.Description:Hide()
-		queueFrame.df.cf.Description:SetText(" ");
-		queueFrame.df.cf.ReagentLabel:SetPoint("TOPLEFT", queueFrame.df.cf.Description, "TOPLEFT", 0, 0);
+		cf.Description:Hide()
+		cf.Description:SetText(" ");
+		cf.ReagentLabel:SetPoint("TOPLEFT", cf.Description, "TOPLEFT", 0, 0);
 	end
 end
 

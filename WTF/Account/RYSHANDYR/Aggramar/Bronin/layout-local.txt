@@ -17,6 +17,13 @@ Frame: TomTomBlock
 FrameLevel: 8
 Anchor: TOPRIGHT
 X: -104
-Y: -209
+Y: -210
 W: 100
+H: 30
+Frame: ResolveStatus_StatusBar
+FrameLevel: 1
+Anchor: CENTER
+X: -256
+Y: -258
+W: 180
 H: 30

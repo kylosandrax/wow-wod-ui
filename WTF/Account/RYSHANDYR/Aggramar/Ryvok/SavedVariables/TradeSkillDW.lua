@@ -1,5 +1,11 @@
 
 TradeSkillDW_QueueSettings = {
+	["Cooking"] = {
+		["queueList"] = {
+		},
+		["selectedIdx"] = 0,
+	},
+	["version"] = 1.7,
 	["Jewelcrafting"] = {
 		["queueList"] = {
 		},
@@ -10,5 +16,9 @@ TradeSkillDW_QueueSettings = {
 		},
 		["selectedIdx"] = 0,
 	},
-	["version"] = 1.7,
+	["First Aid"] = {
+		["queueList"] = {
+		},
+		["selectedIdx"] = 0,
+	},
 }

@@ -3,7 +3,7 @@ TradeSkillDW_QueueSettings = {
 	["Inscription"] = {
 		["queueList"] = {
 		},
-		["selectedIdx"] = 0,
+		["selectedIdx"] = 1,
 	},
 	["Blacksmithing"] = {
 		["queueList"] = {
@@ -16,12 +16,12 @@ TradeSkillDW_QueueSettings = {
 		},
 		["selectedIdx"] = 0,
 	},
-	["Runeforging"] = {
+	["First Aid"] = {
 		["queueList"] = {
 		},
 		["selectedIdx"] = 0,
 	},
-	["First Aid"] = {
+	["Runeforging"] = {
 		["queueList"] = {
 		},
 		["selectedIdx"] = 0,

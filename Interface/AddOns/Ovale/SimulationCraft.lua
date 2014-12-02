@@ -429,7 +429,7 @@ local function UnparseExpression(node)
 			if BINARY_OPERATOR[node.operator][3] == "associative" then
 				rhsExpression = Unparse(rhsNode)
 			else
-				rhsExpression = "{ " .. Unparse(rhsNode) .. " }"
+				rhsExpression = "(" .. Unparse(rhsNode) .. ")"
 			end
 		else
 			rhsExpression = Unparse(rhsNode)
@@ -1043,6 +1043,7 @@ local function InitializeDisambiguation()
 	-- Shaman
 	AddDisambiguation("arcane_torrent",			"arcane_torrent_mana",			"SHAMAN")
 	AddDisambiguation("ascendance",				"ascendance_caster",			"SHAMAN",		"elemental")
+	AddDisambiguation("ascendance",				"ascendance_heal",				"SHAMAN",		"restoration")
 	AddDisambiguation("ascendance",				"ascendance_melee",				"SHAMAN",		"enhancement")
 	AddDisambiguation("blood_fury",				"blood_fury_apsp",				"SHAMAN")
 	-- Warlock
@@ -1271,14 +1272,15 @@ EmitAction = function(parseNode, nodeList, annotation)
 			bodyCode = "InterruptActions()"
 			annotation[action] = class
 			isSpellAction = false
-		elseif class == "ROGUE" and specialization == "subtlety" and action == "slice_and_dice" then
-			-- The game does not prevent a Subtlety rogue from overwriting a longer Slice and Dice buff with a shorter one.
-			local buffName = "slice_and_dice_buff"
-			AddSymbol(annotation, buffName)
-			conditionCode = format("BuffRemaining(%s) < 0.3 * BaseDuration(%s)", buffName, buffName)
 		elseif class == "ROGUE" and action == "stealth" then
 			-- Don't Stealth if already stealthed.
 			conditionCode = "BuffExpires(stealthed_buff any=1)"
+		elseif class == "SHAMAN" and strsub(action, 1, 11) == "ascendance_" then
+			-- Ascendance doesn't go on cooldown until after the buff expires, so don't
+			-- suggest Ascendance if already in Ascendance.
+			local buffName = action .. "_buff"
+			AddSymbol(annotation, buffName)
+			conditionCode = format("BuffExpires(%s)", buffName)
 		elseif class == "SHAMAN" and action == "bloodlust" then
 			bodyCode = "Bloodlust()"
 			annotation[action] = class
@@ -1315,6 +1317,9 @@ EmitAction = function(parseNode, nodeList, annotation)
 		elseif class == "WARLOCK" and action == "grimoire_of_sacrifice" then
 			-- Grimoire of Sacrifice requires a pet to already be summoned.
 			conditionCode = "pet.Present()"
+		elseif class == "WARLOCK" and action == "havoc" then
+			-- Havoc requires another target.
+			conditionCode = "Enemies() > 1"
 		elseif class == "WARLOCK" and action == "service_pet" then
 			if annotation.pet then
 				local spellName = "grimoire_" .. annotation.pet
@@ -1360,6 +1365,16 @@ EmitAction = function(parseNode, nodeList, annotation)
 				bodyCode = OvaleFunctionName(name, annotation) .. "()"
 			end
 			isSpellAction = false
+		elseif action == "cancel_buff" then
+			if modifier.name then
+				local spellName = Unparse(modifier.name)
+				local buffName = spellName .. "_buff"
+				AddSymbol(annotation, spellName)
+				AddSymbol(annotation, buffName)
+				bodyCode = format("Texture(%s text=cancel)", spellName)
+				conditionCode = format("BuffPresent(%s)", buffName)
+				isSpellAction = false
+			end
 		elseif action == "mana_potion" then
 			bodyCode = "UsePotionMana()"
 			annotation.use_potion_mana = class
@@ -1449,7 +1464,16 @@ EmitAction = function(parseNode, nodeList, annotation)
 		end
 		if isSpellAction then
 			AddSymbol(annotation, action)
-			bodyCode = "Spell(" .. action .. ")"
+			if modifier.target then
+				local actionTarget = Unparse(modifier.target)
+				if actionTarget == "2" then
+					actionTarget = "other"
+				end
+				if actionTarget ~= "1" then
+					bodyCode = format("Spell(%s text=%s)", action, actionTarget)
+				end
+			end
+			bodyCode = bodyCode or "Spell(" .. action .. ")"
 		end
 		annotation.astAnnotation = annotation.astAnnotation or {}
 		if not bodyNode and bodyCode then
@@ -1804,15 +1828,15 @@ EmitModifier = function(modifier, parseNode, nodeList, annotation, action)
 		node = Emit(parseNode, nodeList, annotation, action)
 	elseif modifier == "line_cd" then
 		if not SPECIAL_ACTION[action] then
-			local value = tonumber(Unparse(parseNode))
 			AddSymbol(annotation, action)
-			code = format("TimeSincePreviousSpell(%s) > %d", action, value)
+			local expressionCode = OvaleAST:Unparse(Emit(parseNode, nodeList, annotation, action))
+			code = format("TimeSincePreviousSpell(%s) > %s", action, expressionCode)
 		end
 	elseif modifier == "max_cycle_targets" then
-		local value = tonumber(Unparse(parseNode))
 		local debuffName = action .. "_debuff"
 		AddSymbol(annotation, debuffName)
-		code = format("DebuffCountOnAny(%s) <= Enemies() and DebuffCountOnAny(%s) <= %d", debuffName, debuffName, value)
+		local expressionCode = OvaleAST:Unparse(Emit(parseNode, nodeList, annotation, action))
+		code = format("DebuffCountOnAny(%s) <= Enemies() and DebuffCountOnAny(%s) <= %s", debuffName, debuffName, expressionCode)
 	elseif modifier == "max_energy" then
 		local value = tonumber(Unparse(parseNode))
 		if value == 1 then
@@ -2700,6 +2724,11 @@ EmitOperandSpecial = function(operand, parseNode, nodeList, annotation, action, 
 	elseif class == "PRIEST" and operand == "primary_target" then
 		-- TODO: "primary_target" is 1 if the current target is the "main/boss" target.
 		code = "0"
+	elseif class == "ROGUE" and specialization == "subtlety" and operand == "cooldown.honor_among_thieves.remains" then
+		-- The cooldown of Honor Among Thieves is implemented as a hidden buff.
+		local buffName = "honor_among_thieves_cooldown_buff"
+		code = format("BuffRemaining(%s)", buffName)
+		AddSymbol(annotation, buffName)
 	elseif operand == "debuff.casting.react" then
 		code = target .. "IsInterruptible()"
 	elseif operand == "debuff.flying.down" then

@@ -13,3 +13,10 @@ X: -534
 Y: 252
 W: 32
 H: 32
+Frame: TomTomBlock
+FrameLevel: 8
+Anchor: BOTTOMLEFT
+X: 5
+Y: 189
+W: 100
+H: 30

@@ -11,5 +11,5 @@ BagnonFrameSettings = {
 			["point"] = "BOTTOMRIGHT",
 		},
 	},
-	["version"] = "6.0.14",
+	["version"] = "6.0.16",
 }

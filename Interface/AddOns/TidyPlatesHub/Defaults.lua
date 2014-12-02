@@ -11,6 +11,20 @@ TidyPlatesHubDefaults = {
 
 	-- Style
 	---------------------------------------
+	StyleHeadlineOutOfCombat = false,
+	StyleHeadlineNeutral = false,
+
+	StyleFriendlyBarsOnActive = true,
+	StyleFriendlyBarsOnElite = false,
+	StyleFriendlyBarsOnPlayers = true,
+	StyleFriendlyBarsOnNPC = false,
+
+	StyleEnemyBarsOnActive = true,
+	StyleEnemyBarsOnElite = true,
+	StyleEnemyBarsOnPlayers = true,
+	StyleEnemyBarsOnNPC = true,
+
+
 	ColorEnemyBarMode =  1,
 	ColorEnemyNameMode = 1,
 	ColorEnemyStatusTextMode = 1,
@@ -25,11 +39,11 @@ TidyPlatesHubDefaults = {
 	-- Headline
 	---------------------------------------
 	StyleEnemyMode = 1,
-	StyleFriendlyMode = 1,
+	StyleFriendlyMode = 2,
 
 	HeadlineEnemyColor = 4,
 	HeadlineFriendlyColor = 4,
-	TextPlateFieldMode = 3,
+	HeadlineEnemySubtext = 3,
 
 	-- Opacity
 	---------------------------------------
@@ -37,13 +51,10 @@ TidyPlatesHubDefaults = {
 	OpacityNonTarget = .5,
 	--OpacitySpotlightMode = 1,
 
-
-
-
-	EnemyAlphaSpotlightMode = 1,
+	EnemyAlphaSpotlightMode = 2,
 	FriendlyAlphaSpotlightMode = 1,
 
-	OpacitySpotlight = 1,
+	OpacitySpotlight = .85,
 	OpacityFullNoTarget = true,				-- Use full opacity when No Target
 
 	--OpacityFullSpell = false,				-- Deprecated 6.13
@@ -78,15 +89,15 @@ TidyPlatesHubDefaults = {
 	OpacityFilterFriendlyNPC = false,
 	OpacityFilterInactive = false,
 	OpacityFilterMini = false,
-	OpacityFilterList = "Fanged Pit Viper",
+	OpacityFilterList = "Fanged Pit Viper\nLiberated Karabor Prisoner",
 	OpacityFilterLookup = {},
 
 	-- Scale
 	---------------------------------------
 	ScaleStandard = 1,
 	ScaleSpotlight = 1.2,
-	ScaleSpotlightMode = 4,
-	ScaleIgnoreNeutralUnits = false,
+	ScaleSpotlightMode = 2,
+	ScaleIgnoreNeutralUnits = true,
 	ScaleIgnoreNonEliteUnits = false,
 	ScaleIgnoreInactive = false,
 	ScaleCastingSpotlight = false,
@@ -113,9 +124,9 @@ TidyPlatesHubDefaults = {
 	---------------------------------------
 	ThreatMode = 1,
 	ThreatGlowEnable = true,
-	ColorAttackingMe = {r = .8, g = 0, b = 0,},		-- Orange
-	ColorAggroTransition = {r = 255/255, g = 160/255, b = 0},	-- Yellow
-	ColorAttackingOthers = {r = 15/255, g = 150/255, b = 230/255},	-- Bright Blue
+	ColorThreatWarning = {r = .8, g = 0, b = 0,},		-- Orange
+	ColorThreatTransition = {r = 255/255, g = 160/255, b = 0},	-- Yellow
+	ColorThreatSafe = {r = 15/255, g = 150/255, b = 230/255},	-- Bright Blue
 	ColorAttackingOtherTank = {r = 15/255, g = 170/255, b = 200/255},	-- Bright Blue
 	ColorShowPartyAggro = false,
 	ColorPartyAggro = {r = 255/255, g = 0, b = .4,},
@@ -177,7 +188,6 @@ TidyPlatesHubDefaults = {
 	WidgetsTotemIcon = false,
 	WidgetsComboPoints = true,
 	WidgetsThreatIndicator = true,
-	WidgetsThreatIndicatorMode = 1,
 	WidgetsRangeIndicator = false,
 	WidgetsRangeMode = 1,
 	WidgetsEnableExternal = true,
@@ -186,7 +196,7 @@ TidyPlatesHubDefaults = {
 	---------------------------------------
 	WidgetsDebuff = true,
 	WidgetsDebuffStyle = 1,
-	WidgetsAuraMode = 1,
+	--WidgetsAuraMode = 1,
 	WidgetsMyDebuff = true,
 	WidgetsMyBuff = false,
 	WidgetsDebuffTrackList = "My Rake\nMy Rip\nMy Moonfire\nAll 339\nMy Regrowth\nMy Rejuvenation\nNot Facepalm Bolt",

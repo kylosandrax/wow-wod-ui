@@ -1661,7 +1661,7 @@ function GUI:UpdateQueue()
 	sort(stData, function(a, b) return a.order < b.order end)
 
 	GUI.frame.queue.matST:SetData(stData)
-	TSMAPI:CreateTimeDelay("gatheringUpdateThrottle", 0.3, GUI.UpdateGathering)
+	TSMAPI:CreateTimeDelay("gatheringUpdateThrottle", 0.5, GUI.UpdateGathering)
 end
 
 function GUI:ShowProfessionsTab()

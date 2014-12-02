@@ -2,7 +2,7 @@
 ## Title: TradeSkillDW
 ## Notes: TradeSkills double wide
 ## Author: another
-## Version: 1.96
+## Version: 1.97
 ## SavedVariables: TradeSkillDW_Settings
 ## Dependencies: Blizzard_TradeSkillUI
 ## SavedVariablesPerCharacter: TradeSkillDW_QueueSettings

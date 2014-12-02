@@ -49,8 +49,8 @@ AddFunction GuardianDefaultActions
 	#auto_attack
 	#skull_bash
 	InterruptActions()
-	#savage_defense
-	Spell(savage_defense)
+	#savage_defense,if=buff.barkskin.down
+	if BuffExpires(barkskin_buff) Spell(savage_defense)
 	#blood_fury
 	Spell(blood_fury_apsp)
 	#berserking
@@ -59,8 +59,10 @@ AddFunction GuardianDefaultActions
 	Spell(arcane_torrent_energy)
 	#use_item,slot=trinket2
 	UseItemActions()
-	#barkskin
-	Spell(barkskin)
+	#barkskin,if=buff.bristling_fur.down
+	if BuffExpires(bristling_fur_buff) Spell(barkskin)
+	#bristling_fur,if=buff.barkskin.down&buff.savage_defense.down
+	if BuffExpires(barkskin_buff) and BuffExpires(savage_defense_buff) Spell(bristling_fur)
 	#maul,if=buff.tooth_and_claw.react&incoming_damage_1s
 	if BuffPresent(tooth_and_claw_buff) and IncomingDamage(1) > 0 Spell(maul)
 	#berserk,if=buff.pulverize.remains>10
@@ -73,14 +75,14 @@ AddFunction GuardianDefaultActions
 	if HealthPercent() < 30 Spell(renewal)
 	#heart_of_the_wild
 	Spell(heart_of_the_wild_tank)
-	#rejuvenation,if=buff.heart_of_the_wild.up&remains<=0.3*duration
-	if BuffPresent(heart_of_the_wild_tank_buff) and BuffRemaining(rejuvenation_buff) <= 0.3 * BaseDuration(rejuvenation_buff) and SpellKnown(enhanced_rejuvenation) Spell(rejuvenation)
+	#rejuvenation,if=buff.heart_of_the_wild.up&remains<=3.6
+	if BuffPresent(heart_of_the_wild_tank_buff) and BuffRemaining(rejuvenation_buff) <= 3.6 and SpellKnown(enhanced_rejuvenation) Spell(rejuvenation)
 	#natures_vigil
 	Spell(natures_vigil)
 	#healing_touch,if=buff.dream_of_cenarius.react&health.pct<30
 	if BuffPresent(dream_of_cenarius_tank_buff) and HealthPercent() < 30 Spell(healing_touch)
-	#pulverize,if=buff.pulverize.remains<0.5
-	if BuffRemaining(pulverize_buff) < 0.5 and target.DebuffStacks(lacerate_debuff) >= 3 Spell(pulverize)
+	#pulverize,if=buff.pulverize.remains<=3.6
+	if BuffRemaining(pulverize_buff) <= 3.6 and target.DebuffStacks(lacerate_debuff) >= 3 Spell(pulverize)
 	#lacerate,if=talent.pulverize.enabled&buff.pulverize.remains<=(3-dot.lacerate.stack)*gcd&buff.berserk.down
 	if Talent(pulverize_talent) and BuffRemaining(pulverize_buff) <= { 3 - target.DebuffStacks(lacerate_debuff) } * GCD() and BuffExpires(berserk_bear_buff) Spell(lacerate)
 	#incarnation
@@ -91,8 +93,8 @@ AddFunction GuardianDefaultActions
 	if not target.DebuffPresent(thrash_bear_debuff) Spell(thrash_bear)
 	#mangle
 	Spell(mangle)
-	#thrash_bear,if=remains<=0.3*duration
-	if target.DebuffRemaining(thrash_bear_debuff) <= 0.3 * BaseDuration(thrash_bear_debuff) Spell(thrash_bear)
+	#thrash_bear,if=remains<=4.8
+	if target.DebuffRemaining(thrash_bear_debuff) <= 4.8 Spell(thrash_bear)
 	#lacerate
 	Spell(lacerate)
 }
@@ -125,11 +127,14 @@ AddIcon specialization=guardian help=aoe
 ### Required symbols
 # arcane_torrent_energy
 # barkskin
+# barkskin_buff
 # bear_form
 # berserk_bear
 # berserk_bear_buff
 # berserking
 # blood_fury_apsp
+# bristling_fur
+# bristling_fur_buff
 # cenarion_ward
 # dream_of_cenarius_tank_buff
 # enhanced_rejuvenation
@@ -153,6 +158,7 @@ AddIcon specialization=guardian help=aoe
 # rejuvenation_buff
 # renewal
 # savage_defense
+# savage_defense_buff
 # shred
 # skull_bash
 # thrash_bear

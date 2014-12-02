@@ -203,8 +203,7 @@ function private:StartDisenchantSearch()
 		local _, link, _, iLvl = GetItemInfo(itemID)
 		if iLvl and iLvl >= TSM.db.global.minDeSearchLvl and iLvl <= TSM.db.global.maxDeSearchLvl then
 			local deValue = TSMAPI:ModuleAPI("TradeSkillMaster", "deValue", link)
---			if link and data.minBuyout and deValue * (TSM.db.global.maxDeSearchPercent or 1) > data.minBuyout then
-			if link and data.minBuyout and (data.minBuyout / deValue) < (TSM.db.global.maxDeSearchPercent or 1) then
+			if link and deValue and data.minBuyout and (data.minBuyout / deValue) < (TSM.db.global.maxDeSearchPercent or 1) then
 				tinsert(itemList, TSMAPI:GetItemString(link))
 			end
 		end
@@ -220,13 +219,13 @@ function private.DisenchantSearchCallback(event, ...)
 		local filter = ...
 		local maxPrice
 		for _, itemString in ipairs(filter.items) do
-			local deValue = TSMAPI:ModuleAPI("TradeSkillMaster", "deValue", itemString)
+			local deValue = TSMAPI:ModuleAPI("TradeSkillMaster", "deValue", itemString) or 0
 			maxPrice = maxPrice and max(maxPrice, deValue) or deValue
 		end
 		return maxPrice
 	elseif event == "process" then
 		local itemString, auctionItem = ...
-		local deValue = TSMAPI:ModuleAPI("TradeSkillMaster", "deValue", itemString)
+		local deValue = TSMAPI:ModuleAPI("TradeSkillMaster", "deValue", itemString) or 0
 		if not deValue then return end
 		auctionItem:FilterRecords(function(record)
 			return (record:GetItemBuyout() or 0) >= deValue
@@ -238,7 +237,7 @@ function private.DisenchantSearchCallback(event, ...)
 		local profit = 0
 		for itemString, data in pairs(auctions) do
 			local link = select(2, TSMAPI:GetSafeItemInfo(itemString))
-			local deValue = TSMAPI:ModuleAPI("TradeSkillMaster", "deValue", itemString)
+			local deValue = TSMAPI:ModuleAPI("TradeSkillMaster", "deValue", itemString) or 0
 			for _, record in ipairs(data.records) do
 				profit = profit + deValue * record.count - record.buyout
 			end

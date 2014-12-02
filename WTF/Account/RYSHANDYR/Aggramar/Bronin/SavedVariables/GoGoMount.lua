@@ -10,6 +10,13 @@ GoGo_Prefs = {
 	["AutoExcludeFlyingMounts"] = true,
 	["DruidFormNotRandomize"] = false,
 	["Zones"] = {
+		["War Mill"] = {
+			["Preferred"] = {
+			},
+			["Excluded"] = {
+			},
+			["ZoneID"] = 976,
+		},
 		["Blackrock Mountain"] = {
 			["Preferred"] = {
 			},
@@ -43,14 +50,21 @@ GoGo_Prefs = {
 			},
 			["Excluded"] = {
 			},
-			["ZoneID"] = 949,
+			["ZoneID"] = 993,
 		},
 		["Orgrimmar"] = {
 			["Preferred"] = {
 			},
 			["Excluded"] = {
 			},
-			["ZoneID"] = 321,
+			["ZoneID"] = -1,
+		},
+		["The Everbloom"] = {
+			["Preferred"] = {
+			},
+			["Excluded"] = {
+			},
+			["ZoneID"] = 949,
 		},
 		["Tanaris"] = {
 			["Preferred"] = {
@@ -78,7 +92,14 @@ GoGo_Prefs = {
 			},
 			["Excluded"] = {
 			},
-			["ZoneID"] = 1011,
+			["ZoneID"] = 978,
+		},
+		["The Molten Core"] = {
+			["Preferred"] = {
+			},
+			["Excluded"] = {
+			},
+			["ZoneID"] = 962,
 		},
 		["Swamp of Sorrows"] = {
 			["Preferred"] = {
@@ -155,7 +176,7 @@ GoGo_Prefs = {
 			},
 			["Excluded"] = {
 			},
-			["ZoneID"] = 962,
+			["ZoneID"] = 948,
 		},
 		["Auchindoun"] = {
 			["Preferred"] = {
@@ -163,6 +184,13 @@ GoGo_Prefs = {
 			["Excluded"] = {
 			},
 			["ZoneID"] = 962,
+		},
+		["Auction House"] = {
+			["Preferred"] = {
+			},
+			["Excluded"] = {
+			},
+			["ZoneID"] = 14,
 		},
 		["Burning Steppes"] = {
 			["Preferred"] = {
@@ -248,6 +276,13 @@ GoGo_Prefs = {
 			},
 			["ZoneID"] = 976,
 		},
+		["Brawl'gar Arena"] = {
+			["Preferred"] = {
+			},
+			["Excluded"] = {
+			},
+			["ZoneID"] = 962,
+		},
 		["Scarlet Monastery"] = {
 			["Preferred"] = {
 			},
@@ -261,6 +296,13 @@ GoGo_Prefs = {
 			["Excluded"] = {
 			},
 			["ZoneID"] = 976,
+		},
+		["Lumber Mill"] = {
+			["Preferred"] = {
+			},
+			["Excluded"] = {
+			},
+			["ZoneID"] = 941,
 		},
 		["Temple of the Jade Serpent"] = {
 			["Preferred"] = {
@@ -325,6 +367,13 @@ GoGo_Prefs = {
 			},
 			["ZoneID"] = 862,
 		},
+		["The Grimrail"] = {
+			["Preferred"] = {
+			},
+			["Excluded"] = {
+			},
+			["ZoneID"] = 949,
+		},
 		["Wor'gol"] = {
 			["Preferred"] = {
 			},
@@ -339,6 +388,13 @@ GoGo_Prefs = {
 			},
 			["ZoneID"] = 36,
 		},
+		["Tower Of War"] = {
+			["Preferred"] = {
+			},
+			["Excluded"] = {
+			},
+			["ZoneID"] = 941,
+		},
 		["Scholomance"] = {
 			["Preferred"] = {
 			},
@@ -346,19 +402,26 @@ GoGo_Prefs = {
 			},
 			["ZoneID"] = 862,
 		},
-		["Ashran"] = {
+		["Blackwing Lair"] = {
 			["Preferred"] = {
 			},
 			["Excluded"] = {
 			},
-			["ZoneID"] = 978,
+			["ZoneID"] = 755,
 		},
-		["Siege of Niuzao Temple"] = {
+		["Dalaran"] = {
 			["Preferred"] = {
 			},
 			["Excluded"] = {
 			},
-			["ZoneID"] = 862,
+			["ZoneID"] = 13,
+		},
+		["Southern Barrens"] = {
+			["Preferred"] = {
+			},
+			["Excluded"] = {
+			},
+			["ZoneID"] = 607,
 		},
 		["Grulloc's Grotto"] = {
 			["Preferred"] = {
@@ -367,12 +430,12 @@ GoGo_Prefs = {
 			},
 			["ZoneID"] = 941,
 		},
-		["The Storm Peaks"] = {
+		["Blasted Lands"] = {
 			["Preferred"] = {
 			},
 			["Excluded"] = {
 			},
-			["ZoneID"] = 485,
+			["ZoneID"] = -1,
 		},
 		["Vale of Eternal Blossoms"] = {
 			["Preferred"] = {
@@ -380,6 +443,13 @@ GoGo_Prefs = {
 			["Excluded"] = {
 			},
 			["ZoneID"] = -1,
+		},
+		["Shado-Pan Monastery"] = {
+			["Preferred"] = {
+			},
+			["Excluded"] = {
+			},
+			["ZoneID"] = 877,
 		},
 		["Crystalsong Forest"] = {
 			["Preferred"] = {
@@ -395,19 +465,12 @@ GoGo_Prefs = {
 			},
 			["ZoneID"] = 962,
 		},
-		["Bloodmaul Slag Mines"] = {
+		["Shattrath City"] = {
 			["Preferred"] = {
 			},
 			["Excluded"] = {
 			},
-			["ZoneID"] = 962,
-		},
-		["Proving Grounds"] = {
-			["Preferred"] = {
-			},
-			["Excluded"] = {
-			},
-			["ZoneID"] = 899,
+			["ZoneID"] = 481,
 		},
 		["Bladespire Citadel"] = {
 			["Preferred"] = {
@@ -416,47 +479,54 @@ GoGo_Prefs = {
 			},
 			["ZoneID"] = 941,
 		},
-		["Shattrath City"] = {
+		["Proving Grounds"] = {
 			["Preferred"] = {
 			},
 			["Excluded"] = {
 			},
-			["ZoneID"] = 481,
+			["ZoneID"] = 899,
 		},
-		["Shado-Pan Monastery"] = {
+		["Salvage Yard"] = {
 			["Preferred"] = {
 			},
 			["Excluded"] = {
 			},
-			["ZoneID"] = 877,
+			["ZoneID"] = 976,
 		},
-		["Blasted Lands"] = {
+		["Bloodmaul Slag Mines"] = {
 			["Preferred"] = {
 			},
 			["Excluded"] = {
 			},
-			["ZoneID"] = -1,
+			["ZoneID"] = 941,
 		},
-		["Blackwing Lair"] = {
+		["The Storm Peaks"] = {
 			["Preferred"] = {
 			},
 			["Excluded"] = {
 			},
-			["ZoneID"] = 755,
+			["ZoneID"] = 485,
 		},
-		["Southern Barrens"] = {
-			["Preferred"] = {
-			},
-			["Excluded"] = {
-			},
-			["ZoneID"] = 607,
-		},
-		["Dalaran"] = {
+		["Tower of Elements"] = {
 			["Preferred"] = {
 			},
 			["Excluded"] = {
 			},
 			["ZoneID"] = 13,
+		},
+		["Siege of Niuzao Temple"] = {
+			["Preferred"] = {
+			},
+			["Excluded"] = {
+			},
+			["ZoneID"] = 862,
+		},
+		["Ashran"] = {
+			["Preferred"] = {
+			},
+			["Excluded"] = {
+			},
+			["ZoneID"] = 978,
 		},
 		["Hillsbrad Foothills"] = {
 			["Preferred"] = {
@@ -474,7 +544,7 @@ GoGo_Prefs = {
 		},
 	},
 	["DisableMountNotice"] = true,
-	["DisableWaterFlight"] = true,
+	["autodismount"] = true,
 	["DruidDisableInCombat"] = false,
 	["DisableUpdateNotice"] = false,
 	["RemoveBuffs"] = true,
@@ -488,7 +558,7 @@ GoGo_Prefs = {
 	["ShamanClickForm"] = false,
 	["ExtraPassengerMounts"] = {
 	},
-	["autodismount"] = true,
+	["DisableWaterFlight"] = true,
 }
 GoGo_DebugLog = {
 }

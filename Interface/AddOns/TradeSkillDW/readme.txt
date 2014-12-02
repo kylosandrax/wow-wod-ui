@@ -2,6 +2,9 @@ Lightweight tradeskill double wide window with profession's tabs. Reuses origina
 
 Changes:
 
+v1.97
+fixed reagent count text in Queue
+
 v1.96
 toc changed for WoD
 
