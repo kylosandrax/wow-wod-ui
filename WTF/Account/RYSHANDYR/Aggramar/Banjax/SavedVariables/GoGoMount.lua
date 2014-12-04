@@ -24,13 +24,6 @@ GoGo_Prefs = {
 			},
 			["ZoneID"] = 11,
 		},
-		["Orgrimmar"] = {
-			["Preferred"] = {
-			},
-			["Excluded"] = {
-			},
-			["ZoneID"] = 321,
-		},
 		["Valley of Trials"] = {
 			["Preferred"] = {
 			},
@@ -38,9 +31,16 @@ GoGo_Prefs = {
 			},
 			["ZoneID"] = 889,
 		},
+		["Orgrimmar"] = {
+			["Preferred"] = {
+			},
+			["Excluded"] = {
+			},
+			["ZoneID"] = 321,
+		},
 	},
 	["DisableMountNotice"] = false,
-	["autodismount"] = true,
+	["DisableWaterFlight"] = true,
 	["DruidDisableInCombat"] = false,
 	["DisableUpdateNotice"] = false,
 	["RemoveBuffs"] = true,
@@ -51,7 +51,7 @@ GoGo_Prefs = {
 	["ShamanClickForm"] = false,
 	["ExtraPassengerMounts"] = {
 	},
-	["DisableWaterFlight"] = true,
+	["autodismount"] = true,
 }
 GoGo_DebugLog = {
 }

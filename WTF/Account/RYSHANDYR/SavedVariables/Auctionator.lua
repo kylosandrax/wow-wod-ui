@@ -2,13 +2,13 @@
 AUCTIONATOR_SAVEDVARS = {
 	["_50000"] = 500,
 	["_2000"] = 100,
+	["_10000"] = 200,
+	["_500"] = 5,
+	["_1000000"] = 2500,
 	["_200000"] = 1000,
 	["STARTING_DISCOUNT"] = 5,
-	["_1000000"] = 2500,
-	["_5000000"] = 10000,
 	["LOG_DE_DATA_X"] = true,
-	["_500"] = 5,
-	["_10000"] = 200,
+	["_5000000"] = 10000,
 }
 AUCTIONATOR_PRICING_HISTORY = {
 	["Dunewalker Wrap"] = {
@@ -19,18 +19,18 @@ AUCTIONATOR_PRICING_HISTORY = {
 		["is"] = "31898:0",
 		["3301606"] = "54000:1",
 	},
-	["Four of Tigers"] = {
-		["is"] = "79286:0",
-		["3301608"] = "1700000:1",
+	["Glyph of Astral Fixation"] = {
+		["is"] = "104133:0",
+		["3301609"] = "260000:1",
 	},
-	["Casque of Defiance"] = {
-		["3310025"] = "24990000:1",
-		["3314832"] = "10000000:1",
-		["is"] = "118857:0",
+	["Auction Control Module"] = {
+		["is"] = "118376:0",
+		["3314832"] = "10220000:1",
+		["3322094"] = "4987500:1",
 	},
-	["Mechanical Pandaren Dragonling"] = {
-		["is"] = "87526:0",
-		["3291604"] = "4747500:1",
+	["Pattern: Shoulders of Lightning Reflexes"] = {
+		["is"] = "32749:0",
+		["3301605"] = "26200:1",
 	},
 	["Ritual Headcleaver Halberd of the Soldier"] = {
 		["is"] = "94103:-43:370933821",
@@ -57,18 +57,18 @@ AUCTIONATOR_PRICING_HISTORY = {
 		["is"] = "98602:0",
 		["3291713"] = "36990000:1",
 	},
-	["Pattern: Shoulders of Lightning Reflexes"] = {
-		["is"] = "32749:0",
-		["3301605"] = "26200:1",
+	["Mechanical Pandaren Dragonling"] = {
+		["is"] = "87526:0",
+		["3291604"] = "4747500:1",
 	},
-	["Auction Control Module"] = {
-		["is"] = "118376:0",
-		["3314832"] = "10220000:1",
-		["3322094"] = "4987500:1",
+	["Four of Tigers"] = {
+		["is"] = "79286:0",
+		["3301608"] = "1700000:1",
 	},
-	["Glyph of Astral Fixation"] = {
-		["is"] = "104133:0",
-		["3301609"] = "260000:1",
+	["Casque of Defiance"] = {
+		["3310025"] = "24990000:1",
+		["3314832"] = "10000000:1",
+		["is"] = "118857:0",
 	},
 }
 AUCTIONATOR_SHOPPING_LISTS = {
@@ -687,9 +687,9 @@ AUCTIONATOR_PRICE_DATABASE = {
 		},
 		["Casque of Defiance"] = {
 			["mr"] = 10005050,
-			["sc"] = 5,
-			["id"] = "118857",
 			["H1465"] = 10005050,
+			["id"] = "118857",
+			["sc"] = 5,
 			["cc"] = 2,
 		},
 		["Bloodscale Belt of the Beast"] = {
@@ -799,9 +799,9 @@ AUCTIONATOR_PRICE_DATABASE = {
 		},
 		["Sensei's Wild Jade"] = {
 			["mr"] = 543995,
-			["cc"] = 8,
-			["id"] = "76643",
 			["H1444"] = 543995,
+			["id"] = "76643",
+			["cc"] = 8,
 			["sc"] = 5,
 		},
 		["Valanos' Longbow"] = {
@@ -939,9 +939,9 @@ AUCTIONATOR_PRICE_DATABASE = {
 		},
 		["Knight's Badge"] = {
 			["mr"] = 100970000,
-			["cc"] = 2,
-			["id"] = "112319",
 			["L1476"] = 100970000,
+			["id"] = "112319",
+			["cc"] = 2,
 			["H1476"] = 109980000,
 			["sc"] = 1,
 		},
@@ -1416,9 +1416,9 @@ AUCTIONATOR_PRICE_DATABASE = {
 		},
 		["Perfect Keen Tiger Opal"] = {
 			["mr"] = 950000,
-			["sc"] = 6,
-			["id"] = "76605",
 			["H1444"] = 950000,
+			["id"] = "76605",
+			["sc"] = 6,
 			["cc"] = 8,
 		},
 		["Battered Saurscale Belt of the Monkey"] = {
@@ -1458,9 +1458,9 @@ AUCTIONATOR_PRICE_DATABASE = {
 		},
 		["Sensei's Jasper"] = {
 			["mr"] = 49999,
-			["cc"] = 8,
-			["id"] = "52128",
 			["H1444"] = 49999,
+			["id"] = "52128",
+			["cc"] = 8,
 			["sc"] = 5,
 		},
 		["Dunewalker Wrap"] = {
@@ -2243,9 +2243,9 @@ AUCTIONATOR_PRICE_DATABASE = {
 		},
 		["Perfect Sensei's Jasper"] = {
 			["mr"] = 49999,
-			["cc"] = 8,
-			["id"] = "52129",
 			["H1444"] = 49999,
+			["id"] = "52129",
+			["cc"] = 8,
 			["sc"] = 5,
 		},
 		["Perfect Shattered Alexandrite"] = {
@@ -2276,12 +2276,12 @@ AUCTIONATOR_PRICE_DATABASE = {
 			["sc"] = 2,
 			["H1437"] = 670000,
 		},
-		["Forgotten Peacekeeper Leggings of the Bear"] = {
-			["mr"] = 4074998,
-			["cc"] = 2,
-			["id"] = "94036:-7",
-			["H1476"] = 4074998,
-			["sc"] = 5,
+		["Fractured Sun's Radiance"] = {
+			["mr"] = 119000,
+			["cc"] = 8,
+			["id"] = "76700",
+			["sc"] = 3,
+			["H1477"] = 119000,
 		},
 		["Warlord's Axe of the Eagle"] = {
 			["mr"] = 1000000,
@@ -2304,12 +2304,12 @@ AUCTIONATOR_PRICE_DATABASE = {
 			["sc"] = 4,
 			["H1437"] = 14614345,
 		},
-		["Forgotten Peacekeeper Shoulders of the Champion"] = {
-			["mr"] = 12000000,
-			["cc"] = 2,
-			["id"] = "94042:-45",
-			["H1476"] = 12000000,
-			["sc"] = 5,
+		["Fractured Temporal Crystal"] = {
+			["mr"] = 470000,
+			["cc"] = 6,
+			["id"] = "115504",
+			["sc"] = 7,
+			["H1477"] = 470000,
 		},
 		["Bandit Buckler of Strength"] = {
 			["mr"] = 90000,
@@ -2346,12 +2346,12 @@ AUCTIONATOR_PRICE_DATABASE = {
 			["sc"] = 2,
 			["H1477"] = 600000,
 		},
-		["Warmonger's Belt of the Wolf"] = {
-			["mr"] = 1000000,
-			["cc"] = 2,
-			["id"] = "9961:-13",
-			["sc"] = 4,
-			["H1437"] = 1000000,
+		["Solid Sky Sapphire"] = {
+			["mr"] = 899999,
+			["cc"] = 8,
+			["id"] = "40008",
+			["sc"] = 2,
+			["H1477"] = 899999,
 		},
 		["Khan's Buckler"] = {
 			["mr"] = 15423161,
@@ -2360,12 +2360,12 @@ AUCTIONATOR_PRICE_DATABASE = {
 			["sc"] = 7,
 			["H1437"] = 15423161,
 		},
-		["Five of Lunacy"] = {
-			["H1456"] = 100000,
-			["mr"] = 100000,
-			["sc"] = 0,
-			["id"] = "31912",
-			["cc"] = 10,
+		["Skettis Belt of the Owl"] = {
+			["mr"] = 550000,
+			["cc"] = 2,
+			["id"] = "24886:-9",
+			["sc"] = 4,
+			["H1437"] = 550000,
 		},
 		["Stalwart Tiger Opal"] = {
 			["mr"] = 200000,
@@ -2416,19 +2416,19 @@ AUCTIONATOR_PRICE_DATABASE = {
 			["sc"] = 4,
 			["H1437"] = 2999491,
 		},
-		["Rageclaw Belt of the Eagle"] = {
-			["mr"] = 2297995,
+		["Ephew's Enlightened Mantle"] = {
+			["mr"] = 375000000,
+			["sc"] = 2,
+			["id"] = "118889",
+			["H1475"] = 375000000,
 			["cc"] = 2,
-			["id"] = "15378:-69",
-			["sc"] = 3,
-			["H1437"] = 2297995,
 		},
-		["Fortified Belt of Power"] = {
-			["mr"] = 1000000,
+		["Warlord's Iron-Legplates of Agility"] = {
+			["mr"] = 350000,
 			["cc"] = 2,
-			["id"] = "9814:-20",
-			["sc"] = 4,
-			["H1437"] = 1000000,
+			["H1440"] = 350000,
+			["id"] = "25027:-18",
+			["sc"] = 5,
 		},
 		["Mistyreed Belt of the Seer"] = {
 			["mr"] = 2505888,
@@ -2458,11 +2458,11 @@ AUCTIONATOR_PRICE_DATABASE = {
 			["sc"] = 4,
 			["H1437"] = 25726686,
 		},
-		["Overlord's Gauntlets of Strength"] = {
-			["mr"] = 8315350,
+		["Forgotten Peacekeeper Breastplate of the Bear"] = {
+			["mr"] = 12317797,
 			["cc"] = 2,
-			["H1440"] = 8315350,
-			["id"] = "10205:-17",
+			["id"] = "94039:-7",
+			["H1476"] = 12317797,
 			["sc"] = 5,
 		},
 		["Rain Poppy"] = {
@@ -2500,12 +2500,12 @@ AUCTIONATOR_PRICE_DATABASE = {
 			["id"] = "10208:-78",
 			["sc"] = 5,
 		},
-		["Six of Storms"] = {
-			["H1456"] = 54500,
-			["mr"] = 54500,
-			["sc"] = 0,
-			["id"] = "31898",
-			["cc"] = 10,
+		["Shattered Hand Belt of the Elder"] = {
+			["mr"] = 1056962,
+			["cc"] = 2,
+			["id"] = "25014:-44",
+			["sc"] = 5,
+			["H1437"] = 1056962,
 		},
 		["Warlord's Sabatons of the Falcon"] = {
 			["mr"] = 1284079,
@@ -2514,12 +2514,12 @@ AUCTIONATOR_PRICE_DATABASE = {
 			["id"] = "25023:-11",
 			["sc"] = 5,
 		},
-		["Warlord's Axe of the Bear"] = {
-			["mr"] = 60000,
-			["cc"] = 1,
-			["H1440"] = 60000,
-			["id"] = "15238:-68",
-			["sc"] = 1,
+		["Overlord's Chestplate of Power"] = {
+			["mr"] = 3991998,
+			["cc"] = 2,
+			["H1440"] = 3991998,
+			["id"] = "10203:-20",
+			["sc"] = 5,
 		},
 		["Perfect Potent Tiger Opal"] = {
 			["mr"] = 1099999,
@@ -2549,18 +2549,25 @@ AUCTIONATOR_PRICE_DATABASE = {
 			["sc"] = 5,
 			["H1437"] = 19999999,
 		},
-		["Warlord's Iron-Girdle of the Owl"] = {
-			["mr"] = 1371538,
+		["Forgotten Peacekeeper Breastplate of the Champion"] = {
+			["mr"] = 12317696,
 			["cc"] = 2,
-			["H1440"] = 1371538,
-			["id"] = "25022:-9",
+			["id"] = "94039:-45",
+			["H1476"] = 12317696,
 			["sc"] = 5,
 		},
-		["Overlord's Girdle of Power"] = {
-			["mr"] = 4292420,
+		["Overlord's Shield of the Tiger"] = {
+			["mr"] = 11499800,
 			["cc"] = 2,
-			["H1440"] = 4292420,
-			["id"] = "10206:-20",
+			["H1440"] = 11499800,
+			["id"] = "9974:-14",
+			["sc"] = 7,
+		},
+		["Overlord's Girdle of Strength"] = {
+			["mr"] = 4292419,
+			["cc"] = 2,
+			["H1440"] = 4292419,
+			["id"] = "10206:-17",
 			["sc"] = 5,
 		},
 		["Lightning Alexandrite"] = {
@@ -2568,13 +2575,6 @@ AUCTIONATOR_PRICE_DATABASE = {
 			["cc"] = 8,
 			["id"] = "76509",
 			["H1434"] = 90000,
-			["sc"] = 5,
-		},
-		["Overlord's Girdle of Strength"] = {
-			["mr"] = 4292419,
-			["cc"] = 2,
-			["H1440"] = 4292419,
-			["id"] = "10206:-17",
 			["sc"] = 5,
 		},
 		["Mountain Belt of the Monkey"] = {
@@ -2612,11 +2612,11 @@ AUCTIONATOR_PRICE_DATABASE = {
 			["sc"] = 5,
 			["H1437"] = 502277,
 		},
-		["Forgotten Peacekeeper Shoulders of the Beast"] = {
-			["mr"] = 2990000,
+		["Overlord's Chestplate of the Gorilla"] = {
+			["mr"] = 3991997,
 			["cc"] = 2,
-			["H1440"] = 2990000,
-			["id"] = "94042:-41",
+			["H1440"] = 3991997,
+			["id"] = "10203:-10",
 			["sc"] = 5,
 		},
 		["Perfect Lightning Alexandrite"] = {
@@ -2626,11 +2626,11 @@ AUCTIONATOR_PRICE_DATABASE = {
 			["H1434"] = 218999,
 			["sc"] = 5,
 		},
-		["Overlord's Legplates of the Gorilla"] = {
-			["mr"] = 1400798,
+		["Overlord's Legplates of the Whale"] = {
+			["mr"] = 1400800,
 			["cc"] = 2,
-			["H1440"] = 1400798,
-			["id"] = "10208:-10",
+			["H1440"] = 1400800,
+			["id"] = "10208:-81",
 			["sc"] = 5,
 		},
 		["Warlord's Iron-Helm of Agility"] = {
@@ -2654,12 +2654,12 @@ AUCTIONATOR_PRICE_DATABASE = {
 			["H1434"] = 70000,
 			["sc"] = 5,
 		},
-		["Swashbuckler's Leggings of the Gorilla"] = {
-			["mr"] = 2743022,
+		["Warlord's Sabatons of Intellect"] = {
+			["mr"] = 998995,
 			["cc"] = 2,
-			["id"] = "10188:-10",
-			["sc"] = 3,
-			["H1437"] = 2743022,
+			["H1440"] = 998995,
+			["id"] = "25023:-26",
+			["sc"] = 5,
 		},
 		["Huntsman's Belt of Intellect"] = {
 			["mr"] = 1999796,
@@ -2668,11 +2668,18 @@ AUCTIONATOR_PRICE_DATABASE = {
 			["sc"] = 3,
 			["H1437"] = 1999796,
 		},
-		["Warlord's Iron-Legplates of Strength"] = {
-			["mr"] = 2000000,
+		["Archmage Belt of the Invoker"] = {
+			["mr"] = 200000,
 			["cc"] = 2,
-			["H1440"] = 2000000,
-			["id"] = "25027:-17",
+			["id"] = "24677:-39",
+			["sc"] = 2,
+			["H1437"] = 200000,
+		},
+		["Warlord's Iron-Gauntlets of Nimbleness"] = {
+			["mr"] = 1129083,
+			["cc"] = 2,
+			["H1440"] = 1129083,
+			["id"] = "25025:-27",
 			["sc"] = 5,
 		},
 		["Enduring Belt"] = {
@@ -2682,13 +2689,6 @@ AUCTIONATOR_PRICE_DATABASE = {
 			["sc"] = 4,
 			["H1437"] = 11470965,
 		},
-		["Warlord's Iron-Breastplate of the Champion"] = {
-			["mr"] = 1000000,
-			["cc"] = 2,
-			["H1440"] = 1000000,
-			["id"] = "25024:-45",
-			["sc"] = 5,
-		},
 		["Stormscale Belt of the Galeburst"] = {
 			["mr"] = 3500000,
 			["cc"] = 2,
@@ -2696,11 +2696,11 @@ AUCTIONATOR_PRICE_DATABASE = {
 			["sc"] = 4,
 			["H1437"] = 3500000,
 		},
-		["Warlord's Iron-Epaulets of Nimbleness"] = {
-			["mr"] = 999000,
+		["Warlord's Iron-Girdle of the Gorilla"] = {
+			["mr"] = 550000,
 			["cc"] = 2,
-			["H1440"] = 999000,
-			["id"] = "25028:-27",
+			["H1440"] = 550000,
+			["id"] = "25022:-10",
 			["sc"] = 5,
 		},
 		["Warlord's Iron-Epaulets of the Falcon"] = {
@@ -2710,12 +2710,12 @@ AUCTIONATOR_PRICE_DATABASE = {
 			["id"] = "25028:-11",
 			["sc"] = 5,
 		},
-		["Nimble Wild Jade"] = {
-			["mr"] = 67500,
-			["cc"] = 8,
-			["id"] = "93705",
-			["H1434"] = 67500,
-			["sc"] = 5,
+		["Superior Buckler of the Boar"] = {
+			["mr"] = 3471000,
+			["cc"] = 2,
+			["id"] = "9804:-12",
+			["sc"] = 7,
+			["H1437"] = 3471000,
 		},
 		["Warlord's Axe of the Monkey"] = {
 			["mr"] = 500000,
@@ -2724,12 +2724,12 @@ AUCTIONATOR_PRICE_DATABASE = {
 			["id"] = "15238:-78",
 			["sc"] = 1,
 		},
-		["Bard's Belt of the Wolf"] = {
-			["mr"] = 803293,
-			["cc"] = 2,
-			["id"] = "6558:-13",
-			["sc"] = 3,
-			["H1437"] = 803293,
+		["Energized Wild Jade"] = {
+			["mr"] = 252999,
+			["cc"] = 8,
+			["id"] = "76651",
+			["H1434"] = 252999,
+			["sc"] = 5,
 		},
 		["Warlord's Iron-Legplates of the Champion"] = {
 			["mr"] = 1161858,
@@ -2780,19 +2780,19 @@ AUCTIONATOR_PRICE_DATABASE = {
 			["sc"] = 4,
 			["H1437"] = 398062,
 		},
-		["Warlord's Iron-Girdle of the Sorcerer"] = {
-			["mr"] = 1523085,
-			["cc"] = 2,
-			["H1440"] = 1523085,
-			["id"] = "25022:-36",
-			["sc"] = 5,
+		["Pattern: Spider Belt"] = {
+			["mr"] = 1235000,
+			["cc"] = 7,
+			["id"] = "4353",
+			["sc"] = 3,
+			["H1437"] = 1235000,
 		},
-		["Warmaul Belt of the Falcon"] = {
-			["mr"] = 1116650,
+		["Raider's Belt of the Whale"] = {
+			["mr"] = 260000,
 			["cc"] = 2,
-			["id"] = "24990:-11",
-			["sc"] = 5,
-			["H1437"] = 1116650,
+			["id"] = "9788:-81",
+			["sc"] = 4,
+			["H1437"] = 260000,
 		},
 		["Warlord's Sabatons of the Bear"] = {
 			["mr"] = 998996,
@@ -2808,26 +2808,26 @@ AUCTIONATOR_PRICE_DATABASE = {
 			["H1435"] = 1000000,
 			["sc"] = 6,
 		},
-		["Perfect Puissant Alexandrite"] = {
-			["mr"] = 799593,
-			["cc"] = 8,
-			["id"] = "76590",
-			["H1434"] = 799593,
+		["Warlord's Iron-Gauntlets of the Beast"] = {
+			["mr"] = 836000,
+			["cc"] = 2,
+			["H1440"] = 836000,
+			["id"] = "25025:-41",
 			["sc"] = 5,
 		},
-		["Masterwork Spiritguard Belt"] = {
-			["mr"] = 6643151,
+		["Warlord's Iron-Breastplate of the Whale"] = {
+			["mr"] = 1481091,
 			["cc"] = 2,
-			["id"] = "82926",
+			["H1440"] = 1481091,
+			["id"] = "25024:-8",
 			["sc"] = 5,
-			["H1437"] = 6643151,
 		},
-		["Grunt's Belt of the Monkey"] = {
-			["mr"] = 2999999,
+		["Imbued Infantry Belt"] = {
+			["mr"] = 1500000,
 			["cc"] = 2,
-			["id"] = "15510:-78",
+			["id"] = "68752",
 			["sc"] = 4,
-			["H1437"] = 2999999,
+			["H1437"] = 1500000,
 		},
 		["Belt of Redeemed Fate"] = {
 			["mr"] = 150000,
@@ -2836,19 +2836,19 @@ AUCTIONATOR_PRICE_DATABASE = {
 			["sc"] = 3,
 			["H1437"] = 150000,
 		},
-		["Seer's Belt"] = {
-			["mr"] = 97500,
+		["Masterwork Spiritguard Belt"] = {
+			["mr"] = 6643151,
 			["cc"] = 2,
-			["id"] = "4699",
-			["sc"] = 2,
-			["H1437"] = 97500,
-		},
-		["Warmaul Belt of Strength"] = {
-			["mr"] = 2000000,
-			["cc"] = 2,
-			["id"] = "24990:-17",
+			["id"] = "82926",
 			["sc"] = 5,
-			["H1437"] = 2000000,
+			["H1437"] = 6643151,
+		},
+		["Regal Alexandrite"] = {
+			["mr"] = 330000,
+			["cc"] = 8,
+			["id"] = "76521",
+			["H1434"] = 330000,
+			["sc"] = 5,
 		},
 		["Scouting Belt of Intellect"] = {
 			["mr"] = 1102350,
@@ -2864,19 +2864,19 @@ AUCTIONATOR_PRICE_DATABASE = {
 			["sc"] = 5,
 			["H1437"] = 2649186,
 		},
-		["Stormscale Belt of the Windstorm"] = {
-			["mr"] = 2382203,
+		["Twilight Belt of the Eagle"] = {
+			["mr"] = 999000,
 			["cc"] = 2,
-			["id"] = "85841:-137",
-			["sc"] = 4,
-			["H1437"] = 2382203,
+			["id"] = "7438:-69",
+			["sc"] = 2,
+			["H1437"] = 999000,
 		},
-		["Bloodforged Belt of Strength"] = {
-			["mr"] = 2620650,
+		["Scouting Belt of the Bear"] = {
+			["mr"] = 1099999,
 			["cc"] = 2,
-			["id"] = "14950:-17",
-			["sc"] = 5,
-			["H1437"] = 2620650,
+			["id"] = "6581:-68",
+			["sc"] = 3,
+			["H1437"] = 1099999,
 		},
 		["Willow Belt of the Wolf"] = {
 			["mr"] = 1516422,
@@ -2885,19 +2885,19 @@ AUCTIONATOR_PRICE_DATABASE = {
 			["sc"] = 2,
 			["H1437"] = 1516422,
 		},
-		["Elegant Belt of the Owl"] = {
-			["mr"] = 1005147,
+		["Belt of Ghostly Graces"] = {
+			["mr"] = 7000000,
 			["cc"] = 2,
-			["id"] = "10216:-9",
-			["sc"] = 2,
-			["H1437"] = 1005147,
+			["id"] = "78886",
+			["sc"] = 4,
+			["H1437"] = 7000000,
 		},
-		["Rageclaw Belt of the Owl"] = {
-			["mr"] = 2297794,
-			["cc"] = 2,
-			["id"] = "15378:-9",
-			["sc"] = 3,
-			["H1437"] = 2297794,
+		["Living Steel Weapon Chain"] = {
+			["mr"] = 2000000,
+			["cc"] = 4,
+			["id"] = "86597",
+			["sc"] = 6,
+			["H1437"] = 2000000,
 		},
 		["Grand Belt of the Monkey"] = {
 			["mr"] = 14768128,
@@ -2906,26 +2906,19 @@ AUCTIONATOR_PRICE_DATABASE = {
 			["sc"] = 3,
 			["H1437"] = 14768128,
 		},
-		["Swashbuckler's Leggings of the Owl"] = {
-			["mr"] = 749998,
+		["Clefthoof Belt of the Tiger"] = {
+			["mr"] = 3000000,
 			["cc"] = 2,
-			["id"] = "10188:-9",
+			["id"] = "24765:-14",
 			["sc"] = 3,
-			["H1437"] = 749998,
+			["H1437"] = 3000000,
 		},
-		["Sparkleshell Belt of the Gorilla"] = {
-			["mr"] = 3499692,
+		["Gossamer Belt of Intellect"] = {
+			["mr"] = 4397125,
 			["cc"] = 2,
-			["id"] = "15575:-10",
-			["sc"] = 4,
-			["H1437"] = 3499692,
-		},
-		["Keen Vermilion Onyx"] = {
-			["mr"] = 957992,
-			["sc"] = 6,
-			["id"] = "76671",
-			["H1444"] = 957992,
-			["cc"] = 8,
+			["id"] = "7526:-19",
+			["sc"] = 2,
+			["H1437"] = 4397125,
 		},
 		["Warlord's Iron-Helm of Shadow Protection"] = {
 			["mr"] = 10000000,
@@ -2934,12 +2927,19 @@ AUCTIONATOR_PRICE_DATABASE = {
 			["id"] = "25026:-35",
 			["sc"] = 5,
 		},
-		["Puissant Alexandrite"] = {
-			["mr"] = 100000000,
+		["Keen Vermilion Onyx"] = {
+			["mr"] = 957992,
+			["H1444"] = 957992,
+			["id"] = "76671",
+			["sc"] = 6,
 			["cc"] = 8,
-			["id"] = "76524",
-			["H1434"] = 100000000,
-			["sc"] = 5,
+		},
+		["Twilight Belt of Intellect"] = {
+			["mr"] = 999999,
+			["cc"] = 2,
+			["id"] = "7438:-19",
+			["sc"] = 2,
+			["H1437"] = 999999,
 		},
 		["Perfect Misty Alexandrite"] = {
 			["mr"] = 898880,
@@ -2955,19 +2955,19 @@ AUCTIONATOR_PRICE_DATABASE = {
 			["sc"] = 2,
 			["H1437"] = 1891561,
 		},
-		["Forgotten Peacekeeper Breastplate of the Soldier"] = {
-			["mr"] = 12317697,
+		["Puissant Alexandrite"] = {
+			["mr"] = 100000000,
+			["cc"] = 8,
+			["id"] = "76524",
+			["H1434"] = 100000000,
 			["sc"] = 5,
-			["id"] = "94039:-43",
-			["H1476"] = 12317697,
-			["cc"] = 2,
 		},
-		["Sparkleshell Belt of the Eagle"] = {
-			["mr"] = 3499793,
+		["Gaea's Belt of Intellect"] = {
+			["mr"] = 2535300,
 			["cc"] = 2,
-			["id"] = "15575:-69",
-			["sc"] = 4,
-			["H1437"] = 3499793,
+			["id"] = "14276:-19",
+			["sc"] = 2,
+			["H1437"] = 2535300,
 		},
 		["Imposing Belt of the Monkey"] = {
 			["mr"] = 2405039,
@@ -2983,13 +2983,6 @@ AUCTIONATOR_PRICE_DATABASE = {
 			["sc"] = 3,
 			["H1437"] = 7547245,
 		},
-		["Solid Majestic Zircon"] = {
-			["mr"] = 1245400,
-			["cc"] = 8,
-			["id"] = "40119",
-			["sc"] = 2,
-			["H1477"] = 1245400,
-		},
 		["Swashbuckler's Gloves of the Eagle"] = {
 			["mr"] = 1158680,
 			["cc"] = 2,
@@ -2997,12 +2990,19 @@ AUCTIONATOR_PRICE_DATABASE = {
 			["sc"] = 3,
 			["H1437"] = 1158680,
 		},
-		["Sensei's Alexandrite"] = {
-			["mr"] = 150000,
+		["Solid Majestic Zircon"] = {
+			["mr"] = 1245400,
 			["cc"] = 8,
-			["id"] = "76510",
-			["H1444"] = 150000,
-			["sc"] = 5,
+			["id"] = "40119",
+			["sc"] = 2,
+			["H1477"] = 1245400,
+		},
+		["Boneshredder Belt of the Tiger"] = {
+			["mr"] = 1628096,
+			["cc"] = 2,
+			["id"] = "24773:-14",
+			["sc"] = 3,
+			["H1437"] = 1628096,
 		},
 		["Pattern: Deviate Scale Belt"] = {
 			["mr"] = 149999999,
@@ -3018,33 +3018,33 @@ AUCTIONATOR_PRICE_DATABASE = {
 			["sc"] = 4,
 			["H1437"] = 9341494,
 		},
-		["Perfect Sensei's Alexandrite"] = {
-			["mr"] = 538999,
+		["Deft Tiger Opal"] = {
+			["mr"] = 349900,
 			["cc"] = 8,
-			["id"] = "76577",
-			["H1444"] = 538999,
+			["id"] = "76534",
+			["H1435"] = 349900,
+			["sc"] = 6,
+		},
+		["Shattered Hand Belt of the Sorcerer"] = {
+			["mr"] = 100000,
+			["cc"] = 2,
+			["id"] = "25014:-36",
+			["sc"] = 5,
+			["H1437"] = 100000,
+		},
+		["Warlord's Iron-Breastplate of the Owl"] = {
+			["mr"] = 5000000,
+			["cc"] = 2,
+			["H1440"] = 5000000,
+			["id"] = "25024:-9",
 			["sc"] = 5,
 		},
-		["Mail Combat Belt"] = {
-			["mr"] = 10245083,
+		["Dragonhawk Belt of Nature Protection"] = {
+			["mr"] = 2000000,
 			["cc"] = 2,
-			["id"] = "4717",
-			["sc"] = 4,
-			["H1437"] = 10245083,
-		},
-		["Talhide Stitched-Belt of the Elder"] = {
-			["mr"] = 446085,
-			["cc"] = 2,
-			["id"] = "24902:-44",
-			["sc"] = 4,
-			["H1437"] = 446085,
-		},
-		["Misty Wild Jade"] = {
-			["mr"] = 192555,
-			["cc"] = 8,
-			["id"] = "76640",
-			["H1434"] = 192555,
-			["sc"] = 5,
+			["id"] = "24798:-34",
+			["sc"] = 3,
+			["H1437"] = 2000000,
 		},
 		["Perfect Inscribed Tiger Opal"] = {
 			["mr"] = 800000,
@@ -3053,20 +3053,6 @@ AUCTIONATOR_PRICE_DATABASE = {
 			["H1435"] = 800000,
 			["sc"] = 6,
 		},
-		["Chieftain's Belt of the Monkey"] = {
-			["mr"] = 2565732,
-			["cc"] = 2,
-			["id"] = "9947:-78",
-			["sc"] = 3,
-			["H1437"] = 2565732,
-		},
-		["Pygmy Belt of Stamina"] = {
-			["mr"] = 211346,
-			["cc"] = 2,
-			["id"] = "36147:-16",
-			["sc"] = 3,
-			["H1437"] = 211346,
-		},
 		["Crafted Dreadful Gladiator's Belt of Cruelty"] = {
 			["mr"] = 8000000,
 			["cc"] = 2,
@@ -3074,12 +3060,26 @@ AUCTIONATOR_PRICE_DATABASE = {
 			["sc"] = 3,
 			["H1437"] = 8000000,
 		},
-		["Willow Belt of the Eagle"] = {
-			["mr"] = 9899,
+		["Misty Wild Jade"] = {
+			["mr"] = 192555,
+			["cc"] = 8,
+			["id"] = "76640",
+			["H1434"] = 192555,
+			["sc"] = 5,
+		},
+		["Chieftain's Belt of the Monkey"] = {
+			["mr"] = 2565732,
 			["cc"] = 2,
-			["id"] = "6539:-69",
+			["id"] = "9947:-78",
+			["sc"] = 3,
+			["H1437"] = 2565732,
+		},
+		["Eldr'naan Belt of Intellect"] = {
+			["mr"] = 4980000,
+			["cc"] = 2,
+			["id"] = "24669:-26",
 			["sc"] = 2,
-			["H1437"] = 9899,
+			["H1437"] = 4980000,
 		},
 		["Warlord's Iron-Helm of Intellect"] = {
 			["mr"] = 3000000,
@@ -3088,12 +3088,12 @@ AUCTIONATOR_PRICE_DATABASE = {
 			["id"] = "25026:-26",
 			["sc"] = 5,
 		},
-		["Plans: Belt of the Titans"] = {
-			["mr"] = 9999999,
+		["Pattern: Shoulders of Lightning Reflexes"] = {
+			["H1456"] = 26398,
+			["mr"] = 26398,
+			["sc"] = 2,
+			["id"] = "32749",
 			["cc"] = 7,
-			["id"] = "45088",
-			["sc"] = 5,
-			["H1437"] = 9999999,
 		},
 		["Bright Belt"] = {
 			["mr"] = 90000,
@@ -3102,19 +3102,19 @@ AUCTIONATOR_PRICE_DATABASE = {
 			["sc"] = 2,
 			["H1437"] = 90000,
 		},
+		["Emblazoned Belt"] = {
+			["mr"] = 1623294,
+			["cc"] = 2,
+			["id"] = "6398",
+			["sc"] = 3,
+			["H1437"] = 1623294,
+		},
 		["Hero's Buckler"] = {
 			["mr"] = 4195036,
 			["cc"] = 2,
 			["id"] = "8313",
 			["sc"] = 7,
 			["H1437"] = 4195036,
-		},
-		["Swashbuckler's Gloves of the Monkey"] = {
-			["mr"] = 1238050,
-			["cc"] = 2,
-			["id"] = "10186:-78",
-			["sc"] = 3,
-			["H1437"] = 1238050,
 		},
 		["Beaststalker's Belt"] = {
 			["mr"] = 61372489,
@@ -3144,19 +3144,19 @@ AUCTIONATOR_PRICE_DATABASE = {
 			["sc"] = 2,
 			["H1437"] = 291658,
 		},
-		["Regal Wild Jade"] = {
-			["mr"] = 60000,
-			["cc"] = 8,
-			["id"] = "76653",
-			["H1434"] = 60000,
-			["sc"] = 5,
-		},
-		["Dark Leather Belt"] = {
-			["mr"] = 150000,
+		["Swashbuckler's Breastplate of the Bear"] = {
+			["mr"] = 1947294,
 			["cc"] = 2,
-			["id"] = "4249",
+			["id"] = "10182:-68",
 			["sc"] = 3,
-			["H1437"] = 150000,
+			["H1437"] = 1947294,
+		},
+		["Grunt's Belt of the Eagle"] = {
+			["mr"] = 2999492,
+			["cc"] = 2,
+			["id"] = "15510:-69",
+			["sc"] = 4,
+			["H1437"] = 2999492,
 		},
 		["Warlord's Sabatons of Strength"] = {
 			["mr"] = 1000000,
@@ -3165,19 +3165,19 @@ AUCTIONATOR_PRICE_DATABASE = {
 			["id"] = "25023:-17",
 			["sc"] = 5,
 		},
-		["Mystic's Belt"] = {
-			["mr"] = 1904898,
+		["Raider's Belt of the Gorilla"] = {
+			["mr"] = 98999,
 			["cc"] = 2,
-			["id"] = "14025",
-			["sc"] = 2,
-			["H1437"] = 1904898,
+			["id"] = "9788:-10",
+			["sc"] = 4,
+			["H1437"] = 98999,
 		},
-		["Boneshredder Belt of Intellect"] = {
-			["mr"] = 1628097,
+		["Warmonger's Belt of the Boar"] = {
+			["mr"] = 1000000,
 			["cc"] = 2,
-			["id"] = "24773:-21",
-			["sc"] = 3,
-			["H1437"] = 1628097,
+			["id"] = "9961:-12",
+			["sc"] = 4,
+			["H1437"] = 1000000,
 		},
 		["Sensei's Dream Emerald"] = {
 			["mr"] = 899999,
@@ -3207,26 +3207,26 @@ AUCTIONATOR_PRICE_DATABASE = {
 			["H1434"] = 57000,
 			["sc"] = 5,
 		},
-		["Mountain Belt of the Bandit"] = {
-			["mr"] = 790000,
+		["Alexandrite Ring of Intellect"] = {
+			["mr"] = 202566,
 			["cc"] = 2,
-			["id"] = "82186:-40",
-			["sc"] = 4,
-			["H1437"] = 790000,
-		},
-		["White Swashbuckler's Shirt"] = {
-			["mr"] = 90099,
-			["cc"] = 2,
-			["id"] = "6795",
+			["id"] = "25055:-19",
+			["H1434"] = 202566,
 			["sc"] = 1,
-			["H1437"] = 90099,
 		},
-		["Steadfast Buckler of Intellect"] = {
-			["mr"] = 7602362,
+		["Elunarian Belt"] = {
+			["mr"] = 5020000,
 			["cc"] = 2,
-			["id"] = "15592:-19",
-			["sc"] = 7,
-			["H1437"] = 7602362,
+			["id"] = "14465",
+			["sc"] = 2,
+			["H1437"] = 5020000,
+		},
+		["Wanderer's Belt of the Whale"] = {
+			["mr"] = 2000000,
+			["cc"] = 2,
+			["id"] = "10109:-81",
+			["sc"] = 3,
+			["H1437"] = 2000000,
 		},
 		["Green Leather Belt"] = {
 			["mr"] = 131313,
@@ -3242,19 +3242,19 @@ AUCTIONATOR_PRICE_DATABASE = {
 			["sc"] = 4,
 			["H1437"] = 302811,
 		},
-		["Elegant Belt of Intellect"] = {
-			["mr"] = 1005146,
-			["cc"] = 2,
-			["id"] = "10216:-19",
-			["sc"] = 2,
-			["H1437"] = 1005146,
-		},
 		["Design: Solid Star of Elune"] = {
 			["mr"] = 1833975,
 			["cc"] = 7,
 			["id"] = "24199",
 			["sc"] = 11,
 			["H1477"] = 1833975,
+		},
+		["Elegant Belt of Intellect"] = {
+			["mr"] = 1005146,
+			["cc"] = 2,
+			["id"] = "10216:-19",
+			["sc"] = 2,
+			["H1437"] = 1005146,
 		},
 		["Pattern: Blue Belt of Chaos"] = {
 			["mr"] = 2250000,
@@ -3263,12 +3263,12 @@ AUCTIONATOR_PRICE_DATABASE = {
 			["sc"] = 2,
 			["H1437"] = 2250000,
 		},
-		["Perfect Forceful Alexandrite"] = {
-			["mr"] = 2997498,
-			["cc"] = 8,
-			["id"] = "76588",
-			["H1434"] = 2997498,
-			["sc"] = 5,
+		["White Cloud Belt"] = {
+			["mr"] = 18000000,
+			["cc"] = 2,
+			["id"] = "98608",
+			["sc"] = 2,
+			["H1437"] = 18000000,
 		},
 		["Perfect Energized Alexandrite"] = {
 			["mr"] = 215820,
@@ -3291,19 +3291,19 @@ AUCTIONATOR_PRICE_DATABASE = {
 			["sc"] = 16,
 			["H1477"] = 750000,
 		},
-		["Fierce Tiger Opal"] = {
-			["mr"] = 100000000,
-			["cc"] = 8,
-			["id"] = "76537",
-			["H1435"] = 100000000,
-			["sc"] = 6,
-		},
 		["Headhunter's Buckler of the Owl"] = {
 			["mr"] = 1636684,
 			["cc"] = 2,
 			["id"] = "15352:-9",
 			["sc"] = 7,
 			["H1437"] = 1636684,
+		},
+		["Fierce Tiger Opal"] = {
+			["mr"] = 100000000,
+			["cc"] = 8,
+			["id"] = "76537",
+			["H1435"] = 100000000,
+			["sc"] = 6,
 		},
 		["Swashbuckler's Boots of the Falcon"] = {
 			["mr"] = 2752129,
@@ -3326,12 +3326,12 @@ AUCTIONATOR_PRICE_DATABASE = {
 			["sc"] = 7,
 			["H1437"] = 90000,
 		},
-		["Wanderer's Belt of the Monkey"] = {
-			["mr"] = 4979999,
+		["Krasari Prowler Belt"] = {
+			["mr"] = 87654320,
 			["cc"] = 2,
-			["id"] = "10109:-78",
-			["sc"] = 3,
-			["H1437"] = 4979999,
+			["id"] = "98610",
+			["sc"] = 4,
+			["H1437"] = 87654320,
 		},
 		["Raider's Belt of the Monkey"] = {
 			["mr"] = 4980000,
@@ -3347,12 +3347,12 @@ AUCTIONATOR_PRICE_DATABASE = {
 			["sc"] = 3,
 			["H1437"] = 1999897,
 		},
-		["Living Steel Belt Buckle"] = {
-			["mr"] = 2223044,
-			["cc"] = 4,
-			["id"] = "90046",
-			["sc"] = 6,
-			["H1437"] = 2223044,
+		["Gorge Stalker Belt"] = {
+			["mr"] = 54980000,
+			["cc"] = 2,
+			["id"] = "98614",
+			["sc"] = 4,
+			["H1437"] = 54980000,
 		},
 		["Swashbuckler's Gloves of the Owl"] = {
 			["mr"] = 1238050,
@@ -3375,12 +3375,12 @@ AUCTIONATOR_PRICE_DATABASE = {
 			["sc"] = 3,
 			["H1437"] = 1947500,
 		},
-		["Warlord's Iron-Epaulets of the Elder"] = {
-			["mr"] = 4000000,
+		["Sundown Belt of the Windstorm"] = {
+			["mr"] = 2325616,
 			["cc"] = 2,
-			["H1440"] = 4000000,
-			["id"] = "25028:-44",
-			["sc"] = 5,
+			["id"] = "55625:-137",
+			["sc"] = 4,
+			["H1437"] = 2325616,
 		},
 		["Perfect Wicked Tiger Opal"] = {
 			["mr"] = 4050002,
@@ -3389,19 +3389,19 @@ AUCTIONATOR_PRICE_DATABASE = {
 			["sc"] = 6,
 			["H1437"] = 4050002,
 		},
-		["Crusader's Belt of the Owl"] = {
-			["mr"] = 1000000,
+		["Skettis Belt of the Gorilla"] = {
+			["mr"] = 200000,
 			["cc"] = 2,
-			["id"] = "10197:-9",
+			["id"] = "24886:-10",
 			["sc"] = 4,
-			["H1437"] = 1000000,
+			["H1437"] = 200000,
 		},
-		["Bard's Belt of the Tiger"] = {
-			["mr"] = 3000000,
+		["Swashbuckler's Breastplate of the Whale"] = {
+			["mr"] = 1947289,
 			["cc"] = 2,
-			["id"] = "6558:-14",
+			["id"] = "10182:-81",
 			["sc"] = 3,
-			["H1437"] = 3000000,
+			["H1437"] = 1947289,
 		},
 		["Perfect Piercing Alexandrite"] = {
 			["mr"] = 2487500,
@@ -3410,12 +3410,12 @@ AUCTIONATOR_PRICE_DATABASE = {
 			["H1434"] = 2487500,
 			["sc"] = 5,
 		},
-		["Giantstalker's Belt"] = {
-			["mr"] = 550000,
+		["Gaea's Belt of the Whale"] = {
+			["mr"] = 1226400,
 			["cc"] = 2,
-			["id"] = "16851",
-			["sc"] = 4,
-			["H1437"] = 550000,
+			["id"] = "14276:-81",
+			["sc"] = 2,
+			["H1437"] = 1226400,
 		},
 		["Twilight Belt of the Whale"] = {
 			["mr"] = 999998,
@@ -3452,12 +3452,12 @@ AUCTIONATOR_PRICE_DATABASE = {
 			["sc"] = 3,
 			["H1437"] = 2565729,
 		},
-		["Willow Belt of the Whale"] = {
-			["mr"] = 9900,
+		["Swashbuckler's Boots of Intellect"] = {
+			["mr"] = 2752130,
 			["cc"] = 2,
-			["id"] = "6539:-81",
-			["sc"] = 2,
-			["H1437"] = 9900,
+			["id"] = "10183:-19",
+			["sc"] = 3,
+			["H1437"] = 2752130,
 		},
 		["Stormbringer Belt"] = {
 			["mr"] = 4980000,
@@ -3473,12 +3473,12 @@ AUCTIONATOR_PRICE_DATABASE = {
 			["cc"] = 8,
 			["H1437"] = 677000,
 		},
-		["Gossamer Belt of the Wolf"] = {
-			["mr"] = 4397125,
+		["Willow Belt of the Whale"] = {
+			["mr"] = 9900,
 			["cc"] = 2,
-			["id"] = "7526:-13",
+			["id"] = "6539:-81",
 			["sc"] = 2,
-			["H1437"] = 4397125,
+			["H1437"] = 9900,
 		},
 		["Warmaul Belt of the Champion"] = {
 			["mr"] = 550000,
@@ -3501,12 +3501,12 @@ AUCTIONATOR_PRICE_DATABASE = {
 			["sc"] = 3,
 			["H1437"] = 990000,
 		},
-		["Tiger Opal Pendant"] = {
-			["mr"] = 1999999,
-			["sc"] = 1,
-			["id"] = "83806",
+		["Imperial Leather Belt"] = {
+			["mr"] = 5868024,
 			["cc"] = 2,
-			["H1437"] = 1999999,
+			["id"] = "4738",
+			["sc"] = 3,
+			["H1437"] = 5868024,
 		},
 		["Deadly Tiger Opal"] = {
 			["mr"] = 64215,
@@ -3515,12 +3515,12 @@ AUCTIONATOR_PRICE_DATABASE = {
 			["sc"] = 6,
 			["H1437"] = 64215,
 		},
-		["Pattern: Black Belt of Knowledge"] = {
-			["mr"] = 19999697,
-			["cc"] = 7,
-			["id"] = "24304",
-			["sc"] = 3,
-			["H1437"] = 19999697,
+		["Valorous Wristguards"] = {
+			["H1439"] = 3983918,
+			["mr"] = 3983918,
+			["sc"] = 5,
+			["id"] = "8273",
+			["cc"] = 2,
 		},
 		["Solid Zephyrite"] = {
 			["mr"] = 100000,
@@ -3543,12 +3543,12 @@ AUCTIONATOR_PRICE_DATABASE = {
 			["id"] = "8279",
 			["cc"] = 2,
 		},
-		["Blessed Trillium Belt"] = {
-			["mr"] = 49000000,
+		["Cabalist Belt of Intellect"] = {
+			["mr"] = 2094056,
 			["cc"] = 2,
-			["id"] = "98611",
-			["sc"] = 5,
-			["H1437"] = 49000000,
+			["id"] = "7535:-19",
+			["sc"] = 3,
+			["H1437"] = 2094056,
 		},
 		["Rain Poppy Petal"] = {
 			["mr"] = 52500,
@@ -3557,12 +3557,12 @@ AUCTIONATOR_PRICE_DATABASE = {
 			["id"] = "97620",
 			["sc"] = 6,
 		},
-		["Cabalist Belt of Intellect"] = {
-			["mr"] = 2094056,
+		["Blessed Trillium Belt"] = {
+			["mr"] = 49000000,
 			["cc"] = 2,
-			["id"] = "7535:-19",
-			["sc"] = 3,
-			["H1437"] = 2094056,
+			["id"] = "98611",
+			["sc"] = 5,
+			["H1437"] = 49000000,
 		},
 		["Adept Tiger Opal"] = {
 			["mr"] = 99400,
@@ -3592,12 +3592,12 @@ AUCTIONATOR_PRICE_DATABASE = {
 			["sc"] = 3,
 			["H1437"] = 14796300,
 		},
-		["Nexus-Strider Belt of the Boar"] = {
-			["mr"] = 4990000,
+		["Nimble Climber's Belt"] = {
+			["mr"] = 500000,
 			["cc"] = 2,
-			["id"] = "24830:-12",
-			["sc"] = 4,
-			["H1437"] = 4990000,
+			["id"] = "45709",
+			["sc"] = 3,
+			["H1437"] = 500000,
 		},
 		["Talhide Stitched-Belt of Intellect"] = {
 			["mr"] = 2000000,
@@ -3613,12 +3613,12 @@ AUCTIONATOR_PRICE_DATABASE = {
 			["sc"] = 2,
 			["H1437"] = 1500000,
 		},
-		["Nimble Climber's Belt"] = {
-			["mr"] = 500000,
+		["Nexus-Strider Belt of the Boar"] = {
+			["mr"] = 4990000,
 			["cc"] = 2,
-			["id"] = "45709",
-			["sc"] = 3,
-			["H1437"] = 500000,
+			["id"] = "24830:-12",
+			["sc"] = 4,
+			["H1437"] = 4990000,
 		},
 		["Deathsilk Belt"] = {
 			["mr"] = 2250000,
@@ -3648,19 +3648,19 @@ AUCTIONATOR_PRICE_DATABASE = {
 			["sc"] = 2,
 			["H1477"] = 50000,
 		},
-		["Valorous Wristguards"] = {
-			["H1439"] = 3983918,
-			["mr"] = 3983918,
-			["sc"] = 5,
-			["id"] = "8273",
-			["cc"] = 2,
-		},
-		["Imperial Leather Belt"] = {
-			["mr"] = 5868024,
-			["cc"] = 2,
-			["id"] = "4738",
+		["Pattern: Black Belt of Knowledge"] = {
+			["mr"] = 19999697,
+			["cc"] = 7,
+			["id"] = "24304",
 			["sc"] = 3,
-			["H1437"] = 5868024,
+			["H1437"] = 19999697,
+		},
+		["Tiger Opal Pendant"] = {
+			["mr"] = 1999999,
+			["sc"] = 1,
+			["id"] = "83806",
+			["cc"] = 2,
+			["H1437"] = 1999999,
 		},
 		["High Chief's Belt of the Bear"] = {
 			["mr"] = 20221154,
@@ -3676,12 +3676,12 @@ AUCTIONATOR_PRICE_DATABASE = {
 			["id"] = "25025:-5",
 			["sc"] = 5,
 		},
-		["Swashbuckler's Boots of Intellect"] = {
-			["mr"] = 2752130,
+		["Gossamer Belt of the Wolf"] = {
+			["mr"] = 4397125,
 			["cc"] = 2,
-			["id"] = "10183:-19",
-			["sc"] = 3,
-			["H1437"] = 2752130,
+			["id"] = "7526:-13",
+			["sc"] = 2,
+			["H1437"] = 4397125,
 		},
 		["Contender's Dragonscale Belt"] = {
 			["mr"] = 2023200,
@@ -3690,33 +3690,33 @@ AUCTIONATOR_PRICE_DATABASE = {
 			["sc"] = 4,
 			["H1437"] = 2023200,
 		},
-		["Gaea's Belt of the Whale"] = {
-			["mr"] = 1226400,
+		["Giantstalker's Belt"] = {
+			["mr"] = 550000,
 			["cc"] = 2,
-			["id"] = "14276:-81",
-			["sc"] = 2,
-			["H1437"] = 1226400,
+			["id"] = "16851",
+			["sc"] = 4,
+			["H1437"] = 550000,
 		},
-		["Swashbuckler's Breastplate of the Whale"] = {
-			["mr"] = 1947289,
+		["Bard's Belt of the Tiger"] = {
+			["mr"] = 3000000,
 			["cc"] = 2,
-			["id"] = "10182:-81",
+			["id"] = "6558:-14",
 			["sc"] = 3,
-			["H1437"] = 1947289,
+			["H1437"] = 3000000,
 		},
-		["Skettis Belt of the Gorilla"] = {
-			["mr"] = 200000,
+		["Crusader's Belt of the Owl"] = {
+			["mr"] = 1000000,
 			["cc"] = 2,
-			["id"] = "24886:-10",
+			["id"] = "10197:-9",
 			["sc"] = 4,
-			["H1437"] = 200000,
+			["H1437"] = 1000000,
 		},
-		["Sundown Belt of the Windstorm"] = {
-			["mr"] = 2325616,
+		["Warlord's Iron-Epaulets of the Elder"] = {
+			["mr"] = 4000000,
 			["cc"] = 2,
-			["id"] = "55625:-137",
-			["sc"] = 4,
-			["H1437"] = 2325616,
+			["H1440"] = 4000000,
+			["id"] = "25028:-44",
+			["sc"] = 5,
 		},
 		["Turbid Alexandrite"] = {
 			["mr"] = 100000000,
@@ -3725,19 +3725,19 @@ AUCTIONATOR_PRICE_DATABASE = {
 			["H1434"] = 100000000,
 			["sc"] = 5,
 		},
-		["Gorge Stalker Belt"] = {
-			["mr"] = 54980000,
-			["cc"] = 2,
-			["id"] = "98614",
-			["sc"] = 4,
-			["H1437"] = 54980000,
+		["Living Steel Belt Buckle"] = {
+			["mr"] = 2223044,
+			["cc"] = 4,
+			["id"] = "90046",
+			["sc"] = 6,
+			["H1437"] = 2223044,
 		},
-		["Krasari Prowler Belt"] = {
-			["mr"] = 87654320,
+		["Wanderer's Belt of the Monkey"] = {
+			["mr"] = 4979999,
 			["cc"] = 2,
-			["id"] = "98610",
-			["sc"] = 4,
-			["H1437"] = 87654320,
+			["id"] = "10109:-78",
+			["sc"] = 3,
+			["H1437"] = 4979999,
 		},
 		["Skettis Belt of Intellect"] = {
 			["mr"] = 1844734,
@@ -3753,12 +3753,12 @@ AUCTIONATOR_PRICE_DATABASE = {
 			["id"] = "8280",
 			["cc"] = 2,
 		},
-		["White Cloud Belt"] = {
-			["mr"] = 18000000,
-			["cc"] = 2,
-			["id"] = "98608",
-			["sc"] = 2,
-			["H1437"] = 18000000,
+		["Perfect Forceful Alexandrite"] = {
+			["mr"] = 2997498,
+			["cc"] = 8,
+			["id"] = "76588",
+			["H1434"] = 2997498,
+			["sc"] = 5,
 		},
 		["Jagged Alexandrite"] = {
 			["mr"] = 79500,
@@ -3788,54 +3788,54 @@ AUCTIONATOR_PRICE_DATABASE = {
 			["H1434"] = 53500,
 			["sc"] = 5,
 		},
-		["Wanderer's Belt of the Whale"] = {
-			["mr"] = 2000000,
+		["Steadfast Buckler of Intellect"] = {
+			["mr"] = 7602362,
 			["cc"] = 2,
-			["id"] = "10109:-81",
-			["sc"] = 3,
-			["H1437"] = 2000000,
+			["id"] = "15592:-19",
+			["sc"] = 7,
+			["H1437"] = 7602362,
 		},
-		["Elunarian Belt"] = {
-			["mr"] = 5020000,
+		["White Swashbuckler's Shirt"] = {
+			["mr"] = 90099,
 			["cc"] = 2,
-			["id"] = "14465",
-			["sc"] = 2,
-			["H1437"] = 5020000,
-		},
-		["Alexandrite Ring of Intellect"] = {
-			["mr"] = 202566,
-			["cc"] = 2,
-			["id"] = "25055:-19",
-			["H1434"] = 202566,
+			["id"] = "6795",
 			["sc"] = 1,
+			["H1437"] = 90099,
 		},
-		["Warmonger's Belt of the Boar"] = {
-			["mr"] = 1000000,
+		["Mountain Belt of the Bandit"] = {
+			["mr"] = 790000,
 			["cc"] = 2,
-			["id"] = "9961:-12",
+			["id"] = "82186:-40",
 			["sc"] = 4,
-			["H1437"] = 1000000,
+			["H1437"] = 790000,
 		},
-		["Raider's Belt of the Gorilla"] = {
-			["mr"] = 98999,
+		["Boneshredder Belt of Intellect"] = {
+			["mr"] = 1628097,
 			["cc"] = 2,
-			["id"] = "9788:-10",
-			["sc"] = 4,
-			["H1437"] = 98999,
-		},
-		["Grunt's Belt of the Eagle"] = {
-			["mr"] = 2999492,
-			["cc"] = 2,
-			["id"] = "15510:-69",
-			["sc"] = 4,
-			["H1437"] = 2999492,
-		},
-		["Swashbuckler's Breastplate of the Bear"] = {
-			["mr"] = 1947294,
-			["cc"] = 2,
-			["id"] = "10182:-68",
+			["id"] = "24773:-21",
 			["sc"] = 3,
-			["H1437"] = 1947294,
+			["H1437"] = 1628097,
+		},
+		["Mystic's Belt"] = {
+			["mr"] = 1904898,
+			["cc"] = 2,
+			["id"] = "14025",
+			["sc"] = 2,
+			["H1437"] = 1904898,
+		},
+		["Dark Leather Belt"] = {
+			["mr"] = 150000,
+			["cc"] = 2,
+			["id"] = "4249",
+			["sc"] = 3,
+			["H1437"] = 150000,
+		},
+		["Regal Wild Jade"] = {
+			["mr"] = 60000,
+			["cc"] = 8,
+			["id"] = "76653",
+			["H1434"] = 60000,
+			["sc"] = 5,
 		},
 		["Red Swashbuckler's Shirt"] = {
 			["mr"] = 149500,
@@ -3844,26 +3844,26 @@ AUCTIONATOR_PRICE_DATABASE = {
 			["sc"] = 1,
 			["H1437"] = 149500,
 		},
-		["Emblazoned Belt"] = {
-			["mr"] = 1623294,
+		["Swashbuckler's Gloves of the Monkey"] = {
+			["mr"] = 1238050,
 			["cc"] = 2,
-			["id"] = "6398",
+			["id"] = "10186:-78",
 			["sc"] = 3,
-			["H1437"] = 1623294,
+			["H1437"] = 1238050,
 		},
-		["Pattern: Shoulders of Lightning Reflexes"] = {
-			["H1456"] = 26398,
-			["mr"] = 26398,
-			["sc"] = 2,
-			["id"] = "32749",
+		["Plans: Belt of the Titans"] = {
+			["mr"] = 9999999,
 			["cc"] = 7,
+			["id"] = "45088",
+			["sc"] = 5,
+			["H1437"] = 9999999,
 		},
-		["Eldr'naan Belt of Intellect"] = {
-			["mr"] = 4980000,
+		["Willow Belt of the Eagle"] = {
+			["mr"] = 9899,
 			["cc"] = 2,
-			["id"] = "24669:-26",
+			["id"] = "6539:-69",
 			["sc"] = 2,
-			["H1437"] = 4980000,
+			["H1437"] = 9899,
 		},
 		["Wicked Tiger Opal"] = {
 			["mr"] = 100000000,
@@ -3872,33 +3872,33 @@ AUCTIONATOR_PRICE_DATABASE = {
 			["cc"] = 8,
 			["H1437"] = 100000000,
 		},
-		["Dragonhawk Belt of Nature Protection"] = {
-			["mr"] = 2000000,
+		["Pygmy Belt of Stamina"] = {
+			["mr"] = 211346,
 			["cc"] = 2,
-			["id"] = "24798:-34",
+			["id"] = "36147:-16",
 			["sc"] = 3,
-			["H1437"] = 2000000,
+			["H1437"] = 211346,
 		},
-		["Warlord's Iron-Breastplate of the Owl"] = {
-			["mr"] = 5000000,
+		["Talhide Stitched-Belt of the Elder"] = {
+			["mr"] = 446085,
 			["cc"] = 2,
-			["H1440"] = 5000000,
-			["id"] = "25024:-9",
-			["sc"] = 5,
+			["id"] = "24902:-44",
+			["sc"] = 4,
+			["H1437"] = 446085,
 		},
-		["Shattered Hand Belt of the Sorcerer"] = {
-			["mr"] = 100000,
+		["Mail Combat Belt"] = {
+			["mr"] = 10245083,
 			["cc"] = 2,
-			["id"] = "25014:-36",
-			["sc"] = 5,
-			["H1437"] = 100000,
+			["id"] = "4717",
+			["sc"] = 4,
+			["H1437"] = 10245083,
 		},
-		["Deft Tiger Opal"] = {
-			["mr"] = 349900,
+		["Perfect Sensei's Alexandrite"] = {
+			["mr"] = 538999,
+			["H1444"] = 538999,
+			["id"] = "76577",
 			["cc"] = 8,
-			["id"] = "76534",
-			["H1435"] = 349900,
-			["sc"] = 6,
+			["sc"] = 5,
 		},
 		["Perfect Willful Tiger Opal"] = {
 			["mr"] = 36587,
@@ -3907,12 +3907,12 @@ AUCTIONATOR_PRICE_DATABASE = {
 			["H1434"] = 36587,
 			["sc"] = 6,
 		},
-		["Boneshredder Belt of the Tiger"] = {
-			["mr"] = 1628096,
-			["cc"] = 2,
-			["id"] = "24773:-14",
-			["sc"] = 3,
-			["H1437"] = 1628096,
+		["Sensei's Alexandrite"] = {
+			["mr"] = 150000,
+			["H1444"] = 150000,
+			["id"] = "76510",
+			["cc"] = 8,
+			["sc"] = 5,
 		},
 		["Raider's Belt of the Bear"] = {
 			["mr"] = 99000,
@@ -3921,19 +3921,19 @@ AUCTIONATOR_PRICE_DATABASE = {
 			["sc"] = 4,
 			["H1437"] = 99000,
 		},
-		["Gaea's Belt of Intellect"] = {
-			["mr"] = 2535300,
+		["Sparkleshell Belt of the Eagle"] = {
+			["mr"] = 3499793,
 			["cc"] = 2,
-			["id"] = "14276:-19",
-			["sc"] = 2,
-			["H1437"] = 2535300,
+			["id"] = "15575:-69",
+			["sc"] = 4,
+			["H1437"] = 3499793,
 		},
-		["Twilight Belt of Intellect"] = {
-			["mr"] = 999999,
+		["Forgotten Peacekeeper Breastplate of the Soldier"] = {
+			["mr"] = 12317697,
+			["sc"] = 5,
+			["id"] = "94039:-43",
+			["H1476"] = 12317697,
 			["cc"] = 2,
-			["id"] = "7438:-19",
-			["sc"] = 2,
-			["H1437"] = 999999,
 		},
 		["Glyph of Astral Fixation"] = {
 			["H1456"] = 260899,
@@ -3942,47 +3942,47 @@ AUCTIONATOR_PRICE_DATABASE = {
 			["id"] = "104133",
 			["cc"] = 5,
 		},
-		["Gossamer Belt of Intellect"] = {
-			["mr"] = 4397125,
+		["Sparkleshell Belt of the Gorilla"] = {
+			["mr"] = 3499692,
 			["cc"] = 2,
-			["id"] = "7526:-19",
-			["sc"] = 2,
-			["H1437"] = 4397125,
-		},
-		["Clefthoof Belt of the Tiger"] = {
-			["mr"] = 3000000,
-			["cc"] = 2,
-			["id"] = "24765:-14",
-			["sc"] = 3,
-			["H1437"] = 3000000,
-		},
-		["Living Steel Weapon Chain"] = {
-			["mr"] = 2000000,
-			["cc"] = 4,
-			["id"] = "86597",
-			["sc"] = 6,
-			["H1437"] = 2000000,
-		},
-		["Belt of Ghostly Graces"] = {
-			["mr"] = 7000000,
-			["cc"] = 2,
-			["id"] = "78886",
+			["id"] = "15575:-10",
 			["sc"] = 4,
-			["H1437"] = 7000000,
+			["H1437"] = 3499692,
 		},
-		["Scouting Belt of the Bear"] = {
-			["mr"] = 1099999,
+		["Swashbuckler's Leggings of the Owl"] = {
+			["mr"] = 749998,
 			["cc"] = 2,
-			["id"] = "6581:-68",
+			["id"] = "10188:-9",
 			["sc"] = 3,
-			["H1437"] = 1099999,
+			["H1437"] = 749998,
 		},
-		["Twilight Belt of the Eagle"] = {
-			["mr"] = 999000,
+		["Rageclaw Belt of the Owl"] = {
+			["mr"] = 2297794,
 			["cc"] = 2,
-			["id"] = "7438:-69",
+			["id"] = "15378:-9",
+			["sc"] = 3,
+			["H1437"] = 2297794,
+		},
+		["Elegant Belt of the Owl"] = {
+			["mr"] = 1005147,
+			["cc"] = 2,
+			["id"] = "10216:-9",
 			["sc"] = 2,
-			["H1437"] = 999000,
+			["H1437"] = 1005147,
+		},
+		["Bloodforged Belt of Strength"] = {
+			["mr"] = 2620650,
+			["cc"] = 2,
+			["id"] = "14950:-17",
+			["sc"] = 5,
+			["H1437"] = 2620650,
+		},
+		["Stormscale Belt of the Windstorm"] = {
+			["mr"] = 2382203,
+			["cc"] = 2,
+			["id"] = "85841:-137",
+			["sc"] = 4,
+			["H1437"] = 2382203,
 		},
 		["Hulking Belt"] = {
 			["mr"] = 83314286,
@@ -3991,32 +3991,32 @@ AUCTIONATOR_PRICE_DATABASE = {
 			["sc"] = 4,
 			["H1437"] = 83314286,
 		},
-		["Regal Alexandrite"] = {
-			["mr"] = 330000,
-			["cc"] = 8,
-			["id"] = "76521",
-			["H1434"] = 330000,
-			["sc"] = 5,
-		},
-		["Imbued Infantry Belt"] = {
-			["mr"] = 1500000,
+		["Warmaul Belt of Strength"] = {
+			["mr"] = 2000000,
 			["cc"] = 2,
-			["id"] = "68752",
+			["id"] = "24990:-17",
+			["sc"] = 5,
+			["H1437"] = 2000000,
+		},
+		["Grunt's Belt of the Monkey"] = {
+			["mr"] = 2999999,
+			["cc"] = 2,
+			["id"] = "15510:-78",
 			["sc"] = 4,
-			["H1437"] = 1500000,
+			["H1437"] = 2999999,
 		},
-		["Warlord's Iron-Breastplate of the Whale"] = {
-			["mr"] = 1481091,
+		["Seer's Belt"] = {
+			["mr"] = 97500,
 			["cc"] = 2,
-			["H1440"] = 1481091,
-			["id"] = "25024:-8",
-			["sc"] = 5,
+			["id"] = "4699",
+			["sc"] = 2,
+			["H1437"] = 97500,
 		},
-		["Warlord's Iron-Gauntlets of the Beast"] = {
-			["mr"] = 836000,
-			["cc"] = 2,
-			["H1440"] = 836000,
-			["id"] = "25025:-41",
+		["Perfect Puissant Alexandrite"] = {
+			["mr"] = 799593,
+			["cc"] = 8,
+			["id"] = "76590",
+			["H1434"] = 799593,
 			["sc"] = 5,
 		},
 		["Rain Poppy Staff"] = {
@@ -4033,19 +4033,19 @@ AUCTIONATOR_PRICE_DATABASE = {
 			["sc"] = 3,
 			["H1437"] = 1511370,
 		},
-		["Raider's Belt of the Whale"] = {
-			["mr"] = 260000,
+		["Warmaul Belt of the Falcon"] = {
+			["mr"] = 1116650,
 			["cc"] = 2,
-			["id"] = "9788:-81",
-			["sc"] = 4,
-			["H1437"] = 260000,
+			["id"] = "24990:-11",
+			["sc"] = 5,
+			["H1437"] = 1116650,
 		},
-		["Pattern: Spider Belt"] = {
-			["mr"] = 1235000,
-			["cc"] = 7,
-			["id"] = "4353",
-			["sc"] = 3,
-			["H1437"] = 1235000,
+		["Warlord's Iron-Girdle of the Sorcerer"] = {
+			["mr"] = 1523085,
+			["cc"] = 2,
+			["H1440"] = 1523085,
+			["id"] = "25022:-36",
+			["sc"] = 5,
 		},
 		["Swashbuckler's Boots of Power"] = {
 			["mr"] = 2752129,
@@ -4075,12 +4075,12 @@ AUCTIONATOR_PRICE_DATABASE = {
 			["sc"] = 4,
 			["H1437"] = 199990000,
 		},
-		["Energized Wild Jade"] = {
-			["mr"] = 252999,
-			["cc"] = 8,
-			["id"] = "76651",
-			["H1434"] = 252999,
-			["sc"] = 5,
+		["Bard's Belt of the Wolf"] = {
+			["mr"] = 803293,
+			["cc"] = 2,
+			["id"] = "6558:-13",
+			["sc"] = 3,
+			["H1437"] = 803293,
 		},
 		["Swashbuckler's Leggings of the Whale"] = {
 			["mr"] = 1000000,
@@ -4089,40 +4089,40 @@ AUCTIONATOR_PRICE_DATABASE = {
 			["sc"] = 3,
 			["H1437"] = 1000000,
 		},
-		["Superior Buckler of the Boar"] = {
-			["mr"] = 3471000,
-			["cc"] = 2,
-			["id"] = "9804:-12",
-			["sc"] = 7,
-			["H1437"] = 3471000,
-		},
-		["Warlord's Iron-Girdle of the Gorilla"] = {
-			["mr"] = 550000,
-			["cc"] = 2,
-			["H1440"] = 550000,
-			["id"] = "25022:-10",
+		["Nimble Wild Jade"] = {
+			["mr"] = 67500,
+			["cc"] = 8,
+			["id"] = "93705",
+			["H1434"] = 67500,
 			["sc"] = 5,
 		},
-		["Warlord's Iron-Gauntlets of Nimbleness"] = {
-			["mr"] = 1129083,
+		["Warlord's Iron-Epaulets of Nimbleness"] = {
+			["mr"] = 999000,
 			["cc"] = 2,
-			["H1440"] = 1129083,
-			["id"] = "25025:-27",
+			["H1440"] = 999000,
+			["id"] = "25028:-27",
 			["sc"] = 5,
 		},
-		["Archmage Belt of the Invoker"] = {
-			["mr"] = 200000,
+		["Warlord's Iron-Breastplate of the Champion"] = {
+			["mr"] = 1000000,
 			["cc"] = 2,
-			["id"] = "24677:-39",
-			["sc"] = 2,
-			["H1437"] = 200000,
-		},
-		["Warlord's Sabatons of Intellect"] = {
-			["mr"] = 998995,
-			["cc"] = 2,
-			["H1440"] = 998995,
-			["id"] = "25023:-26",
+			["H1440"] = 1000000,
+			["id"] = "25024:-45",
 			["sc"] = 5,
+		},
+		["Warlord's Iron-Legplates of Strength"] = {
+			["mr"] = 2000000,
+			["cc"] = 2,
+			["H1440"] = 2000000,
+			["id"] = "25027:-17",
+			["sc"] = 5,
+		},
+		["Swashbuckler's Leggings of the Gorilla"] = {
+			["mr"] = 2743022,
+			["cc"] = 2,
+			["id"] = "10188:-10",
+			["sc"] = 3,
+			["H1437"] = 2743022,
 		},
 		["Archmage Belt of Nature Protection"] = {
 			["mr"] = 368373,
@@ -4138,18 +4138,18 @@ AUCTIONATOR_PRICE_DATABASE = {
 			["id"] = "25023:-14",
 			["sc"] = 5,
 		},
-		["Overlord's Legplates of the Whale"] = {
-			["mr"] = 1400800,
+		["Overlord's Legplates of the Gorilla"] = {
+			["mr"] = 1400798,
 			["cc"] = 2,
-			["H1440"] = 1400800,
-			["id"] = "10208:-81",
+			["H1440"] = 1400798,
+			["id"] = "10208:-10",
 			["sc"] = 5,
 		},
-		["Overlord's Chestplate of the Gorilla"] = {
-			["mr"] = 3991997,
+		["Forgotten Peacekeeper Shoulders of the Beast"] = {
+			["mr"] = 2990000,
 			["cc"] = 2,
-			["H1440"] = 3991997,
-			["id"] = "10203:-10",
+			["H1440"] = 2990000,
+			["id"] = "94042:-41",
 			["sc"] = 5,
 		},
 		["Daggerfen Belt of the Wolf"] = {
@@ -4166,26 +4166,26 @@ AUCTIONATOR_PRICE_DATABASE = {
 			["sc"] = 3,
 			["H1437"] = 492318,
 		},
-		["Overlord's Shield of the Tiger"] = {
-			["mr"] = 11499800,
+		["Overlord's Girdle of Power"] = {
+			["mr"] = 4292420,
 			["cc"] = 2,
-			["H1440"] = 11499800,
-			["id"] = "9974:-14",
-			["sc"] = 7,
-		},
-		["Forgotten Peacekeeper Breastplate of the Champion"] = {
-			["mr"] = 12317696,
-			["cc"] = 2,
-			["id"] = "94039:-45",
-			["H1476"] = 12317696,
+			["H1440"] = 4292420,
+			["id"] = "10206:-20",
 			["sc"] = 5,
 		},
-		["Overlord's Chestplate of Power"] = {
-			["mr"] = 3991998,
+		["Warlord's Iron-Girdle of the Owl"] = {
+			["mr"] = 1371538,
 			["cc"] = 2,
-			["H1440"] = 3991998,
-			["id"] = "10203:-20",
+			["H1440"] = 1371538,
+			["id"] = "25022:-9",
 			["sc"] = 5,
+		},
+		["Warlord's Axe of the Bear"] = {
+			["mr"] = 60000,
+			["cc"] = 1,
+			["H1440"] = 60000,
+			["id"] = "15238:-68",
+			["sc"] = 1,
 		},
 		["Indomitable Belt"] = {
 			["mr"] = 5229900,
@@ -4194,12 +4194,12 @@ AUCTIONATOR_PRICE_DATABASE = {
 			["sc"] = 3,
 			["H1437"] = 5229900,
 		},
-		["Shattered Hand Belt of the Elder"] = {
-			["mr"] = 1056962,
-			["cc"] = 2,
-			["id"] = "25014:-44",
-			["sc"] = 5,
-			["H1437"] = 1056962,
+		["Six of Storms"] = {
+			["H1456"] = 54500,
+			["mr"] = 54500,
+			["sc"] = 0,
+			["id"] = "31898",
+			["cc"] = 10,
 		},
 		["Forgotten Peacekeeper Breastplate of the Sorcerer"] = {
 			["mr"] = 12317697,
@@ -4222,11 +4222,11 @@ AUCTIONATOR_PRICE_DATABASE = {
 			["sc"] = 5,
 			["H1437"] = 180000,
 		},
-		["Forgotten Peacekeeper Breastplate of the Bear"] = {
-			["mr"] = 12317797,
+		["Overlord's Gauntlets of Strength"] = {
+			["mr"] = 8315350,
 			["cc"] = 2,
-			["id"] = "94039:-7",
-			["H1476"] = 12317797,
+			["H1440"] = 8315350,
+			["id"] = "10205:-17",
 			["sc"] = 5,
 		},
 		["Jazeraint Belt of Intellect"] = {
@@ -4236,19 +4236,19 @@ AUCTIONATOR_PRICE_DATABASE = {
 			["sc"] = 4,
 			["H1437"] = 2489900,
 		},
-		["Warlord's Iron-Legplates of Agility"] = {
-			["mr"] = 350000,
+		["Fortified Belt of Power"] = {
+			["mr"] = 1000000,
 			["cc"] = 2,
-			["H1440"] = 350000,
-			["id"] = "25027:-18",
-			["sc"] = 5,
+			["id"] = "9814:-20",
+			["sc"] = 4,
+			["H1437"] = 1000000,
 		},
-		["Ephew's Enlightened Mantle"] = {
-			["mr"] = 375000000,
-			["sc"] = 2,
-			["id"] = "118889",
-			["H1475"] = 375000000,
+		["Rageclaw Belt of the Eagle"] = {
+			["mr"] = 2297995,
 			["cc"] = 2,
+			["id"] = "15378:-69",
+			["sc"] = 3,
+			["H1437"] = 2297995,
 		},
 		["Jade Belt of the Whale"] = {
 			["mr"] = 6095000,
@@ -4271,19 +4271,19 @@ AUCTIONATOR_PRICE_DATABASE = {
 			["sc"] = 4,
 			["H1437"] = 5480000,
 		},
-		["Skettis Belt of the Owl"] = {
-			["mr"] = 550000,
-			["cc"] = 2,
-			["id"] = "24886:-9",
-			["sc"] = 4,
-			["H1437"] = 550000,
+		["Five of Lunacy"] = {
+			["H1456"] = 100000,
+			["mr"] = 100000,
+			["sc"] = 0,
+			["id"] = "31912",
+			["cc"] = 10,
 		},
-		["Solid Sky Sapphire"] = {
-			["mr"] = 899999,
-			["cc"] = 8,
-			["id"] = "40008",
-			["sc"] = 2,
-			["H1477"] = 899999,
+		["Warmonger's Belt of the Wolf"] = {
+			["mr"] = 1000000,
+			["cc"] = 2,
+			["id"] = "9961:-13",
+			["sc"] = 4,
+			["H1437"] = 1000000,
 		},
 		["Geist Belt of the Prophet"] = {
 			["mr"] = 113502,
@@ -4299,12 +4299,12 @@ AUCTIONATOR_PRICE_DATABASE = {
 			["id"] = "10208:-68",
 			["sc"] = 5,
 		},
-		["Fractured Temporal Crystal"] = {
-			["mr"] = 470000,
-			["cc"] = 6,
-			["id"] = "115504",
-			["sc"] = 7,
-			["H1477"] = 470000,
+		["Forgotten Peacekeeper Shoulders of the Champion"] = {
+			["mr"] = 12000000,
+			["cc"] = 2,
+			["id"] = "94042:-45",
+			["H1476"] = 12000000,
+			["sc"] = 5,
 		},
 		["Steady Wild Jade"] = {
 			["mr"] = 46200,
@@ -4313,12 +4313,12 @@ AUCTIONATOR_PRICE_DATABASE = {
 			["H1434"] = 46200,
 			["sc"] = 5,
 		},
-		["Fractured Sun's Radiance"] = {
-			["mr"] = 119000,
-			["cc"] = 8,
-			["id"] = "76700",
-			["sc"] = 3,
-			["H1477"] = 119000,
+		["Forgotten Peacekeeper Leggings of the Bear"] = {
+			["mr"] = 4074998,
+			["cc"] = 2,
+			["id"] = "94036:-7",
+			["H1476"] = 4074998,
+			["sc"] = 5,
 		},
 	},
 	["__dbversion"] = 4,
@@ -4347,25 +4347,25 @@ AUCTIONATOR_TOONS = {
 		["firstSeen"] = 1413753437,
 		["firstVersion"] = "3.1.6",
 	},
-	["Kylozandrax"] = {
-		["firstSeen"] = 1414365977,
+	["Stormslinger"] = {
+		["firstSeen"] = 1413753241,
 		["firstVersion"] = "3.1.6",
-		["guid"] = "Player-1317-065406C1",
 	},
 	["Banjax"] = {
 		["firstSeen"] = 1415050082,
-		["firstVersion"] = "3.1.6",
-	},
-	["Ryvok"] = {
-		["firstSeen"] = 1413753142,
 		["firstVersion"] = "3.1.6",
 	},
 	["Greenthorn"] = {
 		["firstSeen"] = 1413753390,
 		["firstVersion"] = "3.1.6",
 	},
-	["Stormslinger"] = {
-		["firstSeen"] = 1413753241,
+	["Ryvok"] = {
+		["firstSeen"] = 1413753142,
+		["firstVersion"] = "3.1.6",
+	},
+	["Kylozandrax"] = {
+		["firstSeen"] = 1414365977,
+		["guid"] = "Player-1317-065406C1",
 		["firstVersion"] = "3.1.6",
 	},
 }

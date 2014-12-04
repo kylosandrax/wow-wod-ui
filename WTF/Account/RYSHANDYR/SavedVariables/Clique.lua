@@ -8,10 +8,10 @@ CliqueDB3 = {
 		["Banjax - Aggramar"] = {
 			["alerthidden"] = true,
 		},
-		["Ryvok - Aggramar"] = {
+		["Kylosandrax - Aggramar"] = {
 			["alerthidden"] = true,
 		},
-		["Kylosandrax - Aggramar"] = {
+		["Ryvok - Aggramar"] = {
 			["alerthidden"] = true,
 		},
 		["Bronin - Aggramar"] = {
@@ -34,10 +34,10 @@ CliqueDB3 = {
 		["Zapunzel - Aggramar"] = {
 			["bindings"] = {
 				{
-					["type"] = "target",
 					["sets"] = {
 						["default"] = true,
 					},
+					["type"] = "target",
 					["key"] = "BUTTON1",
 					["unit"] = "mouseover",
 				}, -- [1]
@@ -53,10 +53,10 @@ CliqueDB3 = {
 		["Greenthorn - Aggramar"] = {
 			["bindings"] = {
 				{
+					["type"] = "target",
 					["sets"] = {
 						["default"] = true,
 					},
-					["type"] = "target",
 					["key"] = "BUTTON1",
 					["unit"] = "mouseover",
 				}, -- [1]
@@ -72,10 +72,10 @@ CliqueDB3 = {
 		["Ryjax - Aggramar"] = {
 			["bindings"] = {
 				{
-					["type"] = "target",
 					["sets"] = {
 						["default"] = true,
 					},
+					["type"] = "target",
 					["key"] = "BUTTON1",
 					["unit"] = "mouseover",
 				}, -- [1]
@@ -91,10 +91,10 @@ CliqueDB3 = {
 		["Kylosandrax - Aggramar"] = {
 			["bindings"] = {
 				{
-					["type"] = "target",
 					["sets"] = {
 						["default"] = true,
 					},
+					["type"] = "target",
 					["key"] = "BUTTON1",
 					["unit"] = "mouseover",
 				}, -- [1]
@@ -128,10 +128,10 @@ CliqueDB3 = {
 		["Feldspar - Aggramar"] = {
 			["bindings"] = {
 				{
-					["type"] = "target",
 					["sets"] = {
 						["default"] = true,
 					},
+					["type"] = "target",
 					["key"] = "BUTTON1",
 					["unit"] = "mouseover",
 				}, -- [1]
@@ -183,10 +183,10 @@ CliqueDB3 = {
 		["Kylozandrax - Earthen Ring"] = {
 			["bindings"] = {
 				{
+					["type"] = "target",
 					["sets"] = {
 						["default"] = true,
 					},
-					["type"] = "target",
 					["key"] = "BUTTON1",
 					["unit"] = "mouseover",
 				}, -- [1]
@@ -202,10 +202,10 @@ CliqueDB3 = {
 		["Banjax - Aggramar"] = {
 			["bindings"] = {
 				{
-					["type"] = "target",
 					["sets"] = {
 						["default"] = true,
 					},
+					["type"] = "target",
 					["key"] = "BUTTON1",
 					["unit"] = "mouseover",
 				}, -- [1]
@@ -221,10 +221,10 @@ CliqueDB3 = {
 		["Stormslinger - Aggramar"] = {
 			["bindings"] = {
 				{
+					["type"] = "target",
 					["sets"] = {
 						["default"] = true,
 					},
-					["type"] = "target",
 					["key"] = "BUTTON1",
 					["unit"] = "mouseover",
 				}, -- [1]
@@ -258,10 +258,10 @@ CliqueDB3 = {
 		["Ryvok - Aggramar"] = {
 			["bindings"] = {
 				{
+					["type"] = "target",
 					["sets"] = {
 						["default"] = true,
 					},
-					["type"] = "target",
 					["key"] = "BUTTON1",
 					["unit"] = "mouseover",
 				}, -- [1]
@@ -394,10 +394,10 @@ CliqueDB3 = {
 		["Bronin - Aggramar"] = {
 			["bindings"] = {
 				{
-					["type"] = "target",
 					["sets"] = {
 						["default"] = true,
 					},
+					["type"] = "target",
 					["key"] = "BUTTON1",
 					["unit"] = "mouseover",
 				}, -- [1]

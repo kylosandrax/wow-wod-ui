@@ -4,10 +4,10 @@ HandyNotesDB = {
 		["Feldspar - Aggramar"] = "Feldspar - Aggramar",
 		["Zapunzel - Aggramar"] = "Zapunzel - Aggramar",
 		["Stormslinger - Aggramar"] = "Stormslinger - Aggramar",
-		["Kylosandrax - Aggramar"] = "Kylosandrax - Aggramar",
+		["Ryvok - Aggramar"] = "Ryvok - Aggramar",
 		["Banjax - Aggramar"] = "Banjax - Aggramar",
 		["Ryjax - Aggramar"] = "Ryjax - Aggramar",
-		["Ryvok - Aggramar"] = "Ryvok - Aggramar",
+		["Kylosandrax - Aggramar"] = "Kylosandrax - Aggramar",
 		["Bronin - Aggramar"] = "Bronin - Aggramar",
 	},
 	["profiles"] = {
@@ -17,13 +17,13 @@ HandyNotesDB = {
 		},
 		["Stormslinger - Aggramar"] = {
 		},
-		["Kylosandrax - Aggramar"] = {
+		["Ryvok - Aggramar"] = {
 		},
 		["Banjax - Aggramar"] = {
 		},
 		["Ryjax - Aggramar"] = {
 		},
-		["Ryvok - Aggramar"] = {
+		["Kylosandrax - Aggramar"] = {
 		},
 		["Bronin - Aggramar"] = {
 		},
@@ -34,10 +34,10 @@ HandyNotes_HandyNotesDB = {
 		["Feldspar - Aggramar"] = "Feldspar - Aggramar",
 		["Zapunzel - Aggramar"] = "Zapunzel - Aggramar",
 		["Stormslinger - Aggramar"] = "Stormslinger - Aggramar",
-		["Kylosandrax - Aggramar"] = "Kylosandrax - Aggramar",
+		["Ryvok - Aggramar"] = "Ryvok - Aggramar",
 		["Banjax - Aggramar"] = "Banjax - Aggramar",
 		["Ryjax - Aggramar"] = "Ryjax - Aggramar",
-		["Ryvok - Aggramar"] = "Ryvok - Aggramar",
+		["Kylosandrax - Aggramar"] = "Kylosandrax - Aggramar",
 		["Bronin - Aggramar"] = "Bronin - Aggramar",
 	},
 	["profiles"] = {
@@ -47,13 +47,13 @@ HandyNotes_HandyNotesDB = {
 		},
 		["Stormslinger - Aggramar"] = {
 		},
-		["Kylosandrax - Aggramar"] = {
+		["Ryvok - Aggramar"] = {
 		},
 		["Banjax - Aggramar"] = {
 		},
 		["Ryjax - Aggramar"] = {
 		},
-		["Ryvok - Aggramar"] = {
+		["Kylosandrax - Aggramar"] = {
 		},
 		["Bronin - Aggramar"] = {
 		},

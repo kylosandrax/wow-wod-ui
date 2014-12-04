@@ -20,14 +20,14 @@ OvaleDB = {
 		["Zapunzel - Aggramar"] = {
 			["check"] = {
 				["opt_mage_frost_aoe"] = true,
-				["opt_time_warp"] = true,
 				["opt_potion_intellect"] = true,
+				["opt_time_warp"] = true,
 			},
 		},
 		["Greenthorn - Aggramar"] = {
 			["apparence"] = {
-				["raccourcis"] = false,
 				["offsetY"] = -171.999786376953,
+				["raccourcis"] = false,
 				["offsetX"] = -0.9998779296875,
 				["verrouille"] = true,
 			},
@@ -93,10 +93,10 @@ OvaleDB = {
 		},
 		["Ryvok - Aggramar"] = {
 			["apparence"] = {
-				["offsetY"] = -180.999572753906,
-				["raccourcis"] = false,
-				["offsetX"] = 2.9998779296875,
 				["clickThru"] = true,
+				["offsetY"] = -180.999572753906,
+				["offsetX"] = 2.9998779296875,
+				["raccourcis"] = false,
 			},
 			["check"] = {
 				["opt_righteous_fury_check"] = true,
@@ -107,22 +107,22 @@ OvaleDB = {
 		},
 		["Bronin - Aggramar"] = {
 			["apparence"] = {
+				["raccourcis"] = false,
+				["offsetX"] = -2.9998779296875,
+				["hideVehicule"] = true,
+				["offsetY"] = -147.999237060547,
+				["verrouille"] = true,
 				["minimap"] = {
 					["hide"] = true,
 				},
-				["offsetX"] = -2.9998779296875,
-				["hideVehicule"] = true,
-				["verrouille"] = true,
-				["raccourcis"] = false,
-				["offsetY"] = -147.999237060547,
 			},
-			["standaloneOptions"] = true,
 			["check"] = {
 				["opt_potion_strength"] = true,
 				["opt_deathknight_frost_aoe"] = true,
 				["opt_potion_armor"] = true,
 				["opt_deathknight_blood_aoe"] = true,
 			},
+			["standaloneOptions"] = true,
 		},
 	},
 }

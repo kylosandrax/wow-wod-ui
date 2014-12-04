@@ -1,5 +1,5 @@
 
 ResolveHistoryDB = {
-	["Bronin - Aggramar"] = {
+	["Banjax - Aggramar"] = {
 	},
 }
