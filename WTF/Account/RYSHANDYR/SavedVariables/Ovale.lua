@@ -20,14 +20,14 @@ OvaleDB = {
 		["Zapunzel - Aggramar"] = {
 			["check"] = {
 				["opt_mage_frost_aoe"] = true,
-				["opt_potion_intellect"] = true,
 				["opt_time_warp"] = true,
+				["opt_potion_intellect"] = true,
 			},
 		},
 		["Greenthorn - Aggramar"] = {
 			["apparence"] = {
-				["offsetY"] = -171.999786376953,
 				["raccourcis"] = false,
+				["offsetY"] = -171.999786376953,
 				["offsetX"] = -0.9998779296875,
 				["verrouille"] = true,
 			},

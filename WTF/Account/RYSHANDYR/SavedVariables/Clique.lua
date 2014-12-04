@@ -5,10 +5,13 @@ CliqueDB3 = {
 		["Stormslinger - Aggramar"] = {
 			["alerthidden"] = true,
 		},
-		["Kylosandrax - Aggramar"] = {
+		["Banjax - Aggramar"] = {
 			["alerthidden"] = true,
 		},
 		["Ryvok - Aggramar"] = {
+			["alerthidden"] = true,
+		},
+		["Kylosandrax - Aggramar"] = {
 			["alerthidden"] = true,
 		},
 		["Bronin - Aggramar"] = {
@@ -31,10 +34,10 @@ CliqueDB3 = {
 		["Zapunzel - Aggramar"] = {
 			["bindings"] = {
 				{
+					["type"] = "target",
 					["sets"] = {
 						["default"] = true,
 					},
-					["type"] = "target",
 					["key"] = "BUTTON1",
 					["unit"] = "mouseover",
 				}, -- [1]
@@ -50,10 +53,10 @@ CliqueDB3 = {
 		["Greenthorn - Aggramar"] = {
 			["bindings"] = {
 				{
-					["type"] = "target",
 					["sets"] = {
 						["default"] = true,
 					},
+					["type"] = "target",
 					["key"] = "BUTTON1",
 					["unit"] = "mouseover",
 				}, -- [1]
@@ -69,10 +72,10 @@ CliqueDB3 = {
 		["Ryjax - Aggramar"] = {
 			["bindings"] = {
 				{
+					["type"] = "target",
 					["sets"] = {
 						["default"] = true,
 					},
-					["type"] = "target",
 					["key"] = "BUTTON1",
 					["unit"] = "mouseover",
 				}, -- [1]
@@ -88,10 +91,10 @@ CliqueDB3 = {
 		["Kylosandrax - Aggramar"] = {
 			["bindings"] = {
 				{
+					["type"] = "target",
 					["sets"] = {
 						["default"] = true,
 					},
-					["type"] = "target",
 					["key"] = "BUTTON1",
 					["unit"] = "mouseover",
 				}, -- [1]
@@ -125,13 +128,20 @@ CliqueDB3 = {
 		["Feldspar - Aggramar"] = {
 			["bindings"] = {
 				{
+					["type"] = "target",
 					["sets"] = {
 						["default"] = true,
 					},
-					["type"] = "target",
 					["key"] = "BUTTON1",
 					["unit"] = "mouseover",
 				}, -- [1]
+				{
+					["type"] = "menu",
+					["key"] = "BUTTON2",
+					["sets"] = {
+						["default"] = true,
+					},
+				}, -- [2]
 				{
 					["spell"] = "Renew",
 					["key"] = "SHIFT-BUTTON2",
@@ -140,23 +150,7 @@ CliqueDB3 = {
 					},
 					["icon"] = "Interface\\Icons\\Spell_Holy_Renew",
 					["type"] = "spell",
-				}, -- [2]
-				{
-					["type"] = "menu",
-					["key"] = "BUTTON2",
-					["sets"] = {
-						["default"] = true,
-					},
 				}, -- [3]
-				{
-					["spell"] = "Flash Heal",
-					["key"] = "SHIFT-BUTTON1",
-					["sets"] = {
-						["default"] = true,
-					},
-					["icon"] = "Interface\\Icons\\Spell_Holy_FlashHeal",
-					["type"] = "spell",
-				}, -- [4]
 				{
 					["spell"] = "Power Word: Shield",
 					["key"] = "SHIFT-BUTTON4",
@@ -164,6 +158,15 @@ CliqueDB3 = {
 						["default"] = true,
 					},
 					["icon"] = "Interface\\Icons\\Spell_Holy_PowerWordShield",
+					["type"] = "spell",
+				}, -- [4]
+				{
+					["spell"] = "Flash Heal",
+					["key"] = "SHIFT-BUTTON1",
+					["sets"] = {
+						["default"] = true,
+					},
+					["icon"] = "Interface\\Icons\\Spell_Holy_FlashHeal",
 					["type"] = "spell",
 				}, -- [5]
 				{
@@ -180,10 +183,10 @@ CliqueDB3 = {
 		["Kylozandrax - Earthen Ring"] = {
 			["bindings"] = {
 				{
-					["type"] = "target",
 					["sets"] = {
 						["default"] = true,
 					},
+					["type"] = "target",
 					["key"] = "BUTTON1",
 					["unit"] = "mouseover",
 				}, -- [1]
@@ -199,10 +202,10 @@ CliqueDB3 = {
 		["Banjax - Aggramar"] = {
 			["bindings"] = {
 				{
+					["type"] = "target",
 					["sets"] = {
 						["default"] = true,
 					},
-					["type"] = "target",
 					["key"] = "BUTTON1",
 					["unit"] = "mouseover",
 				}, -- [1]
@@ -218,10 +221,10 @@ CliqueDB3 = {
 		["Stormslinger - Aggramar"] = {
 			["bindings"] = {
 				{
-					["type"] = "target",
 					["sets"] = {
 						["default"] = true,
 					},
+					["type"] = "target",
 					["key"] = "BUTTON1",
 					["unit"] = "mouseover",
 				}, -- [1]
@@ -255,10 +258,10 @@ CliqueDB3 = {
 		["Ryvok - Aggramar"] = {
 			["bindings"] = {
 				{
-					["type"] = "target",
 					["sets"] = {
 						["default"] = true,
 					},
+					["type"] = "target",
 					["key"] = "BUTTON1",
 					["unit"] = "mouseover",
 				}, -- [1]
@@ -297,23 +300,23 @@ CliqueDB3 = {
 					["type"] = "spell",
 				}, -- [5]
 				{
-					["spell"] = "Hand of Freedom",
+					["spell"] = "Execution Sentence",
 					["key"] = "SHIFT-3",
 					["sets"] = {
 						["default"] = true,
 						["sectalent"] = true,
 					},
-					["icon"] = "Interface\\Icons\\Spell_Holy_SealOfValor",
+					["icon"] = "Interface\\Icons\\spell_paladin_executionsentence",
 					["type"] = "spell",
 				}, -- [6]
 				{
-					["spell"] = "Holy Light",
-					["key"] = "SHIFT-BUTTON2",
+					["spell"] = "Beacon of Light",
+					["key"] = "SHIFT-A",
 					["sets"] = {
 						["default"] = true,
 						["sectalent"] = true,
 					},
-					["icon"] = "Interface\\Icons\\Spell_Holy_SurgeOfLight",
+					["icon"] = "Interface\\Icons\\Ability_Paladin_BeaconofLight",
 					["type"] = "spell",
 				}, -- [7]
 				{
@@ -337,23 +340,23 @@ CliqueDB3 = {
 					["type"] = "spell",
 				}, -- [9]
 				{
-					["spell"] = "Execution Sentence",
-					["key"] = "SHIFT-3",
+					["spell"] = "Holy Light",
+					["key"] = "SHIFT-BUTTON2",
 					["sets"] = {
 						["default"] = true,
 						["sectalent"] = true,
 					},
-					["icon"] = "Interface\\Icons\\spell_paladin_executionsentence",
+					["icon"] = "Interface\\Icons\\Spell_Holy_SurgeOfLight",
 					["type"] = "spell",
 				}, -- [10]
 				{
-					["spell"] = "Beacon of Light",
-					["key"] = "SHIFT-A",
+					["spell"] = "Cleanse",
+					["key"] = "SHIFT-BUTTON3",
 					["sets"] = {
 						["default"] = true,
 						["sectalent"] = true,
 					},
-					["icon"] = "Interface\\Icons\\Ability_Paladin_BeaconofLight",
+					["icon"] = "Interface\\Icons\\Spell_Holy_Purify",
 					["type"] = "spell",
 				}, -- [11]
 				{
@@ -367,13 +370,13 @@ CliqueDB3 = {
 					["type"] = "spell",
 				}, -- [12]
 				{
-					["spell"] = "Cleanse",
-					["key"] = "SHIFT-BUTTON3",
+					["spell"] = "Hand of Freedom",
+					["key"] = "SHIFT-3",
 					["sets"] = {
 						["default"] = true,
 						["sectalent"] = true,
 					},
-					["icon"] = "Interface\\Icons\\Spell_Holy_Purify",
+					["icon"] = "Interface\\Icons\\Spell_Holy_SealOfValor",
 					["type"] = "spell",
 				}, -- [13]
 				{
@@ -391,10 +394,10 @@ CliqueDB3 = {
 		["Bronin - Aggramar"] = {
 			["bindings"] = {
 				{
+					["type"] = "target",
 					["sets"] = {
 						["default"] = true,
 					},
-					["type"] = "target",
 					["key"] = "BUTTON1",
 					["unit"] = "mouseover",
 				}, -- [1]

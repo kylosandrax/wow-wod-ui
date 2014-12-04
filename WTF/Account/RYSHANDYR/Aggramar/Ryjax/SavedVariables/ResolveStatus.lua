@@ -7,9 +7,9 @@ ResolveStatusDB = {
 	["border"] = true,
 	["width"] = 200,
 	["fontsize"] = 12,
-	["fontpath"] = "Default",
-	["locked"] = false,
-	["height"] = 20,
-	["keepSession"] = false,
 	["instance"] = false,
+	["locked"] = false,
+	["keepSession"] = false,
+	["height"] = 20,
+	["fontpath"] = "Default",
 }

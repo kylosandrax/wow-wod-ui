@@ -1,7 +1,5 @@
 
 ResolveHistoryDB = {
 	["Bronin - Aggramar"] = {
-		["Frostwall"] = {
-		},
 	},
 }

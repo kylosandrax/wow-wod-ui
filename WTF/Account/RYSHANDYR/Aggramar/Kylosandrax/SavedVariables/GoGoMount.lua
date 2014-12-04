@@ -73,47 +73,12 @@ GoGo_Prefs = {
 			},
 			["ZoneID"] = 976,
 		},
-		["Gorgrond"] = {
-			["Preferred"] = {
-			},
-			["Excluded"] = {
-			},
-			["ZoneID"] = 949,
-		},
-		["Vale of Eternal Blossoms"] = {
-			["Preferred"] = {
-			},
-			["Excluded"] = {
-			},
-			["ZoneID"] = 811,
-		},
-		["Valley of the Four Winds"] = {
-			["Preferred"] = {
-			},
-			["Excluded"] = {
-			},
-			["ZoneID"] = 807,
-		},
 		["Orgrimmar"] = {
 			["Preferred"] = {
 			},
 			["Excluded"] = {
 			},
-			["ZoneID"] = 14,
-		},
-		["The Burning Glacier"] = {
-			["Preferred"] = {
-			},
-			["Excluded"] = {
-			},
-			["ZoneID"] = 941,
-		},
-		["Warspear"] = {
-			["Preferred"] = {
-			},
-			["Excluded"] = {
-			},
-			["ZoneID"] = 1011,
+			["ZoneID"] = 962,
 		},
 		["Townlong Steppes"] = {
 			["Preferred"] = {
@@ -122,20 +87,6 @@ GoGo_Prefs = {
 			},
 			["ZoneID"] = 810,
 		},
-		["Bladespire Citadel"] = {
-			["Preferred"] = {
-			},
-			["Excluded"] = {
-			},
-			["ZoneID"] = 941,
-		},
-		["Halfhill"] = {
-			["Preferred"] = {
-			},
-			["Excluded"] = {
-			},
-			["ZoneID"] = 807,
-		},
 		["The Jade Forest"] = {
 			["Preferred"] = {
 			},
@@ -143,12 +94,19 @@ GoGo_Prefs = {
 			},
 			["ZoneID"] = 806,
 		},
-		["Tanaan Jungle"] = {
+		["Auction House"] = {
 			["Preferred"] = {
 			},
 			["Excluded"] = {
 			},
-			["ZoneID"] = 945,
+			["ZoneID"] = 978,
+		},
+		["Frostfire Ridge"] = {
+			["Preferred"] = {
+			},
+			["Excluded"] = {
+			},
+			["ZoneID"] = 941,
 		},
 		["Timeless Isle"] = {
 			["Preferred"] = {
@@ -157,19 +115,19 @@ GoGo_Prefs = {
 			},
 			["ZoneID"] = 951,
 		},
-		["Durotar"] = {
+		["Vale of Eternal Blossoms"] = {
 			["Preferred"] = {
 			},
 			["Excluded"] = {
 			},
-			["ZoneID"] = 4,
+			["ZoneID"] = 811,
 		},
-		["The Veiled Stair"] = {
+		["Bladespire Citadel"] = {
 			["Preferred"] = {
 			},
 			["Excluded"] = {
 			},
-			["ZoneID"] = 873,
+			["ZoneID"] = 941,
 		},
 		["Kun-Lai Summit"] = {
 			["Preferred"] = {
@@ -178,6 +136,48 @@ GoGo_Prefs = {
 			},
 			["ZoneID"] = 809,
 		},
+		["Valley of the Four Winds"] = {
+			["Preferred"] = {
+			},
+			["Excluded"] = {
+			},
+			["ZoneID"] = 807,
+		},
+		["Tanaan Jungle"] = {
+			["Preferred"] = {
+			},
+			["Excluded"] = {
+			},
+			["ZoneID"] = 945,
+		},
+		["The Veiled Stair"] = {
+			["Preferred"] = {
+			},
+			["Excluded"] = {
+			},
+			["ZoneID"] = 873,
+		},
+		["Halfhill"] = {
+			["Preferred"] = {
+			},
+			["Excluded"] = {
+			},
+			["ZoneID"] = 807,
+		},
+		["Warspear"] = {
+			["Preferred"] = {
+			},
+			["Excluded"] = {
+			},
+			["ZoneID"] = 1011,
+		},
+		["Durotar"] = {
+			["Preferred"] = {
+			},
+			["Excluded"] = {
+			},
+			["ZoneID"] = 4,
+		},
 		["Stormstout Brewery"] = {
 			["Preferred"] = {
 			},
@@ -185,7 +185,7 @@ GoGo_Prefs = {
 			},
 			["ZoneID"] = 862,
 		},
-		["Frostfire Ridge"] = {
+		["The Burning Glacier"] = {
 			["Preferred"] = {
 			},
 			["Excluded"] = {
@@ -206,16 +206,16 @@ GoGo_Prefs = {
 			},
 			["ZoneID"] = 930,
 		},
-		["Auction House"] = {
+		["Gorgrond"] = {
 			["Preferred"] = {
 			},
 			["Excluded"] = {
 			},
-			["ZoneID"] = 978,
+			["ZoneID"] = 949,
 		},
 	},
 	["DisableMountNotice"] = false,
-	["DisableWaterFlight"] = true,
+	["autodismount"] = true,
 	["DruidDisableInCombat"] = false,
 	["DisableUpdateNotice"] = false,
 	["RemoveBuffs"] = true,
@@ -226,7 +226,7 @@ GoGo_Prefs = {
 	["ShamanClickForm"] = false,
 	["ExtraPassengerMounts"] = {
 	},
-	["autodismount"] = true,
+	["DisableWaterFlight"] = true,
 }
 GoGo_DebugLog = {
 }

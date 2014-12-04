@@ -18,10 +18,10 @@ TradeSkillMaster_WarehousingDB = {
 				["1"] = true,
 			},
 			["scrollvalue"] = 0,
-			["selected"] = 1,
+			["fullwidth"] = 782.999816894531,
 			["treesizable"] = true,
 			["treewidth"] = 175,
-			["fullwidth"] = 782.999816894531,
+			["selected"] = 1,
 		},
 	},
 }

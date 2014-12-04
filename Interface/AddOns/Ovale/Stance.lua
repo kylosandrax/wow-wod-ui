@@ -27,7 +27,7 @@ local tinsert = table.insert
 local tonumber = tonumber
 local tsort = table.sort
 local type = type
-local wipe = table.wipe
+local wipe = wipe
 local API_GetNumShapeshiftForms = GetNumShapeshiftForms
 local API_GetShapeshiftForm = GetShapeshiftForm
 local API_GetShapeshiftFormInfo = GetShapeshiftFormInfo
@@ -127,7 +127,6 @@ function OvaleStance:OnInitialize()
 end
 
 function OvaleStance:OnEnable()
-	self:RegisterEvent("PLAYER_ALIVE", "UpdateStances")
 	self:RegisterEvent("PLAYER_ENTERING_WORLD", "UpdateStances")
 	self:RegisterEvent("UPDATE_SHAPESHIFT_FORM")
 	self:RegisterEvent("UPDATE_SHAPESHIFT_FORMS")

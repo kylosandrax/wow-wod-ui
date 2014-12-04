@@ -24,12 +24,12 @@ GoGo_Prefs = {
 			},
 			["ZoneID"] = 13,
 		},
-		["The Jade Forest"] = {
+		["Timeless Isle"] = {
 			["Preferred"] = {
 			},
 			["Excluded"] = {
 			},
-			["ZoneID"] = 806,
+			["ZoneID"] = 951,
 		},
 		["Shrine of Two Moons"] = {
 			["Preferred"] = {
@@ -38,19 +38,19 @@ GoGo_Prefs = {
 			},
 			["ZoneID"] = 13,
 		},
+		["The Jade Forest"] = {
+			["Preferred"] = {
+			},
+			["Excluded"] = {
+			},
+			["ZoneID"] = 806,
+		},
 		["Siege of Orgrimmar"] = {
 			["Preferred"] = {
 			},
 			["Excluded"] = {
 			},
 			["ZoneID"] = 862,
-		},
-		["Timeless Isle"] = {
-			["Preferred"] = {
-			},
-			["Excluded"] = {
-			},
-			["ZoneID"] = 951,
 		},
 		["Orgrimmar"] = {
 			["Preferred"] = {
@@ -61,7 +61,7 @@ GoGo_Prefs = {
 		},
 	},
 	["DisableMountNotice"] = false,
-	["DisableWaterFlight"] = true,
+	["autodismount"] = true,
 	["DruidDisableInCombat"] = false,
 	["DisableUpdateNotice"] = false,
 	["RemoveBuffs"] = true,
@@ -72,7 +72,7 @@ GoGo_Prefs = {
 	["ShamanClickForm"] = false,
 	["ExtraPassengerMounts"] = {
 	},
-	["autodismount"] = true,
+	["DisableWaterFlight"] = true,
 }
 GoGo_DebugLog = {
 }

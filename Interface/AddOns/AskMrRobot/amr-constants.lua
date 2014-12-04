@@ -114,14 +114,14 @@ AskMrRobot.instanceIds = {
 
 -- instances that we currently support logging for
 AskMrRobot.supportedInstanceIds = {
-	[1182] = true,
-	[1175] = true,
-	[1208] = true,
-	[1195] = true,
-	[1176] = true,
-	[1209] = true,
-	[1279] = true,
-	[1358] = true,
+	--[1182] = true,
+	--[1175] = true,
+	--[1208] = true,
+	--[1195] = true,
+	--[1176] = true,
+	--[1209] = true,
+	--[1279] = true,
+	--[1358] = true,
 	[1228] = true,
 	[1205] = true
 }
@@ -130,6 +130,14 @@ AskMrRobot.supportedInstanceIds = {
 function AskMrRobot.IsSupportedInstance()
 
 	local zone, _, difficultyIndex, _, _, _, _, instanceMapID = GetInstanceInfo()
+	if AskMrRobot.supportedInstanceIds[tonumber(instanceMapID)] then
+		return true
+	else
+		return false
+	end
+end
+
+function AskMrRobot.IsSupportedInstanceId(instanceMapID)
 	if AskMrRobot.supportedInstanceIds[tonumber(instanceMapID)] then
 		return true
 	else

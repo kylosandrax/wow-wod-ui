@@ -28,7 +28,7 @@ local tostring = tostring
 local tostringall = tostringall		-- FrameXML/RestrictedInfrastructure
 local type = type
 local unpack = unpack
-local wipe = table.wipe
+local wipe = wipe
 local API_GetItemInfo = GetItemInfo
 local API_GetTime = GetTime
 local API_IsInGroup = IsInGroup
@@ -41,7 +41,7 @@ local API_UnitIsDead = UnitIsDead
 local DEFAULT_CHAT_FRAME = DEFAULT_CHAT_FRAME
 local LE_PARTY_CATEGORY_INSTANCE = LE_PARTY_CATEGORY_INSTANCE
 
-local OVALE_VERSION = "6.0.27"
+local OVALE_VERSION = "6.0.28"
 local REPOSITORY_KEYWORD = "@" .. "project-version" .. "@"
 
 -- Table of strings to display once per session.

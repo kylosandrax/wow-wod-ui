@@ -34,7 +34,7 @@ local pairs = pairs
 local tonumber = tonumber
 local tostring = tostring
 local type = type
-local wipe = table.wipe
+local wipe = wipe
 local Complement = OvaleTimeSpan.Complement
 local CopyTimeSpan = OvaleTimeSpan.CopyTo
 local HasTime = OvaleTimeSpan.HasTime
@@ -311,7 +311,7 @@ local function GetActionTextureInfo(element, state, target)
 	local actionShortcut = nil
 	local actionIsCurrent = nil
 	local actionType = "texture"
-	local actionId = texture
+	local actionId = actionTexture
 
 	OvaleBestAction:StopProfiling("OvaleBestAction_GetActionTextureInfo")
 	return actionTexture, actionInRange, actionCooldownStart, actionCooldownDuration,

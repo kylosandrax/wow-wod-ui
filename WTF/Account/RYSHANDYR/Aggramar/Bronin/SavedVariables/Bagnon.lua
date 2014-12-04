@@ -19,6 +19,13 @@ BagnonFrameSettings = {
 			["y"] = 206.667236328125,
 			["x"] = -47.777771749616,
 		},
+		["voidstorage"] = {
+			["y"] = 628.000061035156,
+			["point"] = "BOTTOMLEFT",
+			["frameLayer"] = "TOPLEVEL",
+			["scale"] = 0.9,
+			["itemFrameColumns"] = 14,
+		},
 		["guildbank"] = {
 			["frameColor"] = {
 				nil, -- [1]
@@ -31,13 +38,6 @@ BagnonFrameSettings = {
 			["frameLayer"] = "TOPLEVEL",
 			["scale"] = 0.9,
 			["y"] = 819.000183105469,
-		},
-		["voidstorage"] = {
-			["y"] = 628.000061035156,
-			["point"] = "BOTTOMLEFT",
-			["frameLayer"] = "TOPLEVEL",
-			["scale"] = 0.9,
-			["itemFrameColumns"] = 14,
 		},
 		["bank"] = {
 			["frameColor"] = {

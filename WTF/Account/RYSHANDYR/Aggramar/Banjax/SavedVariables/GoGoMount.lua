@@ -17,12 +17,12 @@ GoGo_Prefs = {
 			},
 			["ZoneID"] = 4,
 		},
-		["Valley of Trials"] = {
+		["Northern Barrens"] = {
 			["Preferred"] = {
 			},
 			["Excluded"] = {
 			},
-			["ZoneID"] = 889,
+			["ZoneID"] = 11,
 		},
 		["Orgrimmar"] = {
 			["Preferred"] = {
@@ -31,9 +31,16 @@ GoGo_Prefs = {
 			},
 			["ZoneID"] = 321,
 		},
+		["Valley of Trials"] = {
+			["Preferred"] = {
+			},
+			["Excluded"] = {
+			},
+			["ZoneID"] = 889,
+		},
 	},
 	["DisableMountNotice"] = false,
-	["DisableWaterFlight"] = true,
+	["autodismount"] = true,
 	["DruidDisableInCombat"] = false,
 	["DisableUpdateNotice"] = false,
 	["RemoveBuffs"] = true,
@@ -44,7 +51,7 @@ GoGo_Prefs = {
 	["ShamanClickForm"] = false,
 	["ExtraPassengerMounts"] = {
 	},
-	["autodismount"] = true,
+	["DisableWaterFlight"] = true,
 }
 GoGo_DebugLog = {
 }

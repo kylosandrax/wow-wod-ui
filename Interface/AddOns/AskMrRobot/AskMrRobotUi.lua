@@ -6,8 +6,8 @@ AskMrRobot.AmrUI = AskMrRobot.inheritsFrom(AskMrRobot.Frame)
 local _menuIds = {
 	export = 1,
 	gear = 2,
-	settings = 3,
-	combatLog = 4,
+	combatLog = 3,
+	settings = 4,
 	help = 5    
 }
 
@@ -67,12 +67,12 @@ function AskMrRobot.AmrUI:new()
     o.gearComparisonTab = AskMrRobot.GearComparisonTab:new(tabArea)
     o.menu[_menuIds["gear"]].element = o.gearComparisonTab
     
-	o.settingsTab = AskMrRobot.SettingsTab:new(tabArea)
-    o.menu[_menuIds["settings"]].element = o.settingsTab	
-	
     o.combatLogTab = AskMrRobot.CombatLogTab:new(tabArea)
     o.menu[_menuIds["combatLog"]].element = o.combatLogTab
 
+	o.settingsTab = AskMrRobot.SettingsTab:new(tabArea)
+    o.menu[_menuIds["settings"]].element = o.settingsTab	
+	
     o.helpTab = AskMrRobot.HelpTab:new(tabArea)
     o.menu[_menuIds["help"]].element = o.helpTab
     
@@ -124,8 +124,8 @@ function AskMrRobot.AmrUI:createMainMenu()
 
 	createButton(L.AMR_UI_MENU_EXPORT, -35)
 	createButton(L.AMR_UI_MENU_GEAR, -20)
-	createButton(L.AMR_UI_MENU_SETTINGS, 0)
 	createButton(L.AMR_UI_MENU_COMBAT_LOG, 0)
+	createButton(L.AMR_UI_MENU_SETTINGS, 0)
 	createButton(L.AMR_UI_MENU_HELP, 0)
 
 	return buttons

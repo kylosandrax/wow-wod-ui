@@ -201,7 +201,7 @@ function AskMrRobot.CombatLogTab:new(parent)
     end
     
 	-- if auto-logging is enabled, do a check when the addon is loaded to make sure that state is set correctly
-	if AmrDb.LogData._autoLog[AskMrRobot.instanceIds.Highmaul] == "enabled" or  AmrDb.LogData._autoLog[AskMrRobot.instanceIds.BlackrockFoundry] == "enabled" then
+	if tab:IsAutoLoggingEnabled() then
 		tab:UpdateAutoLogging()
 	end
 
@@ -363,6 +363,17 @@ function AskMrRobot.CombatLogTab:Update()
 
 end
 
+-- returns true if any auto-logging options are enabled
+function AskMrRobot.CombatLogTab:IsAutoLoggingEnabled()
+	-- see if any auto-logging is enabled
+	for k,v in pairs(AmrDb.LogData._autoLog) do
+		if v == "enabled" then
+			return true
+		end
+	end
+	return false
+end
+
 -- called to update logging state when auto-logging is enabled
 function AskMrRobot.CombatLogTab:UpdateAutoLogging()
 
@@ -383,14 +394,15 @@ function AskMrRobot.CombatLogTab:UpdateAutoLogging()
 	AmrDb.LogData._lastZone = zone
 	AmrDb.LogData._lastDiff = difficultyIndex
 
-	if AmrDb.LogData._autoLog[AskMrRobot.instanceIds.Highmaul] == "enabled"  or AmrDb.LogData._autoLog[AskMrRobot.instanceIds.BlackrockFoundry] == "enabled"  then
-		if tonumber(instanceMapID) == AskMrRobot.instanceIds.Highmaul or tonumber(instanceMapID) == AskMrRobot.instanceIds.BlackrockFoundry then
-			-- if in SoO, make sure logging is on
+	if self:IsAutoLoggingEnabled() then
+		if AskMrRobot.IsSupportedInstanceId(instanceMapID) and AmrDb.LogData._autoLog[tonumber(instanceMapID)] == "enabled" then
+			-- we are in a supported zone that we want to auto-log, turn logging on 
+			-- (supported check is probably redundant, but just in case someone has old settings lying around)
 			if not AskMrRobot.CombatLogTab.IsLogging() then
 				self:StartLogging()
 			end
 		else
-			-- not in SoO, turn logging off
+			-- not in a zone that we want to auto-log, turn logging off
 			if AskMrRobot.CombatLogTab.IsLogging() then
 				self:StopLogging()
 			end
@@ -438,12 +450,13 @@ end
 function AskMrRobot.CombatLogTab.InitializeVariable()
     if not AmrDb.LogData then AmrDb.LogData = {} end
 	if not AmrDb.LogData._autoLog then AmrDb.LogData._autoLog = {} end
-	if not AmrDb.LogData._autoLog[AskMrRobot.instanceIds.Highmaul] then 
-		AmrDb.LogData._autoLog[AskMrRobot.instanceIds.Highmaul] = "disabled" 
+	
+	for k,v in pairs(AskMrRobot.supportedInstanceIds) do
+		if not AmrDb.LogData._autoLog[k] then
+			AmrDb.LogData._autoLog[k] = "disabled"
+		end
 	end
-	if not AmrDb.LogData._autoLog[AskMrRobot.instanceIds.BlackrockFoundry] then 
-		AmrDb.LogData._autoLog[AskMrRobot.instanceIds.BlackrockFoundry] = "disabled" 
-	end	
+	
 	AmrDb.LogData._wipes = AmrDb.LogData._wipes or {}
 end
 
