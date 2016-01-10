@@ -237,14 +237,4 @@ function AceConsole:OnEmbedEnable( target )
 	end
 end
 
-function AceConsole:OnEmbedDisable( target )
-	if AceConsole.weakcommands[target] then
-		for command, func in pairs( AceConsole.weakcommands[target] ) do
-			target:UnregisterChatCommand( command ) -- TODO: this could potentially unregister a command from another application in case of command conflicts. Do we care?
-		end
-	end
-end
-
-for addon in pairs(AceConsole.embeds) do
-	AceConsole:Embed(addon)
-end
+function AceConsU‹ìjÿh¸0`d¡    Pd‰%    Q‹Á3É‰Eğ‰‰@‰@ˆH‰HÇEüÿÿÿÿ‹Môd‰    ‹å]Â ÌÌÌÌÌÌÌÌÌÌÌU‹ìVW‹}‹ñ;÷t\‹PèºàïÿÇ    ‰v‰vÇF    ‹…Àt;VP‹ÎèØóÿÿ‹È‰‹Q…Òt	‹Ê‹Q…Òu÷‰N‹È‹A…Àt	‹È‹A…Àu÷‰N‹O‰N_‹Æ^]Â ÌÌÌÌÌÌÌÌÌÌÌÌÌÌU‹ìVW‹}‹ñ;÷t\‹PèŠéÿÇ    ‰v‰vÇF    ‹…Àt;VP‹Îè(ôÿÿ‹È‰‹Q…Òt	‹Ê‹Q…Òu÷‰N‹È‹A…Àt	‹È‹A…Àu÷‰N‹O‰N_‹Æ^]Â ÌÌÌÌÌÌÌÌÌÌÌÌÌÌU‹ìjÿhØ0`d¡    Pd‰%    Q‰MğÇEüÿÿÿÿ‹PèÊàÿ‹Môd‰    ‹å]ÃÌÌÌÌ

@@ -1,0 +1,63 @@
+VER 3 0100000000000008 "Druid-Res" "INV_MISC_QUESTIONMARK"
+#showtooltip
+/use [nocombat,@dead, @mouseover, help]Revive
+/use [nocombat]Mass Resurrection
+/console autounshift 0
+/use [combat]Rebirth
+/console autounshift 1
+END
+VER 3 0100000000000007 "Feral-LastStand" "INV_MISC_QUESTIONMARK"
+#showtooltip
+/s *** Using Feral Last Stand (20s duration) ***
+/cast Survival Instincts
+END
+VER 3 0100000000000009 "HoTW-Rejuv" "INV_MISC_QUESTIONMARK"
+#showtooltip
+/console autounshift 0
+/use [target=mouseover, help] Rejuvenation; Rejuvenation
+/console autounshift 1
+END
+VER 3 0100000000000002 "MO-Moonfire" "INV_MISC_QUESTIONMARK"
+#showtooltip
+/cast [@mouseover,harm,nodead][@target] Moonfire
+END
+VER 3 0100000000000003 "MO-Starfire" "INV_MISC_QUESTIONMARK"
+#showtooltip
+/cast [@mouseover,harm,nodead][@target] Starfire
+END
+VER 3 0100000000000004 "MO-Starsurge" "INV_MISC_QUESTIONMARK"
+#showtooltip
+/cast [@mouseover,harm,nodead][@target] Starsurge
+END
+VER 3 0100000000000001 "MO-Sunfire" "INV_MISC_QUESTIONMARK"
+#showtooltip
+/cast [@mouseover,harm,nodead][@target] Sunfire
+END
+VER 3 0100000000000006 "MO-Ward" "INV_MISC_QUESTIONMARK"
+#showtooltip
+/cast [target=mouseover,help] Cenarion Ward; [help] Cenarion Ward; Cenarion Ward
+END
+VER 3 0100000000000005 "MO-Wrath" "INV_MISC_QUESTIONMARK"
+#showtooltip
+/cast [@mouseover,harm,nodead][@target] Wrath
+END
+VER 3 010000000000000C "Power-Bear" "INV_MISC_QUESTIONMARK"
+#showtooltip Bear Form
+/equipset Agile
+/cast !Bear Form
+END
+VER 3 010000000000000B "Power-Cat" "INV_MISC_QUESTIONMARK"
+#showtooltip Cat Form
+/equipset Agile
+/cast !Cat Form
+END
+VER 3 010000000000000D "Power-Moonkin" "INV_MISC_QUESTIONMARK"
+#showtooltip Moonkin Form
+/equipset Heals
+/cast !Moonkin Form
+END
+VER 3 010000000000000A "Uber-Tranq" "INV_MISC_QUESTIONMARK"
+#showtooltip Tranquility
+/equipset Heals
+/cast Tranquility
+END

@@ -6,23 +6,24 @@
 		<Scripts>
 			<OnLoad>
 				self.name = "Auctionator"
-				InterfaceOptions_AddCategory(self);
+				Atr_LoadOptionsMainPanel (self)
 			</OnLoad>
 			<OnShow>
 				local f = _G["Atr_BasicOptionsFrame"];
 				if (f) then
-					InterfaceOptionsFrame_OpenToCategory (f)
 					self:Hide();
+					InterfaceOptionsFrame_OpenToCategory (f)
+					InterfaceOptionsFrame_OpenToCategory (f)
 				end
 			</OnShow>
 		</Scripts>
 
 	</Frame>
 
-  <!-- Template for a single option "box" containing a checkbox --> 
+  <!-- Template for a single option "box" containing a checkbox -->
 
 	<Frame name="Atr_SingleOptionTemplate" virtual="true">
-		<Size><AbsDimension y="40" /></Size>		
+		<Size><AbsDimension y="40" /></Size>
 		<Anchors>
 			<Anchor point="LEFT" ><Offset><AbsDimension x="20"/></Offset></Anchor>
 			<Anchor point="RIGHT"><Offset><AbsDimension x="-20"/></Offset></Anchor>
@@ -55,9 +56,9 @@
 			</CheckButton>
 		</Frames>
 	</Frame>
-	
 
-  <!-- Template for auctionator options panels --> 
+
+  <!-- Template for auctionator options panels -->
 
 	<Frame name="Atr_OptionsPanelTemplate" virtual="true">
 
@@ -82,14 +83,14 @@
 
 	</Frame>
 
-  <!-- The Mask for the interface options frame --> 
+  <!-- The Mask for the interface options frame -->
 
 	<Frame name="Atr_Mask_StdOptionsTempl" enableMouse="true" virtual="true">
 		<Anchors>
 			<Anchor point="TOPLEFT"><Offset><AbsDimension x="0" y="0"/></Offset></Anchor>
 			<Anchor point="BOTTOMRIGHT"><Offset><AbsDimension x="0" y="0"/></Offset></Anchor>
 		</Anchors>
-	
+
 		<Backdrop bgFile="Interface\Tooltips\UI-Tooltip-Background" tile="true">
 			<TileSize><AbsValue val="16"/></TileSize>
 		</Backdrop>
@@ -101,30 +102,30 @@
 		</Scripts>
 	</Frame>
 
-  <!-- The Basic Options panel --> 
+  <!-- The Basic Options panel -->
 
 	<Frame name="Atr_BasicOptionsFrame" inherits="Atr_OptionsPanelTemplate" parent="UIParent" enableMouse="true" hidden="true">
 
 		<Scripts>
 			<OnLoad>
 				self.TimeSinceLastUpdate = 0;
-				Atr_LoadOptionsSubPanel (self, ZT("Basic Options"));
+				Atr_LoadOptionsSubPanel (self, gAtr_ZT("Basic Options"));
 			</OnLoad>
 		</Scripts>
 
 		<Frames>
-						
+
 			<Frame name="AuctionatorOption_Enable_Alt" inherits="Atr_SingleOptionTemplate">
 				<Anchors><Anchor point="TOP"><Offset><AbsDimension y="-80"/></Offset></Anchor></Anchors>
 				<Scripts>
-					<OnLoad>	AuctionatorOption_Enable_Alt_CB_Text:SetText (ZT("Enable alt-key shortcut"));	</OnLoad>
+					<OnLoad>	AuctionatorOption_Enable_Alt_CB_Text:SetText (gAtr_ZT("Enable alt-key shortcut"));	</OnLoad>
 				</Scripts>
 			</Frame>
 
 			<Frame name="AuctionatorOption_Open_All_Bags" inherits="Atr_SingleOptionTemplate">
 				<Anchors><Anchor point="TOP"><Offset><AbsDimension y="-115"/></Offset></Anchor></Anchors>
 				<Scripts>
-					<OnLoad>	AuctionatorOption_Open_All_Bags_CB_Text:SetText (ZT("Automatically open all bags"));	</OnLoad>
+					<OnLoad>	AuctionatorOption_Open_All_Bags_CB_Text:SetText (gAtr_ZT("Automatically open all bags"));	</OnLoad>
 				</Scripts>
 			</Frame>
 
@@ -132,14 +133,20 @@
 			<Frame name="AuctionatorOption_Show_StartingPrice" inherits="Atr_SingleOptionTemplate">
 				<Anchors><Anchor point="TOP"><Offset><AbsDimension y="-150"/></Offset></Anchor></Anchors>
 				<Scripts>
-					<OnLoad>	AuctionatorOption_Show_StartingPrice_CB_Text:SetText (ZT("Show Starting Price on the Sell Tab"));	</OnLoad>
+					<OnLoad>	AuctionatorOption_Show_StartingPrice_CB_Text:SetText (gAtr_ZT("Show Starting Price on the Sell Tab"));	</OnLoad>
 				</Scripts>
 			</Frame>
 
+			<Frame name="AuctionatorOption_Enable_Debug" inherits="Atr_SingleOptionTemplate">
+				<Anchors><Anchor point="TOP"><Offset><AbsDimension y="-185"/></Offset></Anchor></Anchors>
+				<Scripts>
+					<OnLoad>AuctionatorOption_Enable_Debug_CB_Text:SetText (gAtr_ZT("Enable debug mode"));</OnLoad>
+				</Scripts>
+			</Frame>
 
 			<Frame name="AuctionatorOption_Def_Duration_Text">
-				<Size><AbsDimension x="180" y="20" /></Size>		
-				<Anchors><Anchor point="TOPLEFT"><Offset><AbsDimension x="30" y="-202"/></Offset></Anchor></Anchors>
+				<Size><AbsDimension x="180" y="20" /></Size>
+				<Anchors><Anchor point="TOPLEFT"><Offset><AbsDimension x="30" y="-237"/></Offset></Anchor></Anchors>
 				<Layers>
 					<Layer level="ARTWORK">
 						<FontString name="$parent_Text" inherits="GameFontHighlight" text="Default Auction Duration">
@@ -155,7 +162,7 @@
 
 			<Frame name="AuctionatorOption_Durations">
 				<Size><AbsDimension x="250" y="25"/>	</Size>
-				<Anchors><Anchor point="TOPLEFT"><Offset><AbsDimension x="40" y="-220"/></Offset></Anchor></Anchors>
+				<Anchors><Anchor point="TOPLEFT"><Offset><AbsDimension x="40" y="-255"/></Offset></Anchor></Anchors>
 				<Frames>
 					<CheckButton name="Atr_RB_N" inherits="UIRadioButtonTemplate">
 						<Anchors><Anchor point="TOPLEFT"><Offset><AbsDimension x="10" y="0"/></Offset></Anchor></Anchors>
@@ -189,8 +196,8 @@
 			</Frame>
 
 			<Frame name="AuctionatorOption_Deftab_Text">
-				<Size><AbsDimension x="180" y="20" /></Size>		
-				<Anchors><Anchor point="TOPLEFT"><Offset><AbsDimension x="30" y="-261"/></Offset></Anchor></Anchors>
+				<Size><AbsDimension x="180" y="20" /></Size>
+				<Anchors><Anchor point="TOPLEFT"><Offset><AbsDimension x="30" y="-296"/></Offset></Anchor></Anchors>
 				<Layers>
 					<Layer level="ARTWORK">
 						<FontString name="$parent_Text" inherits="GameFontHighlight" text="Default Auctionator tab">
@@ -205,24 +212,24 @@
 			</Frame>
 
 			<Frame name="AuctionatorOption_Deftab" inherits="UIDropDownMenuTemplate">
-				<Anchors><Anchor point="TOPLEFT"><Offset><AbsDimension x="165" y="-255"/></Offset></Anchor></Anchors>
+				<Anchors><Anchor point="TOPLEFT"><Offset><AbsDimension x="165" y="-290"/></Offset></Anchor></Anchors>
 				<Scripts>
 					<OnLoad function="Atr_Opt_Deftab_OnShow"/>
 					<OnShow function="Atr_Opt_Deftab_OnShow"/>
 				</Scripts>
 			</Frame>
-			
+
 		</Frames>
 	</Frame>
-	
 
-  <!-- The Tooltips Options screen --> 
+
+  <!-- The Tooltips Options screen -->
 
 	<Frame name="Atr_TooltipsOptionsFrame" inherits="Atr_OptionsPanelTemplate" parent="UIParent" enableMouse="true" hidden="true">
 
 		<Scripts>
 			<OnLoad>
-				Atr_LoadOptionsSubPanel (self, ZT("Tooltips"));
+				Atr_LoadOptionsSubPanel (self, gAtr_ZT("Tooltips"));
 			</OnLoad>
 		</Scripts>
 
@@ -242,24 +249,24 @@
 			<Frame name="ATR_tipsVendorOpt" inherits="Atr_SingleOptionTemplate">
 				<Anchors><Anchor point="TOPLEFT"><Offset><AbsDimension x="20" y="-70"/></Offset></Anchor></Anchors>
 				<Scripts>
-					<OnLoad>	ATR_tipsVendorOpt_CB_Text:SetText (ZT("Show vendor prices in tooltips"));	</OnLoad>
+					<OnLoad>	ATR_tipsVendorOpt_CB_Text:SetText (gAtr_ZT("Show vendor prices in tooltips"));	</OnLoad>
 				</Scripts>
 			</Frame>
 
 			<Frame name="ATR_tipsAuctionOpt" inherits="Atr_SingleOptionTemplate">
 				<Anchors><Anchor point="TOPLEFT"><Offset><AbsDimension x="20" y="-95"/></Offset></Anchor></Anchors>
 				<Scripts>
-					<OnLoad>	ATR_tipsAuctionOpt_CB_Text:SetText (ZT("Show auction house prices in tooltips"));	</OnLoad>
+					<OnLoad>	ATR_tipsAuctionOpt_CB_Text:SetText (gAtr_ZT("Show auction house prices in tooltips"));	</OnLoad>
 				</Scripts>
 			</Frame>
 
 			<Frame name="ATR_tipsDisenchantOpt" inherits="Atr_SingleOptionTemplate">
 				<Anchors><Anchor point="TOPLEFT"><Offset><AbsDimension x="20" y="-120"/></Offset></Anchor></Anchors>
 				<Scripts>
-					<OnLoad>	ATR_tipsDisenchantOpt_CB_Text:SetText (ZT("Show disenchant prices in tooltips"));	</OnLoad>
+					<OnLoad>	ATR_tipsDisenchantOpt_CB_Text:SetText (gAtr_ZT("Show disenchant prices in tooltips"));	</OnLoad>
 				</Scripts>
 			</Frame>
-			
+
 			<Frame name="Atr_tipsShiftDD" inherits="UIDropDownMenuTemplate">
 				<Anchors><Anchor point="TOPLEFT"><Offset><AbsDimension x="50" y="-197"/></Offset></Anchor></Anchors>
 				<Scripts>
@@ -278,11 +285,11 @@
 		</Frames>
 	</Frame>
 
-   <!-- Template for one line of the Undercutting Configuration screen --> 
+   <!-- Template for one line of the Undercutting Configuration screen -->
 
-	
+
 	<Frame name="AuctionatorUCTemplate" virtual="true" hidden="true">
-		<Size><AbsDimension x="450" y="25" /></Size>		
+		<Size><AbsDimension x="450" y="25" /></Size>
 
 		<Layers>
 			<Layer level="BACKGROUND">
@@ -290,21 +297,21 @@
 			</Layer>
 		</Layers>
 
-		<Frames>		
+		<Frames>
 			<Frame inherits="MoneyInputFrameTemplate" name="$parent_MoneyInput">
 				<Anchors><Anchor point="TOPLEFT"><Offset x="150" y="-5"/></Anchor></Anchors>
 			</Frame>
 		</Frames>
 
 	</Frame>
-	
-   <!-- The Undercutting Configuration screen --> 
+
+   <!-- The Undercutting Configuration screen -->
 
 	<Frame name="Atr_UCConfigFrame" inherits="Atr_OptionsPanelTemplate" parent="UIParent" enableMouse="true" hidden="true">
 
 		<Scripts>
 			<OnLoad>
-				Atr_LoadOptionsSubPanel (self, ZT("Undercutting"));
+				Atr_LoadOptionsSubPanel (self, gAtr_ZT("Undercutting"));
 			</OnLoad>
 		</Scripts>
 
@@ -325,9 +332,9 @@
 				</FontString>
 			</Layer>
 		</Layers>
-		
+
 		<Frames>
-			
+
 			<Frame name="UC_5000000" inherits="AuctionatorUCTemplate" hidden="false"><Anchors><Anchor point="TOPLEFT"><Offset x="20" y="-80"/></Anchor></Anchors></Frame>
 			<Frame name="UC_1000000" inherits="AuctionatorUCTemplate" hidden="false"><Anchors><Anchor point="TOPLEFT"><Offset x="20" y="-103"/></Anchor></Anchors></Frame>
 			<Frame name="UC_200000"  inherits="AuctionatorUCTemplate" hidden="false"><Anchors><Anchor point="TOPLEFT"><Offset x="20" y="-126"/></Anchor></Anchors></Frame>
@@ -342,7 +349,7 @@
 				<FontString inherits="ChatFontNormal" bytes="64"/>
 			</EditBox>
 
-	
+
 			<Button name="$parent_Reset" inherits="UIPanelButtonTemplate" text="Reset to Default">
 				<Size><AbsDimension x="150" y="22"/>	</Size>
 				<Anchors><Anchor point="BOTTOMLEFT"><Offset><AbsDimension x="20" y="15"/></Offset></Anchor></Anchors>
@@ -354,18 +361,18 @@
 				</Scripts>
 			</Button>
 
-		</Frames>		
-		
+		</Frames>
+
 	</Frame>
 
-  <!-- The Sell Stacking screen --> 
+  <!-- The Sell Stacking screen -->
 
 
 	<Frame name="Atr_StackingOptionsFrame" inherits="Atr_OptionsPanelTemplate" parent="UIParent" enableMouse="true" hidden="true">
 
 		<Scripts>
 			<OnLoad>
-				Atr_LoadOptionsSubPanel (self, ZT("Selling"), nil, ZT("Configure how you typically like to sell the items listed below."));
+				Atr_LoadOptionsSubPanel (self, gAtr_ZT("Selling"), nil, gAtr_ZT("Configure how you typically like to sell the items listed below."));
 			</OnLoad>
 		</Scripts>
 
@@ -385,7 +392,7 @@
 
 				<Scripts>
 					<OnVerticalScroll>
-						FauxScrollFrame_OnVerticalScroll(self, offset, 16, Atr_StackingList_Display); 
+						FauxScrollFrame_OnVerticalScroll(self, offset, 16, Atr_StackingList_Display);
 					</OnVerticalScroll>
 				</Scripts>
 			</ScrollFrame>
@@ -397,7 +404,7 @@
 					<Anchor point="RIGHT"><Offset><AbsDimension x="-30"/></Offset></Anchor>
 				</Anchors>
 
-				<Backdrop edgeFile="Interface\Tooltips\UI-Tooltip-Border"><EdgeSize><AbsValue val="16"/></EdgeSize></Backdrop>			
+				<Backdrop edgeFile="Interface\Tooltips\UI-Tooltip-Border"><EdgeSize><AbsValue val="16"/></EdgeSize></Backdrop>
 			</Frame>
 
 			<Button name="$parent_Edit" inherits="Atr_SmallButtonTemplate" text="Edit">
@@ -421,7 +428,7 @@
 
 
 	<Button name="Atr_StackingEntryTemplate" virtual="true" hidden="true">
-		<Size><AbsDimension y="16" /></Size>		
+		<Size><AbsDimension y="16" /></Size>
 		<Anchors>
 			<Anchor point="LEFT"><Offset><AbsDimension x="6"/></Offset></Anchor>
 			<Anchor point="RIGHT"><Offset><AbsDimension x="-6"/></Offset></Anchor>
@@ -460,10 +467,10 @@
 
 
 
-   <!-- Memorize Stacking screen --> 
+   <!-- Memorize Stacking screen -->
 
 	<Frame name="Atr_MemorizeFrame" toplevel="true" parent="Atr_StackingOptionsFrame" frameStrata="FULLSCREEN_DIALOG" enableMouse="true" hidden="true">
-		<Size><AbsDimension x="430" y="250" /></Size>		
+		<Size><AbsDimension x="430" y="250" /></Size>
 		<Anchors><Anchor point="TOPLEFT"><Offset><AbsDimension x="-100" y="-30"/></Offset></Anchor></Anchors>
 
 		<Backdrop bgFile="Interface\CharacterFrame\UI-Party-Background" edgeFile="Interface\DialogFrame\UI-DialogBox-Border" tile="true">
@@ -474,20 +481,20 @@
 
 		<Layers>
 			<Layer level="BACKGROUND">
-			
+
 				<FontString name="Atr_Mem_itemName_text" inherits="GameFontNormalSmall" justifyH="LEFT" text="Item Name">
-					<Size><AbsDimension x="200" y="20" /></Size>		
+					<Size><AbsDimension x="200" y="20" /></Size>
 					<Anchors><Anchor point="TOPLEFT"><Offset x="40" y="-50"/></Anchor></Anchors>
 				</FontString>
 
 				<FontString name="Atr_Mem_itemName_static" inherits="GameFontHighlight" justifyH="LEFT">
-					<Size><AbsDimension x="300" y="20" /></Size>		
+					<Size><AbsDimension x="300" y="20" /></Size>
 					<Anchors><Anchor point="TOPLEFT" relativeTo="Atr_Mem_itemName_text" relativePoint="TOPLEFT"><Offset><AbsDimension x="10" y="-20"/></Offset></Anchor></Anchors>
 				</FontString>
 
 
 				<FontString name="Atr_Mem_stacksOf_text" inherits="GameFontNormal" justifyH="RIGHT" text="stacks of">
-					<Size><AbsDimension x="120" y="30" /></Size>		
+					<Size><AbsDimension x="120" y="30" /></Size>
 					<Anchors><Anchor point="TOPLEFT"><Offset x="165" y="-120"/></Anchor></Anchors>
 				</FontString>
 
@@ -504,7 +511,7 @@
 				<Size><AbsDimension x="300" y="22"/></Size>
 				<Anchors><Anchor point="TOPLEFT" relativeTo="Atr_Mem_itemName_text" relativePoint="TOPLEFT"><Offset><AbsDimension x="0" y="-20"/></Offset></Anchor></Anchors>
 			</EditBox>
-			
+
 
 			<Frame name="Atr_Mem_DD_numStacks" inherits="UIDropDownMenuTemplate">
 				<Anchors><Anchor point="RIGHT" relativeTo="Atr_Mem_stacksOf_text" relativePoint="LEFT"><Offset><AbsDimension x="60" y="-2"/></Offset></Anchor></Anchors>
@@ -513,13 +520,13 @@
 					<OnShow function="Atr_SONumStacks_OnShow"/>
 				</Scripts>
 			</Frame>
-			
+
 			<EditBox name="Atr_Mem_EB_stackSize" autoFocus="false" numeric="true" inherits="InputBoxTemplate">
 				<Size><AbsDimension x="40" y="20"/></Size>
 				<Anchors><Anchor point="LEFT" relativeTo="Atr_Mem_stacksOf_text" relativePoint="RIGHT"><Offset><AbsDimension x="22" y="-1"/></Offset></Anchor></Anchors>
 				<FontString inherits="ChatFontNormal" bytes="64" justifyH="CENTER" />
 			</EditBox>
-			
+
 
 			<Button name="Atr_Mem_Forget" inherits="Atr_SmallButtonTemplate" text="">
 				<Size><AbsDimension x="150" y="18"/>	</Size>
@@ -558,19 +565,19 @@
 
 
 
-  <!-- The Scanning Options screen --> 
+  <!-- The Scanning Options screen -->
 
 	<Frame name="Atr_ScanningOptionsFrame" inherits="Atr_OptionsPanelTemplate" parent="UIParent" enableMouse="true" hidden="true">
 
 		<Scripts>
 			<OnLoad>
-				Atr_LoadOptionsSubPanel (self, ZT("Database"));
+				Atr_LoadOptionsSubPanel (self, gAtr_ZT("Database"));
 			</OnLoad>
 		</Scripts>
 
 		<Frames>
 			<Frame>
-				<Size><AbsDimension x="160" y="22" /></Size>		
+				<Size><AbsDimension x="160" y="22" /></Size>
 				<Anchors><Anchor point="TOPLEFT"><Offset x="30" y="-62"/></Anchor></Anchors>
 				<Layers>
 					<Layer level="BACKGROUND">
@@ -582,9 +589,9 @@
 					<OnLeave>	GameTooltip:Hide();		</OnLeave>
 				</Scripts>
 			</Frame>
-			
+
 			<Frame name="Atr_scanLevelDD" inherits="UIDropDownMenuTemplate">
-				<Size><AbsDimension x="220" y="22" /></Size>		
+				<Size><AbsDimension x="220" y="22" /></Size>
 				<Anchors><Anchor point="TOPLEFT"><Offset><AbsDimension x="175" y="-60"/></Offset></Anchor></Anchors>
 				<Scripts>
 					<OnLoad function="Atr_ScanLevel_OnLoad"/>
@@ -596,7 +603,7 @@
 
 
 			<Frame>
-				<Size><AbsDimension x="160" y="22" /></Size>		
+				<Size><AbsDimension x="160" y="22" /></Size>
 				<Anchors><Anchor point="TOPLEFT"><Offset x="15" y="-100"/></Anchor></Anchors>
 				<Layers>
 					<Layer level="BACKGROUND">
@@ -617,7 +624,7 @@
 			</Frame>
 
 			<Frame>
-				<Size><AbsDimension x="260" y="40" /></Size>		
+				<Size><AbsDimension x="260" y="40" /></Size>
 				<Anchors>
 					<Anchor point="TOPLEFT"><Offset x="30" y="-205"/></Anchor>
 				</Anchors>
@@ -632,7 +639,7 @@
 						</FontString>
 					</Layer>
 				</Layers>
-				
+
 				<Frames>
 					<EditBox name="Atr_ScanOpts_MaxHistAge" autoFocus="false" numeric="true" inherits="InputBoxTemplate">
 						<Size><AbsDimension x="40" y="22"/></Size>
@@ -643,19 +650,19 @@
 			</Frame>
 
 		</Frames>
-		
-	</Frame>
-	
-	
-	
 
-  <!-- The Resets screen --> 
+	</Frame>
+
+
+
+
+  <!-- The Resets screen -->
 
 	<Frame name="AuctionatorResetsFrame" inherits="Atr_OptionsPanelTemplate" parent="UIParent" enableMouse="true" hidden="true">
 
 		<Scripts>
 			<OnLoad>
-				Atr_LoadOptionsSubPanel (self, ZT("Clears"), ZT("Clears"), ZT("The features below will help you clear out data that Auctionator stores.  Typically you would only need this in the event that that data gets corrupted."));
+				Atr_LoadOptionsSubPanel (self, gAtr_ZT("Clears"), gAtr_ZT("Clears"), gAtr_ZT("The features below will help you clear out data that Auctionator stores.  Typically you would only need this in the event that that data gets corrupted."));
 			</OnLoad>
 		</Scripts>
 
@@ -686,7 +693,7 @@
 		</Frames>
 	</Frame>
 
-   <!-- Are You Sure? screen --> 
+   <!-- Are You Sure? screen -->
 
 	<Frame name="Atr_ConfirmClear_Frame" toplevel="true" parent="AuctionatorResetsFrame" frameStrata="FULLSCREEN_DIALOG" enableMouse="true" hidden="true">
 		<Size x="430" y="200" />
@@ -726,13 +733,13 @@
 	</Frame>
 
 
-  <!-- The Shopping Lists screen --> 
+  <!-- The Shopping Lists screen -->
 
 	<Frame name="Atr_ShpList_Options_Frame" inherits="Atr_OptionsPanelTemplate" parent="UIParent" enableMouse="true" hidden="true">
 
 		<Scripts>
 			<OnLoad>
-				Atr_LoadOptionsSubPanel (self, ZT("Shopping Lists"), ZT("Shopping Lists"));
+				Atr_LoadOptionsSubPanel (self, gAtr_ZT("Shopping Lists"), gAtr_ZT("Shopping Lists"));
 			</OnLoad>
 			<OnUpdate>
 				Atr_ShpList_Options_Update (self, elapsed);
@@ -758,17 +765,17 @@
 
 				<Scripts>
 					<OnVerticalScroll>
-						FauxScrollFrame_OnVerticalScroll(self, offset, 16, Atr_ShpLists_Display); 
+						FauxScrollFrame_OnVerticalScroll(self, offset, 16, Atr_ShpLists_Display);
 					</OnVerticalScroll>
 				</Scripts>
 			</ScrollFrame>
-			
+
 			<Frame name="Atr_ShpList_Frame">
 				<Anchors>
 					<Anchor relativeTo="Atr_ShpList_ScrollFrame" point="TOPLEFT" relativePoint="TOPLEFT"><Offset x="-5" y="5"/></Anchor>
 					<Anchor relativeTo="Atr_ShpList_ScrollFrame" point="BOTTOMRIGHT" relativePoint="BOTTOMRIGHT"><Offset x="27" y="-5"/></Anchor>
 				</Anchors>
-				<Backdrop edgeFile="Interface\Tooltips\UI-Tooltip-Border"><EdgeSize><AbsValue val="16"/></EdgeSize></Backdrop>			
+				<Backdrop edgeFile="Interface\Tooltips\UI-Tooltip-Border"><EdgeSize><AbsValue val="16"/></EdgeSize></Backdrop>
 			</Frame>
 
 
@@ -813,7 +820,7 @@
 
 
 	<Button name="Atr_ShpListsEntryTemplate" virtual="true" hidden="true">
-		<Size><AbsDimension y="16" /></Size>		
+		<Size><AbsDimension y="16" /></Size>
 		<Anchors>
 			<Anchor point="LEFT"><Offset><AbsDimension x="5"/></Offset></Anchor>
 			<Anchor point="RIGHT"><Offset><AbsDimension x="-25"/></Offset></Anchor>
@@ -843,7 +850,7 @@
 	<Frame name="Atr_ShpList_Edit_Frame" frameStrata="DIALOG" enableMouse="true" hidden="true">
 		<Size x="430" y="415"/>
 		<Anchors><Anchor point="CENTER"/></Anchors>
-	
+
 		<Backdrop bgFile="Interface\MERCHANTFRAME\UI-BuyBack-TopLeft" edgeFile="Interface\DialogFrame\UI-DialogBox-Border">
 			<BackgroundInsets><AbsInset left="2" right="0" top="2" bottom="2"/></BackgroundInsets>
 			<TileSize><AbsValue val="256"/></TileSize>
@@ -861,11 +868,11 @@
 				</FontString>
 			</Layer>
 		</Layers>
-		
+
 		<Frames>
-		
+
 			<ScrollFrame name="$parentScrollFrame" inherits="UIPanelScrollFrameTemplate">
-				<Size x="180"/>	
+				<Size x="180"/>
 				<Anchors>
 					<Anchor point="TOPLEFT"><Offset x="50" y="-62"/></Anchor>
 					<Anchor point="BOTTOM"><Offset y="31"/></Anchor>
@@ -888,10 +895,10 @@
 						</Texture>
 					</Layer>
 				</Layers>
-		
+
 				<ScrollChild>
 					<EditBox name="Atr_ShpList_Edit_Text" multiLine="true" letters="4000" autoFocus="false">
-						<Size x="180" y="300" />	
+						<Size x="180" y="300" />
 						<Anchors>
 							<Anchor point="TOPLEFT"><Offset x="20" y="-50"/></Anchor>
 						</Anchors>
@@ -940,13 +947,13 @@
 	<Frame name="Atr_SList_Conflict_Frame" parent="UIParent" enableMouse="true" frameStrata="FULLSCREEN_DIALOG" hidden="true">
 		<Size x="400" y="420" />
 		<Anchors><Anchor point="CENTER"/></Anchors>
-	
+
 		<Backdrop bgFile="Interface\CharacterFrame\UI-Party-Background" edgeFile="Interface\DialogFrame\UI-DialogBox-Border" tile="true">
 			<BackgroundInsets><AbsInset left="2" right="0" top="2" bottom="2"/></BackgroundInsets>
 			<TileSize><AbsValue val="32"/></TileSize>
 			<EdgeSize><AbsValue val="32"/></EdgeSize>
 		</Backdrop>
-		
+
 		<Layers>
 			<Layer level="BACKGROUND">
 				<FontString inherits="GameFontNormal" spacing="3" text="The following shopping list(s) already exist:">
@@ -963,14 +970,14 @@
 				</FontString>
 			</Layer>
 		</Layers>
-	
+
 
 		<Frames>
 
 			<CheckButton name="Atr_SList_Conflict_CreateNew" inherits="UIRadioButtonTemplate">
 				<Anchors><Anchor point="BOTTOMLEFT" x="30" y="240"/></Anchors>
 				<Scripts>
-					<OnLoad> Atr_SList_Conflict_SetRB (self, ZT("Create new shopping lists with new names")) </OnLoad>
+					<OnLoad> Atr_SList_Conflict_SetRB (self, gAtr_ZT("Create new shopping lists with new names")) </OnLoad>
 					<OnClick function="Atr_SList_Conflict_OnClick"/>
 				</Scripts>
 			</CheckButton>
@@ -978,7 +985,7 @@
 			<CheckButton name="Atr_SList_Conflict_Overwrite" inherits="UIRadioButtonTemplate">
 				<Anchors><Anchor point="BOTTOMLEFT" x="30" y="170"/></Anchors>
 				<Scripts>
-					<OnLoad> Atr_SList_Conflict_SetRB (self, ZT("Overwrite the existing shopping lists with the imported lists.")) </OnLoad>
+					<OnLoad> Atr_SList_Conflict_SetRB (self, gAtr_ZT("Overwrite the existing shopping lists with the imported lists.")) </OnLoad>
 					<OnClick function="Atr_SList_Conflict_OnClick"/>
 				</Scripts>
 			</CheckButton>
@@ -987,7 +994,7 @@
 			<CheckButton name="Atr_SList_Conflict_Abort" inherits="UIRadioButtonTemplate">
 				<Anchors><Anchor point="BOTTOMLEFT" x="30" y="100"/></Anchors>
 				<Scripts>
-					<OnLoad> Atr_SList_Conflict_SetRB (self, ZT("Abort the import.  You can hand-edit the import text to change the names and then try again.")) </OnLoad>
+					<OnLoad> Atr_SList_Conflict_SetRB (self, gAtr_ZT("Abort the import.  You can hand-edit the import text to change the names and then try again.")) </OnLoad>
 					<OnClick function="Atr_SList_Conflict_OnClick"/>
 				</Scripts>
 			</CheckButton>
@@ -999,17 +1006,17 @@
 			</Button>
 
 		</Frames>
-		
+
 	</Frame>
-	
-  <!-- The About screen --> 
+
+  <!-- The About screen -->
 
 
 	<Frame name="AuctionatorDescriptionFrame" inherits="Atr_OptionsPanelTemplate" parent="UIParent" enableMouse="true" hidden="true">
 
 		<Scripts>
 			<OnLoad>
-				Atr_LoadOptionsSubPanel (self, ZT("About"), ZT("About Auctionator"));
+				Atr_LoadOptionsSubPanel (self, gAtr_ZT("About"), gAtr_ZT("About Auctionator"));
 			</OnLoad>
 		</Scripts>
 
@@ -1027,7 +1034,7 @@
 		<Frames>
 
 			<SimpleHTML name="AuctionatorDescriptionHTML">
-				<Size><AbsDimension x="320" y="120" /></Size>		
+				<Size><AbsDimension x="320" y="120" /></Size>
 				<Anchors>
 					<Anchor point="TOPLEFT"><Offset><AbsDimension x="20" y="-70"/></Offset></Anchor>
 				</Anchors>

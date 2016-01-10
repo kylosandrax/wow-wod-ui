@@ -1,3 +1,28 @@
+v3.1.1
+*Fixed error which occurred when renaming a recent or favorite search.
+
+v3.1
+*You can now shift-click on the search button after running a favorite search to run the next favorite search in the list.
+*After stopping the sniper, you can now shift-click the search button to quickly restart it.
+*Fixed a visual issue with renaming recent / favorite searches.
+
+v3.0
+*Initial 3.0 version!
+\\
+
+v2.4.6
+*Updated for patch 6.2
+
+v2.4.5
+*Fixing interface version.
+
+v2.4.4
+*Updated for patch 6.1.
+
+v2.4.3
+*Increased Max DE iLvl to 640.
+*Added transformations to destroying search.
+
 v2.4.2
 *Fixed Lua error with disenchant search.
 

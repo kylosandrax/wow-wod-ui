@@ -6,17 +6,18 @@ V['general'] = {
 	['loot'] = true,
 	['lootRoll'] = true,
 	["normTex"] = "ElvUI Norm",
-	["glossTex"] = "ElvUI Norm",	
+	["glossTex"] = "ElvUI Norm",
 	["dmgfont"] = "ElvUI Combat",
 	["namefont"] = "ElvUI Font",
 	['chatBubbles'] = 'backdrop',
+	['chatBubbleFont'] = "ElvUI Font",
+	['chatBubbleFontSize'] = 14,
 	['pixelPerfect'] = true,
-	['lfrEnhancement'] = true,
 	['replaceBlizzFonts'] = true,
-
+	['smallerWorldMap'] = true,
 	['minimap'] = {
 		['enable'] = true,
-		['hideGarrison'] = false,
+		['hideGarrison'] = true,
 		['hideCalendar'] = true,
 	},
 }
@@ -33,6 +34,12 @@ V["nameplate"] = {
 V['auras'] = {
 	['enable'] = true,
 	['disableBlizzard'] = true,
+	
+	["masque"] = {
+		["buffs"] = false,
+		["debuffs"] = false,
+		["consolidatedBuffs"] = false,
+	},
 }
 
 V['chat'] = {
@@ -42,9 +49,10 @@ V['chat'] = {
 V['skins'] = {
 	['ace3'] = {
 		['enable'] = true,
-	},	
+	},
 	['blizzard'] = {
 		['enable'] = true,
+		["deathRecap"] = true,
 		["bags"] = true,
 		["bmah"] = true, --black market ah
 		["reforge"] = true,
@@ -67,7 +75,7 @@ V['skins'] = {
 		["trainer"] = true,
 		["socket"] = true,
 		['loot'] = true,
-		["alertframes"] = true,
+		["alertframes"] = false,
 		["bgscore"] = true,
 		["merchant"] = true,
 		["mail"] = true,
@@ -79,6 +87,7 @@ V['skins'] = {
 		["worldmap"] = true,
 		["taxi"] = true,
 		["quest"] = true,
+		["questChoice"] = false,
 		["petition"] = true,
 		["dressingroom"] = true,
 		["pvp"] = true,
@@ -109,11 +118,26 @@ V['tooltip'] = {
 
 V['unitframe'] = {
 	['enable'] = true,
-	['disableBlizzard'] = true,	
+	['disabledBlizzardFrames'] = {
+		['player'] = true,
+		['target'] = true,
+		['focus'] = true,
+		['boss'] = true,
+		['arena'] = true,
+		['party'] = true,
+		['raid'] = true,
+	},
 }
 
 V["actionbar"] = {
 	["enable"] = true,
+	["hideCooldownBling"] = false,
+
+	["masque"] = {
+		["actionbars"] = false,
+		["petBar"] = false,
+		["stanceBar"] = false,
+	},
 }
 
 V["cooldown"] = {

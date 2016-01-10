@@ -1,11 +1,31 @@
 local E, L, V, P, G = unpack(select(2, ...)); --Inport: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
 local DT = E:GetModule('DataTexts')
 
-local format = string.format
-local join = string.join
-local floor = math.floor
-local wipe = table.wipe
+--Cache global variables
+--Lua functions
+local date = date
+local format, join = string.format, string.join
+--WoW API / Variables
+local GetGameTime = GetGameTime
+local RequestRaidInfo = RequestRaidInfo
+local GetNumWorldPVPAreas = GetNumWorldPVPAreas
+local GetWorldPVPAreaInfo = GetWorldPVPAreaInfo
+local SecondsToTime = SecondsToTime
+local GetNumSavedInstances = GetNumSavedInstances
+local GetSavedInstanceInfo = GetSavedInstanceInfo
+local GetDifficultyInfo = GetDifficultyInfo
+local GetNumSavedWorldBosses = GetNumSavedWorldBosses
+local GetSavedWorldBossInfo = GetSavedWorldBossInfo
+local VOICE_CHAT_BATTLEGROUND = VOICE_CHAT_BATTLEGROUND
+local WINTERGRASP_IN_PROGRESS = WINTERGRASP_IN_PROGRESS
+local QUEUE_TIME_UNAVAILABLE = QUEUE_TIME_UNAVAILABLE
+local TIMEMANAGER_TOOLTIP_REALMTIME = TIMEMANAGER_TOOLTIP_REALMTIME
+local TIMEMANAGER_TOOLTIP_LOCALTIME = TIMEMANAGER_TOOLTIP_LOCALTIME
 
+--Global variables that we don't cache, list them here for mikk's FindGlobals script
+-- GLOBALS: GameTimeFrame
+
+local WORLD_BOSSES_TEXT = RAID_INFO_WORLD_BOSS.."(s)"
 local APM = { TIMEMANAGER_PM, TIMEMANAGER_AM }
 local europeDisplayFormat = '';
 local ukDisplayFormat = '';
@@ -28,7 +48,7 @@ local name, instanceID, reset, difficultyId, locked, extended, isRaid, maxPlayer
 local function ValueColorUpdate(hex, r, g, b)
 	europeDisplayFormat = join("", "%02d", hex, ":|r%02d")
 	ukDisplayFormat = join("", "", "%d", hex, ":|r%02d", hex, " %s|r")
-	
+
 	if lastPanel ~= nil then
 		Update(lastPanel, 20000)
 	end
@@ -55,7 +75,7 @@ local function CalculateTimeValues(tooltip)
 	if (tooltip and E.db.datatexts.localtime) or (not tooltip and not E.db.datatexts.localtime) then
 		return ConvertTime(GetGameTime())
 	else
-		local	dateTable =	date("*t")
+		local dateTable = date("*t")
 		return ConvertTime(dateTable["hour"], dateTable["min"])
 	end
 end
@@ -67,12 +87,6 @@ end
 local function OnLeave(self)
 	DT.tooltip:Hide();
 	enteredFrame = false;
-end
-
-local function OnEvent()
-	if event == "UPDATE_INSTANCE_INFO" and enteredFrame then
-		RequestRaidInfo()
-	end
 end
 
 local function OnEnter(self)
@@ -94,9 +108,9 @@ local function OnEnter(self)
 			else
 				startTime = SecondsToTime(startTime, false, nil, 3)
 			end
-			DT.tooltip:AddDoubleLine(format(formatBattleGroundInfo, localizedName), startTime, 1, 1, 1, lockoutColorNormal.r, lockoutColorNormal.g, lockoutColorNormal.b)	
+			DT.tooltip:AddDoubleLine(format(formatBattleGroundInfo, localizedName), startTime, 1, 1, 1, lockoutColorNormal.r, lockoutColorNormal.g, lockoutColorNormal.b)
 		end
-	end	
+	end
 
 	local oneraid, lockoutColor
 	for i = 1, GetNumSavedInstances() do
@@ -107,60 +121,66 @@ local function OnEnter(self)
 				DT.tooltip:AddLine(L["Saved Raid(s)"])
 				oneraid = true
 			end
-			if extended then 
-				lockoutColor = lockoutColorExtended 
-			else 
-				lockoutColor = lockoutColorNormal 
+			if extended then
+				lockoutColor = lockoutColorExtended
+			else
+				lockoutColor = lockoutColorNormal
 			end
-			
+
 			local _, _, isHeroic, _, displayHeroic, displayMythic = GetDifficultyInfo(difficultyId)
 			if (numEncounters and numEncounters > 0) and (encounterProgress and encounterProgress > 0) then
 				DT.tooltip:AddDoubleLine(format(lockoutInfoFormat, maxPlayers, (displayMythic and "M" or (isHeroic or displayHeroic) and "H" or "N"), name, encounterProgress, numEncounters), SecondsToTime(reset, false, nil, 3), 1, 1, 1, lockoutColor.r, lockoutColor.g, lockoutColor.b)
 			else
 				DT.tooltip:AddDoubleLine(format(lockoutInfoFormatNoEnc, maxPlayers, (displayMythic and "M" or (isHeroic or displayHeroic) and "H" or "N"), name), SecondsToTime(reset, false, nil, 3), 1, 1, 1, lockoutColor.r, lockoutColor.g, lockoutColor.b)
-			end			
+			end
 		end
-	end	
-	
+	end
+
 	local addedLine = false
 	for i = 1, GetNumSavedWorldBosses() do
 		name, instanceID, reset = GetSavedWorldBossInfo(i)
 		if(reset) then
 			if(not addedLine) then
 				DT.tooltip:AddLine(' ')
-				DT.tooltip:AddLine(RAID_INFO_WORLD_BOSS.."(s)")
+				DT.tooltip:AddLine(WORLD_BOSSES_TEXT)
 				addedLine = true
 			end
-			DT.tooltip:AddDoubleLine(name, SecondsToTime(reset, true, nil, 3), 1, 1, 1, 0.8, 0.8, 0.8)		
+			DT.tooltip:AddDoubleLine(name, SecondsToTime(reset, true, nil, 3), 1, 1, 1, 0.8, 0.8, 0.8)
 		end
 	end
-	
+
 	local timeText
 	local Hr, Min, AmPm = CalculateTimeValues(true)
 
 	DT.tooltip:AddLine(" ")
 	if AmPm == -1 then
-		DT.tooltip:AddDoubleLine(E.db.datatexts.localtime and TIMEMANAGER_TOOLTIP_REALMTIME or TIMEMANAGER_TOOLTIP_LOCALTIME, 
+		DT.tooltip:AddDoubleLine(E.db.datatexts.localtime and TIMEMANAGER_TOOLTIP_REALMTIME or TIMEMANAGER_TOOLTIP_LOCALTIME,
 			format(europeDisplayFormat_nocolor, Hr, Min), 1, 1, 1, lockoutColorNormal.r, lockoutColorNormal.g, lockoutColorNormal.b)
 	else
 		DT.tooltip:AddDoubleLine(E.db.datatexts.localtime and TIMEMANAGER_TOOLTIP_REALMTIME or TIMEMANAGER_TOOLTIP_LOCALTIME,
 			format(ukDisplayFormat_nocolor, Hr, Min, APM[AmPm]), 1, 1, 1, lockoutColorNormal.r, lockoutColorNormal.g, lockoutColorNormal.b)
-	end	
-	
+	end
+
 	DT.tooltip:Show()
+end
+
+local function OnEvent(self, event)
+	if event == "UPDATE_INSTANCE_INFO" and enteredFrame then
+		OnEnter(self)
+	end
 end
 
 local int = 3
 function Update(self, t)
 	int = int - t
-		
+
 	if int > 0 then return end
-	
+
 	if GameTimeFrame.flashInvite then
-		E:Flash(self, 0.53)
+		E:Flash(self, 0.53, true)
 	else
 		E:StopFlash(self)
-	end	
+	end
 
 	if enteredFrame then
 		OnEnter(self)
@@ -173,11 +193,11 @@ function Update(self, t)
 		int = 5
 		return
 	end
-	
+
 	curHr = Hr
 	curMin = Min
 	curAmPm = AmPm
-		
+
 	if AmPm == -1 then
 		self.text:SetFormattedText(europeDisplayFormat, Hr, Min)
 	else
@@ -189,9 +209,9 @@ end
 
 --[[
 	DT:RegisterDatatext(name, events, eventFunc, updateFunc, clickFunc, onEnterFunc, onLeaveFunc)
-	
+
 	name - name of the datatext (required)
-	events - must be a table with string values of event names to register 
+	events - must be a table with string values of event names to register
 	eventFunc - function that gets fired when an event gets triggered
 	updateFunc - onUpdate script target function
 	click - function to fire when clicking the datatext

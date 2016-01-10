@@ -57,9 +57,11 @@ local default = {
   yOffset = 0,
   stickyDuration = false,
   icon_side = "RIGHT",
+  icon_color = {1.0, 1.0, 1.0, 1.0},
   rotateText = "NONE",
   frameStrata = 1,
-  customTextUpdate = "update"
+  customTextUpdate = "update",
+  zoom = 0,
 };
 
 -- Returns tex Coord for 90° rotations + x or y flip
@@ -129,18 +131,17 @@ local barPrototype = {
 
     -- VERTICAL (Grow: T -> B, Deplete: B -> T)
     elseif orientation == "VERTICAL" then
-      TLx, TLy, TRx, TRy, BLx, BLy, BRx, BRy = GetTexCoord(90, false)
+      TLx, TLy, TRx, TRy, BLx, BLy, BRx, BRy = GetTexCoord(270, false)
 
-      TLx_, TLy_ = TLx      , TLy      ; TRx_, TRy_ = TRx      , TRy      ;
-      BLx_, BLy_ = BLx*progress  , BLy      ; BRx_, BRy_ = BRx*progress  , BRy      ;
+      TLx_, TLy_ = TLx           , TLy ; TRx_, TRy_ = TRx           , TRy;
+      BLx_, BLy_ = BLx * progress, BLy ; BRx_, BRy_ = BRx * progress, BRy;
 
     -- VERTICAL_INVERSE (Grow: B -> T, Deplete: T -> B)
     elseif orientation == "VERTICAL_INVERSE" then
-      TLx, TLy, TRx, TRy, BLx, BLy, BRx, BRy = GetTexCoord(270, false)
+      TLx, TLy, TRx, TRy, BLx, BLy, BRx, BRy = GetTexCoord(90, false)
 
-      TLx_, TLy_ = TLx*progress  , TLy      ; TRx_, TRy_ = TRx*progress  , TRy      ;
-      BLx_, BLy_ = BLx      , BLy      ; BRx_, BRy_ = BRx      , BRy      ;
-
+      TLx_, TLy_ = TLx * progress, TLy ; TRx_, TRy_ = TRx * progress, TRy;
+      BLx_, BLy_ = BLx           , BLy ; BRx_, BRy_ = BRx           , BRy;
     end
 
     -- HORIZONTAL (Grow: L -> R, Deplete: R -> L)
@@ -668,9 +669,7 @@ local function UpdateText(region, data)
 
   -- Replace %-marks
   textStr = data.displayTextLeft or "";
-  for symbol, v in pairs(WeakAuras.dynamic_texts) do
-    textStr = textStr:gsub(symbol, region.values[v.value] or "");
-  end
+  textStr = WeakAuras.ReplacePlaceHolders(textStr, region.values);
 
   -- Update left text
   if not text.displayTextLeft or #text.displayTextLeft ~= #textStr then
@@ -683,17 +682,15 @@ local function UpdateText(region, data)
 
   -- Replace %-marks
   textStr = data.displayTextRight or "";
-  for symbol, v in pairs(WeakAuras.dynamic_texts) do
-    textStr = textStr:gsub(symbol, region.values[v.value] or "");
-  end
+  textStr = WeakAuras.ReplacePlaceHolders(textStr, region.values);
 
   -- Update right text
   if not timer.displayTextRight or #timer.displayTextRight ~= #textStr then
     shouldOrient = true;
   end
-  if timer.displayTextLeft ~= textStr then
+  if timer.displayTextRight ~= textStr then
     timer:SetText(textStr);
-    timer.displayTextLeft = textStr;
+    timer.displayTextRight = textStr;
   end
 
   -- Re-orientate
@@ -795,10 +792,17 @@ local function UpdateValue(region, data, value, total)
   UpdateText(region, data);
 end
 
+local function GetTexCoordZoom(texWidth)
+     local texCoord = {texWidth, texWidth, texWidth, 1 - texWidth, 1 - texWidth, texWidth, 1 - texWidth, 1 - texWidth}
+    return unpack(texCoord)
+end
+
 -- Modify a given region/display
 local function modify(parent, region, data)
   -- Localize
   local bar, border, timer, text, iconFrame, icon, stacks = region.bar, region.border, region.timer, region.text, region.iconFrame, region.icon, region.stacks;
+
+  region.useAuto = data.auto and WeakAuras.CanHaveAuto(data);
 
   -- Adjust framestrata
     if data.frameStrata == 1 then
@@ -865,9 +869,11 @@ local function modify(parent, region, data)
   -- Bar or Border (+Backdrop) in front
   if data.barInFront then
     iconFrame:SetFrameLevel(5);
+    iconFrame:SetFrameLevel(5);
     bar:SetFrameLevel(5);
     border:SetFrameLevel(2);
   else
+    iconFrame:SetFrameLevel(2);
     iconFrame:SetFrameLevel(2);
     bar:SetFrameLevel(2);
     border:SetFrameLevel(5);
@@ -892,30 +898,34 @@ local function modify(parent, region, data)
   -- Rotate text
     local textDegrees = data.rotateText == "LEFT" and 90 or data.rotateText == "RIGHT" and -90 or 0;
 
-  -- Update timer visibility
-    if data.timer then
+  -- Update text visibility
+  if data.text then
     -- Update text font
-    text:SetFont(SharedMedia:Fetch("font", data.textFont), data.textSize, data.textFlags and data.textFlags ~= "None" and data.textFlags);
+    text:SetFont(SharedMedia:Fetch("font", data.textFont),
+                 data.textSize <= 35 and data.textSize or 35,
+                 data.textFlags and data.textFlags ~= "None" and data.textFlags);
+    text:SetTextHeight(data.textSize);
     text:SetTextColor(data.textColor[1], data.textColor[2], data.textColor[3], data.textColor[4]);
     text:SetWordWrap(false);
     animRotate(text, textDegrees);
+    text:Show();
+  else
+    text:Hide();
+  end
 
-        timer:Show();
-    else
-        timer:Hide();
-    end
-
-  -- Update text visibility
-    if data.text then
+  -- Update timer visibility
+  if data.timer then
     -- Update timer font
-    timer:SetFont(SharedMedia:Fetch("font", data.timerFont), data.timerSize, data.timerFlags and data.timerFlags ~= "None" and data.timerFlags);
+    timer:SetFont(SharedMedia:Fetch("font", data.timerFont),
+                  data.timerSize <= 35 and data.timerSize or 35,
+                  data.timerFlags and data.timerFlags ~= "None" and data.timerFlags);
+    timer:SetTextHeight(data.timerSize);
     timer:SetTextColor(data.timerColor[1], data.timerColor[2], data.timerColor[3], data.timerColor[4]);
     animRotate(timer, textDegrees);
-
-        text:Show();
-    else
-        text:Hide();
-    end
+    timer:Show();
+  else
+    timer:Hide();
+  end
 
   -- Update icon visibility
     if data.icon then
@@ -923,20 +933,22 @@ local function modify(parent, region, data)
     local iconsize = math.min(data.height, data.width);
     icon:SetWidth(iconsize);
     icon:SetHeight(iconsize);
+    local texWidth = 0.25 * data.zoom;
+    icon:SetTexCoord(GetTexCoordZoom(texWidth))
 
     -- Icon update function
         function region:SetIcon(path)
       -- Set icon options
             local iconPath = (
-                WeakAuras.CanHaveAuto(data)
-                and data.auto
+                region.useAuto
                 and path ~= ""
                 and path
                 or data.displayIcon
                 or "Interface\\Icons\\INV_Misc_QuestionMark"
             );
             self.icon:SetTexture(iconPath);
-            self.icon:SetDesaturated(data.desaturate)
+            self.icon:SetDesaturated(data.desaturate);
+            self.icon:SetVertexColor(data.icon_color[1], data.icon_color[2], data.icon_color[3], data.icon_color[4]);
             region.values.icon = "|T"..iconPath..":12:12:0:0:64:64:4:60:4:60|t";
 
       -- Update text
@@ -950,7 +962,10 @@ local function modify(parent, region, data)
     -- Update stack text visibility
     if data.icon and data.stacks then
       -- Update stack font
-      stacks:SetFont(SharedMedia:Fetch("font", data.stacksFont), data.stacksSize, data.stacksFlags and data.stacksFlags ~= "None" and data.stacksFlags);
+      stacks:SetFont(SharedMedia:Fetch("font", data.stacksFont),
+                     data.stacksSize <= 35 and data.stacksSize or 35,
+                     data.stacksFlags and data.stacksFlags ~= "None" and data.stacksFlags);
+      stacks:SetTextHeight(data.stacksSize);
       stacks:SetTextColor(data.stacksColor[1], data.stacksColor[2], data.stacksColor[3], data.stacksColor[4]);
       animRotate(stacks, textDegrees);
 
@@ -1001,7 +1016,10 @@ local function modify(parent, region, data)
     -- Save custom text function
         region.UpdateCustomText = function()
       -- Evaluate and update text
+            WeakAuras.ActivateAuraEnvironment(data.id);
             local custom = customTextFunc(region.expirationTime, region.duration, values.progress, values.duration, values.name, values.icon, values.stacks);
+            WeakAuras.ActivateAuraEnvironment(nil);
+            custom = WeakAuras.EnsureString(custom);
             if custom ~= values.custom then
                 values.custom = custom;
                 UpdateText(region, data);
@@ -1100,7 +1118,7 @@ local function modify(parent, region, data)
 
   -- Name update function
     function region:SetName(name)
-        region.values.name = WeakAuras.CanHaveAuto(data) and name or data.id;
+        region.values.name = name or data.id;
         UpdateText(self, data);
     end
 --  region:SetName("");
@@ -1118,11 +1136,15 @@ local function modify(parent, region, data)
       -- Update via custom OnUpdate handler
             if type(customValue) == "function" then
                 local value, total = customValue(data.trigger);
+                value = type(value) == "number" and value or 0
+                total = type(value) == "number" and total or 0
                 if total > 0 and value < total then
                     self.customValueFunc = customValue;
                     self:SetScript("OnUpdate", function()
             -- Relay
             local value, total = self.customValueFunc(data.trigger);
+            value = type(value) == "number" and value or 0
+            total = type(value) == "number" and total or 0
             UpdateValue(self, data, value, total);
           end);
                 else

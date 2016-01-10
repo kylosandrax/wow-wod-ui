@@ -31,6 +31,7 @@ function AS:UpdateLocale()
 	ASL["DBM|VEM Font"] = "DBM|VEM Font"
 	ASL["DBM|VEM Font Size"] = "DBM|VEM Font Size"
 	ASL["DBM|VEM Font Flag"] = "DBM|VEM Font Flag"
+	ASL["DBM Transparent Radar"] = "DBM Transparent Radar"
 	ASL["None"] = "None"
 	ASL["OUTLINE"] = "OUTLINE"
 	ASL["THICKOUTLINE"] = "THICKOUTLINE"
@@ -39,7 +40,7 @@ function AS:UpdateLocale()
 	ASL["DBM|VEM Half-bar Skin"] = "DBM|VEM Half-bar Skin"
 	ASL["BigWigs Half-Bar"] = "BigWigs Half-Bar"
 	ASL["Embed Settings"] = "Embed Settings"
-	ASL["Settings to control Embedded AddOns:\n\nAvailable Embeds: alDamageMeter | Omen | Skada | Recount | TinyDPS"] = "Settings to control Embedded AddOns:\n\nAvailable Embeds: alDamageMeter | Omen | Skada | Recount | TinyDPS"
+	ASL["Settings to control Embedded AddOns:\n\nAvailable Embeds: alDamageMeter | Details | Omen | Skada | Recount | TinyDPS"] = "Settings to control Embedded AddOns:\n\nAvailable Embeds: alDamageMeter | Details | Omen | Skada | Recount | TinyDPS" 
 	ASL["Single Embed System"] = "Single Embed System"
 	ASL["Embed for Main Panel"] = "Embed for Main Panel"
 	ASL["Dual Embed System"] = "Dual Embed System"
@@ -51,6 +52,7 @@ function AS:UpdateLocale()
 	ASL["Attach CoolLine to action bar"] = "Attach CoolLine to action bar"
 	ASL["Embed Transparancy"] = "Embed Transparancy"
 	ASL["Embed Below Top Tab"] = "Embed Below Top Tab"
+	ASL["Details Backdrop"] = "Details Backdrop" 
 	ASL["Recount Backdrop"] = "Recount Backdrop"
 	ASL["Skada Backdrop"] = "Skada Backdrop"
 	ASL["Omen Backdrop"] = "Omen Backdrop"
@@ -79,6 +81,8 @@ function AS:UpdateLocale()
 	ASL['Reset Settings'] = 'Reset Settings'
 	ASL["WeakAura Cooldowns"] = "WeakAura Cooldowns"
 	ASL["Embed into Right Chat Panel"] = "Embed into Right Chat Panel"
+	ASL["Parchment"] = "Parchment"
+	ASL["Enable Skin Debugging"] = "Enable Skin Debugging"
 
 	if AS['UpdateLocale_'..Locale] then
 		AS['UpdateLocale_'..Locale]()

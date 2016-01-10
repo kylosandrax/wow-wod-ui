@@ -1,19 +1,55 @@
 local E, L, V, P, G = unpack(select(2, ...)); --Inport: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
 local LSM = LibStub("LibSharedMedia-3.0")
+local Masque = LibStub("Masque", true)
 
-local format = string.format
-local find = string.find
-local split = string.split
-local match = string.match
-local twipe = table.wipe
+--Cache global variables
+--Lua functions
+local _G = _G
+local tonumber, pairs, error, unpack, select = tonumber, pairs, error, unpack, select
+local print, type, collectgarbage, pcall, date = print, type, collectgarbage, pcall, date
+local twipe, tinsert= table.wipe, tinsert
+local floor = floor
+local format, find, split, match, gsub = string.format, string.find, string.split, string.match, string.gsub
+--WoW API / Variables
+local CreateFrame = CreateFrame
+local GetCVar, SetCVar, GetCVarBool = GetCVar, SetCVar, GetCVarBool
+local IsAddOnLoaded = IsAddOnLoaded
+local PlayMusic, StopMusic = PlayMusic, StopMusic
+local GetSpellInfo = GetSpellInfo
+local IsInInstance, IsInGroup, IsInRaid = IsInInstance, IsInGroup, IsInRaid
+local RequestBattlefieldScoreData = RequestBattlefieldScoreData
+local GetSpecialization, GetActiveSpecGroup = GetSpecialization, GetActiveSpecGroup
+local GetCombatRatingBonus = GetCombatRatingBonus
+local GetDodgeChance, GetParryChance = GetDodgeChance, GetParryChance
+local UnitLevel, UnitStat, UnitAttackPower = UnitLevel, UnitStat, UnitAttackPower
+local SendAddonMessage = SendAddonMessage
+local InCombatLockdown = InCombatLockdown
+local DoEmote = DoEmote
+local SendChatMessage = SendChatMessage
+local GetFunctionCPUUsage = GetFunctionCPUUsage
+local GetMapNameByID = GetMapNameByID
+local RAID_CLASS_COLORS = RAID_CLASS_COLORS
+local CUSTOM_CLASS_COLORS = CUSTOM_CLASS_COLORS
+local COMBAT_RATING_RESILIENCE_PLAYER_DAMAGE_TAKEN = COMBAT_RATING_RESILIENCE_PLAYER_DAMAGE_TAKEN
+local LE_PARTY_CATEGORY_HOME = LE_PARTY_CATEGORY_HOME
+local LE_PARTY_CATEGORY_INSTANCE = LE_PARTY_CATEGORY_INSTANCE
+local ERR_NOT_IN_COMBAT = ERR_NOT_IN_COMBAT
+local NUM_PET_ACTION_SLOTS = NUM_PET_ACTION_SLOTS
+
+--Global variables that we don't cache, list them here for the mikk's Find Globals script
+-- GLOBALS: LibStub, UIParent, MAX_PLAYER_LEVEL, ScriptErrorsFrame_OnError
+-- GLOBALS: ElvUIPlayerBuffs, ElvUIPlayerDebuffs, LeftChatPanel, RightChatPanel
+-- GLOBALS: ElvUI_StaticPopup1, ElvUI_StaticPopup1Button1, LeftChatToggleButton, RightChatToggleButton
+-- GLOBALS: ElvUI_StanceBar, ObjectiveTrackerFrame, GameTooltip, Minimap
 
 --Constants
 E.myclass = select(2, UnitClass("player"));
+E.myspec = GetSpecialization()
 E.myrace = select(2, UnitRace("player"))
 E.myfaction = select(2, UnitFactionGroup('player'))
 E.myname = UnitName("player");
 E.myguid = UnitGUID('player');
-E.version = GetAddOnMetadata("ElvUI", "Version"); 
+E.version = GetAddOnMetadata("ElvUI", "Version");
 E.myrealm = GetRealmName();
 E.wowbuild = select(2, GetBuildInfo()); E.wowbuild = tonumber(E.wowbuild);
 E.resolution = GetCVar("gxResolution")
@@ -98,38 +134,38 @@ E.ClassRole = {
 	WARRIOR = {
 		[1] = "Melee",
 		[2] = "Melee",
-		[3] = "Tank",	
+		[3] = "Tank",
 	},
 	HUNTER = "Melee",
 	SHAMAN = {
 		[1] = "Caster",
 		[2] = "Melee",
-		[3] = "Caster",	
+		[3] = "Caster",
 	},
 	ROGUE = "Melee",
 	MAGE = "Caster",
 	DEATHKNIGHT = {
 		[1] = "Tank",
 		[2] = "Melee",
-		[3] = "Melee",	
+		[3] = "Melee",
 	},
 	DRUID = {
 		[1] = "Caster",
 		[2] = "Melee",
-		[3] = "Tank",	
+		[3] = "Tank",
 		[4] = "Caster"
 	},
 	MONK = {
 		[1] = "Tank",
 		[2] = "Caster",
-		[3] = "Melee",	
+		[3] = "Melee",
 	},
 }
 
 E.noop = function() end;
 
-function E:Print(msg)
-	print(self["media"].hexvaluecolor..'ElvUI:|r', msg)
+function E:Print(...)
+	print(self["media"].hexvaluecolor..'ElvUI:|r', ...)
 end
 
 --Workaround for people wanting to use white and it reverting to their class color.
@@ -146,13 +182,13 @@ function E:CheckClassColor(r, g, b)
 	local matchFound = false;
 	for class, _ in pairs(RAID_CLASS_COLORS) do
 		if class ~= E.myclass then
-			local colorTable = class == 'PRIEST' and E.PriestColors or RAID_CLASS_COLORS[class]
+			local colorTable = class == 'PRIEST' and E.PriestColors or (CUSTOM_CLASS_COLORS and CUSTOM_CLASS_COLORS[class] or RAID_CLASS_COLORS[class])
 			if colorTable.r == r and colorTable.g == g and colorTable.b == b then
 				matchFound = true;
 			end
 		end
 	end
-	
+
 	return matchFound
 end
 
@@ -160,7 +196,7 @@ function E:GetColorTable(data)
 	if not data.r or not data.g or not data.b then
 		error("Could not unpack color values.")
 	end
-	
+
 	if data.a then
 		return {data.r, data.g, data.b, data.a}
 	else
@@ -170,11 +206,10 @@ end
 
 function E:UpdateMedia()
 	if not self.db['general'] or not self.private['general'] then return end --Prevent rare nil value errors
-	
+
 	--Fonts
 	self["media"].normFont = LSM:Fetch("font", self.db['general'].font)
-	self["media"].combatFont = LSM:Fetch("font", self.db['general'].dmgfont)
-	
+	self["media"].combatFont = LSM:Fetch("font", self.private['general'].dmgfont)
 
 	--Textures
 	self["media"].blankTex = LSM:Fetch("background", "ElvUI Blank")
@@ -184,10 +219,10 @@ function E:UpdateMedia()
 	--Border Color
 	local border = E.db['general'].bordercolor
 	if self:CheckClassColor(border.r, border.g, border.b) then
-		classColor = E.myclass == 'PRIEST' and E.PriestColors or RAID_CLASS_COLORS[E.myclass]
+		local classColor = E.myclass == 'PRIEST' and E.PriestColors or (CUSTOM_CLASS_COLORS and CUSTOM_CLASS_COLORS[E.myclass] or RAID_CLASS_COLORS[E.myclass])
 		E.db['general'].bordercolor.r = classColor.r
 		E.db['general'].bordercolor.g = classColor.g
-		E.db['general'].bordercolor.b = classColor.b	
+		E.db['general'].bordercolor.b = classColor.b
 	elseif E.PixelMode then
 		border = {r = 0, g = 0, b = 0}
 	end
@@ -198,29 +233,114 @@ function E:UpdateMedia()
 
 	--Backdrop Fade Color
 	self["media"].backdropfadecolor = E:GetColorTable(self.db['general'].backdropfadecolor)
-	
+
 	--Value Color
 	local value = self.db['general'].valuecolor
 
 	if self:CheckClassColor(value.r, value.g, value.b) then
-		value = E.myclass == 'PRIEST' and E.PriestColors or RAID_CLASS_COLORS[E.myclass]
+		value = E.myclass == 'PRIEST' and E.PriestColors or (CUSTOM_CLASS_COLORS and CUSTOM_CLASS_COLORS[E.myclass] or RAID_CLASS_COLORS[E.myclass])
 		self.db['general'].valuecolor.r = value.r
 		self.db['general'].valuecolor.g = value.g
-		self.db['general'].valuecolor.b = value.b		
+		self.db['general'].valuecolor.b = value.b
 	end
 	self["media"].hexvaluecolor = self:RGBToHex(value.r, value.g, value.b)
 	self["media"].rgbvaluecolor = {value.r, value.g, value.b}
-	
+
 	if LeftChatPanel and LeftChatPanel.tex and RightChatPanel and RightChatPanel.tex then
 		LeftChatPanel.tex:SetTexture(E.db.chat.panelBackdropNameLeft)
-		LeftChatPanel.tex:SetAlpha(E.db.general.backdropfadecolor.a - 0.55 > 0 and E.db.general.backdropfadecolor.a - 0.55 or 0.5)		
-		
+		local a = E.db.general.backdropfadecolor.a or 0.5
+		LeftChatPanel.tex:SetAlpha(a)
+
 		RightChatPanel.tex:SetTexture(E.db.chat.panelBackdropNameRight)
-		RightChatPanel.tex:SetAlpha(E.db.general.backdropfadecolor.a - 0.55 > 0 and E.db.general.backdropfadecolor.a - 0.55 or 0.5)		
+		RightChatPanel.tex:SetAlpha(a)
 	end
-	
+
 	self:ValueFuncCall()
 	self:UpdateBlizzardFonts()
+end
+
+--Update font/texture paths when they are registered by the addon providing them
+--This helps fix most of the issues with fonts or textures reverting to default because the addon providing them is loading after ElvUI.
+--We use a wrapper to avoid errors in :UpdateMedia because "self" is passed to the function with a value other than ElvUI.
+local function LSMCallback()
+	E:UpdateMedia()
+end
+E.LSM.RegisterCallback(E, "LibSharedMedia_Registered", LSMCallback)
+
+local MasqueGroupState = {}
+local MasqueGroupToTableElement = {
+	["ActionBars"] = {"actionbar", "actionbars"},
+	["Pet Bar"] = {"actionbar", "petBar"},
+	["Stance Bar"] = {"actionbar", "stanceBar"},
+	["Buffs"] = {"auras", "buffs"},
+	["Debuffs"] = {"auras", "debuffs"},
+	["Consolidated Buffs"] = {"auras", "consolidatedBuffs"},
+}
+
+local function MasqueCallback(Addon, Group, SkinID, Gloss, Backdrop, Colors, Disabled)
+	if not E.private then return; end
+	local element = MasqueGroupToTableElement[Group]
+
+	if element then
+		if Disabled then
+			if E.private[element[1]].masque[element[2]] and MasqueGroupState[Group] == "enabled" then
+				E.private[element[1]].masque[element[2]] = false
+				E:StaticPopup_Show("CONFIG_RL")
+			end
+			MasqueGroupState[Group] = "disabled"
+		else
+			MasqueGroupState[Group] = "enabled"
+		end
+	end
+end
+
+if Masque then
+	Masque:Register("ElvUI", MasqueCallback)
+end
+
+-- Code taken from LibTourist-3.0 and rewritten to fit our purpose
+local localizedMapNames = {}
+local ZoneIDToContinentName = {
+	[473] = "Outland",
+	[477] = "Outland",
+}
+local MapIdLookupTable = {
+	[466] = "Outland",
+	[473] = "Shadowmoon Valley",
+	[477] = "Nagrand",
+}
+
+local function LocalizeZoneNames()
+	local localizedZoneName
+
+	for mapID, englishName in pairs(MapIdLookupTable) do
+		localizedZoneName = GetMapNameByID(mapID)
+		if localizedZoneName then
+			-- Add combination of English and localized name to lookup table
+			if not localizedMapNames[englishName] then
+				localizedMapNames[englishName] = localizedZoneName
+			end
+		end
+	end
+end
+LocalizeZoneNames()
+
+--Add " (Outland)" to the end of zone name for Nagrand and Shadowmoon Valley, if mapID matches Outland continent.
+--We can then use this function when we need to compare the players own zone against return values from stuff like GetFriendInfo and GetGuildRosterInfo,
+--which adds the " (Outland)" part unlike the GetRealZoneText() API.
+function E:GetZoneText(zoneAreaID)
+	local zoneName = GetMapNameByID(zoneAreaID)
+	local continent = ZoneIDToContinentName[zoneAreaID]
+
+	if continent and continent == "Outland" then
+		if zoneName == localizedMapNames["Nagrand"] or zoneName == "Nagrand"  then
+			zoneName = localizedMapNames["Nagrand"].." ("..localizedMapNames["Outland"]..")"
+		elseif zoneName == localizedMapNames["Shadowmoon Valley"] or zoneName == "Shadowmoon Valley"  then
+			zoneName = localizedMapNames["Shadowmoon Valley"].." ("..localizedMapNames["Outland"]..")"
+		end
+	end
+
+	return zoneName
 end
 
 function E:RequestBGInfo()
@@ -233,7 +353,7 @@ function E:PLAYER_ENTERING_WORLD()
 		self:UpdateMedia()
 		self.MediaUpdated = true;
 	end
-	
+
 	local _, instanceType = IsInInstance();
 	if instanceType == "pvp" then
 		self.BGTimer = self:ScheduleRepeatingTimer("RequestBGInfo", 5)
@@ -270,7 +390,7 @@ function E:UpdateBorderColors()
 			self["frames"][frame] = nil;
 		end
 	end
-end	
+end
 
 function E:UpdateBackdropColors()
 	for frame, _ in pairs(self["frames"]) do
@@ -279,7 +399,7 @@ function E:UpdateBackdropColors()
 				if frame.backdropTexture then
 					frame.backdropTexture:SetVertexColor(unpack(self['media'].backdropcolor))
 				else
-					frame:SetBackdropColor(unpack(self['media'].backdropcolor))				
+					frame:SetBackdropColor(unpack(self['media'].backdropcolor))
 				end
 			elseif frame.template == 'Transparent' then
 				frame:SetBackdropColor(unpack(self['media'].backdropfadecolor))
@@ -288,7 +408,7 @@ function E:UpdateBackdropColors()
 			self["frames"][frame] = nil;
 		end
 	end
-end	
+end
 
 function E:UpdateFontTemplates()
 	for text, _ in pairs(self["texts"]) do
@@ -322,14 +442,14 @@ function E:CheckTalentTree(tree)
 		for _, index in pairs(tree) do
 			if activeGroup and GetSpecialization(false, false, activeGroup) then
 				return index == GetSpecialization(false, false, activeGroup)
-			end		
+			end
 		end
 	end
 end
 
 function E:IsDispellableByMe(debuffType)
 	if not self.DispelClasses[self.myclass] then return; end
-	
+
 	if self.DispelClasses[self.myclass][debuffType] then
 		return true;
 	end
@@ -353,18 +473,19 @@ function E:CheckRole()
 	if resilperc > GetDodgeChance() and resilperc > GetParryChance() and UnitLevel('player') == MAX_PLAYER_LEVEL then
 		IsInPvPGear = true;
 	end
-	
+
+	self.myspec = talentTree
 
 	if type(self.ClassRole[self.myclass]) == "string" then
 		role = self.ClassRole[self.myclass]
 	elseif talentTree then
 		role = self.ClassRole[self.myclass][talentTree]
 	end
-	
+
 	if role == "Tank" and IsInPvPGear then
 		role = "Melee"
 	end
-	
+
 	if not role then
 		local playerint = select(2, UnitStat("player", 4));
 		local playeragi	= select(2, UnitStat("player", 2));
@@ -375,7 +496,7 @@ function E:CheckRole()
 			role = "Melee";
 		else
 			role = "Caster";
-		end		
+		end
 	end
 
 	if(self.role ~= role) then
@@ -409,14 +530,14 @@ function E:CheckIncompatible()
 	if IsAddOnLoaded('Chatter') and E.private.chat.enable then
 		E:IncompatibleAddOn('Chatter', 'Chat')
 	end
-	
+
 	if IsAddOnLoaded('TidyPlates') and E.private.nameplate.enable then
 		E:IncompatibleAddOn('TidyPlates', 'NamePlate')
 	end
-		
+
 	if IsAddOnLoaded('Aloft') and E.private.nameplate.enable then
 		E:IncompatibleAddOn('Aloft', 'NamePlate')
-	end	
+	end
 
 	if IsAddOnLoaded('Healers-Have-To-Die') and E.private.nameplate.enable then
 		E:IncompatibleAddOn('Healers-Have-To-Die', 'NamePlate')
@@ -433,17 +554,17 @@ end
 
 function E:CopyTable(currentTable, defaultTable)
 	if type(currentTable) ~= "table" then currentTable = {} end
-	
+
 	if type(defaultTable) == 'table' then
 		for option, value in pairs(defaultTable) do
 			if type(value) == "table" then
 				value = self:CopyTable(currentTable[option], value)
 			end
-			
-			currentTable[option] = value			
+
+			currentTable[option] = value
 		end
 	end
-	
+
 	return currentTable
 end
 
@@ -454,7 +575,7 @@ function E:SendMessage()
 	elseif IsInGroup() then
 		SendAddonMessage("ELVUI_VERSIONCHK", E.version, (not IsInGroup(LE_PARTY_CATEGORY_HOME) and IsInGroup(LE_PARTY_CATEGORY_INSTANCE)) and "INSTANCE_CHAT" or "PARTY")
 	end
-	
+
 	if E.SendMSGTimer then
 		self:CancelTimer(E.SendMSGTimer)
 		E.SendMSGTimer = nil
@@ -471,7 +592,7 @@ local function SendRecieve(self, event, prefix, message, channel, sender)
 		if prefix == "ELVUI_VERSIONCHK" and not E.recievedOutOfDateMessage then
 			if(tonumber(message) ~= nil and tonumber(message) > tonumber(E.version)) then
 				E:Print(L["ElvUI is out of date. You can download the newest version from www.tukui.org. Get premium membership and have ElvUI automatically updated with the Tukui Client!"])
-				
+
 				if((tonumber(message) - tonumber(E.version)) >= 0.05) then
 					E:StaticPopup_Show("ELVUI_UPDATE_AVAILABLE")
 				end
@@ -493,70 +614,70 @@ f:RegisterEvent("CHAT_MSG_ADDON")
 f:SetScript('OnEvent', SendRecieve)
 
 function E:UpdateAll(ignoreInstall)
-	self.data = LibStub("AceDB-3.0"):New("ElvDB", self.DF);
-	self.data.RegisterCallback(self, "OnProfileChanged", "UpdateAll")
-	self.data.RegisterCallback(self, "OnProfileCopied", "UpdateAll")
-	self.data.RegisterCallback(self, "OnProfileReset", "OnProfileReset")
-	LibStub('LibDualSpec-1.0'):EnhanceDatabase(self.data, "ElvUI")
+	self.private = self.charSettings.profile
 	self.db = self.data.profile;
 	self.global = self.data.global;
-	self:DBConversions()
 	self.db.theme = nil;
-	self.db.install_complete = nil;	
-	
+	self.db.install_complete = nil;
+
 	self:SetMoversPositions()
 	self:UpdateMedia()
 	self:UpdateCooldownSettings()
-	
+	if self.RefreshGUI then self:RefreshGUI() end --Refresh Config
+
 	local UF = self:GetModule('UnitFrames')
 	UF.db = self.db.unitframe
 	UF:Update_AllFrames()
-	
+
 	local CH = self:GetModule('Chat')
 	CH.db = self.db.chat
-	CH:PositionChat(true); 
+	CH:PositionChat(true);
 	CH:SetupChat()
-	
+
 	local AB = self:GetModule('ActionBars')
 	AB.db = self.db.actionbar
 	AB:UpdateButtonSettings()
 	AB:UpdateMicroPositionDimensions()
-	 
-	local bags = E:GetModule('Bags'); 
+	AB:Extra_SetAlpha()
+	AB:Extra_SetScale()
+
+	local bags = E:GetModule('Bags');
 	bags.db = self.db.bags
-	bags:Layout(); 
-	bags:Layout(true); 
+	bags:Layout();
+	bags:Layout(true);
 	bags:PositionBagFrames()
 	bags:SizeAndPositionBagBar()
-	
-	local totems = E:GetModule('Totems'); 
+	bags:UpdateItemLevelDisplay()
+	bags:UpdateCountDisplay()
+
+	local totems = E:GetModule('Totems');
 	totems.db = self.db.general.totems
 	totems:PositionAndSize()
 	totems:ToggleEnable()
-	
+
 	self:GetModule('Layout'):ToggleChatPanels()
-	
+
 	local DT = self:GetModule('DataTexts')
 	DT.db = self.db.datatexts
 	DT:LoadDataTexts()
-	
+
 	local NP = self:GetModule('NamePlates')
 	NP.db = self.db.nameplate
 	NP:UpdateAllPlates()
-		
+
 	local M = self:GetModule("Misc")
 	M:UpdateExpRepDimensions()
 	M:EnableDisable_ExperienceBar()
-	M:EnableDisable_ReputationBar()	
-	
+	M:EnableDisable_ReputationBar()
+
 	local T = self:GetModule('Threat')
 	T.db = self.db.general.threat
 	T:UpdatePosition()
 	T:ToggleEnable()
-	
+
 	self:GetModule('Auras').db = self.db.auras
 	self:GetModule('Tooltip').db = self.db.tooltip
-	
+
 	if(ElvUIPlayerBuffs) then
 		E:GetModule('Auras'):UpdateHeader(ElvUIPlayerBuffs)
 	end
@@ -564,24 +685,27 @@ function E:UpdateAll(ignoreInstall)
 	if(ElvUIPlayerDebuffs) then
 		E:GetModule('Auras'):UpdateHeader(ElvUIPlayerDebuffs)
 	end
-	
+
 	if self.private.install_complete == nil or (self.private.install_complete and type(self.private.install_complete) == 'boolean') or (self.private.install_complete and type(tonumber(self.private.install_complete)) == 'number' and tonumber(self.private.install_complete) <= 3.83) then
 		if not ignoreInstall then
 			self:Install()
 		end
 	end
-	
+
 	self:GetModule('Minimap'):UpdateSettings()
-	
+
 	self:UpdateBorderColors()
 	self:UpdateBackdropColors()
 	--self:UpdateFrameTemplates()
-	
+
 	local LO = E:GetModule('Layout')
-	LO:ToggleChatPanels()	
+	LO:ToggleChatPanels()
 	LO:BottomPanelVisibility()
 	LO:TopPanelVisibility()
-		
+	LO:SetDataPanelStyle()
+
+	self:GetModule('Blizzard'):ObjectiveFrameHeight()
+
 	collectgarbage('collect');
 end
 
@@ -608,7 +732,7 @@ function E:ResetAllUI()
 
 	if E.db.lowresolutionset then
 		E:SetupResolution(true)
-	end	
+	end
 
 	if E.db.layoutSet then
 		E:SetupLayout(E.db.layoutSet, true)
@@ -617,12 +741,12 @@ end
 
 function E:ResetUI(...)
 	if InCombatLockdown() then E:Print(ERR_NOT_IN_COMBAT) return end
-	
+
 	if ... == '' or ... == ' ' or ... == nil then
 		E:StaticPopup_Show('RESETUI_CHECK')
 		return
 	end
-	
+
 	self:ResetMovers(...)
 end
 
@@ -656,7 +780,7 @@ function E:RefreshModulesDB()
 	UF.db = self.db.unitframe
 end
 
-function E:InitializeModules()	
+function E:InitializeModules()
 	for _, module in pairs(E['RegisteredModules']) do
 		local module = self:GetModule(module)
 		if module.Initialize then
@@ -676,12 +800,12 @@ function E:DBConversions()
 			self.private.cooldown.enable = self.private.actionbar.enablecd
 			self.private.actionbar.enablecd = nil
 		end
-		
+
 		if(self.db.actionbar.treshold ~= nil) then
 			self.db.cooldown.threshold = self.db.actionbar.treshold
 			self.db.actionbar.treshold = nil
 		end
-		
+
 		if(self.db.actionbar.expiringcolor ~= nil) then
 			self.db.cooldown.expiringColor = self.db.actionbar.expiringcolor
 			self.db.actionbar.expiringcolor = nil
@@ -690,30 +814,50 @@ function E:DBConversions()
 		if(self.db.actionbar.secondscolor ~= nil) then
 			self.db.cooldown.secondsColor = self.db.actionbar.secondscolor
 			self.db.actionbar.secondscolor = nil
-		end	
-		
+		end
+
 		if(self.db.actionbar.minutescolor ~= nil) then
 			self.db.cooldown.minutesColor = self.db.actionbar.minutescolor
 			self.db.actionbar.minutescolor = nil
-		end		
-		
+		end
+
 		if(self.db.actionbar.hourscolor ~= nil) then
 			self.db.cooldown.hoursColor = self.db.actionbar.hourscolor
 			self.db.actionbar.hourscolor = nil
-		end	
-		
+		end
+
 		if(self.db.actionbar.dayscolor ~= nil) then
 			self.db.cooldown.daysColor = self.db.actionbar.dayscolor
 			self.db.actionbar.dayscolor = nil
-		end		
+		end
 	end
-
-	if E.global.unitframe.aurafilters['Whitelist (Strict)'].spells then
-		for k, v in pairs(E.global.unitframe.aurafilters['Whitelist (Strict)'].spells) do
+	
+	--Add missing Stack Threshold
+	if E.global.unitframe['aurafilters']['RaidDebuffs'].spells then
+		local matchFound
+		for k, v in pairs(E.global.unitframe['aurafilters']['RaidDebuffs'].spells) do
+			if type(v) == 'table' then
+				matchFound = false
+				for k_,v_ in pairs(v) do
+					if k_ == 'stackThreshold' then
+						matchFound = true
+					end
+				end
+			end
+			
+			if not matchFound then
+				E.global.unitframe['aurafilters']['RaidDebuffs']['spells'][k].stackThreshold = 0
+			end
+		end
+	end
+	
+	--Convert spellIDs saved as strings to numbers
+	if E.global.unitframe['aurafilters']['Whitelist (Strict)'].spells then
+		for k, v in pairs(E.global.unitframe['aurafilters']['Whitelist (Strict)'].spells) do
 			if type(v) == 'table' then
 				for k_,v_ in pairs(v) do
-					if k_ == 'spellID' and type(v_) ~= 'number' then
-						E.global.unitframe.aurafilters['Whitelist (Strict)']['spells'][k][k_] = tonumber(v_)
+					if k_ == 'spellID' and type(v_) == "string" and tonumber(v_) then
+						E.global.unitframe['aurafilters']['Whitelist (Strict)']['spells'][k].spellID = tonumber(v_)
 					end
 				end
 			end
@@ -722,100 +866,74 @@ function E:DBConversions()
 
 	self.db.unitframe.units.raid10 = nil
 	self.db.unitframe.units.raid25 = nil
+
+	if E.db.general.experience.width > 100 and E.db.general.experience.height > 100 then
+		E.db.general.experience.width = P.general.experience.width
+		E.db.general.experience.height = P.general.experience.height
+		E:Print("Experience bar appears to be an odd shape. Resetting to default size.")
+	end
+
+	if E.db.general.reputation.width > 100 and E.db.general.reputation.height > 100 then
+		E.db.general.reputation.width = P.general.reputation.width
+		E.db.general.reputation.height = P.general.reputation.height
+		E:Print("Reputation bar appears to be an odd shape. Resetting to default size.")
+	end
 	
-	if not E.db.bagsOffsetFixed then
-		if E.db.bags.xOffset ~= P['bags']['xOffset'] then
-			E.db.bags.xOffsetBank = E.db.bags.xOffset
-			E.db.bags.yOffsetBank = E.db.bags.yOffset
-			E.db.bags.xOffset = E.db.bags.xOffset * (-1) --Change positive value to negative or vice versa
+	--Turns out that a chat height lower than 58 will cause the following error: Message: ..\FrameXML\FloatingChatFrame.lua line 1147: attempt to perform arithmetic on a nil value
+	--This only happens if the datatext panel for the respective chat panel is enabled, leaving no room for the chat frame.
+	--Minimum height has been increased to 60, convert any setting lower than this to the new minimum height.
+	if E.db.chat.panelHeight < 60 then E.db.chat.panelHeight = 60 end
+	if E.db.chat.panelHeightRight < 60 then E.db.chat.panelHeightRight = 60 end
+	
+	--Boss Frame auras have been changed to support friendly/enemy filters in case there is an encounter with a friendly boss
+	--Try to convert any filter settings the user had to the new format
+	if not E.db.bossAuraFiltersConverted then
+		local tempBuffs = E.db.unitframe.units.boss.buffs
+		local tempDebuffs = E.db.unitframe.units.boss.debuffs
+		local filterSettings = {
+			"playerOnly",
+			"noConsolidated",
+			"useBlacklist",
+			"useWhitelist",
+			"noDuration",
+			"onlyDispellable",
+			"bossAuras",
+		}
+
+		--Buffs
+		for _, setting in pairs(filterSettings) do
+			if type(E.db.unitframe.units.boss.buffs[setting]) == "boolean" then
+				E.db.unitframe.units.boss.buffs[setting] = {friendly = tempBuffs[setting], enemy = tempBuffs[setting]}
+			elseif type(E.db.unitframe.units.boss.buffs[setting]) ~= "table" or
+			 (type(E.db.unitframe.units.boss.buffs[setting]) == "table" and (E.db.unitframe.units.boss.buffs[setting].friendly == nil or E.db.unitframe.units.boss.buffs[setting].enemy == nil)) then
+				--Something went wrong here, reset filter setting to default
+				E.db.unitframe.units.boss.buffs[setting] = nil
+			end
 		end
-		E.db.bagsOffsetFixed = true
-	end
-end
 
-function E:StopMassiveShake()
-	E.isMassiveShaking = nil
-	StopMusic()
-	SetCVar("Sound_EnableAllSound", self.oldEnableAllSound)
-	SetCVar("Sound_EnableMusic", self.oldEnableMusic)
-	
-	self:StopShakeHorizontal(ElvUI_StaticPopup1)
-	for _, object in pairs(self["massiveShakeObjects"]) do
-		if object then
-			self:StopShake(object)
+		--Debuffs
+		for _, setting in pairs(filterSettings) do
+			if not setting == "noConsolidated" then --There is no noConsolidated setting for Debuffs
+				if type(E.db.unitframe.units.boss.debuffs[setting]) == "boolean" then
+					E.db.unitframe.units.boss.debuffs[setting] = {friendly = tempDebuffs[setting], enemy = tempDebuffs[setting]}
+				elseif type(E.db.unitframe.units.boss.debuffs[setting]) ~= "table" or
+				 (type(E.db.unitframe.units.boss.debuffs[setting]) == "table" and (E.db.unitframe.units.boss.debuffs[setting].friendly == nil or E.db.unitframe.units.boss.debuffs[setting].enemy == nil)) then
+					--Something went wrong here, reset filter setting to default
+					E.db.unitframe.units.boss.debuffs[setting] = nil
+				end
+			end
 		end
-	end
-
-	if E.massiveShakeTimer then
-		E:CancelTimer(E.massiveShakeTimer)
-	end
-
-	E.global.aprilFools = true;
-	E:StaticPopup_Hide("APRIL_FOOLS2013")
-	twipe(self.massiveShakeObjects)
-	DoEmote("Dance")
-end
-
-function E:MassiveShake()
-	E.isMassiveShaking = true
-	ElvUI_StaticPopup1Button1:Enable()
-	
-	for _, object in pairs(self["massiveShakeObjects"]) do
-		if object and object:IsShown() then
-			self:Shake(object)
-		end
+		
+		E.db.bossAuraFiltersConverted = true
 	end
 	
-	E.massiveShakeTimer = E:ScheduleTimer("StopMassiveShake", 42.5)
-	SendChatMessage("DO THE HARLEM SHAKE!", "YELL")
-end
-
-function E:BeginFoolsDayEvent()
-	DoEmote("Dance")
-	ElvUI_StaticPopup1Button1:Disable()
-	self:ShakeHorizontal(ElvUI_StaticPopup1)
-	self.oldEnableAllSound = GetCVar("Sound_EnableAllSound")
-	self.oldEnableMusic = GetCVar("Sound_EnableMusic")
-	
-	SetCVar("Sound_EnableAllSound", 1)
-	SetCVar("Sound_EnableMusic", 1)
-	PlayMusic([[Interface\AddOns\ElvUI\media\sounds\harlemshake.mp3]])
-	E:ScheduleTimer("MassiveShake", 15.5)
-	
-	local UF = E:GetModule("UnitFrames")
-	local AB = E:GetModule("ActionBars")
-	self.massiveShakeObjects = {}
-	tinsert(self.massiveShakeObjects, GameTooltip)
-	tinsert(self.massiveShakeObjects, Minimap)
-	tinsert(self.massiveShakeObjects, WatchFrame)
-	tinsert(self.massiveShakeObjects, LeftChatPanel)
-	tinsert(self.massiveShakeObjects, RightChatPanel)
-	tinsert(self.massiveShakeObjects,LeftChatToggleButton)
-	tinsert(self.massiveShakeObjects,RightChatToggleButton)
-	
-	for unit in pairs(UF['units']) do
-		tinsert(self.massiveShakeObjects, UF[unit])
-	end
-	
-	for _, header in pairs(UF['headers']) do
-		tinsert(self.massiveShakeObjects, header)
-	end	
-	
-	for _, bar in pairs(AB['handledBars']) do
-		for i=1, #bar.buttons do
-			tinsert(self.massiveShakeObjects, bar.buttons[i])
-		end
-	end
-
-	if ElvUI_StanceBar then
-		for i=1, #ElvUI_StanceBar.buttons do
-			tinsert(self.massiveShakeObjects, ElvUI_StanceBar.buttons[i])
-		end
-	end
-	
-	for i=1, NUM_PET_ACTION_SLOTS do
-		if _G["PetActionButton"..i] then
-			tinsert(self.massiveShakeObjects, _G["PetActionButton"..i])
+	--Convert stored mover strings to use the new comma delimiter
+	if E.db.movers then
+		for mover, moverString in pairs(E.db.movers) do
+		   if find(moverString, "\031") then --Old delimiter found
+			  moverString = gsub(moverString, "\031", ",") --Replace with new delimiter
+			  E.db.movers[mover] = moverString --Store updated mover string
+		   end
 		end
 	end
 end
@@ -829,7 +947,7 @@ local function CompareCPUDiff(module, minCalls)
 	for name, oldUsage in pairs(CPU_USAGE) do
 		local newUsage, calls = GetFunctionCPUUsage(mod[name], true)
 		local differance = newUsage - oldUsage
-		
+
 		if differance > greatestDiff and calls > (minCalls or 15) then
 			greatestName = name
 			greatestUsage = newUsage
@@ -862,321 +980,71 @@ function E:GetTopCPUFunc(msg)
 	self:Print("Calculating CPU Usage..")
 end
 
-function E:CheckForFoolsDayFuckup(secondCheck)
-	local t = self.db.tempSettings
-	if(not t and not secondCheck) then t = self.db.general end
-	if(t and t.backdropcolor)then
-		return self:Round(t.backdropcolor.r, 2) == 0.87 and self:Round(t.backdropcolor.g, 2) == 0.3 and self:Round(t.backdropcolor.b, 2) == 0.74
-	end
-end
-
-function E:AprilFoolsFuckupFix()
-	local c = P.general.backdropcolor
-	self.db.general.backdropcolor = {r = c.r, g = c.g, b = c.b}
-	
-	c = P.general.backdropfadecolor
-	self.db.general.backdropfadecolor = {r = c.r, g = c.g, b = c.b}
-
-	c = P.general.bordercolor
-	self.db.general.bordercolor = {r = c.r, g = c.g, b = c.b}	
-	
-	c = P.general.valuecolor
-	self.db.general.valuecolor = {r = c.r, g = c.g, b = c.b}
-		
-	self.db.chat.panelBackdropNameLeft = ""
-	self.db.chat.panelBackdropNameRight = ""
-	
-	c = P.unitframe.colors.health
-	self.db.unitframe.colors.health = {r = c.r, g = c.g, b = c.b}	
-	
-	c = P.unitframe.colors.castColor
-	self.db.unitframe.colors.castColor = {r = c.r, g = c.g, b = c.b}
-	self.db.unitframe.colors.transparentCastbar = false
-	
-	c = P.unitframe.colors.castColor
-	self.db.unitframe.colors.auraBarBuff = {r = c.r, g = c.g, b = c.b}
-	self.db.unitframe.colors.transparentAurabars = false
-	
-
-	if(HelloKittyLeft) then
-		HelloKittyLeft:Hide()
-		HelloKittyRight:Hide()
-		return
-	end	
-	
-	self.db.tempSettings = nil	
-	self:UpdateAll()
-end
-
-function E:SetupAprilFools2014()
-	if not self.db.tempSettings then
-		self.db.tempSettings = {}
-	end
-	
-
-	--Store old settings
-	local t = self.db.tempSettings
-	local c = self.db.general.backdropcolor
-	if(self:CheckForFoolsDayFuckup()) then
-		E:AprilFoolsFuckupFix()
-	else
-		self.oldEnableAllSound = GetCVar("Sound_EnableAllSound")
-		self.oldEnableMusic = GetCVar("Sound_EnableMusic")
-	
-		t.backdropcolor = {r = c.r, g = c.g, b = c.b}
-		c = self.db.general.backdropfadecolor
-		t.backdropfadecolor = {r = c.r, g = c.g, b = c.b, a = c.a}
-		c = self.db.general.bordercolor
-		t.bordercolor = {r = c.r, g = c.g, b = c.b}	
-		c = self.db.general.valuecolor
-		t.valuecolor = {r = c.r, g = c.g, b = c.b}		
-		
-		t.panelBackdropNameLeft = self.db.chat.panelBackdropNameLeft
-		t.panelBackdropNameRight = self.db.chat.panelBackdropNameRight
-		
-		c = self.db.unitframe.colors.health
-		t.health = {r = c.r, g = c.g, b = c.b}		
-		
-		c = self.db.unitframe.colors.castColor
-		t.castColor = {r = c.r, g = c.g, b = c.b}	
-		t.transparentCastbar = self.db.unitframe.colors.transparentCastbar
-		
-		c = self.db.unitframe.colors.auraBarBuff
-		t.auraBarBuff = {r = c.r, g = c.g, b = c.b}	
-		t.transparentAurabars = self.db.unitframe.colors.transparentAurabars	
-		
-		--Apply new settings
-		self.db.general.backdropfadecolor = {r =131/255, g =36/255, b = 130/255, a = 0.36}
-		self.db.general.backdropcolor = {r = 223/255, g = 76/255, b = 188/255}
-		self.db.general.bordercolor = {r = 223/255, g = 217/255, b = 47/255}
-		self.db.general.valuecolor = {r = 223/255, g = 217/255, b = 47/255}
-		
-		self.db.chat.panelBackdropNameLeft = [[Interface\AddOns\ElvUI\media\textures\helloKittyChat.tga]]
-		self.db.chat.panelBackdropNameRight = [[Interface\AddOns\ElvUI\media\textures\helloKittyChat.tga]]
-		
-		self.db.unitframe.colors.castColor = {r = 223/255, g = 76/255, b = 188/255}
-		self.db.unitframe.colors.transparentCastbar = true
-		
-		self.db.unitframe.colors.auraBarBuff = {r = 223/255, g = 76/255, b = 188/255}
-		self.db.unitframe.colors.transparentAurabars = true
-		
-		self.db.unitframe.colors.health = {r = 223/255, g = 76/255, b = 188/255}
-		
-		SetCVar("Sound_EnableAllSound", 1)
-		SetCVar("Sound_EnableMusic", 1)
-		PlayMusic([[Interface\AddOns\ElvUI\media\sounds\helloKitty.mp3]])		
-		self:ScheduleTimer('EndAprilFoolsDay2014', 59)
-		
-		self.db.general.kittys = true
-		self:CreateKittys()
-		
-		self:UpdateAll()
-	end
-end
-
-function E:EndAprilFoolsDay2014()
-	StopMusic()
-	SetCVar("Sound_EnableAllSound", self.oldEnableAllSound)
-	SetCVar("Sound_EnableMusic", self.oldEnableMusic)
-
-	E.global.aprilFools = true;
-	E:StaticPopup_Show("APRIL_FOOLS_END")
-end
-
-function E:RestoreAprilFools()
-	--Store old settings
-	self.db.general.kittys = false
-	if(HelloKittyLeft) then
-		HelloKittyLeft:Hide()
-		HelloKittyRight:Hide()
-	end		
-	
-	if not(self.db.tempSettings) then return end
-	if(self:CheckForFoolsDayFuckup()) then
-		self:AprilFoolsFuckupFix()
-		self.db.tempSettings = nil
-		return
-	end
-	local c = self.db.tempSettings.backdropcolor
-	self.db.general.backdropcolor = {r = c.r, g = c.g, b = c.b}
-	
-	c = self.db.tempSettings.backdropfadecolor
-	self.db.general.backdropfadecolor = {r = c.r, g = c.g, b = c.b}
-
-	c = self.db.tempSettings.bordercolor
-	self.db.general.bordercolor = {r = c.r, g = c.g, b = c.b}	
-	
-	c = self.db.tempSettings.valuecolor
-	self.db.general.valuecolor = {r = c.r, g = c.g, b = c.b}
-		
-	self.db.chat.panelBackdropNameLeft = self.db.tempSettings.panelBackdropNameLeft
-	self.db.chat.panelBackdropNameRight = self.db.tempSettings.panelBackdropNameRight
-	
-	c = self.db.tempSettings.health
-	self.db.unitframe.colors.health = {r = c.r, g = c.g, b = c.b}	
-	
-	c = self.db.tempSettings.castColor
-	self.db.unitframe.colors.castColor = {r = c.r, g = c.g, b = c.b}
-	self.db.unitframe.colors.transparentCastbar = self.db.tempSettings.transparentCastbar
-	
-	c = self.db.tempSettings.auraBarBuff
-	self.db.unitframe.colors.auraBarBuff = {r = c.r, g = c.g, b = c.b}
-	self.db.unitframe.colors.transparentAurabars = self.db.tempSettings.transparentAurabars
-	
-
-	self.db.tempSettings = nil
-	
-	self:UpdateAll()
-end
-
-function E:AprilFoolsToggle()
-	if(HelloKittyLeft and HelloKittyLeft:IsShown()) then
-		self:RestoreAprilFools()
-		self.global.aprilFools = true
-	else
-		self:StaticPopup_Show("APRIL_FOOLS")
-	end
-end
-
-local function OnDragStart(self)
-	self:StartMoving()
-end
-
-local function OnDragStop(self)
-	self:StopMovingOrSizing()
-end
-
-local function OnUpdate(self, elapsed)
-	if(self.elapsed and self.elapsed > 0.1) then
-		self.tex:SetTexCoord((self.curFrame - 1) * 0.1, 0, (self.curFrame - 1) * 0.1, 1, self.curFrame * 0.1, 0, self.curFrame * 0.1, 1)
-
-		if(self.countUp) then
-			self.curFrame = self.curFrame + 1
-		else
-			self.curFrame = self.curFrame - 1
-		end
-		
-		if(self.curFrame > 10) then
-			self.countUp = false
-			self.curFrame = 9
-		elseif(self.curFrame < 1) then
-			self.countUp = true
-			self.curFrame = 2
-		end
-		self.elapsed = 0
-	else
-		self.elapsed = (self.elapsed or 0) + elapsed
-	end	
-end
-
-function E:CreateKittys()
-	if(HelloKittyLeft) then
-		HelloKittyLeft:Show()
-		HelloKittyRight:Show()
-		return
-	end
-	local helloKittyLeft = CreateFrame("Frame", "HelloKittyLeft", UIParent)
-	helloKittyLeft:SetSize(120, 128)
-	helloKittyLeft:SetMovable(true)
-	helloKittyLeft:EnableMouse(true)
-	helloKittyLeft:RegisterForDrag("LeftButton")
-	helloKittyLeft:SetPoint("BOTTOMLEFT", LeftChatPanel, "BOTTOMRIGHT", 2, -4)
-	helloKittyLeft.tex = helloKittyLeft:CreateTexture(nil, "OVERLAY")
-	helloKittyLeft.tex:SetAllPoints()
-	helloKittyLeft.tex:SetTexture("Interface\\AddOns\\ElvUI\\media\\textures\\helloKitty.tga")
-	helloKittyLeft.tex:SetTexCoord(0, 0, 0, 1, 0, 0, 0, 1)
-	helloKittyLeft.curFrame = 1
-	helloKittyLeft.countUp = true
-	helloKittyLeft:SetClampedToScreen(true)
-	helloKittyLeft:SetScript("OnDragStart", OnDragStart)
-	helloKittyLeft:SetScript("OnDragStop", OnDragStop)
-	helloKittyLeft:SetScript("OnUpdate", OnUpdate)
-
-	local helloKittyRight = CreateFrame("Frame", "HelloKittyRight", UIParent)
-	helloKittyRight:SetSize(120, 128)
-	helloKittyRight:SetMovable(true)
-	helloKittyRight:EnableMouse(true)
-	helloKittyRight:RegisterForDrag("LeftButton")
-	helloKittyRight:SetPoint("BOTTOMRIGHT", RightChatPanel, "BOTTOMLEFT", -2, -4)
-	helloKittyRight.tex = helloKittyRight:CreateTexture(nil, "OVERLAY")
-	helloKittyRight.tex:SetAllPoints()
-	helloKittyRight.tex:SetTexture("Interface\\AddOns\\ElvUI\\media\\textures\\helloKitty.tga")
-	helloKittyRight.tex:SetTexCoord(0, 0, 0, 1, 0, 0, 0, 1)
-	helloKittyRight.curFrame = 10
-	helloKittyRight.countUp = false
-	helloKittyRight:SetClampedToScreen(true)
-	helloKittyRight:SetScript("OnDragStart", OnDragStart)
-	helloKittyRight:SetScript("OnDragStop", OnDragStop)
-	helloKittyRight:SetScript("OnUpdate", OnUpdate)
-end
-
 function E:Initialize()
 	twipe(self.db)
 	twipe(self.global)
 	twipe(self.private)
-	
+
 	self.data = LibStub("AceDB-3.0"):New("ElvDB", self.DF);
 	self.data.RegisterCallback(self, "OnProfileChanged", "UpdateAll")
 	self.data.RegisterCallback(self, "OnProfileCopied", "UpdateAll")
 	self.data.RegisterCallback(self, "OnProfileReset", "OnProfileReset")
 	LibStub('LibDualSpec-1.0'):EnhanceDatabase(self.data, "ElvUI")
-	self.charSettings = LibStub("AceDB-3.0"):New("ElvPrivateDB", self.privateVars);	
+	self.charSettings = LibStub("AceDB-3.0"):New("ElvPrivateDB", self.privateVars);
 	self.private = self.charSettings.profile
 	self.db = self.data.profile;
 	self.global = self.data.global;
 	self:CheckIncompatible()
 	self:DBConversions()
-	
+
 	self:CheckRole()
 	self:UIScale('PLAYER_LOGIN');
 
 	self:LoadCommands(); --Load Commands
-	self:InitializeModules(); --Load Modules	
+	self:InitializeModules(); --Load Modules
 	self:LoadMovers(); --Load Movers
 	self:UpdateCooldownSettings()
 	self.initialized = true
-	
+
 	if self.private.install_complete == nil then
 		self:Install()
 	end
-	
-	if not find(date(), '04/01/') then	
+
+	if not find(date(), '04/01/') then
 		E.global.aprilFools = nil;
 	end
-	
-	if(self:CheckForFoolsDayFuckup()) then
-		E:AprilFoolsFuckupFix()
-	elseif E:IsFoolsDay() and not self.db.general.kittys then
-		E:StaticPopup_Show('APRIL_FOOLS')
+
+	if(self:HelloKittyFixCheck()) then
+		self:HelloKittyFix()
 	end
-	
+
 	self:UpdateMedia()
 	self:UpdateFrameTemplates()
 	self:RegisterEvent("ACTIVE_TALENT_GROUP_CHANGED", "CheckRole");
 	self:RegisterEvent("PLAYER_TALENT_UPDATE", "CheckRole");
 	self:RegisterEvent("CHARACTER_POINTS_CHANGED", "CheckRole");
 	self:RegisterEvent("UNIT_INVENTORY_CHANGED", "CheckRole");
-	self:RegisterEvent("UPDATE_BONUS_ACTIONBAR", "CheckRole");	
+	self:RegisterEvent("UPDATE_BONUS_ACTIONBAR", "CheckRole");
 	self:RegisterEvent('UI_SCALE_CHANGED', 'UIScale')
 	self:RegisterEvent('PLAYER_ENTERING_WORLD')
 	self:RegisterEvent("PET_BATTLE_CLOSE", 'AddNonPetBattleFrames')
-	self:RegisterEvent('PET_BATTLE_OPENING_START', "RemoveNonPetBattleFrames")	
-	
+	self:RegisterEvent('PET_BATTLE_OPENING_START', "RemoveNonPetBattleFrames")
+
 	if self.myclass == "DRUID" then
 		self:RegisterEvent("SPELLS_CHANGED")
 	end
-	
+
 	if self.db.general.kittys then
 		self:CreateKittys()
-		self:Delay(5, self.Print, self, L["Type /aprilfools to revert to old settings."])
-	end	
-	
+		self:Delay(5, self.Print, self, L["Type /hellokitty to revert to old settings."])
+	end
+
 	self:Tutorials()
 	self:GetModule('Minimap'):UpdateSettings()
 	self:RefreshModulesDB()
 	collectgarbage("collect");
-	
+
 	if self.db.general.loginmessage then
-		print(select(2, E:GetModule('Chat'):FindURL("CHAT_MSG_DUMMY", format(L['LOGIN_MSG'], self["media"].hexvaluecolor, self["media"].hexvaluecolor, self.version)))..'.')
-	end	
+		print(select(2, E:GetModule('Chat'):FindURL("CHAT_MSG_DUMMY", format(L["LOGIN_MSG"], self["media"].hexvaluecolor, self["media"].hexvaluecolor, self.version)))..'.')
+	end
 end

@@ -16,7 +16,8 @@ Skada:AddLoadableModule("Enemies", function(Skada, L)
 		local player = mob.players[name]
 		if player then return player end
 		local _, playerClass = UnitClass(name)
-		player = {done = 0, taken = 0, class = playerClass}
+        local playerRole = UnitGroupRolesAssigned(name)
+		player = {done = 0, taken = 0, class = playerClass, role = playerRole}
 		mob.players[name] = player
 		return player
 	end
@@ -72,21 +73,22 @@ Skada:AddLoadableModule("Enemies", function(Skada, L)
 		local spellid, spellname,_,amount,overheal,absorb,crit = ...
 		local healing = math.max(0,amount - overheal) -- omit absorbs, which players inflict to mitigate healing
 		set.mobhdone = set.mobhdone + healing
-		local smob = find_mob(set,dmg.srcName)
+
+		if dmg.srcName then -- some enemy HoT's omit the true src (eg Cauterizing Bolt) 
+			local smob = find_mob(set,dmg.srcName)
+			smob.hdone = smob.hdone + healing
+			log_healspell(smob, "hdonespell", spellname, healing, overheal, crit)
+		end
+
 		local dmob = find_mob(set,dmg.dstName)
-
-		smob.hdone = smob.hdone + healing
 		dmob.htaken = dmob.htaken + healing
-
-		log_healspell(smob, "hdonespell", spellname, healing, overheal, crit)
 		log_healspell(dmob, "htakenspell", spellname, healing, overheal, crit)
-
 	end
 
 	local dmg = {}
 
 	local function Healing(timestamp, eventtype, srcGUID, srcName, srcFlags, dstGUID, dstName, dstFlags, ...)
-		if srcName and dstName then
+		if dstName then -- we allow missing src (for some enemy HoTs)
 			dmg.dstName = dstName
 			dmg.srcName = srcName
 			log_healing(Skada.current, dmg, ...)
@@ -197,6 +199,7 @@ Skada:AddLoadableModule("Enemies", function(Skada, L)
 					d.value = player.done
 					d.valuetext = Skada:FormatNumber(player.done)..(" (%02.1f%%)"):format(player.done / mob.done * 100)
 					d.class = player.class
+                    d.role = player.role
 
 					if player.done > max then
 						max = player.done
@@ -233,6 +236,7 @@ Skada:AddLoadableModule("Enemies", function(Skada, L)
 					d.value = player.taken
 					d.valuetext = Skada:FormatNumber(player.taken)..(" (%02.1f%%)"):format(player.taken / mob.taken * 100)
 					d.class = player.class
+                    d.role = player.role
 
 					if player.taken > max then
 						max = player.taken
@@ -352,9 +356,9 @@ Skada:AddLoadableModule("Enemies", function(Skada, L)
 		hdone.metadata		= {click1 = hdonespells}
 		htaken.metadata		= {click1 = htakenspells}
 
-		Skada:RegisterForCL(Healing, 'SPELL_HEAL', {src_is_not_interesting = true, dst_is_not_interesting = true})
-		Skada:RegisterForCL(Healing, 'SPELL_PERIODIC_HEAL', {src_is_not_interesting = true, dst_is_not_interesting = true})
-		Skada:RegisterForCL(Healing, 'SPELL_BUILDING_HEAL', {src_is_not_interesting = true, dst_is_not_interesting = true})
+		Skada:RegisterForCL(Healing, 'SPELL_HEAL', {dst_is_not_interesting = true})
+		Skada:RegisterForCL(Healing, 'SPELL_PERIODIC_HEAL', {dst_is_not_interesting = true})
+		Skada:RegisterForCL(Healing, 'SPELL_BUILDING_HEAL', {dst_is_not_interesting = true})
 
 		Skada:AddMode(self)
 	end

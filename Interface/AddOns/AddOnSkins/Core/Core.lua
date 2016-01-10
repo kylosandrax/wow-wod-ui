@@ -1,39 +1,34 @@
 local AS = unpack(AddOnSkins)
 local AddOnName = ...
 local ES
+local FoundError
 
 AS:UpdateLocale()
 
-AddOnSkinsOptions = {
--- Embeds
-	['EmbedOoC'] = false,
-	['EmbedOoCDelay'] = 10,
-	['EmbedCoolLine'] = false,
-	['EmbedSexyCooldown'] = false,
-	['EmbedSystem'] = false,
-	['EmbedSystemDual'] = false,
-	['EmbedMain'] = 'Skada',
-	['EmbedLeft'] = 'Skada',
-	['EmbedRight'] = 'Skada',
-	['EmbedRightChat'] = 'Skada',
-	['EmbedLeftWidth'] = 200,
-	['EmbedBelowTop'] = false,
-	['EmbedIsHidden'] = false,
-	['TransparentEmbed'] = false,
--- Misc
-	['RecountBackdrop'] = true,
-	['SkadaBackdrop'] = true,
-	['OmenBackdrop'] = true,
-	['MiscFixes'] = true,
-	['DBMSkinHalf'] = false,
-	['DBMFont'] = 'Tukui',
-	['DBMFontSize'] = 12,
-	['DBMFontFlag'] = 'OUTLINE',
-	['WeakAuraAuraBar'] = false,
-	['SkinTemplate'] = 'Transparent',
-	['HideChatFrame'] = 'NONE',
-	['SkinDebug'] = false,
-}
+function AS:CheckOption(optionName, ...)
+	for i = 1, select('#', ...) do
+		local addon = select(i, ...)
+		if not addon then break end
+		if not IsAddOnLoaded(addon) then return false end
+	end
+	return AddOnSkinsOptions[optionName]
+end
+
+function AS:SetOption(optionName, value)
+	AddOnSkinsOptions[optionName] = value
+end
+
+function AS:DisableOption(optionName)
+	AS:SetOption(optionName, false)
+end
+
+function AS:EnableOption(optionName)
+	AS:SetOption(optionName, true)
+end
+
+function AS:ToggleOption(optionName)
+	AddOnSkinsOptions[optionName] = not AddOnSkinsOptions[optionName]
+end
 
 function AS:Scale(Number)
 	return AS.Mult * floor(Number/AS.Mult + .5)
@@ -58,7 +53,7 @@ function AS:Delay(delay, func)
 end
 
 function AS:CheckAddOn(addon)
-	return AS.AddOns[addon] or false
+	return AS.AddOns[strlower(addon)] or false
 end
 
 function AS:Print(string)
@@ -198,14 +193,14 @@ function AS:StartSkinning(event)
 
 	AS:UpdateMedia()
 
-	if IsAddOnLoaded('ElvUI') then
+	if AS:CheckAddOn('ElvUI') then
 		ES = ElvUI[1]:GetModule('EnhancedShadows', true)
 	end
 
 	AS.Mult = 768/string.match(GetCVar("gxResolution"), "%d+x(%d+)")/UIParent:GetScale()
-	AS.ParchmentEnabled = true --AS:CheckOption('Parchment')
+	AS.ParchmentEnabled = AS:CheckOption('Parchment')
 
-	if not IsAddOnLoaded('ElvUI') then
+	if not AS:CheckAddOn('ElvUI') then
 		for skin, alldata in pairs(AS.register) do
 			if AS:CheckOption(skin) == nil then
 				AS:EnableOption(skin)
@@ -237,11 +232,24 @@ function AS:StartSkinning(event)
 	AS:UnregisterEvent(event)
 end
 
+function AS:UpdateMedia()
+	local LSM = AS.LSM
+	AS.Blank = LSM:Fetch('background', "Solid")
+	AS.Font = LSM:Fetch('font', "Arial Narrow")
+	AS.ActionBarFont = LSM:Fetch('font', "Arial Narrow")
+	AS.PixelFont = LSM:Fetch('font', "Arial Narrow")
+	AS.NormTex = LSM:Fetch('statusbar', "Blizzard Character Skills Bar")
+	AS.BackdropColor = { 1, 1, 1 }
+	AS.BorderColor = { 1, 1, 1 }
+	AS.PixelPerfect = false
+	AS.HideShadows = false
+end
+
 function AS:Init(event, addon)
 	if event == 'ADDON_LOADED' and addon == AddOnName then
 		AS:UpdateMedia()
 		if AS:CheckAddOn('ElvUI') then
-			local ElvUIVersion, MinElvUIVersion = tonumber(GetAddOnMetadata('ElvUI', 'Version')), 7.32
+			local ElvUIVersion, MinElvUIVersion = tonumber(GetAddOnMetadata('ElvUI', 'Version')), 8.38
 			if ElvUIVersion < MinElvUIVersion then
 				AS:AcceptFrame(format('%s - Required ElvUI Version %s. You currently have %s.\n Download ElvUI @ %s', AS.Title, MinElvUIVersion, ElvUIVersion, AS:PrintURL('http://www.tukui.org/dl.php')), function(self) print(AS:PrintURL('http://www.tukui.org/dl.php')) self:Hide() end)
 				AS:Print('Loading Aborted')
@@ -253,6 +261,7 @@ function AS:Init(event, addon)
 		AS:CreateDataText()
 	end
 	if event == 'PLAYER_LOGIN' then
+		AS:UpdateMedia()
 		AS:RegisterEvent('PET_BATTLE_CLOSE', 'AddNonPetBattleFrames')
 		AS:RegisterEvent('PET_BATTLE_OPENING_START', 'RemoveNonPetBattleFrames')
 		AS:RegisterEvent('PLAYER_ENTERING_WORLD', 'StartSkinning')

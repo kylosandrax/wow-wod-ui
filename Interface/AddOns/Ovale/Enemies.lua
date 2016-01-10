@@ -16,42 +16,66 @@ local OvaleDebug = Ovale.OvaleDebug
 local OvaleProfiler = Ovale.OvaleProfiler
 
 -- Forward declarations for module dependencies.
+local OvaleGUID = nil
 local OvaleState = nil
 
 local bit_band = bit.band
+local bit_bor = bit.bor
 local ipairs = ipairs
 local pairs = pairs
 local strfind = string.find
 local tostring = tostring
 local wipe = wipe
 local API_GetTime = GetTime
-local API_UnitGUID = UnitGUID
-local COMBATLOG_OBJECT_AFFILIATION_OUTSIDER = COMBATLOG_OBJECT_AFFILIATION_OUTSIDER
-local COMBATLOG_OBJECT_REACTION_HOSTILE = COMBATLOG_OBJECT_REACTION_HOSTILE
+local COMBATLOG_OBJECT_AFFILIATION_MINE = COMBATLOG_OBJECT_AFFILIATION_MINE
+local COMBATLOG_OBJECT_AFFILIATION_PARTY = COMBATLOG_OBJECT_AFFILIATION_PARTY
+local COMBATLOG_OBJECT_AFFILIATION_RAID = COMBATLOG_OBJECT_AFFILIATION_RAID
+local COMBATLOG_OBJECT_REACTION_FRIENDLY = COMBATLOG_OBJECT_REACTION_FRIENDLY
+
+-- Bitmask for player, party or raid unit controller affiliation.
+local GROUP_MEMBER = bit_bor(COMBATLOG_OBJECT_AFFILIATION_MINE, COMBATLOG_OBJECT_AFFILIATION_PARTY, COMBATLOG_OBJECT_AFFILIATION_RAID)
 
 -- Register for debugging messages.
 OvaleDebug:RegisterDebugging(OvaleEnemies)
 -- Register for profiling.
 OvaleProfiler:RegisterProfiling(OvaleEnemies)
 
--- List of CLEU event suffixes that can correspond to the player damaging or try to damage (tag) an enemy.
+--[[
+	List of CLEU event suffixes that can correspond to the player damaging or try to
+	damage (tag) an enemy, or vice versa.
+--]]
 local CLEU_TAG_SUFFIXES = {
-	"_CAST_START",
 	"_DAMAGE",
 	"_MISSED",
-	"_DRAIN",
-	"_LEECH",
+	"_AURA_APPLIED",
+	"_AURA_APPLIED_DOSE",
+	"_AURA_REFRESH",
+	"_CAST_START",
 	"_INTERRUPT",
 	"_DISPEL",
 	"_DISPEL_FAILED",
 	"_STOLEN",
-	"_AURA_APPLIED",
-	"_AURA_APPLIED_DOSE",
-	"_AURA_REFRESH",
+	"_DRAIN",
+	"_LEECH",
+}
+
+-- Table of CLEU events for auto-attacks.
+local CLEU_AUTOATTACK = {
+	RANGED_DAMAGE = true,
+	RANGED_MISSED = true,
+	SWING_DAMAGE = true,
+	SWING_MISSED = true,
+}
+
+-- Table of CLEU events for when a unit is removed from combat.
+local CLEU_UNIT_REMOVED = {
+	UNIT_DESTROYED = true,
+	UNIT_DIED = true,
+	UNIT_DISSIPATES = true,
 }
 
 -- Player's GUID.
-local self_guid = nil
+local self_playerGUID = nil
 
 -- enemyName[guid] = name
 local self_enemyName = {}
@@ -75,23 +99,34 @@ OvaleEnemies.taggedEnemies = 0
 
 --<private-static-methods>
 local function IsTagEvent(cleuEvent)
-	for _, suffix in ipairs(CLEU_TAG_SUFFIXES) do
-		if strfind(cleuEvent, suffix .. "$") then
-			return true
+	local isTagEvent = false
+	if CLEU_AUTOATTACK[cleuEvent] then
+		isTagEvent = true
+	else
+		for _, suffix in ipairs(CLEU_TAG_SUFFIXES) do
+			if strfind(cleuEvent, suffix .. "$") then
+				isTagEvent = true
+				break
+			end
 		end
 	end
-	return false
+	return isTagEvent
+end
+
+local function IsFriendly(unitFlags, isGroupMember)
+	return bit_band(unitFlags, COMBATLOG_OBJECT_REACTION_FRIENDLY) > 0 and (not isGroupMember or bit_band(unitFlags, GROUP_MEMBER) > 0)
 end
 --</private-static-methods>
 
 --<public-static-methods>
 function OvaleEnemies:OnInitialize()
 	-- Resolve module dependencies.
+	OvaleGUID = Ovale.OvaleGUID
 	OvaleState = Ovale.OvaleState
 end
 
 function OvaleEnemies:OnEnable()
-	self_guid = API_UnitGUID("player")
+	self_playerGUID = Ovale.playerGUID
 	if not self_reaperTimer then
 		self_reaperTimer = self:ScheduleRepeatingTimer("RemoveInactiveEnemies", REAP_INTERVAL)
 	end
@@ -111,20 +146,27 @@ function OvaleEnemies:OnDisable()
 end
 
 function OvaleEnemies:COMBAT_LOG_EVENT_UNFILTERED(event, timestamp, cleuEvent, hideCaster, sourceGUID, sourceName, sourceFlags, sourceRaidFlags, destGUID, destName, destFlags, destRaidFlags, ...)
-	if cleuEvent == "UNIT_DIED" then
+	if CLEU_UNIT_REMOVED[cleuEvent] then
 		local now = API_GetTime()
-		self:RemoveEnemy(destGUID, now, true)
-	elseif sourceFlags and bit_band(sourceFlags, COMBATLOG_OBJECT_REACTION_HOSTILE) > 0
-			and bit_band(sourceFlags, COMBATLOG_OBJECT_AFFILIATION_OUTSIDER) > 0
-			and destFlags and bit_band(destFlags, COMBATLOG_OBJECT_AFFILIATION_OUTSIDER) == 0 then
-		local now = API_GetTime()
-		self:AddEnemy(sourceGUID, sourceName, now)
-	elseif destGUID and bit_band(destFlags, COMBATLOG_OBJECT_REACTION_HOSTILE) > 0
-			and bit_band(destFlags, COMBATLOG_OBJECT_AFFILIATION_OUTSIDER) > 0
-			and sourceFlags and bit_band(sourceFlags, COMBATLOG_OBJECT_AFFILIATION_OUTSIDER) == 0 then
-		local now = API_GetTime()
-		local isTagged = (sourceGUID == self_guid and IsTagEvent(cleuEvent))
-		self:AddEnemy(destGUID, destName, now, isTagged)
+		self:RemoveEnemy(cleuEvent, destGUID, now, true)
+	elseif sourceGUID and sourceGUID ~= "" and sourceName and sourceFlags and destGUID and destGUID ~= "" and destName and destFlags then
+		if not IsFriendly(sourceFlags) and IsFriendly(destFlags, true) then
+			--[[
+				Unfriendly enemy attacks friendly group member.
+				Filter out periodic damage effects since they can occur after the caster's death
+				and can cause false positives.
+			--]]
+			if not cleuEvent == "SPELL_PERIODIC_DAMAGE" and IsTagEvent(cleuEvent) then
+				local now = API_GetTime()
+				self:AddEnemy(cleuEvent, sourceGUID, sourceName, now)
+			end
+		elseif IsFriendly(sourceFlags, true) and not IsFriendly(destFlags) and IsTagEvent(cleuEvent) then
+			-- Friendly group member attacks unfriendly enemy.
+			local now = API_GetTime()
+			-- Treat both player and pet attacks as a player tag.
+			local isPlayerTag = (sourceGUID == self_playerGUID) or OvaleGUID:IsPlayerPet(sourceGUID)
+			self:AddEnemy(cleuEvent, destGUID, destName, now, isPlayerTag)
+		end
 	end
 end
 
@@ -137,82 +179,100 @@ function OvaleEnemies:PLAYER_REGEN_DISABLED()
 	self.taggedEnemies = 0
 end
 
--- Remove enemies that have been inactive for at least REAP_INTERVAL seconds.
--- These enemies are not in combat with your group, out of range, or
--- incapacitated and shouldn't count toward the number of active enemies.
+--[[
+	Remove enemies that have been inactive for at least REAP_INTERVAL seconds.
+	These enemies are not in combat with your group, out of range, or
+	incapacitated and shouldn't count toward the number of active enemies.
+--]]
 function OvaleEnemies:RemoveInactiveEnemies()
 	self:StartProfiling("OvaleEnemies_RemoveInactiveEnemies")
 	local now = API_GetTime()
+	-- Remove inactive enemies first.
 	for guid, timestamp in pairs(self_enemyLastSeen) do
 		if now - timestamp > REAP_INTERVAL then
-			self:RemoveEnemy(guid, now)
+			self:RemoveEnemy("REAPED", guid, now)
+		end
+	end
+	-- Remove inactive tagged enemies last.
+	for guid, timestamp in pairs(self_taggedEnemyLastSeen) do
+		if now - timestamp > REAP_INTERVAL then
+			self:RemoveTaggedEnemy("REAPED", guid, now)
 		end
 	end
 	self:StopProfiling("OvaleEnemies_RemoveInactiveEnemies")
 end
 
-function OvaleEnemies:AddEnemy(guid, name, timestamp, isTagged)
+function OvaleEnemies:AddEnemy(cleuEvent, guid, name, timestamp, isTagged)
 	self:StartProfiling("OvaleEnemies_AddEnemy")
 	if guid then
 		self_enemyName[guid] = name
-		local tagged = self_taggedEnemyLastSeen[guid]
-		if isTagged then
-			local tagged = self_taggedEnemyLastSeen[guid]
-			self_taggedEnemyLastSeen[guid] = timestamp
-			if not tagged then
-				self.taggedEnemies = self.taggedEnemies + 1
+		local changed = false
+		do
+			-- Update last time this enemy was seen.
+			if not self_enemyLastSeen[guid] then
+				self.activeEnemies = self.activeEnemies + 1
+				changed = true
 			end
+			self_enemyLastSeen[guid] = timestamp
 		end
-		local seen = self_enemyLastSeen[guid]
-		self_enemyLastSeen[guid] = timestamp
-		if not seen then
-			self.activeEnemies = self.activeEnemies + 1
+		if isTagged then
+			-- Update last time this enemy was tagged.
+			if not self_taggedEnemyLastSeen[guid] then
+				self.taggedEnemies = self.taggedEnemies + 1
+				changed = true
+			end
+			self_taggedEnemyLastSeen[guid] = timestamp
 		end
-		if isTagged and not tagged then
-			self:Debug(true, "New tagged enemy seen (%d total, %d tagged): %s (%s)", self.activeEnemies, self.taggedEnemies, guid, name)
-			Ovale.refreshNeeded["player"] = true
-		elseif not seen then
-			self:Debug(true, "New enemy seen (%d total): %s (%s)", self.activeEnemies, guid, name)
-			Ovale.refreshNeeded["player"] = true
+		if changed then
+			self:DebugTimestamp("%s: %d/%d enemy seen: %s (%s)", cleuEvent, self.taggedEnemies, self.activeEnemies, guid, name)
+			Ovale.refreshNeeded[self_playerGUID] = true
 		end
 	end
 	self:StopProfiling("OvaleEnemies_AddEnemy")
 end
 
-function OvaleEnemies:RemoveEnemy(guid, timestamp, isDead)
+function OvaleEnemies:RemoveEnemy(cleuEvent, guid, timestamp, isDead)
 	self:StartProfiling("OvaleEnemies_RemoveEnemy")
 	if guid then
 		local name = self_enemyName[guid]
-		local seen = self_enemyLastSeen[guid]
+		local changed = false
+		-- Update seen enemy count.
+		if self_enemyLastSeen[guid] then
+			self_enemyLastSeen[guid] = nil
+			if self.activeEnemies > 0 then
+				self.activeEnemies = self.activeEnemies - 1
+				changed = true
+			end
+		end
+		-- Update tagged enemy count.
+		if self_taggedEnemyLastSeen[guid] then
+			self_taggedEnemyLastSeen[guid] = nil
+			if self.taggedEnemies > 0 then
+				self.taggedEnemies = self.taggedEnemies - 1
+				changed = true
+			end
+		end
+		if changed then
+			self:DebugTimestamp("%s: %d/%d enemy %s: %s (%s)", cleuEvent, self.taggedEnemies, self.activeEnemies, isDead and "died" or "removed", guid, name)
+			Ovale.refreshNeeded[self_playerGUID] = true
+			self:SendMessage("Ovale_InactiveUnit", guid, isDead)
+		end
+	end
+	self:StopProfiling("OvaleEnemies_RemoveEnemy")
+end
+
+function OvaleEnemies:RemoveTaggedEnemy(cleuEvent, guid, timestamp)
+	self:StartProfiling("OvaleEnemies_RemoveTaggedEnemy")
+	if guid then
+		local name = self_enemyName[guid]
 		local tagged = self_taggedEnemyLastSeen[guid]
 		if tagged then
 			self_taggedEnemyLastSeen[guid] = nil
 			if self.taggedEnemies > 0 then
 				self.taggedEnemies = self.taggedEnemies - 1
 			end
-		end
-		if seen then
-			self_enemyLastSeen[guid] = nil
-			if self.activeEnemies > 0 then
-				self.activeEnemies = self.activeEnemies - 1
-			end
-		end
-		if tagged then
-			if isDead then
-				self:Debug(true, "Tagged enemy died (%d total, %d tagged): %s (%s)", self.activeEnemies, self.taggedEnemies, guid, name)
-			else
-				self:Debug(true, "Tagged enemy removed( %d total, %d tagged): %s (%s), last seen at %f", self.activeEnemies, self.taggedEnemies, guid, name, tagged)
-			end
-		elseif seen then
-			if isDead then
-				self:Debug(true, "Enemy died (%d total): %s (%s)", self.activeEnemies, guid, name)
-			else
-				self:Debug(true, "Enemy removed (%d total): %s (%s), last seen at %f", self.activeEnemies, guid, name, seen)
-			end
-		end
-		if tagged or seen then
-			Ovale.refreshNeeded["player"] = true
-			self:SendMessage("Ovale_InactiveUnit", guid)
+			self:DebugTimestamp("%s: %d/%d enemy removed: %s (%s), last tagged at %f", cleuEvent, self.taggedEnemies, self.activeEnemies, guid, name, tagged)
+			Ovale.refreshNeeded[self_playerGUID] = true
 		end
 	end
 	self:StopProfiling("OvaleEnemies_RemoveEnemy")

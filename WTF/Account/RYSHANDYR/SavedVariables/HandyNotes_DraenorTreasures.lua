@@ -1,23 +1,27 @@
 
 DraenorTreasuresDB = {
 	["profileKeys"] = {
-		["Feldspar - Aggramar"] = "Default",
 		["Zapunzel - Aggramar"] = "Default",
-		["Stormslinger - Aggramar"] = "Default",
-		["Ryvok - Aggramar"] = "Default",
-		["Banjax - Aggramar"] = "Default",
+		["Greenthorn - Aggramar"] = "Default",
 		["Ryjax - Aggramar"] = "Default",
 		["Kylosandrax - Aggramar"] = "Default",
+		["Stormslinger - Aggramar"] = "Default",
+		["Feldspar - Aggramar"] = "Default",
+		["Ryvok - Terokkar"] = "Default",
+		["Kyloc - Aggramar"] = "Default",
+		["Banjax - Aggramar"] = "Default",
+		["Kylosandrix - Aggramar"] = "Default",
+		["Ryvok - Aggramar"] = "Default",
 		["Bronin - Aggramar"] = "Default",
 	},
 	["profiles"] = {
 		["Default"] = {
 			["GorgrondRares"] = false,
 			["SoARares"] = false,
-			["TaladorRares"] = false,
+			["FFRRares"] = false,
 			["NagrandRares"] = false,
 			["SMVRares"] = false,
-			["FFRRares"] = false,
+			["TaladorRares"] = false,
 		},
 	},
 }

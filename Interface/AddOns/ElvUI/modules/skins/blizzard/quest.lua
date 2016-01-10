@@ -2,7 +2,7 @@ local E, L, V, P, G = unpack(select(2, ...)); --Inport: Engine, Locales, Private
 local S = E:GetModule('Skins')
 
 local function StyleScrollFrame(scrollFrame, widthOverride, heightOverride, inset)
-	scrollFrame:SetTemplate()	
+	scrollFrame:SetTemplate()
 	scrollFrame.spellTex = scrollFrame:CreateTexture(nil, 'ARTWORK')
 	scrollFrame.spellTex:SetTexture([[Interface\QuestFrame\QuestBG]])
 	if inset then
@@ -11,13 +11,21 @@ local function StyleScrollFrame(scrollFrame, widthOverride, heightOverride, inse
 		scrollFrame.spellTex:SetPoint("TOPLEFT")
 	end
 	scrollFrame.spellTex:Size(widthOverride or 506, heightOverride or 615)
-	scrollFrame.spellTex:SetTexCoord(0, 1, 0.02, 1)	
+	scrollFrame.spellTex:SetTexCoord(0, 1, 0.02, 1)
 end
 
 local function LoadSkin()
 	if E.private.skins.blizzard.enable ~= true or E.private.skins.blizzard.quest ~= true then return end
+	ObjectiveTrackerBlocksFrame.QuestHeader.Background:Kill()
+
+	--[[ObjectiveTrackerFrame.HeaderMenu.MinimizeButton:SetAlpha(0)
+	local b = CreateFrame("Button", nil, ObjectiveTrackerFrame.QuestHeader)
+	b:SetPoint("TOPLEFT",ObjectiveTrackerFrame.QuestHeader, "TOPLEFT")
+	b:SetPoint("BOTTOMRIGHT", ObjectiveTrackerFrame.HeaderMenu.MinimizeButton, "BOTTOMRIGHT")
+	b:SetScript("OnClick", ObjectiveTrackerFrame.HeaderMenu.MinimizeButton:GetScript("OnClick"))]]
 	S:HandleScrollBar(QuestProgressScrollFrameScrollBar)
 	S:HandleScrollBar(QuestRewardScrollFrameScrollBar)
+	ObjectiveTrackerBlocksFrame.QuestHeader.Text:FontTemplate()
 
 
 	S:HandleScrollBar(QuestDetailScrollFrameScrollBar)
@@ -26,7 +34,7 @@ local function LoadSkin()
 	QuestGreetingScrollFrame:StripTextures()
 	S:HandleScrollBar(QuestGreetingScrollFrameScrollBar)
 
-	
+
 	QuestInfoSkillPointFrame:StripTextures()
 	QuestInfoSkillPointFrame:StyleButton()
 	QuestInfoSkillPointFrame:Width(QuestInfoSkillPointFrame:GetWidth() - 4)
@@ -44,7 +52,7 @@ local function LoadSkin()
 	QuestInfoItemHighlight:SetBackdropColor(0, 0, 0, 0)
 	QuestInfoItemHighlight.backdropTexture:SetAlpha(0)
 	QuestInfoItemHighlight:Size(142, 40)
-	
+
 	hooksecurefunc("QuestInfoItem_OnClick", function(self)
 		QuestInfoItemHighlight:ClearAllPoints()
 		QuestInfoItemHighlight:SetOutside(self.Icon)
@@ -62,13 +70,13 @@ local function LoadSkin()
 
 	QuestRewardScrollFrame:HookScript('OnShow', function(self)
 		if not self.backdrop then
-			self:CreateBackdrop("Default")	
-			StyleScrollFrame(self, 509, 630, false)		
+			self:CreateBackdrop("Default")
+			StyleScrollFrame(self, 509, 630, false)
 			self:Height(self:GetHeight() - 2)
 		end
-		self.spellTex:Height(self:GetHeight() + 217)	
+		self.spellTex:Height(self:GetHeight() + 217)
 	end)
-		
+
 	hooksecurefunc("QuestInfo_Display", function(template, parentFrame)
 	  for i = 1, #QuestInfoRewardsFrame.RewardButtons do
 		local questItem = QuestInfoRewardsFrame.RewardButtons[i]
@@ -84,7 +92,7 @@ local function LoadSkin()
 			    questItem:Point(point, relativeTo, relativePoint, 4, 0)
 			end
 		end
-		
+
 		questItem.Name:SetTextColor(1, 1, 1)
 	  end
     end)
@@ -100,22 +108,22 @@ local function LoadSkin()
     		rewardButton.Count:SetDrawLayer("OVERLAY")
     	end
     end)
-	
-	
+
+
 	--Quest Frame
 	QuestFrame:StripTextures(true)
 	QuestFrameInset:Kill()
 	QuestFrameDetailPanel:StripTextures(true)
 	QuestDetailScrollFrame:StripTextures(true)
-	QuestDetailScrollFrame:SetTemplate()	
-	StyleScrollFrame(QuestDetailScrollFrame, 506, 615, true)	
+	QuestDetailScrollFrame:SetTemplate()
+	StyleScrollFrame(QuestDetailScrollFrame, 506, 615, true)
 
-	QuestProgressScrollFrame:SetTemplate()	
-	StyleScrollFrame(QuestProgressScrollFrame, 506, 615, true)	
-	
+	QuestProgressScrollFrame:SetTemplate()
+	StyleScrollFrame(QuestProgressScrollFrame, 506, 615, true)
+
 	QuestGreetingScrollFrame:SetTemplate()
 	StyleScrollFrame(QuestGreetingScrollFrame, 506, 615, true)
-	
+
 	QuestDetailScrollChildFrame:StripTextures(true)
 	QuestRewardScrollFrame:StripTextures(true)
 	QuestRewardScrollChildFrame:StripTextures(true)
@@ -128,7 +136,7 @@ local function LoadSkin()
 	S:HandleButton(QuestFrameGoodbyeButton, true)
 	S:HandleButton(QuestFrameCompleteQuestButton, true)
 	S:HandleCloseButton(QuestFrameCloseButton, QuestFrame.backdrop)
-	
+
 	for i=1, 6 do
 		local button = _G["QuestProgressItem"..i]
 		local texture = _G["QuestProgressItem"..i.."IconTexture"]
@@ -141,7 +149,7 @@ local function LoadSkin()
 		texture:Point("TOPLEFT", 2, -2)
 		texture:Size(texture:GetWidth() - 2, texture:GetHeight() - 2)
 		_G["QuestProgressItem"..i.."Count"]:SetDrawLayer("OVERLAY")
-		button:SetTemplate("Default")				
+		button:SetTemplate("Default")
 	end
 
 	QuestNPCModel:StripTextures()
@@ -154,12 +162,12 @@ local function LoadSkin()
 	--QuestLogDetailFrame:SetTemplate("Transparent")
 	--QuestLogDetailScrollFrame:StripTextures()
 	--S:HandleCloseButton(QuestLogDetailFrameCloseButton)
-	
+
 	hooksecurefunc("QuestFrame_ShowQuestPortrait", function(parentFrame, portrait, text, name, x, y)
 		QuestNPCModel:ClearAllPoints();
-		QuestNPCModel:SetPoint("TOPLEFT", parentFrame, "TOPRIGHT", x + 18, y);			
-	end)	
-	
+		QuestNPCModel:SetPoint("TOPLEFT", parentFrame, "TOPRIGHT", x + 18, y);
+	end)
+
 	QuestLogPopupDetailFrame:StripTextures()
 	QuestLogPopupDetailFrameInset:StripTextures()
 	S:HandleButton(QuestLogPopupDetailFrameAbandonButton)
@@ -176,7 +184,7 @@ local function LoadSkin()
 			QuestLogPopupDetailFrameScrollFrame:Height(self:GetHeight() - 2)
 		end
 		QuestLogPopupDetailFrameScrollFrame.spellTex:Height(self:GetHeight() + 217)
-	end)	
+	end)
 
 	S:HandleCloseButton(QuestLogPopupDetailFrameCloseButton)
 

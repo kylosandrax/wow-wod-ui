@@ -1,6 +1,6 @@
 --[[--------------------------------------------------------------------
     Copyright (C) 2012 Sidoine De Wispelaere.
-    Copyright (C) 2012, 2013, 2014 Johnny C. Lam.
+    Copyright (C) 2012, 2013, 2014, 2015 Johnny C. Lam.
     See the file LICENSE.txt for copying permission.
 --]]--------------------------------------------------------------------
 
@@ -15,6 +15,7 @@ local OvaleRunes = Ovale:NewModule("OvaleRunes", "AceEvent-3.0")
 Ovale.OvaleRunes = OvaleRunes
 
 --<private-static-properties>
+local OvaleDebug = Ovale.OvaleDebug
 local OvaleProfiler = Ovale.OvaleProfiler
 
 -- Forward declarations for module dependencies.
@@ -28,19 +29,18 @@ local OvaleState = nil
 --local debugprint = print
 local ipairs = ipairs
 local pairs = pairs
+local type = type
 local wipe = wipe
 local API_GetRuneCooldown = GetRuneCooldown
 local API_GetRuneType = GetRuneType
 local API_GetSpellInfo = GetSpellInfo
 local API_GetTime = GetTime
-local API_UnitClass = UnitClass
 local INFINITY = math.huge
 
+-- Register for debugging messages.
+OvaleDebug:RegisterDebugging(OvaleRunes)
 -- Register for profiling.
 OvaleProfiler:RegisterProfiling(OvaleRunes)
-
--- Player's class.
-local _, self_class = API_UnitClass("player")
 
 local BLOOD_RUNE = 1
 local UNHOLY_RUNE = 2
@@ -131,7 +131,7 @@ function OvaleRunes:OnInitialize()
 end
 
 function OvaleRunes:OnEnable()
-	if self_class == "DEATHKNIGHT" then
+	if Ovale.playerClass == "DEATHKNIGHT" then
 		-- Initialize rune database.
 		for runeType, slots in ipairs(RUNE_SLOTS) do
 			for _, slot in pairs(slots) do
@@ -150,7 +150,7 @@ function OvaleRunes:OnEnable()
 end
 
 function OvaleRunes:OnDisable()
-	if self_class == "DEATHKNIGHT" then
+	if Ovale.playerClass == "DEATHKNIGHT" then
 		self:UnregisterEvent("PLAYER_ENTERING_WORLD")
 		self:UnregisterEvent("RUNE_POWER_UPDATE")
 		self:UnregisterEvent("RUNE_TYPE_UPDATE")
@@ -162,15 +162,18 @@ function OvaleRunes:OnDisable()
 end
 
 function OvaleRunes:RUNE_POWER_UPDATE(event, slot, usable)
+	self:Debug(event, slot, usable)
 	self:UpdateRune(slot)
 end
 
 function OvaleRunes:RUNE_TYPE_UPDATE(event, slot)
+	self:Debug(event, slot)
 	self:UpdateRune(slot)
 end
 
 function OvaleRunes:UNIT_RANGEDDAMAGE(event, unitId)
 	if unitId == "player" then
+		self:Debug(event)
 		self:UpdateAllRunes()
 	end
 end
@@ -180,20 +183,26 @@ function OvaleRunes:UpdateRune(slot)
 	local rune = self.rune[slot]
 	local runeType = API_GetRuneType(slot)
 	local start, duration, runeReady = API_GetRuneCooldown(slot)
-	rune.type = runeType
-	if start > 0 then
-		-- Rune is on cooldown.
-		rune.startCooldown = start
-		rune.endCooldown = start + duration
+	if runeType and start and duration then
+		rune.type = runeType
+		if start > 0 then
+			-- Rune is on cooldown.
+			rune.startCooldown = start
+			rune.endCooldown = start + duration
+		else
+			-- Rune is active.
+			rune.startCooldown = 0
+			rune.endCooldown = 0
+		end
+		Ovale.refreshNeeded[Ovale.playerGUID] = true
 	else
-		-- Rune is active.
-		rune.startCooldown = 0
-		rune.endCooldown = 0
+		self:Debug("Warning: rune information for slot %d not available.", slot)
 	end
 	self:StopProfiling("OvaleRunes_UpdateRune")
 end
 
-function OvaleRunes:UpdateAllRunes()
+function OvaleRunes:UpdateAllRunes(event)
+	self:Debug(event)
 	for slot = 1, 6 do
 		self:UpdateRune(slot)
 	end
@@ -263,7 +272,7 @@ function OvaleRunes:CleanState(state)
 end
 
 -- Apply the effects of the spell at the start of the spellcast.
-function OvaleRunes:ApplySpellStartCast(state, spellId, targetGUID, startCast, endCast, nextCast, isChanneled, spellcast)
+function OvaleRunes:ApplySpellStartCast(state, spellId, targetGUID, startCast, endCast, isChanneled, spellcast)
 	self:StartProfiling("OvaleRunes_ApplySpellStartCast")
 	-- Channeled spells cost resources at the start of the channel.
 	if isChanneled then
@@ -273,7 +282,7 @@ function OvaleRunes:ApplySpellStartCast(state, spellId, targetGUID, startCast, e
 end
 
 -- Apply the effects of the spell on the player's state, assuming the spellcast completes.
-function OvaleRunes:ApplySpellAfterCast(state, spellId, targetGUID, startCast, endCast, nextCast, isChanneled, spellcast)
+function OvaleRunes:ApplySpellAfterCast(state, spellId, targetGUID, startCast, endCast, isChanneled, spellcast)
 	self:StartProfiling("OvaleRunes_ApplySpellAfterCast")
 	-- Instant or cast-time spells cost resources at the end of the spellcast.
 	if not isChanneled then
@@ -318,8 +327,7 @@ statePrototype.ApplyRuneCost = function(state, spellId, atTime, spellcast)
 		for i, name in ipairs(RUNE_NAME) do
 			local count = si[name] or 0
 			while count > 0 do
-				local snapshot = spellcast and spellcast.snapshot or nil
-				state:ConsumeRune(spellId, atTime, name, snapshot)
+				state:ConsumeRune(spellId, atTime, name, spellcast)
 				count = count - 1
 			end
 		end
@@ -430,34 +438,32 @@ end
 --     count			The number of currently active runes of the given type.
 --     startCooldown	The time at which the next rune of the given type went on cooldown.
 --     endCooldown		The time at which the next rune of the given type will be active.
-statePrototype.RuneCount = function(state, name, atTime)
+statePrototype.RuneCount = function(state, name, includeDeath, atTime)
 	OvaleRunes:StartProfiling("OvaleRunes_state_RuneCount")
-	-- Default to checking the rune count at the end of the current spellcast in the
-	-- simulator, or at the current time if no spell is being cast.
-	if not atTime then
-		if state.endCast and state.endCast > state.currentTime then
-			atTime = state.endCast
-		else
-			atTime = state.currentTime
-		end
+	-- Default to matching death runes of the same type.
+	if type(includeDeath) == "number" then
+		includeDeath, atTime = nil, includeDeath
 	end
+	atTime = atTime or state.currentTime
 	local count = 0
 	local startCooldown, endCooldown = INFINITY, INFINITY
 	local runeType = RUNE_TYPE[name]
-	if runeType ~= DEATH_RUNE then
+	if runeType ~= DEATH_RUNE and not includeDeath then
 		-- Match only the runes of the given type.
 		for _, slot in ipairs(RUNE_SLOTS[runeType]) do
 			local rune = state.rune[slot]
-			if rune:IsActiveRune(atTime) then
-				count = count + 1
-			elseif rune.endCooldown < endCooldown then
-				startCooldown, endCooldown = rune.startCooldown, rune.endCooldown
+			if rune.type == runeType or (includeDeath == nil and rune.type == DEATH_RUNE) then
+				if rune:IsActiveRune(atTime) then
+					count = count + 1
+				elseif rune.endCooldown < endCooldown then
+					startCooldown, endCooldown = rune.startCooldown, rune.endCooldown
+				end
 			end
 		end
 	else
-		-- Match any requested death runes.
+		-- Match any runes that can satisfy the rune type.
 		for slot, rune in ipairs(state.rune) do
-			if rune.type == DEATH_RUNE then
+			if rune.type == runeType or rune.type == DEATH_RUNE then
 				if rune:IsActiveRune(atTime) then
 					count = count + 1
 				elseif rune.endCooldown < endCooldown then
@@ -472,15 +478,7 @@ end
 
 statePrototype.DeathRuneCount = function(state, name, atTime)
 	OvaleRunes:StartProfiling("OvaleRunes_state_DeathRuneCount")
-	-- Default to checking the rune count at the end of the current spellcast in the
-	-- simulator, or at the current time if no spell is being cast.
-	if not atTime then
-		if state.endCast and state.endCast > state.currentTime then
-			atTime = state.endCast
-		else
-			atTime = state.currentTime
-		end
-	end
+	atTime = atTime or state.currentTime
 	local count = 0
 	local startCooldown, endCooldown = INFINITY, INFINITY
 	local runeType = RUNE_TYPE[name]
@@ -510,15 +508,7 @@ do
 
 	statePrototype.GetRunesCooldown = function(state, blood, unholy, frost, death, atTime)
 		OvaleRunes:StartProfiling("OvaleRunes_state_GetRunesCooldown")
-		-- Default to checking runes at the end of the current spellcast in the
-		-- simulator, or at the current time if no spell is being cast.
-		if not atTime then
-			if state.endCast and state.endCast > state.currentTime then
-				atTime = state.endCast
-			else
-				atTime = state.currentTime
-			end
-		end
+		atTime = atTime or state.currentTime
 
 		-- Initialize static variables.
 		count[BLOOD_RUNE] = blood or 0

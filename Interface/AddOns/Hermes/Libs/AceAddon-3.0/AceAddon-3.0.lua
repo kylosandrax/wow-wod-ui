@@ -402,273 +402,18 @@ function SetDefaultModuleLibraries(self, ...)
 	self.defaultModuleLibraries = {...}
 end
 
---- Set the default state in which new modules are being created.
--- Note that you can only change the default state before any module is created.
--- @name //addon//:SetDefaultModuleState
--- @paramsig state
--- @param state Default state for new modules, true for enabled, false for disabled
--- @usage 
--- -- Create the addon object
--- MyAddon = LibStub("AceAddon-3.0"):NewAddon("MyAddon")
--- -- Set the default state to "disabled"
--- MyAddon:SetDefaultModuleState(false)
--- -- Create a module and explicilty enable it
--- MyModule = MyAddon:NewModule("MyModule")
--- MyModule:Enable()
-function SetDefaultModuleState(self, state)
-	if next(self.modules) then
-		error("Usage: SetDefaultModuleState(state): cannot change the module defaults after a module has been registered.", 2)
-	end
-	self.defaultModuleState = state
-end
+--- Set the default st ó… şÿÿóB$ó…şÿÿóB(ó…şÿÿóB,ó…şÿÿóB0ó…şÿÿó~BLfÖ…şÿÿó~BTfÖ…şÿÿó~B\fÖ…$şÿÿó~BdfÖ…,şÿÿó~BlfÖ…4şÿÿó~BtfÖ…<şÿÿ‹ô,  ƒùÿ„Ù   ·ù‰};¸   ƒÇ   Šˆd  Óï‹ˆd  º   Óâ‹ˆ   ‹<¹‹ô,  J#UiÒ4  ×9
+…   óB ó…DşÿÿóB$ó…HşÿÿóB(ó…LşÿÿóB,ó…PşÿÿóB0ó…Tşÿÿó~BLfÖ…Xşÿÿó~BTfÖ…`şÿÿó~B\fÖ…hşÿÿó~BdfÖ…pşÿÿó~BlfÖ…xşÿÿó~BtfÖ…€şÿÿ‹ü,  ƒùÿ„Ù   ·ù‰};¸   ƒÇ   Šˆd  Óï‹ˆd  º   Óâ‹ˆ   ‹<¹‹ü,  J#UiÒ4  ×9
+…   óB ó…ˆşÿÿóB$ó…ŒşÿÿóB(ó…şÿÿóB,ó…”şÿÿóB0ó…˜şÿÿó~BLfÖ…œşÿÿó~BTfÖ…¤şÿÿó~B\fÖ…¬şÿÿó~BdfÖ…´şÿÿó~BlfÖ…¼şÿÿó~BtfÖ…Äşÿÿ‹-  ƒùÿ„Ù   ·ù‰};¸   ƒÇ   Šˆd  Óï‹ˆd  º   Óâ‹ˆ   ‹<¹‹-  J#UiÒ4  ×9
+…   óB ó…ÌşÿÿóB$ó…ĞşÿÿóB(ó…ÔşÿÿóB,ó…ØşÿÿóB0ó…Üşÿÿó~BLfÖ…àşÿÿó~BTfÖ…èşÿÿó~B\fÖ…ğşÿÿó~BdfÖ…øşÿÿó~BlfÖ… ÿÿÿó~BtfÖ…ÿÿÿ‹-  ƒùÿ„Ù   ·ù‰};¸   ƒÇ   Šˆd  Óï‹ˆd  ‹€   º   ‹<¸‹†-  ÓâJ#UiÒ4  ×9…   óB ó…ÿÿÿóB$ó…ÿÿÿóB(ó…ÿÿÿóB,ó…ÿÿÿóB0ó… ÿÿÿó~BLfÖ…$ÿÿÿó~BTfÖ…,ÿÿÿó~B\fÖ…4ÿÿÿó~BdfÖ…<ÿÿÿó~BlfÖ…Dÿÿÿó~BtfÖ…LÿÿÿDüÿÿè
+;' 0üÿÿè?J' ‹óà=“~$W…0üÿÿ‰4üÿÿPÇ…0üÿÿ   ‹SxQ‹€   ‰•8üÿÿó$è°…' ƒ¾ø   ó‹p  óMÇEìx   t÷è+Õ   tóà=“óMÇEì    óF óó\ĞóYÑóXĞóV èTœâÿ‹Èè½NI ƒøt\WÀéØ   ƒgş…Ét"‹E‹UÜ‹IP‹EèRPèä¾ÿÿ‹Mì‹AƒÄéIõÿÿ…À„>õÿÿ‹U‹MÜR‹UèQ‹HRèº¾ÿÿ‹Eğ‹@ƒÄéõÿÿè7Àáÿ‹È‰Mèƒùÿtp¡Ä+Õ‹€8	  …Àta·ù;¸   sVŠˆd  Óï‹ˆd  º   Óâ·MèJ#Ñ‹ˆ   iÒT  ‹<¹‹Eè9:u#‹Œ:à   QèóÓ` ƒÄ‹øèIâÿ9GHvóGDëóF ~8WQó$•àıÿÿR…\üÿÿPè;ÆÿÿóEƒÄ†¼  PQó$WPèÆÿÿó“Ü   ó\V(óMóYÑóXV(óV(ó“à   ó\V,óYÑóXV,óV,ó“ä   ó\V0óYÑóXV0óV0Ç†ø     èzÒÿÿ‹M‹“°   QRèZ«ÿÿ‹»´   ƒÄ;~„&  ƒ~ÿt2‹FPè‰f ƒÄ…Àtƒ} t‹NQè% ƒÄë‹ÈèG= ÇFÿÿÿÿƒÿÿ„â   MŒè/E ó\±¯ó…hÿÿÿó`±¯ó…lÿÿÿód±¯ó…pÿÿÿóh±¯ó…tÿÿÿól±¯ó…xÿÿÿóp±¯ó…|ÿÿÿót±¯MŒ‰½dÿÿÿóE€ÇE„    ÇEˆÿÿÿÿè¦D óà=“óEÀóYàóEÈóYà3À•dÿÿÿóEÌóYàR‰E¸‰E¼‰EÄóEĞè[0 ƒÄ‰F‰~öCtVèféÿÿƒÄ‹Îèüíÿÿƒ»Ğ   ÿt
+SVè¼ãÿÿƒÄ‹Eì‹‹¸   j PjQèõú  ƒÄÇEüÿÿÿÿ‹èÓUR‰]è‰cI ‹Mô_^[d‰    ‹å]ÃÌÌÌÌÌÌÌÌU‹ì‹EV‹°p  jPèkïÿÿƒÄF8P¼  è‰²ÿÿÙF$‹Ü  Ù^ ó~†Ô  fÖ†à  fÖ†ì  ‹Ñ‰è  ‰–ô  ^]ÃÌÌÌÌU‹ìjÿhĞ_d¡    Pd‰%    ƒìSV‹Ù³`  W3ÿ‰>‰~‰~‰~‰uğƒÆF0j‰ƒÀ0¹   hÿ   P‰]ì‰N‰NÇF   ‰~‰~‰~‰~ ÇF(   ‰F$èG—r ÇF,ğ`‰}ü‹Eğ‰pÇEü   ‰»  ‰»  ‰»  ‰»  ³  ‰uğƒÆF0j‰ (  ¹   hÿ   P‰N‰NÇF   ‰~‰~‰~‰~ ÇF(   ‰F$èÍ–r ƒÄÇF,ğ`ÆEü‹Mğ‰qÆEü‰»$-  ‰»(-  ‰»,-  ÇEüÿÿÿÿ‹Mô_^‹Ã[d‰    ‹å]ÃÌÌÌÌÌÌÌÌÌU‹ìV‹ñè%áÿÿöEt	Vè)—r ƒÄ‹Æ^]Â ÌÌÌÌÌÌÌÌÌÌÌÌÌÌÌU‹ìjÿhñ_d¡    Pd‰%    ƒì8VWj3öVjhh-  èâ˜r ƒÄ‰Eğ‰Eì‰uü;Æt	‹ÈèKşÿÿ‹ğƒÏÿ‰}üóà=“‰¾Ô  ‰¾Ø  ‰¾Ü  ó~†Ô  fÖ†à  fÖ†ì  WÀ‰~‰~‰~‰~‰~‰~óE¼óEÀó~U¼‹Ç‰†è  ‹Ï‰ô  fÖ¸VÎóEÄóMÈó~UÄfÖÀVÎóEóÈVÎó°[‚óÌVÎó¬[‚óĞVÎó¨[‚óÔVÎóE¼óEÀó~U¼fÖìVÎóEÄóMÈó~UÄfÖôVÎóEÌóEĞó~UÌfÖüVÎóEÔóMØó~UÔfÖWÎóEÜóEàó~UÜfÖWÎóEäóMèó~UäfÖWÎóE¼óEÀó~U¼óEÄóMÈfÖ0WÎó~UÄóØVÎóÜVÎóàVÎóäVÎóèVÎóWÎó WÎó$WÎó(WÎó,WÎfÖ8WÎóEÌóEĞóEÔó~UÌfÖ@WÎóMØó~UÔfÖHWÎóEÜóEàó~UÜfÖPWÎóEäóMèó~UäfÖXWÎóE¼óEÀó~U¼fÖtWÎóEÄóMÈó~UÄfÖ|WÎóEÌóEĞó~UÌfÖ„WÎóEÔóMØó~UÔfÖŒWÎóEÜóEàó~UÜfÖ”WÎóEäóMèó~UäfÖœWÎóE¼óEÀó~U¼fÖ¸WÎóEÄóMÈó~UÄfÖÀWÎóEÌóEĞó~UÌfÖÈWÎóEÔóMØó~UÔfÖĞWÎóEÜóEàó~UÜfÖØWÎóEäóMèó~UäfÖàWÎóE¼óEÀó~U¼ó`WÎódWÎóhWÎólWÎópWÎó¤WÎó¨WÎó¬WÎó°WÎó´WÎóèWÎóìWÎóğWÎóôWÎóøWÎóEÄóMÈfÖüWÎó~UÄfÖXÎóEÌóEĞó~UÌfÖXÎóEÔóMØó~UÔfÖXÎóEÜóEàó~UÜóEäóMèfÖXÎó~Uäh¸VÎN8fÖ$XÎó,XÎó0XÎó4XÎó8XÎè'¬ÿÿh¸VÎ¼  è¬ÿÿWÀóà=“UàREĞóEàóEäóEĞóEÔóEØóEÀó¤[‚PMÀóEÄó Z‚Q@  óMèóEÈèø’t ‹MôÇ†\  ,  ‰¾-  ‰¾-  ‰¾-  ‰¾-  ‰¾ -  ‰¾è,  ‰¾ì,  ‰¾ğ,  ‰¾ô,  ‰¾ø,  ‰¾ü,  ‰¾ -  ‰¾-  ‰¾-  ‰¾-  ‰~4‰¾0-  _‹Æ^d‰    ‹å]ÃÌÌÌÌÌÌÌÌÌU‹ìV‹u…öt‹Îè>ÛÿÿVèH‘r ƒÄ^]ÃÌÌ‹AÃÌÌÌÌÌÌÌÌÌÌÌÌU‹ì3Àƒ}ÿ•ÀH]ÃÌV‹ñ‹†p  PÇ¼[‚è«ÿÿÿ‹t  Qè™ ƒÄ^ÃÌÌÌÌÌÌÌÌÌÌSV‹ÙWKèCûşÿs,¿   ‹Îè4ûşÿƒÆOuó_^K\[é#ûşÿÌÌÌVWj j ‹ñ‹†`  ‹Øõ°j j Pè²¯I Ç†`  ÿÿÿÿÆğ   ¿   ‹Nj j j j Q‹Øõ°è†¯I ‹‹Øõ°j j j j Rèp¯I ÇFÿÿÿÿÇÿÿÿÿƒÆOuÀ_^ÃÌÌÌÌÌÌÌÌÌÌSV‹ÙWKèûşÿs,¿   ‹ÎèôúşÿƒÆOuó_^K\[éãúşÿÌÌÌSV‹ÙWKècûşÿs,¿   ‹ÎèTûşÿƒÆOuó_^K\[éCûşÿÌÌÌSV‹ÙWKèó9ÿÿs,¿   ‹Îèä9ÿÿƒÆOuó_^K\[éÓ9ÿÿÌÌÌSV‹ÙWKèCÿÿs,¿   ‹Îè4ÿÿƒÆOuó_^K\[é#ÿÿÌÌÌV‹ñ‹Fxj PèÒ_×ÿ‹N|Qèù_×ÿƒÄ^ÃÌÌÌÌU‹ìì€   SV‹u‹Ùƒşÿ„‘   èb×ÿƒøu~WèÇ"×ÿ‹ğ¹   }Àó¥èæ#×ÿ‹ğ‹Ej ¹   }€Pó¥èo_×ÿjÿè˜_×ÿ‹CxƒÄPjFèJ\J ƒÄPèqiÿÿ‹Kxj QèF_×ÿ‹S|Rèm_×ÿEÀPètO×ÿM€Qè+W×ÿƒÄ_^[‹å]Â Vèya×ÿƒÄ^[‹å]Â ÌÌÌÌÌÌÌÌÌÌÌÌÌÌ‹AÃÌÌÌÌÌÌÌÌÌÌÌÌ‹AÃÌÌÌÌÌÌÌÌÌÌÌÌAÃÌÌÌÌÌÌÌÌÌÌÌÌéëi×ÿÌÌÌÌÌÌÌÌÌÌÌè‹âÿ‹Èèô@I 3Éƒø•Á‹ÁÃÌÌÌÌÌÌÌÌÌé{±âÿÌÌÌÌÌÌÌÌÌÌÌ¡Ä+Õ‹€¨	  ÃÌÌÌÌ3À‰‰A‰AÃÌÌÌÌÌ‹ÁÃÌÌÌÌÌÌÌÌÌÌÌÌÌU‹ì‹EPè´Gs ƒÄ]Â ÌÌÌÌÌÌÌÌÌÌÌÌÌU‹ì‹E…    QèmGs ƒÄ]Â ÌÌÌÌÌÌU‹ì‹E]ÃÌÌÌÌÌÌÌÌU‹ì‹E‹‹U‰
+]ÃÌU‹ì‹M‹EV+ÁW‹}Áø4…    VQWÿ|ˆ{ƒÄ>_^]ÃÌÌÌÃÌÌÌÌÌÌÌÌÌÌÌÌÌÌÌU‹ìjÿh_d¡    Pd‰%    QV‹ñ‰uğÇEüÿÿÿÿ‹†p  PÇ¼[‚èÈûÿÿ‹t  Qè,• ‹MôƒÄ^d‰    ‹å]ÃÌÌÌÌÌÌÌÌÌÌS‹Ä+ÕVW¹TXÎèM÷şÿ¾lXÎ¿   I ‹Îè9÷şÿƒÆOuó¹œXÎè)÷şÿ‹‹¨	  …Ét	‹‹WÿÒë3ÀPè®Œr ƒÄ_^Çƒ¨	      [ÃÌÌÌÌÌÌÌÌÌÌÌÌÌU‹ìV‹ñ‹†p  PÇ¼[‚èûÿÿ‹t  Qè|” ƒÄöEt	Vè]Œr ƒÄ‹Æ^]Â ÌÌÌ‹ÁÃÌÌÌÌÌÌÌÌÌÌÌÌÌU‹ì‹ES‹]VW‹ñj SN‰†d  èöşÿ~,ÇE   ¤$    j S‹ÏèöõşÿƒÇÿMuîj SN\èãõşÿWÀ‹M‹UóFóFóFÇF    _‰h  ‰–l  ^[]Â ÌU‹ìƒì0SV‹ñ‹‹PWMĞQ‹Î‰uäÿÒ‹}Ô‹]Ğ‰}Ø‰}ìè´×ÿƒøtèšSÿÿ÷ØÀƒà‰EøëÇEø*   èB×ÿ‰Eà3À‰Eü‹Mø‰MôƒÉÿ‰Mè‰Œ†€   ‰Œ†ğ   ƒø‡7  ¶g· ÿ$•èf· è×ÿ…À„  ‹óé  è ×ÿ…À„  è3×ÿƒø„ú   è%×ÿƒø„ì   è×ÿƒø„Ş   ‹óéİ   èòRÿÿ…Àu‹Eø‰Eô‹óéÇ   è\oÙÿ‹ÈèÅ&Ùÿ…À„ª  é¨   ¾    ÇEè   ‹şé›   è°Rÿÿ…À„…  ‹óé‡   è¬×ÿƒøtè¢×ÿƒøtè˜×ÿƒø…\  ÇEô   ‹óëZè×ÿƒøtèu×ÿƒøtèk×ÿƒø…/  ÇEô   ë)èT×ÿƒøtèJ×ÿƒøtè@×ÿƒø…  ÇEô    ‹óÑîÑïÇEğ    è×ÿƒøu`‹EüƒètƒèuSë	èÅ×ÿ…ÀtH‹Œ±‹‹’Ì   EğP‹Eìjjj jP‹EøSPÿÒ‹Œ±‹‹€Ì   UğR‹Uìjjj jRSjÿĞ‹Mğ‹Eôj Q‹Müjjj WVUôRPQèJDÿÿƒÄPèñàØÿ‹Uä‹MüƒÄ(‰„Š€   ƒøÿ„„   ‹Eèƒøÿt7‹Uğj Rjjj WV‹uüMèQPVèDÿÿƒÄPè«àØÿ‹UäƒÄ(‰„²ğ   ƒøÿt2‹uä‹}ì‹Eü@‰EüƒøŒ™ıÿÿ¡è„|‰EğèQÿÿ…Àt'‹    ‰Mğë?h\‚j jjè·÷r ƒÄ_^3À[‹å]Ãèæ×ÿƒøu‹Uøj j jj WSRè®ÌØÿƒÄ‰Eğèƒ×ÿ…Àt	‹†¼   ‰Eğèq×ÿ…Àt@è¨"×ÿ‹MØj j jjj Q‹ÓRMäQPj‰Eäè8CÿÿƒÄPèßßØÿƒÄ(‰†À   ƒøÿ„fÿÿÿèh"×ÿj j jjj WSUìRPj
+‰EìèıBÿÿƒÄPè¤ßØÿƒÄ(‰†¨   ƒøÿ„+ÿÿÿè-×ÿƒøtè#×ÿƒøt
+è×ÿƒøu6‹Mìj j jjj WSEìPQjè©BÿÿƒÄPèPßØÿƒÄ(‰†¬   ƒøÿ„×şÿÿ‹UìRhà[‚j jjèŠör ƒÄèÂ×ÿƒøtè¸×ÿƒøt‹†¨   ë‹†¬   ‹Mğ‰Nx‰F|èW×ÿ…Àt;‹Uà‹Eøj j Rjj WSMØQPj‰EØè#BÿÿƒÄPèÊŞØÿƒÄ(‰†È   ƒøÿ„Qşÿÿè×ÿ…Àt=èJ!×ÿ‹Uàj j Rjj WSMØQPj‰EØèİAÿÿƒÄPè„ŞØÿƒÄ(‰†Ì   ƒøÿ„şÿÿº   ;ÓÀ%      ‰Eìè‡$×ÿƒø|è]kÙÿ‹Èèö"Ùÿ…Àu	‹Eì ‰Mìè´×ÿö  u¸   9Eì|‰Eì‹Eìj j jjj PPUØRj hØ[‚ÇEØ    èüİØÿƒÄ(‰†`  èşjÙÿ‹Èèg"Ùÿ…À~?è~ ×ÿj j jjj ÑïWÑëSMØQPj‰EØèAÿÿƒÄPè¶İØÿƒÄ(‰†˜   ƒøÿ„=ıÿÿ_^¸   [‹å]ÃÔa· b· ğb· /b· Ûa· [b· Ça· Hb· Çb· ob· œb· ğc·   	
 
---- Set the default prototype to use for new modules on creation.
--- Note that you can only change the default prototype before any module is created.
--- @name //addon//:SetDefaultModulePrototype
--- @paramsig prototype
--- @param prototype Default prototype for the new modules (table)
--- @usage 
--- -- Define a prototype
--- local prototype = { OnEnable = function(self) print("OnEnable called!") end }
--- -- Set the default prototype
--- MyAddon:SetDefaultModulePrototype(prototype)
--- -- Create a module and explicitly Enable it
--- MyModule = MyAddon:NewModule("MyModule")
--- MyModule:Enable()
--- -- should print "OnEnable called!" now
--- @see NewModule
-function SetDefaultModulePrototype(self, prototype)
-	if next(self.modules) then
-		error("Usage: SetDefaultModulePrototype(prototype): cannot change the module defaults after a module has been registered.", 2)
-	end
-	if type(prototype) ~= "table" then
-		error(("Usage: SetDefaultModulePrototype(prototype): 'prototype' - table expected got '%s'."):format(type(prototype)), 2)
-	end
-	self.defaultModulePrototype = prototype
-end
-
---- Set the state of an addon or module
--- This should only be called before any enabling actually happend, e.g. in/before OnInitialize.
--- @name //addon//:SetEnabledState
--- @paramsig state
--- @param state the state of an addon or module  (enabled=true, disabled=false)
-function SetEnabledState(self, state)
-	self.enabledState = state
-end
-
-
---- Return an iterator of all modules associated to the addon.
--- @name //addon//:IterateModules
--- @paramsig 
--- @usage 
--- -- Enable all modules
--- for name, module in MyAddon:IterateModules() do
---    module:Enable()
--- end
-local function IterateModules(self) return pairs(self.modules) end
-
--- Returns an iterator of all embeds in the addon
--- @name //addon//:IterateEmbeds
--- @paramsig 
-local function IterateEmbeds(self) return pairs(AceAddon.embeds[self]) end
-
---- Query the enabledState of an addon.
--- @name //addon//:IsEnabled
--- @paramsig 
--- @usage 
--- if MyAddon:IsEnabled() then
---     MyAddon:Disable()
--- end
-local function IsEnabled(self) return self.enabledState end
-local mixins = {
-	NewModule = NewModule,
-	GetModule = GetModule,
-	Enable = Enable,
-	Disable = Disable,
-	EnableModule = EnableModule,
-	DisableModule = DisableModule,
-	IsEnabled = IsEnabled,
-	SetDefaultModuleLibraries = SetDefaultModuleLibraries,
-	SetDefaultModuleState = SetDefaultModuleState,
-	SetDefaultModulePrototype = SetDefaultModulePrototype,
-	SetEnabledState = SetEnabledState,
-	IterateModules = IterateModules,
-	IterateEmbeds = IterateEmbeds,
-	GetName = GetName,
-}
-local function IsModule(self) return false end
-local pmixins = {
-	defaultModuleState = true,
-	enabledState = true,
-	IsModule = IsModule,
-}
--- Embed( target )
--- target (object) - target object to embed aceaddon in
---
--- this is a local function specifically since it's meant to be only called internally
-function Embed(target, skipPMixins)
-	for k, v in pairs(mixins) do
-		target[k] = v
-	end
-	if not skipPMixins then
-		for k, v in pairs(pmixins) do
-			target[k] = target[k] or v
-		end
-	end
-end
-
-
--- - Initialize the addon after creation.
--- This function is only used internally during the ADDON_LOADED event
--- It will call the **OnInitialize** function on the addon object (if present), 
--- and the **OnEmbedInitialize** function on all embeded libraries.
--- 
--- **Note:** Do not call this function manually, unless you're absolutely sure that you know what you are doing.
--- @param addon addon object to intialize
-function AceAddon:InitializeAddon(addon)
-	safecall(addon.OnInitialize, addon)
-	
-	local embeds = self.embeds[addon]
-	for i = 1, #embeds do
-		local lib = LibStub:GetLibrary(embeds[i], true)
-		if lib then safecall(lib.OnEmbedInitialize, lib, addon) end
-	end
-	
-	-- we don't call InitializeAddon on modules specifically, this is handled
-	-- from the event handler and only done _once_
-end
-
--- - Enable the addon after creation.
--- Note: This function is only used internally during the PLAYER_LOGIN event, or during ADDON_LOADED,
--- if IsLoggedIn() already returns true at that point, e.g. for LoD Addons.
--- It will call the **OnEnable** function on the addon object (if present), 
--- and the **OnEmbedEnable** function on all embeded libraries.\\
--- This function does not toggle the enable state of the addon itself, and will return early if the addon is disabled.
---
--- **Note:** Do not call this function manually, unless you're absolutely sure that you know what you are doing.
--- Use :Enable on the addon itself instead.
--- @param addon addon object to enable
-function AceAddon:EnableAddon(addon)
-	if type(addon) == "string" then addon = AceAddon:GetAddon(addon) end
-	if self.statuses[addon.name] or not addon.enabledState then return false end
-	
-	-- set the statuses first, before calling the OnEnable. this allows for Disabling of the addon in OnEnable.
-	self.statuses[addon.name] = true
-	
-	safecall(addon.OnEnable, addon)
-	
-	-- make sure we're still enabled before continueing
-	if self.statuses[addon.name] then
-		local embeds = self.embeds[addon]
-		for i = 1, #embeds do
-			local lib = LibStub:GetLibrary(embeds[i], true)
-			if lib then safecall(lib.OnEmbedEnable, lib, addon) end
-		end
-	
-		-- enable possible modules.
-		local modules = addon.orderedModules
-		for i = 1, #modules do
-			self:EnableAddon(modules[i])
-		end
-	end
-	return self.statuses[addon.name] -- return true if we're disabled
-end
-
--- - Disable the addon
--- Note: This function is only used internally.
--- It will call the **OnDisable** function on the addon object (if present), 
--- and the **OnEmbedDisable** function on all embeded libraries.\\
--- This function does not toggle the enable state of the addon itself, and will return early if the addon is still enabled.
---
--- **Note:** Do not call this function manually, unless you're absolutely sure that you know what you are doing. 
--- Use :Disable on the addon itself instead.
--- @param addon addon object to enable
-function AceAddon:DisableAddon(addon)
-	if type(addon) == "string" then addon = AceAddon:GetAddon(addon) end
-	if not self.statuses[addon.name] then return false end
-	
-	-- set statuses first before calling OnDisable, this allows for aborting the disable in OnDisable.
-	self.statuses[addon.name] = false
-	
-	safecall( addon.OnDisable, addon )
-	
-	-- make sure we're still disabling...
-	if not self.statuses[addon.name] then 
-		local embeds = self.embeds[addon]
-		for i = 1, #embeds do
-			local lib = LibStub:GetLibrary(embeds[i], true)
-			if lib then safecall(lib.OnEmbedDisable, lib, addon) end
-		end
-		-- disable possible modules.
-		local modules = addon.orderedModules
-		for i = 1, #modules do
-			self:DisableAddon(modules[i])
-		end
-	end
-	
-	return not self.statuses[addon.name] -- return true if we're disabled
-end
-
---- Get an iterator over all registered addons.
--- @usage 
--- -- Print a list of all installed AceAddon's
--- for name, addon in AceAddon:IterateAddons() do
---   print("Addon: " .. name)
--- end
-function AceAddon:IterateAddons() return pairs(self.addons) end
-
---- Get an iterator over the internal status registry.
--- @usage 
--- -- Print a list of all enabled addons
--- for name, status in AceAddon:IterateAddonStatus() do
---   if status then
---     print("EnabledAddon: " .. name)
---   end
--- end
-function AceAddon:IterateAddonStatus() return pairs(self.statuses) end
-
--- Following Iterators are deprecated, and their addon specific versions should be used
--- e.g. addon:IterateEmbeds() instead of :IterateEmbedsOnAddon(addon)
-function AceAddon:IterateEmbedsOnAddon(addon) return pairs(self.embeds[addon]) end
-function AceAddon:IterateModulesOfAddon(addon) return pairs(addon.modules) end
-
--- Event Handling
-local function onEvent(this, event, arg1)
-	-- 2011-08-17 nevcairiel - ignore the load event of Blizzard_DebugTools, so a potential startup error isn't swallowed up
-	if (event == "ADDON_LOADED"  and arg1 ~= "Blizzard_DebugTools") or event == "PLAYER_LOGIN" then
-		-- if a addon loads another addon, recursion could happen here, so we need to validate the table on every iteration
-		while(#AceAddon.initializequeue > 0) do
-			local addon = tremove(AceAddon.initializequeue, 1)
-			-- this might be an issue with recursion - TODO: validate
-			if event == "ADDON_LOADED" then addon.baseName = arg1 end
-			AceAddon:InitializeAddon(addon)
-			tinsert(AceAddon.enablequeue, addon)
-		end
-		
-		if IsLoggedIn() then
-			while(#AceAddon.enablequeue > 0) do
-				local addon = tremove(AceAddon.enablequeue, 1)
-				AceAddon:EnableAddon(addon)
-			end
-		end
-	end
-end
-
-AceAddon.frame:RegisterEvent("ADDON_LOADED")
-AceAddon.frame:RegisterEvent("PLAYER_LOGIN")
-AceAddon.frame:SetScript("OnEvent", onEvent)
-
--- upgrade embeded
-for name, addon in pairs(AceAddon.addons) do
-	Embed(addon, true)
-end
-
--- 2010-10-27 nevcairiel - add new "orderedModules" table
-if oldminor and oldminor < 10 then
-	for name, addon in pairs(AceAddon.addons) do
-		addon.orderedModules = {}
-		for module_name, module in pairs(addon.modules) do
-			tinsert(addon.orderedModules, module)
-		end
-	end
-end
+ÌÌÌÌÌÌÌÌÌÌÌÌU‹ì‹EÙ ÙYÙ@ÙYÙ@‹EÙY‰A]Â ÌÌÌÌÌÌÌÌÌÌÌÌÌÌÌU‹ìQWÀV‹ñW~óEüè¸¨âÿPèâ¾` ƒÄ…Àtó¸YÎóY8=“óEüj
+èOÅG ƒÄ…Àt)èS©áÿƒx<uó¼YÎóXEüQó$èõ¹ãÿÙ]üƒÄóEü‹†l  Qó$WPè½ôÿWjè»ôÿƒÄ_^‹å]ÃÌÌÌÌÌÌU‹ìV‹uFPVèÿ×ÿƒÄ‹Æ^]Â ÌÌÌÌÌU‹ìV‹uFPVè×ÿƒÄ‹Æ^]Â ÌÌÌÌÌU‹ìƒìƒy ‰MøÇEü    vQSVWëëI ‹Ê‹A‹Mü‹4ˆNèİïşÿ~,»   ëI ‹ÏèÉïşÿƒÇKuóN\è»ïşÿ‹Eü‹Uø@‰Eü;Br¼_^[‹å]ÃÌÌÌÌÌU‹ìƒìƒy ‰MøÇEü    vQSVWëëI ‹Ê‹A‹Mü‹4ˆNè-.ÿÿ~,»   ëI ‹Ïè.ÿÿƒÇKuóN\è.ÿÿ‹Eü‹Uø@‰Eü;Br¼_^[‹å]ÃÌÌÌÌÌU‹ìƒìƒy ‰MøÇEü    vQSVWëëI ‹Ê‹A‹Mü‹4ˆNè=ùşÿ~,»   ëI ‹Ïè)ùşÿƒÇKuóN\èùşÿ‹Eü‹Uø@‰Eü;Br¼_^[‹å]ÃÌÌÌÌÌU‹ìƒìƒy ‰MøÇEü    vQSVWëëI ‹Ê‹A‹Mü‹<ˆOèıíşÿw,»   ëI ‹ÎèéíşÿƒÆKuóO\èÛíşÿ‹Eü‹Uø@‰Eü;Br¼_^[‹å]ÃÌÌÌÌÌVW‹ù3ö9wv)ëI ‹G‹°‹‹BÿĞ…Àt‹O‹±‹‹BÿĞF;wrÜ_^ÃÌÌÌÌÌÌÌÌÌ‹A‹ ÃÌÌÌÌÌÌÌÌÌÌ‹A‹ ÃÌÌÌÌÌÌÌÌÌÌ‹Á3É‰‰H‰HÃÌÌÌU‹ì‹Q‹ÂÑèÂ‹U;ÂBÂ‰AÀÀPèÿ;s ƒÄ]Â ÌÌÌÌÌÌÌÌÃÌÌÌÌÌÌÌÌÌÌÌÌÌÌÌV‹ñƒÊÿÇ¼[‚‰Vx‰V|†ğ   ¹   I ‰P‰ƒÀIuõ3À‰–`  ‰–d  ‰†h  ‰†l  èæêÿÿ‰†p  è ‰†t  ‹Æ^ÃÌ‹Pè˜;s YÃÌÌÌÌÌÌU‹ì‹UV‹ñ‹N;ÑvB‹ÁÑèÁ;ÂBÂ‰FÀÀWPèG;s ‹NÉÉÁùÉ‹ø‹ÉQPWÿ|ˆ{‹RèD;s ƒÄ‰>_^]Â ÌÌÌÌÌÌÌÌÌU‹ìjÿh(_d¡    Pd‰%    QV‹ñ‰uğèÿÿÿÇEü    Ç\‚ÇEüÿÿÿÿ‹Mô‹Æ^d‰    ‹å]ÃÌÌÌÌÌÌÌU‹ìjÿhH_d¡    Pd‰%    QV‹ñ‰uğÇEüÿÿÿÿ‹†p  PÇ¼[‚èˆïÿÿ‹t  Qèìˆ ƒÄöEt	VèÍ€r ƒÄ‹Mô‹Æ^d‰    ‹å]Â ÌÌÌÌÌÌÌU‹ìjÿhk_d¡    Pd‰%    Q‹Á3ÉÇ 8\‚‰Eğ‰H‰H‰H‰Mü‰HÇEüÿÿÿÿ‹Môd‰    ‹å]ÃÌÌÌÌÌÌU‹ìjÿh‹_d¡    Pd‰%    Q‰MğÇ8\‚ÇEüÿÿÿÿ‹APèî9s ‹MôƒÄd‰    ‹å]ÃÌÌÌÌÌÌÌÌÌÌÌÌÌU‹ìVW‹}‹ñ+>‹NÁÿ9NuIQ;ÑvB‹ÁÑèÁ;ÂBÂ‰FÀÀSPèy9s ‹NÉÉÁùÉ‹Ø‹ÉQPSÿ|ˆ{‹Rèv9s ƒÄ‰[‹F‹;øs‹¹‰ÿF_^]Â ‹U‹‰ÿF_^]Â ÌÌÌÌÌÌÌU‹ìjÿh«_d¡    Pd‰%    QV‹ñ‰uğÇ8\‚ÇEüÿÿÿÿ‹FPè9s ƒÄöEt	Vè<r ƒÄ‹Mô‹Æ^d‰    ‹å]Â ÌÌÌÌÌÌU‹ìV‹ñEPNèşşÿÿƒ~uÇF@XÎ^]Â ÌÌÌÌÌÌÌÌÌÌÌÌU‹ìjÿhÜ_d¡    Pd‰%    ƒìSV‹5Ä+Õj3ÛSjjè¿€r ƒÄ‰Eğ‰Eì‰]ü;ÃtÇ 8\‚‰X‰X‰XÆEü‰Xˆ]üë3ÀÇEüÿÿÿÿjSSS¹@XÎ‰†¨	  è6òÿÿ¡Ä+Õ‹°¨	  MğQNÇEğ@XÎèHşÿÿƒ~uÇF@XÎ‹Mô^[d‰    ‹å]ÃÌÌÌÌÌÌÌÌÌÌÌU‹ì‹MI3Àƒùw(¶‰o· ÿ$o· ¸   ]Ã¸   ]Ã¸   ]Ã¸   ]Ãìn· ón· ún· o·     ÌÌÌÌÌÌÌÌÌÌÌÌU‹ìƒìf‹Ef‰MöS‹]f‰EôI3ÀV‰Uøƒùw(¶‰èo· ÿ$Øo· ¸   ë¸   ë¸   ë¸   ¯Â‹ğƒşw
+‹U‹‰Eüë‹‰Mü‹‹Mh†   jREôPQè&ys ƒƒÄƒşv‹‹E‹Mh†   VRPQèys ƒÄ3^[‹å]Ã‹ÿ`o· go· no· uo·     ÌÌÌÌÌÌÌÌÌÌÌÌU‹ììP  SV°şÿÿèêrs ‹]‹Ã¯Ej j jPèÕ~r ‹M‹Ujÿjj SQ‹ğ‹ERVP‰uèè×ªıÿ¯]j3ÀMìh<\‚QfÇEì  ‰Eîf‰Eòÿ8ˆ{‹EP°şÿÿº*   Qf‰UîÇEğ   è£{s •°şÿÿƒÄDRèDts …°şÿÿjPèus ƒÄ…À„s  Wh†   jj MìQ•°şÿÿRèxs h†   jjEP°şÿÿQÇE
+   èáws ·E‹Mh†   j4@j
+UôR…°şÿÿ¿   P4µ   ÇEô  ‰}ø‰Müè¥ws ‹Eh†   jjMôQ•°şÿÿRÇEô ‰}ø‰Eüè|ws ƒÄPh†   ¸   j‰EØ‰Eøj"EôP°şÿÿQÇEà  ÇEä  ÇEô ‰uüè=ws h†   jVUàR…°şÿÿPè%ws h†   jj.EôƒÆ‰}ÄÇEô ‰}ø‰}üP°şÿÿQèùvs h†   j¸   j:Uô‰EĞ‰EüR…°şÿÿPÇEô ‰}øèËvs ‹EØƒÄPh†   jjFMôQ•°şÿÿRÇEô ‰}ø‰EüèŸvs h†   ƒÈÿj‰EÌ‰EüjREôP°şÿÿQÇEô ‰}øèsvs h†   jj^MôQ•°şÿÿR‰}ÔÇEô( ‰}ø‰}üèJvs h†   jjjUôR…°şÿÿP‰uÀÇEô ‰}ø‰uüè!vs ƒÄPh†   jjvEôP°şÿÿQ‰]ÈÇEô ‰}ø‰]üèõus h†   ÇEÜ    jh‚   UÜR…°şÿÿPèÒus ‹Mèh†   SVQ•°şÿÿRè»us …°şÿÿPèts ‹uèƒÄ@_j Vè xr ƒÄ^[‹å]ÃÌÌÌÌÌÌÌU‹ììH  W¸şÿÿè«os ‹}¯}3À

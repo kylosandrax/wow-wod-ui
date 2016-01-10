@@ -190,6 +190,10 @@ local methods = {
 		btn:SetScript("OnEnter", Icon_OnEnter)
 		btn:SetScript("OnLeave", Icon_OnLeave)
 		btn:SetScript("OnClick", function(btn)
+				if InCombatLockdown() then
+					TSM:Print(L["You cannot change tabs within the main TSM window while in combat."])
+					return
+				end
 				if #self.children > 0 then
 					self:ReleaseChildren()
 				end
@@ -266,13 +270,13 @@ local function Constructor()
 	local frameName = Type..AceGUI:GetNextWidgetNum(Type)
 
 	local frameDefaults = {
-		x = UIParent:GetWidth()/2,
-		y = UIParent:GetHeight()/2,
+		x = min(500, UIParent:GetWidth()/2),
+		y = min(200, UIParent:GetHeight()/2),
 		width = 823,
 		height = 686,
 		scale = 1,
 	}
-	local frame = TSMAPI:CreateMovableFrame(frameName, frameDefaults)
+	local frame = TSM.GUI:CreateMovableFrame(frameName, frameDefaults)
 	frame:SetFrameStrata("MEDIUM")
 	TSMAPI.Design:SetFrameBackdropColor(frame)
 	frame:SetResizable(true)
@@ -281,28 +285,13 @@ local function Constructor()
 	frame.toMove = frame
 	tinsert(UISpecialFrames, frameName)
 	
-	local closebutton = CreateFrame("Button", nil, frame)
-	TSMAPI.Design:SetContentColor(closebutton)
-	local highlight = closebutton:CreateTexture(nil, "HIGHLIGHT")
-	highlight:SetAllPoints()
-	highlight:SetTexture(1, 1, 1, .2)
-	highlight:SetBlendMode("BLEND")
-	closebutton.highlight = highlight
-	closebutton:SetPoint("BOTTOMRIGHT", -29, -14)
-	closebutton:SetHeight(29)
+	local closebutton = TSM.GUI:CreateButton(frame, 28)
+	closebutton:SetPoint("BOTTOMRIGHT", -29, 4)
+	closebutton:SetHeight(30)
 	closebutton:SetWidth(86)
 	closebutton:SetScript("OnClick", CloseButton_OnClick)
-	closebutton:Show()
-	local label = closebutton:CreateFontString()
-	label:SetPoint("TOP")
-	label:SetJustifyH("CENTER")
-	label:SetJustifyV("CENTER")
-	label:SetHeight(28)
-	label:SetFont(TSMAPI.Design:GetContentFont(), 28)
-	TSMAPI.Design:SetWidgetTextColor(label)
-	label:SetText(CLOSE)
-	closebutton:SetFontString(label)
-	
+	closebutton:SetText(CLOSE)
+
 	local iconBtn = CreateFrame("Button", nil, frame)
 	iconBtn:SetWidth(286)
 	iconBtn:SetHeight(286)
@@ -328,7 +317,7 @@ local function Constructor()
 	
 	local content = CreateFrame("Frame", nil, frame)
 	content:SetPoint("TOPLEFT", 11, -62)
-	content:SetPoint("BOTTOMRIGHT", -11, 20)
+	content:SetPoint("BOTTOMRIGHT", -11, 40)
 	
 	local titletext = frame:CreateFontString()
 	titletext:SetPoint("TOP", 0, -32)
@@ -345,23 +334,6 @@ local function Constructor()
 	icontext:SetJustifyV("CENTER")
 	icontext:SetFont(TSMAPI.Design:GetContentFont(), 27)
 	icontext:SetTextColor(unpack(ICON_TEXT_COLOR))
-	
-	local helpButton = CreateFrame("Button", nil, frame, "MainHelpPlateButton")
-	helpButton:SetPoint("BOTTOMLEFT", -10, -30)
-	helpButton:SetScript("OnEnter", function(self)
-		HelpPlateTooltip.ArrowRIGHT:Show()
-		HelpPlateTooltip.ArrowGlowRIGHT:Show()
-		HelpPlateTooltip:SetPoint("LEFT", self, "RIGHT", 10, 0)
-		HelpPlateTooltip.Text:SetText(L["Click this to open TSM Assistant."])
-		HelpPlateTooltip:Show()
-	end)
-	helpButton:SetScript("OnLeave", function(self)
-		HelpPlateTooltip.ArrowRIGHT:Hide()
-		HelpPlateTooltip.ArrowGlowRIGHT:Hide()
-		HelpPlateTooltip:ClearAllPoints()
-		HelpPlateTooltip:Hide()
-	end)
-	helpButton:SetScript("OnClick", TSM.Assistant.Open)
 
 	local widget = {
 		type = Type,

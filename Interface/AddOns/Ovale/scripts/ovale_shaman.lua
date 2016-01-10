@@ -2,47 +2,23 @@ local OVALE, Ovale = ...
 local OvaleScripts = Ovale.OvaleScripts
 
 do
-	local name = "legacy_ovale_shaman"
-	local desc = "[6.0] Ovale: Elemental, Enhancement, Restoration"
+	local name = "nerien_shaman_restoration"
+	local desc = "[6.2] Nerien: Restoration"
 	local code = [[
-# Ovale shaman script based on SimulationCraft.
+###
+### Nerien's restoration shaman script.
+###
 
 Include(ovale_common)
+Include(ovale_trinkets_mop)
+Include(ovale_trinkets_wod)
 Include(ovale_shaman_spells)
 
-AddCheckBox(opt_potion_agility ItemName(draenic_agility_potion) default specialization=enhancement)
-AddCheckBox(opt_potion_intellect ItemName(draenic_intellect_potion) default specialization=elemental)
-AddCheckBox(opt_bloodlust SpellName(bloodlust) default)
+AddCheckBox(opt_interrupt L(interrupt) default specialization=restoration)
 
-AddFunction UsePotionAgility
+AddFunction RestorationInterruptActions
 {
-	if CheckBoxOn(opt_potion_agility) and target.Classification(worldboss) Item(draenic_agility_potion usable=1)
-}
-
-AddFunction UsePotionIntellect
-{
-	if CheckBoxOn(opt_potion_intellect) and target.Classification(worldboss) Item(draenic_intellect_potion usable=1)
-}
-
-AddFunction UseItemActions
-{
-	Item(HandSlot usable=1)
-	Item(Trinket0Slot usable=1)
-	Item(Trinket1Slot usable=1)
-}
-
-AddFunction Bloodlust
-{
-	if CheckBoxOn(opt_bloodlust) and DebuffExpires(burst_haste_debuff any=1)
-	{
-		Spell(bloodlust)
-		Spell(heroism)
-	}
-}
-
-AddFunction InterruptActions
-{
-	if not target.IsFriend() and target.IsInterruptible()
+	if CheckBoxOn(opt_interrupt) and not target.IsFriend() and target.IsInterruptible()
 	{
 		Spell(wind_shear)
 		if not target.Classification(worldboss)
@@ -53,419 +29,6 @@ AddFunction InterruptActions
 		}
 	}
 }
-
-###
-### Elemental
-###
-# Based on SimulationCraft profile "Shaman_Elemental_T17M".
-#	class=shaman
-#	spec=elemental
-#	talents=0001011
-#	glyphs=chain_lightning
-
-# ActionList: ElementalDefaultActions --> main, shortcd, cd
-
-AddFunction ElementalDefaultActions
-{
-	#call_action_list,name=single,if=active_enemies=1
-	if Enemies() == 1 ElementalSingleActions()
-	#call_action_list,name=aoe,if=active_enemies>1
-	if Enemies() > 1 ElementalAoeActions()
-}
-
-AddFunction ElementalDefaultShortCdActions
-{
-	#elemental_mastery,if=action.lava_burst.cast_time>=1.2
-	if CastTime(lava_burst) >= 1.2 Spell(elemental_mastery)
-	#ancestral_swiftness,if=!buff.ascendance.up
-	if not BuffPresent(ascendance_caster_buff) Spell(ancestral_swiftness)
-	#liquid_magma,if=pet.searing_totem.remains>=15|pet.fire_elemental_totem.remains>=15
-	if TotemRemaining(fire totem=searing_totem) >= 15 or TotemRemaining(fire totem=fire_elemental_totem) >= 15 Spell(liquid_magma)
-	#call_action_list,name=single,if=active_enemies=1
-	if Enemies() == 1 ElementalSingleShortCdActions()
-	#call_action_list,name=aoe,if=active_enemies>1
-	if Enemies() > 1 ElementalAoeShortCdActions()
-}
-
-AddFunction ElementalDefaultCdActions
-{
-	#wind_shear
-	InterruptActions()
-	#bloodlust,if=target.health.pct<25|time>0.500
-	if target.HealthPercent() < 25 or TimeInCombat() > 0.5 Bloodlust()
-	#potion,name=draenic_intellect,if=buff.ascendance.up|target.time_to_die<=30
-	if BuffPresent(ascendance_caster_buff) or target.TimeToDie() <= 30 UsePotionIntellect()
-	#berserking,if=!buff.bloodlust.up&!buff.elemental_mastery.up&(set_bonus.tier15_4pc_caster=1|(buff.ascendance.cooldown_remains=0&(dot.flame_shock.remains>buff.ascendance.duration|level<87)))
-	if not BuffPresent(burst_haste_buff any=1) and not BuffPresent(elemental_mastery_buff) and { ArmorSetBonus(T15_caster 4) == 1 or not SpellCooldown(ascendance_caster) > 0 and { target.DebuffRemaining(flame_shock_debuff) > BaseDuration(ascendance_caster_buff) or Level() < 87 } } Spell(berserking)
-	#blood_fury,if=buff.bloodlust.up|buff.ascendance.up|((cooldown.ascendance.remains>10|level<87)&cooldown.fire_elemental_totem.remains>10)
-	if BuffPresent(burst_haste_buff any=1) or BuffPresent(ascendance_caster_buff) or { SpellCooldown(ascendance_caster) > 10 or Level() < 87 } and SpellCooldown(fire_elemental_totem) > 10 Spell(blood_fury_apsp)
-	#arcane_torrent
-	Spell(arcane_torrent_mana)
-	#storm_elemental_totem
-	Spell(storm_elemental_totem)
-	#fire_elemental_totem,if=!active
-	if not TotemPresent(fire totem=fire_elemental_totem) Spell(fire_elemental_totem)
-	#ascendance,if=active_enemies>1|(dot.flame_shock.remains>buff.ascendance.duration&(target.time_to_die<20|buff.bloodlust.up|time>=60)&cooldown.lava_burst.remains>0)
-	if { Enemies() > 1 or target.DebuffRemaining(flame_shock_debuff) > BaseDuration(ascendance_caster_buff) and { target.TimeToDie() < 20 or BuffPresent(burst_haste_buff any=1) or TimeInCombat() >= 60 } and SpellCooldown(lava_burst) > 0 } and BuffExpires(ascendance_caster_buff) Spell(ascendance_caster)
-	#call_action_list,name=single,if=active_enemies=1
-	if Enemies() == 1 ElementalSingleCdActions()
-	#call_action_list,name=aoe,if=active_enemies>1
-	if Enemies() > 1 ElementalAoeCdActions()
-}
-
-# ActionList: ElementalAoeActions --> main, shortcd, cd
-
-AddFunction ElementalAoeActions
-{
-	#earthquake,cycle_targets=1,if=!ticking&(buff.enhanced_chain_lightning.up|level<=90)&active_enemies>=2
-	if not target.DebuffPresent(earthquake_debuff) and { BuffPresent(enhanced_chain_lightning_buff) or Level() <= 90 } and Enemies() >= 2 Spell(earthquake)
-	#lava_beam
-	if BuffPresent(ascendance_caster_buff) Spell(lava_beam)
-	#earth_shock,if=buff.lightning_shield.react=buff.lightning_shield.max_stack
-	if BuffStacks(lightning_shield_buff) == SpellData(lightning_shield_buff max_stacks) Spell(earth_shock)
-	#thunderstorm,if=active_enemies>=10
-	if Enemies() >= 10 Spell(thunderstorm)
-	#searing_totem,if=(!talent.liquid_magma.enabled&!totem.fire.active)|(talent.liquid_magma.enabled&pet.searing_totem.remains<=20&!pet.fire_elemental_totem.active&!buff.liquid_magma.up)
-	if not Talent(liquid_magma_talent) and not TotemPresent(fire) or Talent(liquid_magma_talent) and TotemRemaining(fire totem=searing_totem) <= 20 and not TotemPresent(fire totem=fire_elemental_totem) and not BuffPresent(liquid_magma_buff) Spell(searing_totem)
-	#chain_lightning,if=active_enemies>=2
-	if Enemies() >= 2 Spell(chain_lightning)
-	#lightning_bolt
-	Spell(lightning_bolt)
-}
-
-AddFunction ElementalAoeShortCdActions {}
-
-AddFunction ElementalAoeCdActions {}
-
-# ActionList: ElementalPrecombatActions --> main, shortcd, cd
-
-AddFunction ElementalPrecombatActions
-{
-	#flask,type=greater_draenic_intellect_flask
-	#food,type=calamari_crepes
-	#lightning_shield,if=!buff.lightning_shield.up
-	if not BuffPresent(lightning_shield_buff) Spell(lightning_shield)
-	#snapshot_stats
-}
-
-AddFunction ElementalPrecombatShortCdActions {}
-
-AddFunction ElementalPrecombatCdActions
-{
-	unless not BuffPresent(lightning_shield_buff) and Spell(lightning_shield)
-	{
-		#potion,name=draenic_intellect
-		UsePotionIntellect()
-	}
-}
-
-# ActionList: ElementalSingleActions --> main, shortcd, cd
-
-AddFunction ElementalSingleActions
-{
-	#unleash_flame,if=talent.unleashed_fury.enabled&!buff.ascendance.up
-	if Talent(unleashed_fury_talent) and not BuffPresent(ascendance_caster_buff) Spell(unleash_flame)
-	#earth_shock,if=buff.lightning_shield.react=buff.lightning_shield.max_stack
-	if BuffStacks(lightning_shield_buff) == SpellData(lightning_shield_buff max_stacks) Spell(earth_shock)
-	#lava_burst,if=dot.flame_shock.remains>cast_time&(buff.ascendance.up|cooldown_react)
-	if target.DebuffRemaining(flame_shock_debuff) > CastTime(lava_burst) and { BuffPresent(ascendance_caster_buff) or not SpellCooldown(lava_burst) > 0 } Spell(lava_burst)
-	#flame_shock,if=dot.flame_shock.remains<=9
-	if target.DebuffRemaining(flame_shock_debuff) <= 9 Spell(flame_shock)
-	#earth_shock,if=(set_bonus.tier17_4pc&buff.lightning_shield.react>=15&!buff.lava_surge.up)|(!set_bonus.tier17_4pc&buff.lightning_shield.react>15)
-	if ArmorSetBonus(T17 4) and BuffStacks(lightning_shield_buff) >= 15 and not BuffPresent(lava_surge_buff) or not ArmorSetBonus(T17 4) and BuffStacks(lightning_shield_buff) > 15 Spell(earth_shock)
-	#elemental_blast
-	Spell(elemental_blast)
-	#flame_shock,if=time>60&remains<=buff.ascendance.duration&cooldown.ascendance.remains+buff.ascendance.duration<duration
-	if TimeInCombat() > 60 and target.DebuffRemaining(flame_shock_debuff) <= BaseDuration(ascendance_caster_buff) and SpellCooldown(ascendance_caster) + BaseDuration(ascendance_caster_buff) < BaseDuration(flame_shock_debuff) Spell(flame_shock)
-	#searing_totem,if=(!talent.liquid_magma.enabled&!totem.fire.active)|(talent.liquid_magma.enabled&pet.searing_totem.remains<=20&!pet.fire_elemental_totem.active&!buff.liquid_magma.up)
-	if not Talent(liquid_magma_talent) and not TotemPresent(fire) or Talent(liquid_magma_talent) and TotemRemaining(fire totem=searing_totem) <= 20 and not TotemPresent(fire totem=fire_elemental_totem) and not BuffPresent(liquid_magma_buff) Spell(searing_totem)
-	#lightning_bolt
-	Spell(lightning_bolt)
-}
-
-AddFunction ElementalSingleShortCdActions
-{
-	unless Talent(unleashed_fury_talent) and not BuffPresent(ascendance_caster_buff) and Spell(unleash_flame)
-	{
-		#spiritwalkers_grace,moving=1,if=buff.ascendance.up
-		if Speed() > 0 and BuffPresent(ascendance_caster_buff) Spell(spiritwalkers_grace)
-
-		unless BuffStacks(lightning_shield_buff) == SpellData(lightning_shield_buff max_stacks) and Spell(earth_shock)
-			or target.DebuffRemaining(flame_shock_debuff) > CastTime(lava_burst) and { BuffPresent(ascendance_caster_buff) or not SpellCooldown(lava_burst) > 0 } and Spell(lava_burst)
-			or target.DebuffRemaining(flame_shock_debuff) <= 9 and Spell(flame_shock)
-			or ArmorSetBonus(T17 4) and BuffStacks(lightning_shield_buff) >= 15 and not BuffPresent(lava_surge_buff) or not ArmorSetBonus(T17 4) and BuffStacks(lightning_shield_buff) > 15 and Spell(earth_shock)
-		{
-			#earthquake,if=!talent.unleashed_fury.enabled&((1+stat.spell_haste)*(1+(mastery_value*2%4.5))>=(1.875+(1.25*0.226305)+1.25*(2*0.226305*stat.multistrike_pct%100)))&target.time_to_die>10&buff.elemental_mastery.down&buff.bloodlust.down
-			if not Talent(unleashed_fury_talent) and { 1 + SpellHaste() / 100 } * { 1 + MasteryEffect() / 100 * 2 / 4.5 } >= 1.875 + 1.25 * 0.226305 + 1.25 * 2 * 0.226305 * MultistrikeChance() / 100 and target.TimeToDie() > 10 and BuffExpires(elemental_mastery_buff) and BuffExpires(burst_haste_buff any=1) Spell(earthquake)
-			#earthquake,if=!talent.unleashed_fury.enabled&((1+stat.spell_haste)*(1+(mastery_value*2%4.5))>=1.3*(1.875+(1.25*0.226305)+1.25*(2*0.226305*stat.multistrike_pct%100)))&target.time_to_die>10&(buff.elemental_mastery.up|buff.bloodlust.up)
-			if not Talent(unleashed_fury_talent) and { 1 + SpellHaste() / 100 } * { 1 + MasteryEffect() / 100 * 2 / 4.5 } >= 1.3 * { 1.875 + 1.25 * 0.226305 + 1.25 * 2 * 0.226305 * MultistrikeChance() / 100 } and target.TimeToDie() > 10 and { BuffPresent(elemental_mastery_buff) or BuffPresent(burst_haste_buff any=1) } Spell(earthquake)
-			#earthquake,if=!talent.unleashed_fury.enabled&((1+stat.spell_haste)*(1+(mastery_value*2%4.5))>=(1.875+(1.25*0.226305)+1.25*(2*0.226305*stat.multistrike_pct%100)))&target.time_to_die>10&(buff.elemental_mastery.remains>=10|buff.bloodlust.remains>=10)
-			if not Talent(unleashed_fury_talent) and { 1 + SpellHaste() / 100 } * { 1 + MasteryEffect() / 100 * 2 / 4.5 } >= 1.875 + 1.25 * 0.226305 + 1.25 * 2 * 0.226305 * MultistrikeChance() / 100 and target.TimeToDie() > 10 and { BuffRemaining(elemental_mastery_buff) >= 10 or BuffRemaining(burst_haste_buff any=1) >= 10 } Spell(earthquake)
-			#earthquake,if=talent.unleashed_fury.enabled&((1+stat.spell_haste)*(1+(mastery_value*2%4.5))>=((1.3*1.875)+(1.25*0.226305)+1.25*(2*0.226305*stat.multistrike_pct%100)))&target.time_to_die>10&buff.elemental_mastery.down&buff.bloodlust.down
-			if Talent(unleashed_fury_talent) and { 1 + SpellHaste() / 100 } * { 1 + MasteryEffect() / 100 * 2 / 4.5 } >= 1.3 * 1.875 + 1.25 * 0.226305 + 1.25 * 2 * 0.226305 * MultistrikeChance() / 100 and target.TimeToDie() > 10 and BuffExpires(elemental_mastery_buff) and BuffExpires(burst_haste_buff any=1) Spell(earthquake)
-			#earthquake,if=talent.unleashed_fury.enabled&((1+stat.spell_haste)*(1+(mastery_value*2%4.5))>=1.3*((1.3*1.875)+(1.25*0.226305)+1.25*(2*0.226305*stat.multistrike_pct%100)))&target.time_to_die>10&(buff.elemental_mastery.up|buff.bloodlust.up)
-			if Talent(unleashed_fury_talent) and { 1 + SpellHaste() / 100 } * { 1 + MasteryEffect() / 100 * 2 / 4.5 } >= 1.3 * { 1.3 * 1.875 + 1.25 * 0.226305 + 1.25 * 2 * 0.226305 * MultistrikeChance() / 100 } and target.TimeToDie() > 10 and { BuffPresent(elemental_mastery_buff) or BuffPresent(burst_haste_buff any=1) } Spell(earthquake)
-			#earthquake,if=talent.unleashed_fury.enabled&((1+stat.spell_haste)*(1+(mastery_value*2%4.5))>=((1.3*1.875)+(1.25*0.226305)+1.25*(2*0.226305*stat.multistrike_pct%100)))&target.time_to_die>10&(buff.elemental_mastery.remains>=10|buff.bloodlust.remains>=10)
-			if Talent(unleashed_fury_talent) and { 1 + SpellHaste() / 100 } * { 1 + MasteryEffect() / 100 * 2 / 4.5 } >= 1.3 * 1.875 + 1.25 * 0.226305 + 1.25 * 2 * 0.226305 * MultistrikeChance() / 100 and target.TimeToDie() > 10 and { BuffRemaining(elemental_mastery_buff) >= 10 or BuffRemaining(burst_haste_buff any=1) >= 10 } Spell(earthquake)
-
-			unless Spell(elemental_blast)
-				or TimeInCombat() > 60 and target.DebuffRemaining(flame_shock_debuff) <= BaseDuration(ascendance_caster_buff) and SpellCooldown(ascendance_caster) + BaseDuration(ascendance_caster_buff) < BaseDuration(flame_shock_debuff) and Spell(flame_shock)
-				or not Talent(liquid_magma_talent) and not TotemPresent(fire) or Talent(liquid_magma_talent) and TotemRemaining(fire totem=searing_totem) <= 20 and not TotemPresent(fire totem=fire_elemental_totem) and not BuffPresent(liquid_magma_buff) and Spell(searing_totem)
-			{
-				#spiritwalkers_grace,moving=1,if=((talent.elemental_blast.enabled&cooldown.elemental_blast.remains=0)|(cooldown.lava_burst.remains=0&!buff.lava_surge.react))
-				if Speed() > 0 and { Talent(elemental_blast_talent) and not SpellCooldown(elemental_blast) > 0 or not SpellCooldown(lava_burst) > 0 and not BuffPresent(lava_surge_buff) } Spell(spiritwalkers_grace)
-			}
-		}
-	}
-}
-
-AddFunction ElementalSingleCdActions {}
-
-### Elemental icons.
-AddCheckBox(opt_shaman_elemental_aoe L(AOE) specialization=elemental default)
-
-AddIcon specialization=elemental help=shortcd enemies=1 checkbox=!opt_shaman_elemental_aoe
-{
-	if InCombat(no) ElementalPrecombatShortCdActions()
-	ElementalDefaultShortCdActions()
-}
-
-AddIcon specialization=elemental help=shortcd checkbox=opt_shaman_elemental_aoe
-{
-	if InCombat(no) ElementalPrecombatShortCdActions()
-	ElementalDefaultShortCdActions()
-}
-
-AddIcon specialization=elemental help=main enemies=1
-{
-	if InCombat(no) ElementalPrecombatActions()
-	ElementalDefaultActions()
-}
-
-AddIcon specialization=elemental help=aoe checkbox=opt_shaman_elemental_aoe
-{
-	if InCombat(no) ElementalPrecombatActions()
-	ElementalDefaultActions()
-}
-
-AddIcon specialization=elemental help=cd enemies=1 checkbox=!opt_shaman_elemental_aoe
-{
-	if InCombat(no) ElementalPrecombatCdActions()
-	ElementalDefaultCdActions()
-}
-
-AddIcon specialization=elemental help=cd checkbox=opt_shaman_elemental_aoe
-{
-	if InCombat(no) ElementalPrecombatCdActions()
-	ElementalDefaultCdActions()
-}
-
-###
-### Enhancement
-###
-# Based on SimulationCraft profile "Shaman_Enhancement_T17M".
-#	class=shaman
-#	spec=enhancement
-#	talents=0002012
-#	glyphs=chain_lightning/frost_shock
-
-# ActionList: EnhancementDefaultActions --> main, shortcd, cd
-
-AddFunction EnhancementDefaultActions
-{
-	#call_action_list,name=single,if=active_enemies=1
-	if Enemies() == 1 EnhancementSingleActions()
-	#call_action_list,name=aoe,if=active_enemies>1
-	if Enemies() > 1 EnhancementAoeActions()
-}
-
-AddFunction EnhancementDefaultShortCdActions
-{
-	#elemental_mastery
-	Spell(elemental_mastery)
-	#feral_spirit
-	Spell(feral_spirit)
-	#liquid_magma,if=pet.searing_totem.remains>=15|pet.magma_totem.remains>=15|pet.fire_elemental_totem.remains>=15
-	if TotemRemaining(fire totem=searing_totem) >= 15 or TotemRemaining(fire totem=magma_totem) >= 15 or TotemRemaining(fire totem=fire_elemental_totem) >= 15 Spell(liquid_magma)
-}
-
-AddFunction EnhancementDefaultCdActions
-{
-	#wind_shear
-	InterruptActions()
-	#bloodlust,if=target.health.pct<25|time>0.500
-	if target.HealthPercent() < 25 or TimeInCombat() > 0.5 Bloodlust()
-	#use_item,name=beating_heart_of_the_mountain
-	UseItemActions()
-	#potion,name=draenic_agility,if=(talent.storm_elemental_totem.enabled&pet.storm_elemental_totem.remains>=25)|(!talent.storm_elemental_totem.enabled&pet.fire_elemental_totem.remains>=25)|target.time_to_die<=30
-	if Talent(storm_elemental_totem_talent) and TotemRemaining(air totem=storm_elemental_totem) >= 25 or not Talent(storm_elemental_totem_talent) and TotemRemaining(fire totem=fire_elemental_totem) >= 25 or target.TimeToDie() <= 30 UsePotionAgility()
-	#blood_fury
-	Spell(blood_fury_apsp)
-	#arcane_torrent
-	Spell(arcane_torrent_mana)
-	#berserking
-	Spell(berserking)
-	#storm_elemental_totem
-	Spell(storm_elemental_totem)
-	#fire_elemental_totem,if=(talent.primal_elementalist.enabled&active_enemies<=10)|active_enemies<=6
-	if Talent(primal_elementalist_talent) and Enemies() <= 10 or Enemies() <= 6 Spell(fire_elemental_totem)
-	#ascendance
-	if BuffExpires(ascendance_melee_buff) Spell(ascendance_melee)
-
-	unless Spell(feral_spirit)
-		or { TotemRemaining(fire totem=searing_totem) >= 15 or TotemRemaining(fire totem=magma_totem) >= 15 or TotemRemaining(fire totem=fire_elemental_totem) >= 15 } and Spell(liquid_magma)
-	{
-		#ancestral_swiftness
-		Spell(ancestral_swiftness)
-	}
-}
-
-# ActionList: EnhancementAoeActions --> main
-
-AddFunction EnhancementAoeActions
-{
-	#unleash_elements,if=active_enemies>=4&dot.flame_shock.ticking&(cooldown.shock.remains>cooldown.fire_nova.remains|cooldown.fire_nova.remains=0)
-	if Enemies() >= 4 and target.DebuffPresent(flame_shock_debuff) and { SpellCooldown(shock) > SpellCooldown(fire_nova) or not SpellCooldown(fire_nova) > 0 } Spell(unleash_elements)
-	#fire_nova,if=active_dot.flame_shock>=3
-	if DebuffCountOnAny(flame_shock_debuff) >= 3 Spell(fire_nova)
-	#wait,sec=cooldown.fire_nova.remains,if=active_dot.flame_shock>=4&cooldown.fire_nova.remains<=action.fire_nova.gcd
-	unless DebuffCountOnAny(flame_shock_debuff) >= 4 and SpellCooldown(fire_nova) <= GCD() and SpellCooldown(fire_nova) > 0
-	{
-		#magma_totem,if=!totem.fire.active
-		if not TotemPresent(fire) and target.InRange(primal_strike) Spell(magma_totem)
-		#lava_lash,if=dot.flame_shock.ticking&(active_dot.flame_shock<active_enemies|!talent.echo_of_the_elements.enabled|!buff.echo_of_the_elements.up)
-		if target.DebuffPresent(flame_shock_debuff) and { DebuffCountOnAny(flame_shock_debuff) < Enemies() or not Talent(echo_of_the_elements_talent) or not BuffPresent(echo_of_the_elements_buff) } Spell(lava_lash)
-		#elemental_blast,if=!buff.unleash_flame.up&(buff.maelstrom_weapon.react>=4|buff.ancestral_swiftness.up)
-		if not BuffPresent(unleash_flame_buff) and { BuffStacks(maelstrom_weapon_buff) >= 4 or BuffPresent(ancestral_swiftness_buff) } Spell(elemental_blast)
-		#chain_lightning,if=glyph.chain_lightning.enabled&active_enemies>=4&(buff.maelstrom_weapon.react=5|(buff.ancestral_swiftness.up&buff.maelstrom_weapon.react>=3))
-		if Glyph(glyph_of_chain_lightning) and Enemies() >= 4 and { BuffStacks(maelstrom_weapon_buff) == 5 or BuffPresent(ancestral_swiftness_buff) and BuffStacks(maelstrom_weapon_buff) >= 3 } Spell(chain_lightning)
-		#unleash_elements,if=active_enemies<4
-		if Enemies() < 4 Spell(unleash_elements)
-		#flame_shock,cycle_targets=1,if=!ticking
-		if not target.DebuffPresent(flame_shock_debuff) Spell(flame_shock)
-		#lightning_bolt,if=(!glyph.chain_lightning.enabled|active_enemies<=3)&(buff.maelstrom_weapon.react=5|(buff.ancestral_swiftness.up&buff.maelstrom_weapon.react>=3))
-		if { not Glyph(glyph_of_chain_lightning) or Enemies() <= 3 } and { BuffStacks(maelstrom_weapon_buff) == 5 or BuffPresent(ancestral_swiftness_buff) and BuffStacks(maelstrom_weapon_buff) >= 3 } Spell(lightning_bolt)
-		#windstrike
-		if BuffPresent(ascendance_melee_buff) Spell(windstrike)
-		#elemental_blast,if=!buff.unleash_flame.up&buff.maelstrom_weapon.react>=1
-		if not BuffPresent(unleash_flame_buff) and BuffStacks(maelstrom_weapon_buff) >= 1 Spell(elemental_blast)
-		#chain_lightning,if=glyph.chain_lightning.enabled&active_enemies>=4&buff.maelstrom_weapon.react>=1
-		if Glyph(glyph_of_chain_lightning) and Enemies() >= 4 and BuffStacks(maelstrom_weapon_buff) >= 1 Spell(chain_lightning)
-		#fire_nova,if=active_dot.flame_shock>=2
-		if DebuffCountOnAny(flame_shock_debuff) >= 2 Spell(fire_nova)
-		#magma_totem,if=pet.magma_totem.remains<=20&!pet.fire_elemental_totem.active&!buff.liquid_magma.up
-		if TotemRemaining(fire totem=magma_totem) <= 20 and not TotemPresent(fire totem=fire_elemental_totem) and not BuffPresent(liquid_magma_buff) and target.InRange(primal_strike) Spell(magma_totem)
-		#stormstrike
-		Spell(stormstrike)
-		#frost_shock,if=active_enemies<4
-		if Enemies() < 4 Spell(frost_shock)
-		#elemental_blast,if=buff.maelstrom_weapon.react>=1
-		if BuffStacks(maelstrom_weapon_buff) >= 1 Spell(elemental_blast)
-		#chain_lightning,if=active_enemies>=3&buff.maelstrom_weapon.react>=1
-		if Enemies() >= 3 and BuffStacks(maelstrom_weapon_buff) >= 1 Spell(chain_lightning)
-		#lightning_bolt,if=active_enemies<3&buff.maelstrom_weapon.react>=1
-		if Enemies() < 3 and BuffStacks(maelstrom_weapon_buff) >= 1 Spell(lightning_bolt)
-		#fire_nova,if=active_dot.flame_shock>=1
-		if DebuffCountOnAny(flame_shock_debuff) >= 1 Spell(fire_nova)
-	}
-}
-
-# ActionList: EnhancementPrecombatActions --> main, shortcd, cd
-
-AddFunction EnhancementPrecombatActions
-{
-	#flask,type=greater_draenic_agility_flask
-	#food,type=frosty_stew
-	#lightning_shield,if=!buff.lightning_shield.up
-	if not BuffPresent(lightning_shield_buff) Spell(lightning_shield)
-	#snapshot_stats
-}
-
-AddFunction EnhancementPrecombatShortCdActions {}
-
-AddFunction EnhancementPrecombatCdActions
-{
-	unless not BuffPresent(lightning_shield_buff) and Spell(lightning_shield)
-	{
-		#potion,name=draenic_agility
-		UsePotionAgility()
-	}
-}
-
-# ActionList: EnhancementSingleActions --> main
-
-AddFunction EnhancementSingleActions
-{
-	#searing_totem,if=!totem.fire.active
-	if not TotemPresent(fire) Spell(searing_totem)
-	#unleash_elements,if=(talent.unleashed_fury.enabled|set_bonus.tier16_2pc_melee=1)
-	if Talent(unleashed_fury_talent) or ArmorSetBonus(T16_melee 2) == 1 Spell(unleash_elements)
-	#elemental_blast,if=buff.maelstrom_weapon.react>=4|buff.ancestral_swiftness.up
-	if BuffStacks(maelstrom_weapon_buff) >= 4 or BuffPresent(ancestral_swiftness_buff) Spell(elemental_blast)
-	#lightning_bolt,if=buff.maelstrom_weapon.react=5|(buff.maelstrom_weapon.react>=4&!buff.ascendance.up)|(buff.ancestral_swiftness.up&buff.maelstrom_weapon.react>=3)
-	if BuffStacks(maelstrom_weapon_buff) == 5 or BuffStacks(maelstrom_weapon_buff) >= 4 and not BuffPresent(ascendance_melee_buff) or BuffPresent(ancestral_swiftness_buff) and BuffStacks(maelstrom_weapon_buff) >= 3 Spell(lightning_bolt)
-	#windstrike
-	if BuffPresent(ascendance_melee_buff) Spell(windstrike)
-	#stormstrike
-	Spell(stormstrike)
-	#lava_lash
-	Spell(lava_lash)
-	#flame_shock,if=(talent.elemental_fusion.enabled&buff.elemental_fusion.stack=2&buff.unleash_flame.up&dot.flame_shock.remains<16)|(!talent.elemental_fusion.enabled&buff.unleash_flame.up&dot.flame_shock.remains<=9)|!ticking
-	if Talent(elemental_fusion_talent) and BuffStacks(elemental_fusion_buff) == 2 and BuffPresent(unleash_flame_buff) and target.DebuffRemaining(flame_shock_debuff) < 16 or not Talent(elemental_fusion_talent) and BuffPresent(unleash_flame_buff) and target.DebuffRemaining(flame_shock_debuff) <= 9 or not target.DebuffPresent(flame_shock_debuff) Spell(flame_shock)
-	#unleash_elements
-	Spell(unleash_elements)
-	#frost_shock,if=(talent.elemental_fusion.enabled&dot.flame_shock.remains>=16)|!talent.elemental_fusion.enabled
-	if Talent(elemental_fusion_talent) and target.DebuffRemaining(flame_shock_debuff) >= 16 or not Talent(elemental_fusion_talent) Spell(frost_shock)
-	#elemental_blast,if=buff.maelstrom_weapon.react>=1
-	if BuffStacks(maelstrom_weapon_buff) >= 1 Spell(elemental_blast)
-	#lightning_bolt,if=buff.maelstrom_weapon.react>=1&!buff.ascendance.up
-	if BuffStacks(maelstrom_weapon_buff) >= 1 and not BuffPresent(ascendance_melee_buff) Spell(lightning_bolt)
-	#searing_totem,if=pet.searing_totem.remains<=20&!pet.fire_elemental_totem.active&!buff.liquid_magma.up
-	if TotemRemaining(fire totem=searing_totem) <= 20 and not TotemPresent(fire totem=fire_elemental_totem) and not BuffPresent(liquid_magma_buff) Spell(searing_totem)
-}
-
-### Enhancement icons.
-AddCheckBox(opt_shaman_enhancement_aoe L(AOE) specialization=enhancement default)
-
-AddIcon specialization=enhancement help=shortcd enemies=1 checkbox=!opt_shaman_enhancement_aoe
-{
-	if InCombat(no) EnhancementPrecombatShortCdActions()
-	EnhancementDefaultShortCdActions()
-}
-
-AddIcon specialization=enhancement help=shortcd checkbox=opt_shaman_enhancement_aoe
-{
-	if InCombat(no) EnhancementPrecombatShortCdActions()
-	EnhancementDefaultShortCdActions()
-}
-
-AddIcon specialization=enhancement help=main enemies=1
-{
-	if InCombat(no) EnhancementPrecombatActions()
-	EnhancementDefaultActions()
-}
-
-AddIcon specialization=enhancement help=aoe checkbox=opt_shaman_enhancement_aoe
-{
-	if InCombat(no) EnhancementPrecombatActions()
-	EnhancementDefaultActions()
-}
-
-AddIcon specialization=enhancement help=cd enemies=1 checkbox=!opt_shaman_enhancement_aoe
-{
-	if InCombat(no) EnhancementPrecombatCdActions()
-	EnhancementDefaultCdActions()
-}
-
-AddIcon specialization=enhancement help=cd checkbox=opt_shaman_enhancement_aoe
-{
-	if InCombat(no) EnhancementPrecombatCdActions()
-	EnhancementDefaultCdActions()
-}
-
-###
-### Restoration
-###
 
 AddFunction RestorationMainActions
 {
@@ -479,18 +42,39 @@ AddFunction RestorationMainActions
 	# it after the current spellcast and GCD.  Take care not to recall other totems that have
 	# long cooldowns.
 	#
-	if Glyph(glyph_of_totemic_recall) and TotemPresent(water totem=healing_stream_totem) and TotemExpires(water 3) and TotemExpires(fire) and TotemExpires(earth) and TotemExpires(air) Spell(totemic_recall)
+	if Glyph(glyph_of_totemic_recall) and TotemPresent(healing_stream_totem) and TotemExpires(water 3) and TotemExpires(fire) and TotemExpires(earth) and TotemExpires(air) Spell(totemic_recall)
+
+	# Maintain the Elemental Blast buff.
+	if Talent(elemental_blast_talent) and BuffRemaining(elemental_blast_spirit_buff) < CastTime(elemental_blast) Spell(elemental_blast)
 
 	if BuffPresent(unleash_life_buff) Spell(healing_wave)
-	if TotemExpires(water) Spell(healing_stream_totem)
-	if Glyph(glyph_of_riptide no) Spell(riptide)
+	if Talent(totemic_persistence_talent) or TotemExpires(water) Spell(healing_stream_totem)
+	if BuffRemaining(tidal_waves_buff) < 2 or target.BuffRemaining(riptide_buff) < 3 Spell(riptide)
 }
 
 AddFunction RestorationAoeActions
 {
+	if BuffExpires(water_shield_buff) Spell(water_shield)
+	if BuffCountOnAny(earth_shield_buff) == 0 Spell(earth_shield)
+
+	# Maintain the Elemental Blast buff.
+	if Talent(elemental_blast_talent) and BuffRemaining(elemental_blast_spirit_buff) < CastTime(elemental_blast) Spell(elemental_blast)
+
 	if BuffPresent(unleash_life_buff) Spell(chain_heal)
-	if TotemExpires(water) Spell(healing_stream_totem)
+	if Talent(totemic_persistence_talent) or TotemExpires(water) Spell(healing_stream_totem)
 	Spell(healing_rain)
+	if Talent(totemic_persistence_talent) or TotemExpires(water) Spell(cloudburst_totem)
+
+	# If using Glyph of Riptide, keep at least five Riptide buffs rolling on the raid.
+	if Glyph(glyph_of_riptide) and BuffCountOnAny(riptide_buff) < 5 Spell(riptide)
+
+	# If using Glyph of Chaining, which adds a 3s cooldown to Chain Heal, then cast it on cooldown.
+	if Glyph(glyph_of_chaining) Spell(chain_heal)
+
+	# Roll Riptide buffs on the raid on cooldown if using the High Tide talent.
+	if not Glyph(glyph_of_riptide) and Talent(high_tide_talent) Spell(riptide)
+
+	# Chain Heal as filler for AoE healing.
 	Spell(chain_heal)
 }
 
@@ -498,21 +82,21 @@ AddFunction RestorationShortCdActions
 {
 	if Talent(primal_elementalist_talent) and pet.Present()
 	{
-		if TotemPresent(fire totem=fire_elemental_totem) and BuffExpires(pet_empower any=1) Spell(pet_empower)
-		if TotemPresent(earth totem=earth_elemental_totem) and BuffExpires(pet_reinforce any=1) Spell(pet_reinforce)
+		if TotemPresent(fire_elemental_totem) and BuffExpires(fire_elemental_totem_empower_buff any=1) Spell(fire_elemental_totem_empower)
+		if TotemPresent(earth_elemental_totem) and BuffExpires(earth_elemental_totem_reinforce_buff any=1) Spell(earth_elemental_totem_reinforce)
 	}
-	Spell(unleash_life)
+	if BuffExpires(unleash_life_buff) Spell(unleash_life)
 }
 
 AddFunction RestorationCdActions
 {
 	if IsFeared() Spell(tremor_totem)
-	InterruptActions()
+	RestorationInterruptActions()
 	if Speed(more 0) Spell(spiritwalkers_grace)
 	Spell(blood_fury_apsp)
 	Spell(berserking)
 	if ManaPercent() < 90 Spell(arcane_torrent_mana)
-	if TotemExpires(water) Spell(healing_tide_totem)
+	if Talent(totemic_persistence_talent) or TotemExpires(water) Spell(healing_tide_totem)
 	Spell(ancestral_guidance)
 	Spell(ascendance_heal)
 	Spell(fire_elemental_totem)
@@ -520,30 +104,693 @@ AddFunction RestorationCdActions
 }
 
 ### Restoration icons.
-AddCheckBox(opt_shaman_restoration_aoe L(AOE) specialization=restoration default)
 
-AddIcon specialization=restoration help=shortcd
+AddCheckBox(opt_shaman_restoration_aoe L(AOE) default specialization=restoration)
+
+AddIcon help=shortcd specialization=restoration
 {
 	RestorationShortCdActions()
 }
 
-AddIcon specialization=restoration help=main
+AddIcon help=main specialization=restoration
 {
 	RestorationMainActions()
 }
 
-AddIcon specialization=restoration help=aoe checkbox=opt_shaman_restoration_aoe
+AddIcon checkbox=opt_shaman_restoration_aoe help=aoe specialization=restoration
 {
 	RestorationAoeActions()
 }
 
-AddIcon specialization=restoration help=cd
+AddIcon help=cd specialization=restoration
 {
 	RestorationCdActions()
 }
 ]]
+	OvaleScripts:RegisterScript("SHAMAN", "restoration", name, desc, code, "script")
+end
 
-	OvaleScripts:RegisterScript("SHAMAN", name, desc, code, "include")
-	-- Register as the default Ovale script.
-	OvaleScripts:RegisterScript("SHAMAN", "Ovale", desc, code, "script")
+-- THE REST OF THIS FILE IS AUTOMATICALLY GENERATED.
+-- ANY CHANGES MADE BELOW THIS POINT WILL BE LOST.
+
+do
+	local name = "simulationcraft_shaman_elemental_t18m"
+	local desc = "[6.2] SimulationCraft: Shaman_Elemental_T18M"
+	local code = [[
+# Based on SimulationCraft profile "Shaman_Elemental_T18M".
+#	class=shaman
+#	spec=elemental
+#	talents=0001011
+#	glyphs=chain_lightning/spiritwalkers_focus
+
+Include(ovale_common)
+Include(ovale_trinkets_mop)
+Include(ovale_trinkets_wod)
+Include(ovale_shaman_spells)
+
+AddCheckBox(opt_interrupt L(interrupt) default specialization=elemental)
+AddCheckBox(opt_potion_intellect ItemName(draenic_intellect_potion) default specialization=elemental)
+AddCheckBox(opt_legendary_ring_intellect ItemName(legendary_ring_intellect) default specialization=elemental)
+AddCheckBox(opt_bloodlust SpellName(bloodlust) specialization=elemental)
+
+AddFunction ElementalUsePotionIntellect
+{
+	if CheckBoxOn(opt_potion_intellect) and target.Classification(worldboss) Item(draenic_intellect_potion usable=1)
+}
+
+AddFunction ElementalUseItemActions
+{
+	Item(Trinket0Slot usable=1)
+	Item(Trinket1Slot usable=1)
+}
+
+AddFunction ElementalBloodlust
+{
+	if CheckBoxOn(opt_bloodlust) and DebuffExpires(burst_haste_debuff any=1)
+	{
+		Spell(bloodlust)
+		Spell(heroism)
+	}
+}
+
+AddFunction ElementalInterruptActions
+{
+	if CheckBoxOn(opt_interrupt) and not target.IsFriend() and target.IsInterruptible()
+	{
+		Spell(wind_shear)
+		if not target.Classification(worldboss)
+		{
+			Spell(arcane_torrent_mana)
+			if target.InRange(quaking_palm) Spell(quaking_palm)
+			Spell(war_stomp)
+		}
+	}
+}
+
+### actions.default
+
+AddFunction ElementalDefaultMainActions
+{
+	#call_action_list,name=aoe,if=spell_targets.chain_lightning>(2+t18_class_trinket)
+	if Enemies() > 2 + HasTrinket(t18_class_trinket) ElementalAoeMainActions()
+	#call_action_list,name=single
+	ElementalSingleMainActions()
+}
+
+AddFunction ElementalDefaultShortCdActions
+{
+	#elemental_mastery,if=action.lava_burst.cast_time>=1.2
+	if CastTime(lava_burst) >= 1.2 Spell(elemental_mastery)
+	#ancestral_swiftness,if=!buff.ascendance.up
+	if not BuffPresent(ascendance_caster_buff) Spell(ancestral_swiftness)
+	#liquid_magma,if=pet.searing_totem.remains>=15|pet.fire_elemental_totem.remains>=15
+	if TotemRemaining(searing_totem) >= 15 or TotemRemaining(fire_elemental_totem) >= 15 Spell(liquid_magma)
+}
+
+AddFunction ElementalDefaultCdActions
+{
+	#wind_shear
+	ElementalInterruptActions()
+	#bloodlust,if=target.health.pct<25|time>0.500
+	if target.HealthPercent() < 25 or TimeInCombat() > 0.5 ElementalBloodlust()
+	#use_item,name=nithramus_the_allseer
+	if CheckBoxOn(opt_legendary_ring_intellect) Item(legendary_ring_intellect usable=1)
+	#use_item,slot=trinket1
+	ElementalUseItemActions()
+	#potion,name=draenic_intellect,if=buff.ascendance.up|target.time_to_die<=30
+	if BuffPresent(ascendance_caster_buff) or target.TimeToDie() <= 30 ElementalUsePotionIntellect()
+	#berserking,if=!buff.bloodlust.up&!buff.elemental_mastery.up&(set_bonus.tier15_4pc_caster=1|(buff.ascendance.cooldown_remains=0&(dot.flame_shock.remains>buff.ascendance.duration|level<87)))
+	if not BuffPresent(burst_haste_buff any=1) and not BuffPresent(elemental_mastery_buff) and { ArmorSetBonus(T15_caster 4) == 1 or not SpellCooldown(ascendance_caster) > 0 and { target.DebuffRemaining(flame_shock_debuff) > BaseDuration(ascendance_caster_buff) or Level() < 87 } } Spell(berserking)
+	#blood_fury,if=buff.bloodlust.up|buff.ascendance.up|((cooldown.ascendance.remains>10|level<87)&cooldown.fire_elemental_totem.remains>10)
+	if BuffPresent(burst_haste_buff any=1) or BuffPresent(ascendance_caster_buff) or { SpellCooldown(ascendance_caster) > 10 or Level() < 87 } and SpellCooldown(fire_elemental_totem) > 10 Spell(blood_fury_apsp)
+	#arcane_torrent
+	Spell(arcane_torrent_mana)
+	#storm_elemental_totem
+	Spell(storm_elemental_totem)
+	#fire_elemental_totem,if=!active
+	if not TotemPresent(fire_elemental_totem) Spell(fire_elemental_totem)
+	#ascendance,if=spell_targets.chain_lightning>1|(dot.flame_shock.remains>buff.ascendance.duration&(target.time_to_die<20|buff.bloodlust.up|time>=60)&cooldown.lava_burst.remains>0)
+	if { Enemies() > 1 or target.DebuffRemaining(flame_shock_debuff) > BaseDuration(ascendance_caster_buff) and { target.TimeToDie() < 20 or BuffPresent(burst_haste_buff any=1) or TimeInCombat() >= 60 } and SpellCooldown(lava_burst) > 0 } and BuffExpires(ascendance_caster_buff) Spell(ascendance_caster)
+
+	unless { TotemRemaining(searing_totem) >= 15 or TotemRemaining(fire_elemental_totem) >= 15 } and Spell(liquid_magma)
+	{
+		unless Enemies() > 2 + HasTrinket(t18_class_trinket) and ElementalAoeCdPostConditions()
+		{
+			#call_action_list,name=single
+			ElementalSingleCdActions()
+		}
+	}
+}
+
+### actions.aoe
+
+AddFunction ElementalAoeMainActions
+{
+	#earthquake,cycle_targets=1,if=buff.enhanced_chain_lightning.up
+	if BuffPresent(enhanced_chain_lightning_buff) Spell(earthquake)
+	#lava_beam
+	Spell(lava_beam)
+	#earth_shock,if=buff.lightning_shield.react=buff.lightning_shield.max_stack
+	if BuffStacks(lightning_shield_buff) == SpellData(lightning_shield_buff max_stacks) Spell(earth_shock)
+	#searing_totem,if=(!talent.liquid_magma.enabled&!totem.fire.active)|(talent.liquid_magma.enabled&pet.searing_totem.remains<=20&!pet.fire_elemental_totem.active&!buff.liquid_magma.up)
+	if not Talent(liquid_magma_talent) and not TotemPresent(fire) or Talent(liquid_magma_talent) and TotemRemaining(searing_totem) <= 20 and not TotemPresent(fire_elemental_totem) and not BuffPresent(liquid_magma_buff) Spell(searing_totem)
+	#chain_lightning,if=spell_targets.chain_lightning>=2
+	if Enemies() >= 2 Spell(chain_lightning)
+	#lightning_bolt
+	Spell(lightning_bolt)
+}
+
+AddFunction ElementalAoeCdPostConditions
+{
+	BuffPresent(enhanced_chain_lightning_buff) and Spell(earthquake) or Spell(lava_beam) or BuffStacks(lightning_shield_buff) == SpellData(lightning_shield_buff max_stacks) and Spell(earth_shock) or { not Talent(liquid_magma_talent) and not TotemPresent(fire) or Talent(liquid_magma_talent) and TotemRemaining(searing_totem) <= 20 and not TotemPresent(fire_elemental_totem) and not BuffPresent(liquid_magma_buff) } and Spell(searing_totem) or Enemies() >= 2 and Spell(chain_lightning) or Spell(lightning_bolt)
+}
+
+### actions.precombat
+
+AddFunction ElementalPrecombatMainActions
+{
+	#flask,type=greater_draenic_intellect_flask
+	#food,type=salty_squid_roll
+	#lightning_shield,if=!buff.lightning_shield.up
+	if not BuffPresent(lightning_shield_buff) Spell(lightning_shield)
+}
+
+AddFunction ElementalPrecombatShortCdPostConditions
+{
+	not BuffPresent(lightning_shield_buff) and Spell(lightning_shield)
+}
+
+AddFunction ElementalPrecombatCdActions
+{
+	unless not BuffPresent(lightning_shield_buff) and Spell(lightning_shield)
+	{
+		#snapshot_stats
+		#potion,name=draenic_intellect
+		ElementalUsePotionIntellect()
+	}
+}
+
+AddFunction ElementalPrecombatCdPostConditions
+{
+	not BuffPresent(lightning_shield_buff) and Spell(lightning_shield)
+}
+
+### actions.single
+
+AddFunction ElementalSingleMainActions
+{
+	#unleash_flame,moving=1
+	if Speed() > 0 Spell(unleash_flame)
+	#earth_shock,if=buff.lightning_shield.react=buff.lightning_shield.max_stack
+	if BuffStacks(lightning_shield_buff) == SpellData(lightning_shield_buff max_stacks) Spell(earth_shock)
+	#flame_shock,cycle_targets=1,if=(talent.elemental_fusion.enabled&buff.elemental_fusion.stack=2&buff.unleash_flame.up&dot.flame_shock.remains<(dot.flame_shock.duration*(0.3+t18_class_trinket*(0.48+talent.unleashed_fury.enabled*0.22))))
+	if Talent(elemental_fusion_talent) and BuffStacks(elemental_fusion_buff) == 2 and BuffPresent(unleash_flame_buff) and target.DebuffRemaining(flame_shock_debuff) < target.DebuffDuration(flame_shock_debuff) * { 0.3 + HasTrinket(t18_class_trinket) * { 0.48 + TalentPoints(unleashed_fury_talent) * 0.22 } } Spell(flame_shock)
+	#lava_burst,if=dot.flame_shock.remains>cast_time&(buff.ascendance.up|cooldown_react)
+	if target.DebuffRemaining(flame_shock_debuff) > CastTime(lava_burst) and { BuffPresent(ascendance_caster_buff) or not SpellCooldown(lava_burst) > 0 } Spell(lava_burst)
+	#earth_shock,if=(set_bonus.tier17_4pc&buff.lightning_shield.react>=12&!buff.lava_surge.up)|(!set_bonus.tier17_4pc&buff.lightning_shield.react>15)
+	if ArmorSetBonus(T17 4) and BuffStacks(lightning_shield_buff) >= 12 and not BuffPresent(lava_surge_buff) or not ArmorSetBonus(T17 4) and BuffStacks(lightning_shield_buff) > 15 Spell(earth_shock)
+	#flame_shock,cycle_targets=1,if=dot.flame_shock.remains<=(dot.flame_shock.duration*0.3)
+	if target.DebuffRemaining(flame_shock_debuff) <= target.DebuffDuration(flame_shock_debuff) * 0.3 Spell(flame_shock)
+	#elemental_blast
+	Spell(elemental_blast)
+	#flame_shock,if=time>60&remains<=buff.ascendance.duration&cooldown.ascendance.remains+buff.ascendance.duration<duration
+	if TimeInCombat() > 60 and target.DebuffRemaining(flame_shock_debuff) <= BaseDuration(ascendance_caster_buff) and SpellCooldown(ascendance_caster) + BaseDuration(ascendance_caster_buff) < BaseDuration(flame_shock_debuff) Spell(flame_shock)
+	#searing_totem,if=(!talent.liquid_magma.enabled&(!totem.fire.active|(pet.searing_totem.remains<=10&!pet.fire_elemental_totem.active&talent.unleashed_fury.enabled)))|(talent.liquid_magma.enabled&pet.searing_totem.remains<=20&!pet.fire_elemental_totem.active&!buff.liquid_magma.up)
+	if not Talent(liquid_magma_talent) and { not TotemPresent(fire) or TotemRemaining(searing_totem) <= 10 and not TotemPresent(fire_elemental_totem) and Talent(unleashed_fury_talent) } or Talent(liquid_magma_talent) and TotemRemaining(searing_totem) <= 20 and not TotemPresent(fire_elemental_totem) and not BuffPresent(liquid_magma_buff) Spell(searing_totem)
+	#unleash_flame,if=talent.unleashed_fury.enabled&!buff.ascendance.up|(talent.elemental_fusion.enabled&buff.elemental_fusion.stack=2&(dot.flame_shock.remains)<(dot.flame_shock.duration*(0.3+t18_class_trinket*(0.48+talent.unleashed_fury.enabled*0.22)))&cooldown.flame_shock.remains<gcd)
+	if Talent(unleashed_fury_talent) and not BuffPresent(ascendance_caster_buff) or Talent(elemental_fusion_talent) and BuffStacks(elemental_fusion_buff) == 2 and target.DebuffRemaining(flame_shock_debuff) < target.DebuffDuration(flame_shock_debuff) * { 0.3 + HasTrinket(t18_class_trinket) * { 0.48 + TalentPoints(unleashed_fury_talent) * 0.22 } } and SpellCooldown(flame_shock) < GCD() Spell(unleash_flame)
+	#earthquake,cycle_targets=1,if=buff.enhanced_chain_lightning.up
+	if BuffPresent(enhanced_chain_lightning_buff) Spell(earthquake)
+	#chain_lightning,if=spell_targets.chain_lightning>=2
+	if Enemies() >= 2 Spell(chain_lightning)
+	#lightning_bolt
+	Spell(lightning_bolt)
+	#earth_shock,moving=1
+	if Speed() > 0 Spell(earth_shock)
+	#searing_totem,if=(!totem.fire.active|(pet.searing_totem.remains<=40&!pet.fire_elemental_totem.active))
+	if not TotemPresent(fire) or TotemRemaining(searing_totem) <= 40 and not TotemPresent(fire_elemental_totem) Spell(searing_totem)
+}
+
+AddFunction ElementalSingleCdActions
+{
+	unless Speed() > 0 and Spell(unleash_flame)
+	{
+		#spiritwalkers_grace,moving=1,if=buff.ascendance.up
+		if Speed() > 0 and BuffPresent(ascendance_caster_buff) Spell(spiritwalkers_grace)
+
+		unless BuffStacks(lightning_shield_buff) == SpellData(lightning_shield_buff max_stacks) and Spell(earth_shock) or Talent(elemental_fusion_talent) and BuffStacks(elemental_fusion_buff) == 2 and BuffPresent(unleash_flame_buff) and target.DebuffRemaining(flame_shock_debuff) < target.DebuffDuration(flame_shock_debuff) * { 0.3 + HasTrinket(t18_class_trinket) * { 0.48 + TalentPoints(unleashed_fury_talent) * 0.22 } } and Spell(flame_shock) or target.DebuffRemaining(flame_shock_debuff) > CastTime(lava_burst) and { BuffPresent(ascendance_caster_buff) or not SpellCooldown(lava_burst) > 0 } and Spell(lava_burst) or { ArmorSetBonus(T17 4) and BuffStacks(lightning_shield_buff) >= 12 and not BuffPresent(lava_surge_buff) or not ArmorSetBonus(T17 4) and BuffStacks(lightning_shield_buff) > 15 } and Spell(earth_shock) or target.DebuffRemaining(flame_shock_debuff) <= target.DebuffDuration(flame_shock_debuff) * 0.3 and Spell(flame_shock) or Spell(elemental_blast) or TimeInCombat() > 60 and target.DebuffRemaining(flame_shock_debuff) <= BaseDuration(ascendance_caster_buff) and SpellCooldown(ascendance_caster) + BaseDuration(ascendance_caster_buff) < BaseDuration(flame_shock_debuff) and Spell(flame_shock) or { not Talent(liquid_magma_talent) and { not TotemPresent(fire) or TotemRemaining(searing_totem) <= 10 and not TotemPresent(fire_elemental_totem) and Talent(unleashed_fury_talent) } or Talent(liquid_magma_talent) and TotemRemaining(searing_totem) <= 20 and not TotemPresent(fire_elemental_totem) and not BuffPresent(liquid_magma_buff) } and Spell(searing_totem) or { Talent(unleashed_fury_talent) and not BuffPresent(ascendance_caster_buff) or Talent(elemental_fusion_talent) and BuffStacks(elemental_fusion_buff) == 2 and target.DebuffRemaining(flame_shock_debuff) < target.DebuffDuration(flame_shock_debuff) * { 0.3 + HasTrinket(t18_class_trinket) * { 0.48 + TalentPoints(unleashed_fury_talent) * 0.22 } } and SpellCooldown(flame_shock) < GCD() } and Spell(unleash_flame)
+		{
+			#spiritwalkers_grace,moving=1,if=((talent.elemental_blast.enabled&cooldown.elemental_blast.remains=0)|(cooldown.lava_burst.remains=0&!buff.lava_surge.react))&cooldown.ascendance.remains>cooldown.spiritwalkers_grace.remains
+			if Speed() > 0 and { Talent(elemental_blast_talent) and not SpellCooldown(elemental_blast) > 0 or not SpellCooldown(lava_burst) > 0 and not BuffPresent(lava_surge_buff) } and SpellCooldown(ascendance_caster) > SpellCooldown(spiritwalkers_grace) Spell(spiritwalkers_grace)
+		}
+	}
+}
+
+### Elemental icons.
+
+AddCheckBox(opt_shaman_elemental_aoe L(AOE) default specialization=elemental)
+
+AddIcon checkbox=!opt_shaman_elemental_aoe enemies=1 help=shortcd specialization=elemental
+{
+	unless not InCombat() and ElementalPrecombatShortCdPostConditions()
+	{
+		ElementalDefaultShortCdActions()
+	}
+}
+
+AddIcon checkbox=opt_shaman_elemental_aoe help=shortcd specialization=elemental
+{
+	unless not InCombat() and ElementalPrecombatShortCdPostConditions()
+	{
+		ElementalDefaultShortCdActions()
+	}
+}
+
+AddIcon enemies=1 help=main specialization=elemental
+{
+	if not InCombat() ElementalPrecombatMainActions()
+	ElementalDefaultMainActions()
+}
+
+AddIcon checkbox=opt_shaman_elemental_aoe help=aoe specialization=elemental
+{
+	if not InCombat() ElementalPrecombatMainActions()
+	ElementalDefaultMainActions()
+}
+
+AddIcon checkbox=!opt_shaman_elemental_aoe enemies=1 help=cd specialization=elemental
+{
+	if not InCombat() ElementalPrecombatCdActions()
+	unless not InCombat() and ElementalPrecombatCdPostConditions()
+	{
+		ElementalDefaultCdActions()
+	}
+}
+
+AddIcon checkbox=opt_shaman_elemental_aoe help=cd specialization=elemental
+{
+	if not InCombat() ElementalPrecombatCdActions()
+	unless not InCombat() and ElementalPrecombatCdPostConditions()
+	{
+		ElementalDefaultCdActions()
+	}
+}
+
+### Required symbols
+# ancestral_swiftness
+# arcane_torrent_mana
+# ascendance_caster
+# ascendance_caster_buff
+# berserking
+# blood_fury_apsp
+# bloodlust
+# chain_lightning
+# draenic_intellect_potion
+# earth_shock
+# earthquake
+# elemental_blast
+# elemental_blast_talent
+# elemental_fusion_buff
+# elemental_fusion_talent
+# elemental_mastery
+# elemental_mastery_buff
+# enhanced_chain_lightning_buff
+# fire_elemental_totem
+# flame_shock
+# flame_shock_debuff
+# heroism
+# lava_beam
+# lava_burst
+# lava_surge_buff
+# legendary_ring_intellect
+# lightning_bolt
+# lightning_shield
+# lightning_shield_buff
+# liquid_magma
+# liquid_magma_buff
+# liquid_magma_talent
+# quaking_palm
+# searing_totem
+# spiritwalkers_grace
+# storm_elemental_totem
+# t18_class_trinket
+# unleash_flame
+# unleash_flame_buff
+# unleashed_fury_talent
+# war_stomp
+# wind_shear
+]]
+	OvaleScripts:RegisterScript("SHAMAN", "elemental", name, desc, code, "script")
+end
+
+do
+	local name = "simulationcraft_shaman_enhancement_t18m"
+	local desc = "[6.2] SimulationCraft: Shaman_Enhancement_T18M"
+	local code = [[
+# Based on SimulationCraft profile "Shaman_Enhancement_T18M".
+#	class=shaman
+#	spec=enhancement
+#	talents=0002012
+#	glyphs=chain_lightning/frost_shock
+
+Include(ovale_common)
+Include(ovale_trinkets_mop)
+Include(ovale_trinkets_wod)
+Include(ovale_shaman_spells)
+
+AddCheckBox(opt_interrupt L(interrupt) default specialization=enhancement)
+AddCheckBox(opt_melee_range L(not_in_melee_range) specialization=enhancement)
+AddCheckBox(opt_potion_agility ItemName(draenic_agility_potion) default specialization=enhancement)
+AddCheckBox(opt_legendary_ring_agility ItemName(legendary_ring_agility) default specialization=enhancement)
+AddCheckBox(opt_bloodlust SpellName(bloodlust) specialization=enhancement)
+
+AddFunction EnhancementUsePotionAgility
+{
+	if CheckBoxOn(opt_potion_agility) and target.Classification(worldboss) Item(draenic_agility_potion usable=1)
+}
+
+AddFunction EnhancementUseItemActions
+{
+	Item(Trinket0Slot usable=1)
+	Item(Trinket1Slot usable=1)
+}
+
+AddFunction EnhancementBloodlust
+{
+	if CheckBoxOn(opt_bloodlust) and DebuffExpires(burst_haste_debuff any=1)
+	{
+		Spell(bloodlust)
+		Spell(heroism)
+	}
+}
+
+AddFunction EnhancementGetInMeleeRange
+{
+	if CheckBoxOn(opt_melee_range) and not target.InRange(primal_strike) Texture(misc_arrowlup help=L(not_in_melee_range))
+}
+
+AddFunction EnhancementInterruptActions
+{
+	if CheckBoxOn(opt_interrupt) and not target.IsFriend() and target.IsInterruptible()
+	{
+		Spell(wind_shear)
+		if not target.Classification(worldboss)
+		{
+			Spell(arcane_torrent_mana)
+			if target.InRange(quaking_palm) Spell(quaking_palm)
+			Spell(war_stomp)
+		}
+	}
+}
+
+### actions.default
+
+AddFunction EnhancementDefaultMainActions
+{
+	#call_action_list,name=aoe,if=spell_targets.chain_lightning>1
+	if Enemies() > 1 EnhancementAoeMainActions()
+	#call_action_list,name=single
+	EnhancementSingleMainActions()
+}
+
+AddFunction EnhancementDefaultShortCdActions
+{
+	#auto_attack
+	EnhancementGetInMeleeRange()
+	#elemental_mastery
+	Spell(elemental_mastery)
+	#liquid_magma,if=pet.searing_totem.remains>10|pet.magma_totem.remains>10|pet.fire_elemental_totem.remains>10
+	if TotemRemaining(searing_totem) > 10 or TotemRemaining(magma_totem) > 10 or TotemRemaining(fire_elemental_totem) > 10 Spell(liquid_magma)
+	#ancestral_swiftness
+	Spell(ancestral_swiftness)
+}
+
+AddFunction EnhancementDefaultCdActions
+{
+	#wind_shear
+	EnhancementInterruptActions()
+	#bloodlust,if=target.health.pct<25|time>0.500
+	if target.HealthPercent() < 25 or TimeInCombat() > 0.5 EnhancementBloodlust()
+	#use_item,name=maalus_the_blood_drinker
+	if CheckBoxOn(opt_legendary_ring_agility) Item(legendary_ring_agility usable=1)
+	#use_item,slot=trinket1
+	EnhancementUseItemActions()
+	#potion,name=draenic_agility,if=(talent.storm_elemental_totem.enabled&(pet.storm_elemental_totem.remains>=25|(cooldown.storm_elemental_totem.remains>target.time_to_die&pet.fire_elemental_totem.remains>=25)))|(!talent.storm_elemental_totem.enabled&pet.fire_elemental_totem.remains>=25)|target.time_to_die<=30
+	if Talent(storm_elemental_totem_talent) and { TotemRemaining(storm_elemental_totem) >= 25 or SpellCooldown(storm_elemental_totem) > target.TimeToDie() and TotemRemaining(fire_elemental_totem) >= 25 } or not Talent(storm_elemental_totem_talent) and TotemRemaining(fire_elemental_totem) >= 25 or target.TimeToDie() <= 30 EnhancementUsePotionAgility()
+	#blood_fury
+	Spell(blood_fury_apsp)
+	#arcane_torrent
+	Spell(arcane_torrent_mana)
+	#berserking
+	Spell(berserking)
+	#storm_elemental_totem
+	Spell(storm_elemental_totem)
+	#fire_elemental_totem
+	Spell(fire_elemental_totem)
+	#feral_spirit
+	Spell(feral_spirit)
+
+	unless { TotemRemaining(searing_totem) > 10 or TotemRemaining(magma_totem) > 10 or TotemRemaining(fire_elemental_totem) > 10 } and Spell(liquid_magma)
+	{
+		#ascendance
+		if BuffExpires(ascendance_melee_buff) Spell(ascendance_melee)
+	}
+}
+
+### actions.aoe
+
+AddFunction EnhancementAoeMainActions
+{
+	#unleash_elements,if=spell_targets.fire_nova_explosion>=4&dot.flame_shock.ticking&(cooldown.shock.remains>cooldown.fire_nova.remains|cooldown.fire_nova.remains=0)
+	if Enemies() >= 4 and target.DebuffPresent(flame_shock_debuff) and { SpellCooldown(shock) > SpellCooldown(fire_nova) or not SpellCooldown(fire_nova) > 0 } Spell(unleash_elements)
+	#fire_nova,if=active_dot.flame_shock>=3&spell_targets.fire_nova_explosion>=3
+	if DebuffCountOnAny(flame_shock_debuff) >= 3 and Enemies() >= 3 Spell(fire_nova)
+	#wait,sec=cooldown.fire_nova.remains,if=!talent.echo_of_the_elements.enabled&active_dot.flame_shock>=4&cooldown.fire_nova.remains<=action.fire_nova.gcd%2
+	unless not Talent(echo_of_the_elements_talent) and DebuffCountOnAny(flame_shock_debuff) >= 4 and SpellCooldown(fire_nova) <= GCD() / 2 and SpellCooldown(fire_nova) > 0
+	{
+		#magma_totem,if=!totem.fire.active
+		if not TotemPresent(fire) and target.InRange(primal_strike) Spell(magma_totem)
+		#lava_lash,if=dot.flame_shock.ticking&active_dot.flame_shock<spell_targets.fire_nova_explosion
+		if target.DebuffPresent(flame_shock_debuff) and DebuffCountOnAny(flame_shock_debuff) < Enemies() Spell(lava_lash)
+		#elemental_blast,if=!buff.unleash_flame.up&(buff.maelstrom_weapon.react>=4|buff.ancestral_swiftness.up)
+		if not BuffPresent(unleash_flame_buff) and { BuffStacks(maelstrom_weapon_buff) >= 4 or BuffPresent(ancestral_swiftness_buff) } Spell(elemental_blast)
+		#chain_lightning,if=buff.maelstrom_weapon.react=5&((glyph.chain_lightning.enabled&spell_targets.chain_lightning>=3)|(!glyph.chain_lightning.enabled&spell_targets.chain_lightning>=2))
+		if BuffStacks(maelstrom_weapon_buff) == 5 and { Glyph(glyph_of_chain_lightning) and Enemies() >= 3 or not Glyph(glyph_of_chain_lightning) and Enemies() >= 2 } Spell(chain_lightning)
+		#unleash_elements,if=spell_targets.fire_nova_explosion<4
+		if Enemies() < 4 Spell(unleash_elements)
+		#flame_shock,if=dot.flame_shock.remains<=9|!ticking
+		if target.DebuffRemaining(flame_shock_debuff) <= 9 or not target.DebuffPresent(flame_shock_debuff) Spell(flame_shock)
+		#windstrike,target=1,if=!debuff.stormstrike.up
+		if not target.DebuffPresent(stormstrike_debuff) Spell(windstrike)
+		#windstrike,target=2,if=!debuff.stormstrike.up
+		if not target.DebuffPresent(stormstrike_debuff) Spell(windstrike text=other)
+		#windstrike,target=3,if=!debuff.stormstrike.up
+		if not target.DebuffPresent(stormstrike_debuff) Spell(windstrike text=3)
+		#windstrike
+		Spell(windstrike)
+		#elemental_blast,if=!buff.unleash_flame.up&buff.maelstrom_weapon.react>=3
+		if not BuffPresent(unleash_flame_buff) and BuffStacks(maelstrom_weapon_buff) >= 3 Spell(elemental_blast)
+		#chain_lightning,if=(buff.maelstrom_weapon.react>=3|buff.ancestral_swiftness.up)&((glyph.chain_lightning.enabled&spell_targets.chain_lightning>=4)|(!glyph.chain_lightning.enabled&spell_targets.chain_lightning>=3))
+		if { BuffStacks(maelstrom_weapon_buff) >= 3 or BuffPresent(ancestral_swiftness_buff) } and { Glyph(glyph_of_chain_lightning) and Enemies() >= 4 or not Glyph(glyph_of_chain_lightning) and Enemies() >= 3 } Spell(chain_lightning)
+		#magma_totem,if=pet.magma_totem.remains<=20&!pet.fire_elemental_totem.active&!buff.liquid_magma.up
+		if TotemRemaining(magma_totem) <= 20 and not TotemPresent(fire_elemental_totem) and not BuffPresent(liquid_magma_buff) and target.InRange(primal_strike) Spell(magma_totem)
+		#lightning_bolt,if=buff.maelstrom_weapon.react=5&glyph.chain_lightning.enabled&spell_targets.chain_lightning<3
+		if BuffStacks(maelstrom_weapon_buff) == 5 and Glyph(glyph_of_chain_lightning) and Enemies() < 3 Spell(lightning_bolt)
+		#stormstrike,target=1,if=!debuff.stormstrike.up
+		if not target.DebuffPresent(stormstrike_debuff) Spell(stormstrike)
+		#stormstrike,target=2,if=!debuff.stormstrike.up
+		if not target.DebuffPresent(stormstrike_debuff) Spell(stormstrike text=other)
+		#stormstrike,target=3,if=!debuff.stormstrike.up
+		if not target.DebuffPresent(stormstrike_debuff) Spell(stormstrike text=3)
+		#stormstrike
+		Spell(stormstrike)
+		#lava_lash
+		Spell(lava_lash)
+		#fire_nova,if=active_dot.flame_shock>=2&spell_targets.fire_nova_explosion>=2
+		if DebuffCountOnAny(flame_shock_debuff) >= 2 and Enemies() >= 2 Spell(fire_nova)
+		#elemental_blast,if=!buff.unleash_flame.up&buff.maelstrom_weapon.react>=1
+		if not BuffPresent(unleash_flame_buff) and BuffStacks(maelstrom_weapon_buff) >= 1 Spell(elemental_blast)
+		#chain_lightning,if=(buff.maelstrom_weapon.react>=1|buff.ancestral_swiftness.up)&((glyph.chain_lightning.enabled&spell_targets.chain_lightning>=3)|(!glyph.chain_lightning.enabled&spell_targets.chain_lightning>=2))
+		if { BuffStacks(maelstrom_weapon_buff) >= 1 or BuffPresent(ancestral_swiftness_buff) } and { Glyph(glyph_of_chain_lightning) and Enemies() >= 3 or not Glyph(glyph_of_chain_lightning) and Enemies() >= 2 } Spell(chain_lightning)
+		#lightning_bolt,if=(buff.maelstrom_weapon.react>=1|buff.ancestral_swiftness.up)&glyph.chain_lightning.enabled&spell_targets.chain_lightning<3
+		if { BuffStacks(maelstrom_weapon_buff) >= 1 or BuffPresent(ancestral_swiftness_buff) } and Glyph(glyph_of_chain_lightning) and Enemies() < 3 Spell(lightning_bolt)
+		#fire_nova,if=active_dot.flame_shock>=1&spell_targets.fire_nova_explosion>=1
+		if DebuffCountOnAny(flame_shock_debuff) >= 1 and Enemies() >= 1 Spell(fire_nova)
+	}
+}
+
+### actions.precombat
+
+AddFunction EnhancementPrecombatMainActions
+{
+	#flask,type=greater_draenic_agility_flask
+	#food,type=buttered_sturgeon
+	#lightning_shield,if=!buff.lightning_shield.up
+	if not BuffPresent(lightning_shield_buff) Spell(lightning_shield)
+}
+
+AddFunction EnhancementPrecombatShortCdPostConditions
+{
+	not BuffPresent(lightning_shield_buff) and Spell(lightning_shield)
+}
+
+AddFunction EnhancementPrecombatCdActions
+{
+	unless not BuffPresent(lightning_shield_buff) and Spell(lightning_shield)
+	{
+		#snapshot_stats
+		#potion,name=draenic_agility
+		EnhancementUsePotionAgility()
+	}
+}
+
+AddFunction EnhancementPrecombatCdPostConditions
+{
+	not BuffPresent(lightning_shield_buff) and Spell(lightning_shield)
+}
+
+### actions.single
+
+AddFunction EnhancementSingleMainActions
+{
+	#searing_totem,if=!totem.fire.active
+	if not TotemPresent(fire) Spell(searing_totem)
+	#unleash_elements,if=talent.unleashed_fury.enabled
+	if Talent(unleashed_fury_talent) Spell(unleash_elements)
+	#elemental_blast,if=buff.maelstrom_weapon.react>=5+3*set_bonus.tier18_4pc
+	if BuffStacks(maelstrom_weapon_buff) >= 5 + 3 * ArmorSetBonus(T18 4) Spell(elemental_blast)
+	#windstrike,if=!talent.echo_of_the_elements.enabled|(talent.echo_of_the_elements.enabled&(charges=2|(action.windstrike.charges_fractional>1.75)|(charges=1&buff.ascendance.remains<1.5)))
+	if not Talent(echo_of_the_elements_talent) or Talent(echo_of_the_elements_talent) and { Charges(windstrike) == 2 or Charges(windstrike count=0) > 1.75 or Charges(windstrike) == 1 and BuffRemaining(ascendance_melee_buff) < 1.5 } Spell(windstrike)
+	#lightning_bolt,if=buff.maelstrom_weapon.react>=5+3*set_bonus.tier18_4pc
+	if BuffStacks(maelstrom_weapon_buff) >= 5 + 3 * ArmorSetBonus(T18 4) Spell(lightning_bolt)
+	#stormstrike,if=!talent.echo_of_the_elements.enabled|(talent.echo_of_the_elements.enabled&(charges=2|(action.stormstrike.charges_fractional>1.75)|target.time_to_die<6))
+	if not Talent(echo_of_the_elements_talent) or Talent(echo_of_the_elements_talent) and { Charges(stormstrike) == 2 or Charges(stormstrike count=0) > 1.75 or target.TimeToDie() < 6 } Spell(stormstrike)
+	#lava_lash,if=!talent.echo_of_the_elements.enabled|(talent.echo_of_the_elements.enabled&(charges=2|(action.lava_lash.charges_fractional>1.8)|target.time_to_die<8))
+	if not Talent(echo_of_the_elements_talent) or Talent(echo_of_the_elements_talent) and { Charges(lava_lash) == 2 or Charges(lava_lash count=0) > 1.8 or target.TimeToDie() < 8 } Spell(lava_lash)
+	#flame_shock,if=(talent.elemental_fusion.enabled&buff.elemental_fusion.stack=2&buff.unleash_flame.up&dot.flame_shock.remains<16)|(!talent.elemental_fusion.enabled&buff.unleash_flame.up&dot.flame_shock.remains<=9)|!ticking
+	if Talent(elemental_fusion_talent) and BuffStacks(elemental_fusion_buff) == 2 and BuffPresent(unleash_flame_buff) and target.DebuffRemaining(flame_shock_debuff) < 16 or not Talent(elemental_fusion_talent) and BuffPresent(unleash_flame_buff) and target.DebuffRemaining(flame_shock_debuff) <= 9 or not target.DebuffPresent(flame_shock_debuff) Spell(flame_shock)
+	#unleash_elements
+	Spell(unleash_elements)
+	#windstrike,if=talent.echo_of_the_elements.enabled
+	if Talent(echo_of_the_elements_talent) Spell(windstrike)
+	#elemental_blast,if=(!set_bonus.tier18_4pc&buff.maelstrom_weapon.react>=3)|buff.ancestral_swiftness.up
+	if not ArmorSetBonus(T18 4) and BuffStacks(maelstrom_weapon_buff) >= 3 or BuffPresent(ancestral_swiftness_buff) Spell(elemental_blast)
+	#lightning_bolt,if=(!set_bonus.tier18_4pc&(buff.maelstrom_weapon.react>=3&!buff.ascendance.up))|buff.ancestral_swiftness.up
+	if not ArmorSetBonus(T18 4) and BuffStacks(maelstrom_weapon_buff) >= 3 and not BuffPresent(ascendance_melee_buff) or BuffPresent(ancestral_swiftness_buff) Spell(lightning_bolt)
+	#lava_lash,if=talent.echo_of_the_elements.enabled
+	if Talent(echo_of_the_elements_talent) Spell(lava_lash)
+	#frost_shock,if=(talent.elemental_fusion.enabled&dot.flame_shock.remains>=16)|!talent.elemental_fusion.enabled
+	if Talent(elemental_fusion_talent) and target.DebuffRemaining(flame_shock_debuff) >= 16 or not Talent(elemental_fusion_talent) Spell(frost_shock)
+	#elemental_blast,if=buff.maelstrom_weapon.react>=1+2*set_bonus.tier18_4pc
+	if BuffStacks(maelstrom_weapon_buff) >= 1 + 2 * ArmorSetBonus(T18 4) Spell(elemental_blast)
+	#lightning_bolt,if=talent.echo_of_the_elements.enabled&((!set_bonus.tier18_4pc&(buff.maelstrom_weapon.react>=2&!buff.ascendance.up))|buff.ancestral_swiftness.up)
+	if Talent(echo_of_the_elements_talent) and { not ArmorSetBonus(T18 4) and BuffStacks(maelstrom_weapon_buff) >= 2 and not BuffPresent(ascendance_melee_buff) or BuffPresent(ancestral_swiftness_buff) } Spell(lightning_bolt)
+	#stormstrike,if=talent.echo_of_the_elements.enabled
+	if Talent(echo_of_the_elements_talent) Spell(stormstrike)
+	#lightning_bolt,if=(!set_bonus.tier18_4pc&(buff.maelstrom_weapon.react>=1&!buff.ascendance.up))|(set_bonus.tier18_4pc&((talent.unleashed_fury.enabled&buff.unleashed_fury.up)|!talent.unleashed_fury.enabled)&(buff.maelstrom_weapon.react>=5|(buff.maelstrom_weapon.react>=3&!buff.ascendance.up)))|buff.ancestral_swiftness.up
+	if not ArmorSetBonus(T18 4) and BuffStacks(maelstrom_weapon_buff) >= 1 and not BuffPresent(ascendance_melee_buff) or ArmorSetBonus(T18 4) and { Talent(unleashed_fury_talent) and BuffPresent(unleashed_fury_melee_buff) or not Talent(unleashed_fury_talent) } and { BuffStacks(maelstrom_weapon_buff) >= 5 or BuffStacks(maelstrom_weapon_buff) >= 3 and not BuffPresent(ascendance_melee_buff) } or BuffPresent(ancestral_swiftness_buff) Spell(lightning_bolt)
+	#searing_totem,if=pet.searing_totem.remains<=20&!pet.fire_elemental_totem.active&!buff.liquid_magma.up
+	if TotemRemaining(searing_totem) <= 20 and not TotemPresent(fire_elemental_totem) and not BuffPresent(liquid_magma_buff) Spell(searing_totem)
+}
+
+### Enhancement icons.
+
+AddCheckBox(opt_shaman_enhancement_aoe L(AOE) default specialization=enhancement)
+
+AddIcon checkbox=!opt_shaman_enhancement_aoe enemies=1 help=shortcd specialization=enhancement
+{
+	unless not InCombat() and EnhancementPrecombatShortCdPostConditions()
+	{
+		EnhancementDefaultShortCdActions()
+	}
+}
+
+AddIcon checkbox=opt_shaman_enhancement_aoe help=shortcd specialization=enhancement
+{
+	unless not InCombat() and EnhancementPrecombatShortCdPostConditions()
+	{
+		EnhancementDefaultShortCdActions()
+	}
+}
+
+AddIcon enemies=1 help=main specialization=enhancement
+{
+	if not InCombat() EnhancementPrecombatMainActions()
+	EnhancementDefaultMainActions()
+}
+
+AddIcon checkbox=opt_shaman_enhancement_aoe help=aoe specialization=enhancement
+{
+	if not InCombat() EnhancementPrecombatMainActions()
+	EnhancementDefaultMainActions()
+}
+
+AddIcon checkbox=!opt_shaman_enhancement_aoe enemies=1 help=cd specialization=enhancement
+{
+	if not InCombat() EnhancementPrecombatCdActions()
+	unless not InCombat() and EnhancementPrecombatCdPostConditions()
+	{
+		EnhancementDefaultCdActions()
+	}
+}
+
+AddIcon checkbox=opt_shaman_enhancement_aoe help=cd specialization=enhancement
+{
+	if not InCombat() EnhancementPrecombatCdActions()
+	unless not InCombat() and EnhancementPrecombatCdPostConditions()
+	{
+		EnhancementDefaultCdActions()
+	}
+}
+
+### Required symbols
+# ancestral_swiftness
+# ancestral_swiftness_buff
+# arcane_torrent_mana
+# ascendance_melee
+# ascendance_melee_buff
+# berserking
+# blood_fury_apsp
+# bloodlust
+# chain_lightning
+# draenic_agility_potion
+# echo_of_the_elements_talent
+# elemental_blast
+# elemental_fusion_buff
+# elemental_fusion_talent
+# elemental_mastery
+# feral_spirit
+# fire_elemental_totem
+# fire_nova
+# flame_shock
+# flame_shock_debuff
+# frost_shock
+# glyph_of_chain_lightning
+# heroism
+# lava_lash
+# legendary_ring_agility
+# lightning_bolt
+# lightning_shield
+# lightning_shield_buff
+# liquid_magma
+# liquid_magma_buff
+# maelstrom_weapon_buff
+# magma_totem
+# primal_strike
+# quaking_palm
+# searing_totem
+# shock
+# storm_elemental_totem
+# storm_elemental_totem_talent
+# stormstrike
+# stormstrike_debuff
+# unleash_elements
+# unleash_flame_buff
+# unleashed_fury_melee_buff
+# unleashed_fury_talent
+# war_stomp
+# wind_shear
+# windstrike
+]]
+	OvaleScripts:RegisterScript("SHAMAN", "enhancement", name, desc, code, "script")
 end

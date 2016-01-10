@@ -20,17 +20,21 @@ local Defaults = {
 	['RecountBackdrop'] = true,
 	['SkadaBackdrop'] = true,
 	['OmenBackdrop'] = true,
+	['DetailsBackdrop'] = true,
 	['MiscFixes'] = true,
 	['DBMSkinHalf'] = false,
 	['DBMFont'] = 'Tukui',
 	['DBMFontSize'] = 12,
 	['DBMFontFlag'] = 'OUTLINE',
+	['DBMRadarTrans'] = false,
 	['WeakAuraAuraBar'] = false,
 	['WeakAuraIconCooldown'] = false,
 	['SkinTemplate'] = 'Transparent',
 	['HideChatFrame'] = 'NONE',
 	['SkinDebug'] = false,
 }
+
+AddOnSkinsOptions = CopyTable(Defaults)
 
 local DEVELOPER_STRING = ""
 local LINE_BREAK = "\n"
@@ -55,6 +59,7 @@ local DEVELOPERS = {
 	"Kkthnx",
 	"Konungr",
 	"Lockslap",
+	"luminnas",
 	"lolarennt",
 	"MaXiMUS",
 	"Merith",
@@ -64,10 +69,12 @@ local DEVELOPERS = {
 	"Pezzer13",
 	"Rakkhin",
 	"Repooc",
+	"Roktaal",
 	"Shestak",
 	"Shadowcall",
 	"Sinaris",
 	"Sortokk",
+	"Tercioo",
 	"Tukz",
 	"Warmexx",
 }
@@ -156,11 +163,10 @@ function AS:GetOptions()
 						name = ASL["DBM|VEM Half-bar Skin"],
 						order = 4,
 					},
-					BigWigsHalfBar = {
+					DBMRadarTrans = {
 						type = "toggle",
-						name = ASL["BigWigs Half-Bar"],
-						order = 4,
-						disabled = function() return not AS:CheckOption("BigWigs", "BigWigs") end
+						name = ASL["DBM Transparent Radar"],
+						order = 5,
 					},
 				},
 			},
@@ -173,7 +179,7 @@ function AS:GetOptions()
 				args = {
 					desc = {
 						type = "description",
-						name = ASL["Settings to control Embedded AddOns:\n\nAvailable Embeds: alDamageMeter | Omen | Skada | Recount | TinyDPS"],
+						name = ASL["Settings to control Embedded AddOns:\n\nAvailable Embeds: alDamageMeter | Details | Omen | Skada | Recount | TinyDPS"],
 						order = 1
 					},
 					EmbedSystem = {
@@ -267,6 +273,12 @@ function AS:GetOptions()
 						name = ASL["Embed Below Top Tab"],
 						order = 15,
 					},
+					DetailsBackdrop = { 
+						type = "toggle", 
+						name = ASL["Details Backdrop"], 
+						order = 16, 
+						disabled = function() return not (AS:CheckOption("Details", "Details") and AS:CheckEmbed("Details")) end 
+					},
 					RecountBackdrop = {
 						type = "toggle",
 						name = ASL["Recount Backdrop"],
@@ -306,8 +318,18 @@ function AS:GetOptions()
 					WeakAuraAuraBar = {
 						type = "toggle",
 						name = ASL["WeakAura AuraBar"],
-						order = 2,
+						order = 1,
 						disabled = function() return not AS:CheckOption("WeakAuras", "WeakAuras") end,
+					},
+					Parchment = {
+						type = "toggle",
+						name = ASL["Parchment"],
+						order = 2,
+					},
+					SkinDebug = {
+						type = "toggle",
+						name = ASL["Enable Skin Debugging"],
+						order = 3,
 					},
 				},
 			},
@@ -414,10 +436,6 @@ function AS:GetOptions()
 			Options.args.addons.args[skinName] = GenerateOptionTable(skinName, order)
 			order = order + 1
 		end
-	end
-
-	if blizzorder == 0 then
-		Options.args.blizzard = nil
 	end
 
 	if IsAddOnLoaded("ElvUI") then

@@ -1,7 +1,7 @@
 local mod	= DBM:NewMod("Deathbringer", "DBM-Icecrown", 1)
 local L		= mod:GetLocalizedStrings()
 
-mod:SetRevision(("$Revision: 167 $"):sub(12, -3))
+mod:SetRevision(("$Revision: 210 $"):sub(12, -3))
 mod:SetCreatureID(37813)
 mod:SetEncounterID(1096)
 mod:SetModelID(30790)
@@ -23,29 +23,29 @@ mod:RegisterEventsInCombat(
 	"UNIT_POWER target focus mouseover"
 )
 
-local warnFrenzySoon		= mod:NewSoonAnnounce(72737, 2, nil, mod:IsTank() or mod:IsHealer())
+local warnFrenzySoon		= mod:NewSoonAnnounce(72737, 2, nil, "Tank|Healer")
 local warnAddsSoon			= mod:NewPreWarnAnnounce(72173, 10, 3)
 local warnAdds				= mod:NewSpellAnnounce(72173, 4)
-local warnFrenzy			= mod:NewSpellAnnounce(72737, 2, nil, mod:IsTank() or mod:IsHealer())
+local warnFrenzy			= mod:NewSpellAnnounce(72737, 2, nil, "Tank|Healer")
 local warnBloodNova			= mod:NewSpellAnnounce(72378, 2)
 local warnMark 				= mod:NewTargetCountAnnounce(72293, 4, 72293)
-local warnBoilingBlood		= mod:NewTargetAnnounce(72385, 2, nil, mod:IsHealer())
-local warnRuneofBlood		= mod:NewTargetAnnounce(72410, 3, nil, mod:IsTank() or mod:IsHealer())
+local warnBoilingBlood		= mod:NewTargetAnnounce(72385, 2, nil, "Healer")
+local warnRuneofBlood		= mod:NewTargetAnnounce(72410, 3, nil, "Tank|Healer")
 
 local specwarnMark			= mod:NewSpecialWarningTarget(72293, false)
-local specwarnRuneofBlood	= mod:NewSpecialWarningTarget(72410, mod:IsTank())
+local specwarnRuneofBlood	= mod:NewSpecialWarningTaunt(72410)
 
 local timerCombatStart		= mod:NewCombatTimer(48)
-local timerRuneofBlood		= mod:NewNextTimer(20, 72410, nil, mod:IsTank() or mod:IsHealer())
-local timerBoilingBlood		= mod:NewNextTimer(15.5, 72385)
-local timerBloodNova		= mod:NewNextTimer(20, 72378)
-local timerCallBloodBeast	= mod:NewNextTimer(40, 72173)
+local timerRuneofBlood		= mod:NewNextTimer(20, 72410, nil, "Tank|Healer", nil, 3)
+local timerBoilingBlood		= mod:NewNextTimer(15.5, 72385, nil, "Healer", nil, 5)
+local timerBloodNova		= mod:NewNextTimer(20, 72378, nil, nil, nil, 2)
+local timerCallBloodBeast	= mod:NewNextTimer(40, 72173, nil, nil, nil, 1)
 
 local enrageTimer			= mod:NewBerserkTimer(480)
 
-mod:AddBoolOption("RangeFrame", mod:IsRanged())
+mod:AddBoolOption("RangeFrame", "Ranged")
 mod:AddBoolOption("RunePowerFrame", true, "misc")
-mod:AddBoolOption("BeastIcons", true)
+mod:AddSetIconOption("BeastIcons", 72173, false, true)
 mod:AddBoolOption("BoilingBloodIcons", false)
 
 local warned_preFrenzy = false
@@ -105,52 +105,28 @@ end
 function mod:SPELL_CAST_SUCCESS(args)
 	if args.spellId == 72410 then
 		warnRuneofBlood:Show(args.destName)
-		specwarnRuneofBlood:Show(args.destName)
+		if not args:IsPlayer() then
+			specwarnRuneofBlood:Show(args.destName)
+		end
 		timerRuneofBlood:Start()
 	end
 end
 
-do
-	local beastIcon = {}
-	local currentIcon = 1
-	local iconsSet = 0
-	local function resetBeastIconState()
-		table.wipe(beastIcon)
-		currentIcon = 1
-		iconsSet = 0
-	end
-	
-	local lastBeast = 0
-	function mod:SPELL_SUMMON(args)
-		if args:IsSpellID(72172, 72173, 72356, 72357, 72358) then
-			if self:AntiSpam(5) then
-				warnAdds:Show()
-				warnAddsSoon:Schedule(30)
-				timerCallBloodBeast:Start()
-				if self.Options.BeastIcons then
-					resetBeastIconState()
-				end
-			end
-			if self.Options.BeastIcons then
-				beastIcon[args.destGUID] = currentIcon
-				currentIcon = currentIcon + 1
+function mod:SPELL_SUMMON(args)
+	if args:IsSpellID(72172, 72173, 72356, 72357, 72358) then
+		if self:AntiSpam(5) then
+			warnAdds:Show()
+			warnAddsSoon:Schedule(30)
+			timerCallBloodBeast:Start()
+		end
+		if self.Options.BeastIcons then
+			if self:IsDifficulty("normal25", "heroic25") then
+				self:ScanForMobs(args.destGUID, 0, 8, 5, 0.1, 20, "BeastIcons")
+			else
+				self:ScanForMobs(args.destGUID, 0, 8, 2, 0.1, 20, "BeastIcons")
 			end
 		end
 	end
-	
-	mod:RegisterOnUpdateHandler(function(self)
-		if self.Options.BeastIcons and (DBM:GetRaidRank() > 0 and not (iconsSet == 5 and self:IsDifficulty("normal25", "heroic25") or iconsSet == 2 and self:IsDifficulty("normal10", "heroic10"))) then
-			for uId in DBM:GetGroupMembers() do
-				local unitId = uId.."target"
-				local guid = UnitGUID(unitId)
-				if beastIcon[guid] then
-					SetRaidTarget(unitId, beastIcon[guid])
-					iconsSet = iconsSet + 1
-					beastIcon[guid] = nil
-				end
-			end
-		end
-	end, 1)
 end
 
 function mod:SPELL_AURA_APPLIED(args)

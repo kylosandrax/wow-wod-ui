@@ -1,0 +1,31 @@
+VER 3 0100000000000008 "MO-Bolt" "INV_MISC_QUESTIONMARK"
+#showtooltip
+/cast [@mouseover,exists,harm][exists,harm] Lightning Bolt
+END
+VER 3 0100000000000006 "MO-ChainHeal" "INV_MISC_QUESTIONMARK"
+#showtooltip
+/cast [@mouseover,help][@target,help][@targettarget,help][] Chain Heal
+END
+VER 3 0100000000000007 "MO-EarthShield" "INV_MISC_QUESTIONMARK"
+#showtooltip
+/cast [@mouseover,help][@target,help][@targettarget,help][] Earth Shield
+END
+VER 3 0100000000000005 "MO-GreaterHeal" "INV_MISC_QUESTIONMARK"
+#showtooltip
+/cast [@mouseover,help][@target,help][@targettarget,help][] Greater Healing Wave
+END
+VER 3 0100000000000003 "MO-Riptide" "INV_MISC_QUESTIONMARK"
+#showtooltip
+/cast [@mouseover,help][@target,help][@targettarget,help][] Riptide
+END
+VER 3 0100000000000002 "Super-Heal" "INV_Misc_QuestionMark"
+#showtooltip Greater Healing Wave
+/cast Nature's Swiftness
+/cast Greater Healing Wave
+END
+VER 3 0100000000000004 "Uber-CL" "INV_MISC_QUESTIONMARK"
+#showtooltip Chain Lightning
+/use 13
+/use 14
+/cast [@mouseover,exists,harm][exists,harm] Chain Lightning
+END

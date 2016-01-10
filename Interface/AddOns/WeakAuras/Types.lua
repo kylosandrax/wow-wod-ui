@@ -140,6 +140,12 @@ WeakAuras.race_types = {
   Undead = LBR["Undead"]
 }
 
+WeakAuras.faction_group = {
+  Alliance = L["Alliance"],
+  Horde = L["Horde"],
+  Neutral = L["Neutral"],
+}
+
 WeakAuras.form_types = {};
 local function update_forms()
   wipe(WeakAuras.form_types);
@@ -390,8 +396,8 @@ local spec_frame = CreateFrame("frame");
 spec_frame:RegisterEvent("PLAYER_LOGIN")
 spec_frame:SetScript("OnEvent", update_specs);
 WeakAuras.talent_types = {}
-do  -- @patch 6.0 compatibility quick fix
-  local numTalents, numTiers, numColumns = _G.MAX_NUM_TALENTS or 21, _G.MAX_NUM_TALENT_TIERS or 7, _G.NUM_TALENT_COLUMNS or 3
+do
+  local numTalents, numTiers, numColumns = MAX_TALENT_TIERS * NUM_TALENT_COLUMNS, MAX_TALENT_TIERS, NUM_TALENT_COLUMNS
   local talentId,tier,column = 1,1,1
   while talentId <= numTalents do
     while tier <= numTiers do
@@ -414,11 +420,17 @@ WeakAuras.totem_types = {
   [4] = L["Air"]
 };
 WeakAuras.texture_types = {
-  ["Cataclysm Alerts"] = {
+  ["Blizzard Alerts"] = {
     ["Textures\\SpellActivationOverlays\\Arcane_Missiles"] = "Arcane Missiles",
+    ["Textures\\SpellActivationOverlays\\Arcane_Missiles_1"] = "Arcane Missiles 1",
+    ["Textures\\SpellActivationOverlays\\Arcane_Missiles_2"] = "Arcane Missiles 2",
+    ["Textures\\SpellActivationOverlays\\Arcane_Missiles_3"] = "Arcane Missiles 3",
     ["Textures\\SpellActivationOverlays\\Art_of_War"] = "Art of War",
+    ["Textures\\SpellActivationOverlays\\Backlash_Green"] = "Backlash_Green",
+    ["Textures\\SpellActivationOverlays\\Bandits_Guile"] = "Bandits Guile",
     ["Textures\\SpellActivationOverlays\\Blood_Surge"] = "Blood Surge",
     ["Textures\\SpellActivationOverlays\\Brain_Freeze"] = "Brain Freeze",
+    ["Textures\\SpellActivationOverlays\\Echo_of_the_Elements"] = "Echo of the Elements",
     ["Textures\\SpellActivationOverlays\\Eclipse_Moon"] = "Eclipse Moon",
     ["Textures\\SpellActivationOverlays\\Eclipse_Sun"] = "Eclipse Sun",
     ["Textures\\SpellActivationOverlays\\Focus_Fire"] = "Focus Fire",
@@ -434,18 +446,30 @@ WeakAuras.texture_types = {
     ["Textures\\SpellActivationOverlays\\Grand_Crusader"] = "Grand Crusader",
     ["Textures\\SpellActivationOverlays\\Hot_Streak"] = "Hot Streak",
     ["Textures\\SpellActivationOverlays\\Imp_Empowerment"] = "Imp Empowerment",
+    ["Textures\\SpellActivationOverlays\\Imp_Empowerment_Green"] = "Imp Empowerment Green",
     ["Textures\\SpellActivationOverlays\\Impact"] = "Impact",
     ["Textures\\SpellActivationOverlays\\Lock_and_Load"] = "Lock and Load",
     ["Textures\\SpellActivationOverlays\\Maelstrom_Weapon"] = "Maelstrom Weapon",
+    ["Textures\\SpellActivationOverlays\\Maelstrom_Weapon_1"] = "Maelstrom Weapon 1",
+    ["Textures\\SpellActivationOverlays\\Maelstrom_Weapon_2"] = "Maelstrom Weapon 2",
+    ["Textures\\SpellActivationOverlays\\Maelstrom_Weapon_3"] = "Maelstrom Weapon 3",
+    ["Textures\\SpellActivationOverlays\\Maelstrom_Weapon_4"] = "Maelstrom Weapon 4",
     ["Textures\\SpellActivationOverlays\\Master_Marksman"] = "Master Marksman",
+    ["Textures\\SpellActivationOverlays\\Monk_BlackoutKick"] = "Monk Blackout Kick",
     ["Textures\\SpellActivationOverlays\\Natures_Grace"] = "Nature's Grace",
     ["Textures\\SpellActivationOverlays\\Nightfall"] = "Nightfall",
+    ["Textures\\SpellActivationOverlays\\Predatory_Swiftness"] = "Predatory Swiftness",
+    ["Textures\\SpellActivationOverlays\\Raging_Blow"] = "Raging Blow",
     ["Textures\\SpellActivationOverlays\\Rime"] = "Rime",
     ["Textures\\SpellActivationOverlays\\Slice_and_Dice"] = "Slice and Dice",
     ["Textures\\SpellActivationOverlays\\Sudden_Death"] = "Sudden Death",
     ["Textures\\SpellActivationOverlays\\Sudden_Doom"] = "Sudden Doom",
     ["Textures\\SpellActivationOverlays\\Surge_of_Light"] = "Surge of Light",
     ["Textures\\SpellActivationOverlays\\Sword_and_Board"] = "Sword and Board",
+    ["Textures\\SpellActivationOverlays\\Thrill_of_the_Hunt_1"] = "Thrill of the Hunt 1",
+    ["Textures\\SpellActivationOverlays\\Thrill_of_the_Hunt_2"] = "Thrill of the Hunt 2",
+    ["Textures\\SpellActivationOverlays\\Thrill_of_the_Hunt_3"] = "Thrill of the Hunt 3",
+    ["Textures\\SpellActivationOverlays\\Tooth_and_Claw"] = "Tooth and Claw",
     ["Textures\\SpellActivationOverlays\\Backlash"] = "Backslash",
     ["Textures\\SpellActivationOverlays\\Berserk"] = "Berserk",
     ["Textures\\SpellActivationOverlays\\Blood_Boil"] = "Blood Boil",
@@ -457,15 +481,20 @@ WeakAuras.texture_types = {
     ["Textures\\SpellActivationOverlays\\Hand_of_Light"] = "Hand of Light",
     ["Textures\\SpellActivationOverlays\\Killing_Machine"] = "Killing Machine",
     ["Textures\\SpellActivationOverlays\\Molten_Core"] = "Molten Core",
+    ["Textures\\SpellActivationOverlays\\Molten_Core_Green"] = "Molten Core Green",
     ["Textures\\SpellActivationOverlays\\Necropolis"] = "Necropolis",
     ["Textures\\SpellActivationOverlays\\Serendipity"] = "Serendipity",
     ["Textures\\SpellActivationOverlays\\Shooting_Stars"] = "Shooting Stars",
     ["Textures\\SpellActivationOverlays\\Dark_Tiger"] = "Dark Tiger",
     ["Textures\\SpellActivationOverlays\\Daybreak"] = "Daybreak",
     ["Textures\\SpellActivationOverlays\\Monk_Ox"] = "Monk Ox",
+    ["Textures\\SpellActivationOverlays\\Monk_Ox_2"] = "Monk Ox 2",
+    ["Textures\\SpellActivationOverlays\\Monk_Ox_3"] = "Monk Ox 3",
     ["Textures\\SpellActivationOverlays\\Monk_Serpent"] = "Monk Serpent",
     ["Textures\\SpellActivationOverlays\\Monk_Tiger"] = "Monk Tiger",
+    ["Textures\\SpellActivationOverlays\\Monk_TigerPalm"] = "Monk Tiger Palm",
     ["Textures\\SpellActivationOverlays\\Shadow_of_Death"] = "Shadow of Death",
+    ["Textures\\SpellActivationOverlays\\Shadow_Word_Insanity"] = "Shadow Word Insanity",
     ["Textures\\SpellActivationOverlays\\Surge_of_Darkness"] = "Surge of Darkness",
     ["Textures\\SpellActivationOverlays\\Ultimatum"] = "Ultimatum",
     ["Textures\\SpellActivationOverlays\\White_Tiger"] = "White Tiger",
@@ -1054,7 +1083,8 @@ WeakAuras.chat_message_types = {
   CHAT_MSG_RAID_WARNING = L["Raid Warning"],
   CHAT_MSG_SAY = L["Say"],
   CHAT_MSG_WHISPER = L["Whisper"],
-  CHAT_MSG_YELL = L["Yell"]
+  CHAT_MSG_YELL = L["Yell"],
+  CHAT_MSG_SYSTEM = L["System"]
 };
 WeakAuras.send_chat_message_types = {
   WHISPER = L["Whisper"],
@@ -1163,6 +1193,10 @@ for path, name in pairs(WeakAuras.sound_types) do
   end
 end
 ]=]
+
+-- register options font
+LSM:Register("font", "Fira Mono Medium", "Interface\\Addons\\WeakAuras\\Media\\Fonts\\FiraMono-Medium.ttf")
+
 local SharedMediaSounds = LSM:HashTable("sound");
 for name, path in pairs(SharedMediaSounds) do
   WeakAuras.sound_types[path] = name;
@@ -1184,4 +1218,10 @@ WeakAuras.pet_behavior_types = {
   passive = L["Passive"],
   defensive = L["Defensive"],
   assist = L["Assist"]
+};
+
+WeakAuras.cooldown_progress_behavior_types = {
+  showOnCooldown = L["On cooldown"],
+  showOnReady    = L["Not on cooldown"],
+  showAlways     = L["Always"]
 };

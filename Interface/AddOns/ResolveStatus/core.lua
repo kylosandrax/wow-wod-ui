@@ -1,4 +1,4 @@
--- ResolveStatus v1.3
+-- ResolveStatus v1.6
 local f = CreateFrame("Frame")
 local config = CreateFrame("Frame")
 
@@ -53,7 +53,7 @@ local function toggle(flag)
 		if (not ResolveStatusDB.instance) or (ResolveStatusDB.instance and (InstanceType == "party" or InstanceType == "raid")) then
 			if (not ResolveStatusDB.combat) or (ResolveStatusDB.combat and InCombatLockdown()) then
 				f.StatusBar:Show()
-			elseif ResolveStatusDB.combat and (not InCombatLockdown()) then
+			else
 				f.StatusBar:Hide()
 			end
 		else
@@ -134,6 +134,9 @@ local function SetDefaultValues()
 	if not (ResolveStatusDB.border == true or ResolveStatusDB.border == false) then
 		ResolveStatusDB.border = true
 	end
+	if not (ResolveStatusDB.dmgtaken == true or ResolveStatusDB.dmgtaken == false) then
+		ResolveStatusDB.dmgtaken = true
+	end
 	if not (ResolveStatusDB.combat == true or ResolveStatusDB.border == combat) then
 		ResolveStatusDB.combat = false
 	end
@@ -161,11 +164,15 @@ local function SetDefaultValues()
 	if not ResolveStatusDB.fontpath then
 		ResolveStatusDB.fontpath = "Default"
 	end
+	if not ResolveStatusDB.texturepath then
+		ResolveStatusDB.texturepath = "Default"
+	end
 end
 
 local function ResetResolveStatus()
 	ResolveStatusDB.locked = false
 	ResolveStatusDB.border = true
+	ResolveStatusDB.dmgtaken = true
 	ResolveStatusDB.combat = false
 	ResolveStatusDB.instance = false
 	ResolveStatusDB.spam = false	
@@ -176,6 +183,7 @@ local function ResetResolveStatus()
 	ResolveStatusDB.height = 20
 	ResolveStatusDB.fontsize = 12
 	ResolveStatusDB.fontpath = "Default"
+	ResolveStatusDB.texturepath = "Default"
 end
 
 local function createResolveStatusBar()
@@ -206,7 +214,11 @@ local function createResolveStatusBar()
 	bar:SetBackdropColor(0,0,0,ResolveStatusDB.bgalpha or 1)
 	
 	-- Set bar texture and color
-	bar:SetStatusBarTexture([[Interface\TARGETINGFRAME\UI-StatusBar]],"ARTWORK")
+	if ResolveStatusDB.texturepath == "Default" then
+		bar:SetStatusBarTexture([[Interface\TARGETINGFRAME\UI-StatusBar]],"ARTWORK")
+	else
+		bar:SetStatusBarTexture("Interface\\AddOns\\ResolveStatus\\Textures\\"..ResolveStatusDB.texturepath..".tga","ARTWORK")
+	end
 	bar:GetStatusBarTexture():SetVertexColor(255/255, 0/255, 0/255, 1)
 	
 	-- Set border texture
@@ -221,10 +233,9 @@ local function createResolveStatusBar()
 	end
 	
 	-- Set text
-	local bartext = bar:CreateFontString(nil, "OVERLAY")
-	bar.Text = bartext
+	bar.Text = bar:CreateFontString(nil, "OVERLAY")
 	if bar.Text:SetFont("Interface\\AddOns\\ResolveStatus\\Fonts\\"..ResolveStatusDB.fontpath,ResolveStatusDB.fontsize) then
-		bar.Text:SetFont(ResolveStatusDB.fontpath,ResolveStatusDB.fontsize)
+		bar.Text:SetFont("Interface\\AddOns\\ResolveStatus\\Fonts\\"..ResolveStatusDB.fontpath,ResolveStatusDB.fontsize)
 	else
 		bar.Text:SetFont("Fonts\\FRIZQT__.TTF",ResolveStatusDB.fontsize)
 	end
@@ -274,17 +285,15 @@ function UpdateResolveStatusBar()
 	-- set border state
 	if ResolveStatusDB.border then f.StatusBar.Border:Show() else f.StatusBar.Border:Hide()	end
 	
-	-- show or hide based on configuration and current situation
-	local PlayerInInstance, InstanceType = IsInInstance()
-	if (not ResolveStatusDB.instance) or (ResolveStatusDB.instance and (InstanceType == "party" or InstanceType == "raid")) then
-		if (not ResolveStatusDB.combat) or (ResolveStatusDB.combat and InCombatLockdown()) then
-			f.StatusBar:Show()
-		elseif ResolveStatusDB.combat and (not InCombatLockdown()) then
-			f.StatusBar:Hide()
-		end
+	-- display or hide damage taken
+	if ResolveStatusDB.dmgtaken then
+		f.StatusBar.Text:SetText("0% (0)")
 	else
-		f.StatusBar:Hide()
+		f.StatusBar.Text:SetText("0%")
 	end
+	
+	-- show or hide based on configuration and current situation
+	toggle(isTank())
 	
 	-- set position
 	if (ResolveStatusDB.PositionX and ResolveStatusDB.PositionY) then
@@ -305,12 +314,19 @@ function UpdateResolveStatusBar()
 	f.StatusBar.Border:SetHeight(ResolveStatusDB.height*1.28)
 	
 	-- set font, font size and position
-	if f.StatusBar.Text:SetFont("Interface\\AddOns\\ResolveStatus\\Fonts\\"..ResolveStatusDB.fontpath,ResolveStatusDB.fontsize) then
-		f.StatusBar.Text:SetFont("Interface\\AddOns\\ResolveStatus\\Fonts\\"..ResolveStatusDB.fontpath,ResolveStatusDB.fontsize)
-	else
+	if ResolveStatusDB.fontpath == "Default" then
 		f.StatusBar.Text:SetFont("Fonts\\FRIZQT__.TTF",ResolveStatusDB.fontsize)
+	else
+		f.StatusBar.Text:SetFont("Interface\\AddOns\\ResolveStatus\\Fonts\\"..ResolveStatusDB.fontpath,ResolveStatusDB.fontsize)
 	end
 	f.StatusBar.Text:SetPoint("CENTER",f.StatusBar,"CENTER",0,0)
+	
+	-- set bar texture
+	if ResolveStatusDB.texturepath == "Default" then
+		f.StatusBar:SetStatusBarTexture([[Interface\TARGETINGFRAME\UI-StatusBar]],"ARTWORK")
+	else
+		f.StatusBar:SetStatusBarTexture("Interface\\AddOns\\ResolveStatus\\Textures\\"..ResolveStatusDB.texturepath..".tga","ARTWORK")
+	end
 end
 
 local function SlashHandler(command)
@@ -351,6 +367,7 @@ function CreateResolveConfig()
 		UpdateResolveStatusBar()
 		config.ButtonLocked:SetChecked(ResolveStatusDB.locked)
 		config.ButtonBorder:SetChecked(ResolveStatusDB.border)
+		config.ButtonDmgTaken:SetChecked(ResolveStatusDB.dmgtaken)
 		config.ButtonCombat:SetChecked(ResolveStatusDB.combat)
 		config.ButtonInstance:SetChecked(ResolveStatusDB.instance)
 		config.ButtonReportToSelf:SetChecked(ResolveStatusDB.spam)
@@ -401,9 +418,27 @@ function CreateResolveConfig()
 	config.TextBorder:SetPoint("LEFT", config.ButtonBorder, 30, 0)
 	config.TextBorder:SetText("|cffffffffShow border|r")
 	
+	-- Show damage taken
+	config.ButtonDmgTaken = CreateFrame("CheckButton", "ResolveStatusButtonDmgTaken", config, "InterfaceOptionsCheckButtonTemplate")
+	config.ButtonDmgTaken:SetPoint("TOPLEFT", config, 10, -64)
+	config.ButtonDmgTaken:SetChecked(ResolveStatusDB.dmgtaken)
+	config.ButtonDmgTaken:SetScript("OnClick", function(self)
+		if self:GetChecked() then
+			ResolveStatusDB.dmgtaken = true
+			UpdateResolveStatusBar()
+		else
+			ResolveStatusDB.dmgtaken = false
+			UpdateResolveStatusBar()
+		end
+	end)
+	config.TextDmgTaken = config:CreateFontString("ResolveStatusTextDmgTaken", "ARTWORK", "GameFontNormal")
+	config.TextDmgTaken:SetFont(GameFontNormal:GetFont(), 12)
+	config.TextDmgTaken:SetPoint("LEFT", config.ButtonDmgTaken, 30, 0)
+	config.TextDmgTaken:SetText("|cffffffffShow damage taken in the last 10s|r")
+	
 	-- Show in combat config
 	config.ButtonCombat = CreateFrame("CheckButton", "ResolveStatusButtonCombat", config, "InterfaceOptionsCheckButtonTemplate")
-	config.ButtonCombat:SetPoint("TOPLEFT", config, 10, -64)
+	config.ButtonCombat:SetPoint("TOPLEFT", config, 10, -82)
 	config.ButtonCombat:SetChecked(ResolveStatusDB.combat)
 	config.ButtonCombat:SetScript("OnClick", function(self)
 		if self:GetChecked() then
@@ -421,7 +456,7 @@ function CreateResolveConfig()
 
 	-- Show in instance config
 	config.ButtonInstance = CreateFrame("CheckButton", "ResolveStatusButtonInstance", config, "InterfaceOptionsCheckButtonTemplate")
-	config.ButtonInstance:SetPoint("TOPLEFT", config, 10, -82)
+	config.ButtonInstance:SetPoint("TOPLEFT", config, 10, -100)
 	config.ButtonInstance:SetChecked(ResolveStatusDB.instance)
 	config.ButtonInstance:SetScript("OnClick", function(self)
 		if self:GetChecked() then
@@ -435,11 +470,11 @@ function CreateResolveConfig()
 	config.TextInstance = config:CreateFontString("ResolveStatusTextInstance", "ARTWORK", "GameFontNormal")
 	config.TextInstance:SetFont(GameFontNormal:GetFont(), 12)
 	config.TextInstance:SetPoint("LEFT", config.ButtonInstance, 30, 0)
-	config.TextInstance:SetText("|cffffffffShow in Instance only|r")
+	config.TextInstance:SetText("|cffffffffShow in 5-mans and raids only|r")
 
 	-- Show report config
 	config.ButtonReportToSelf = CreateFrame("CheckButton", "ResolveStatusButtonReportToSelf", config, "InterfaceOptionsCheckButtonTemplate")
-	config.ButtonReportToSelf:SetPoint("TOPLEFT", config, 10, -100)
+	config.ButtonReportToSelf:SetPoint("TOPLEFT", config, 10, -118)
 	config.ButtonReportToSelf:SetChecked(ResolveStatusDB.spam)
 	config.ButtonReportToSelf:SetScript("OnClick", function(self)
 		if self:GetChecked() then
@@ -457,7 +492,7 @@ function CreateResolveConfig()
 
 	-- Show session logging config
 	config.ButtonSessionLogging = CreateFrame("CheckButton", "ResolveStatusButtonSessionLogging", config, "InterfaceOptionsCheckButtonTemplate")
-	config.ButtonSessionLogging:SetPoint("TOPLEFT", config, 10, -118)
+	config.ButtonSessionLogging:SetPoint("TOPLEFT", config, 10, -136)
 	config.ButtonSessionLogging:SetChecked(ResolveStatusDB.keepSession)
 	config.ButtonSessionLogging:SetScript("OnClick", function(self)
 		if self:GetChecked() then
@@ -475,7 +510,7 @@ function CreateResolveConfig()
 
 	-- Show opacity config
 	config.SliderAlpha = CreateFrame("Slider", "ResolveStatusSliderAlpha", config, "OptionsSliderTemplate")
-	config.SliderAlpha:SetPoint("TOPLEFT", config, 10, -160)
+	config.SliderAlpha:SetPoint("TOPLEFT", config, 10, -178)
 	config.SliderAlpha.textLow = _G["ResolveStatusSliderAlpha".."Low"]
 	config.SliderAlpha.textHigh = _G["ResolveStatusSliderAlpha".."High"]
 	config.SliderAlpha.text = _G["ResolveStatusSliderAlpha".."Text"]
@@ -488,7 +523,7 @@ function CreateResolveConfig()
 	config.SliderAlpha:SetValueStep(5)
 	config.SliderAlpha:SetScript("OnValueChanged", function(self,value)
 		config.SliderAlpha:SetValue(SimpleRound (value,config.SliderAlpha:GetValueStep()))
-		ResolveStatusDB.bgalpha = (config.SliderAlpha:GetValue()/100)
+		ResolveStatusDB.bgalpha = (self:GetValue()/100)
 		UpdateResolveStatusBar()
     end)
 	config.SliderAlpha:SetScript("OnMouseWheel", function(self, delta)
@@ -501,7 +536,7 @@ function CreateResolveConfig()
 
 	-- Show width config
 	config.SliderWidth = CreateFrame("Slider", "ResolveStatusSliderWidth", config, "OptionsSliderTemplate")
-	config.SliderWidth:SetPoint("TOPLEFT", config, 10, -190)
+	config.SliderWidth:SetPoint("TOPLEFT", config, 10, -208)
 	config.SliderWidth.textLow = _G["ResolveStatusSliderWidth".."Low"]
 	config.SliderWidth.textHigh = _G["ResolveStatusSliderWidth".."High"]
 	config.SliderWidth.text = _G["ResolveStatusSliderWidth".."Text"]
@@ -514,7 +549,7 @@ function CreateResolveConfig()
 	config.SliderWidth:SetValueStep(1)
 	config.SliderWidth:SetScript("OnValueChanged", function(self,value)
 		config.SliderWidth:SetValue(SimpleRound (value,config.SliderWidth:GetValueStep()))
-		ResolveStatusDB.width = (config.SliderWidth:GetValue())
+		ResolveStatusDB.width = (self:GetValue())
 		config.BoxWidth:SetNumber(ResolveStatusDB.width)
 		UpdateResolveStatusBar()
     end)
@@ -533,9 +568,6 @@ function CreateResolveConfig()
 	config.ButtonWidthMinus:SetScript("OnClick", function(self)
 		if config.SliderWidth:GetValue() > 50 then
 			config.SliderWidth:SetValue(config.SliderWidth:GetValue()-1)
-			ResolveStatusDB.width = (config.SliderWidth:GetValue())
-			config.BoxWidth:SetNumber(ResolveStatusDB.width)
-			UpdateResolveStatusBar()
 		end
     end)
 	
@@ -549,18 +581,12 @@ function CreateResolveConfig()
 		if SetWidth then
 			if SetWidth < 50 then
 				self:SetNumber(50)
-				ResolveStatusDB.width = 50
-				config.SliderWidth:SetValue(ResolveStatusDB.width)
-				UpdateResolveStatusBar()
+				config.SliderWidth:SetValue(50)
 			elseif SetWidth > 600 then
-				ResolveStatusDB.width = 600
 				self:SetNumber(600)
-				config.SliderWidth:SetValue(ResolveStatusDB.width)
-				UpdateResolveStatusBar()
+				config.SliderWidth:SetValue(600)
 			else
-				ResolveStatusDB.width = SetWidth
-				config.SliderWidth:SetValue(ResolveStatusDB.width)
-				UpdateResolveStatusBar()
+				config.SliderWidth:SetValue(SetWidth)
 			end
 		end
 		self:ClearFocus()
@@ -573,15 +599,12 @@ function CreateResolveConfig()
 	config.ButtonWidthPlus:SetScript("OnClick", function(self)
 		if config.SliderWidth:GetValue() < 600 then
 			config.SliderWidth:SetValue(config.SliderWidth:GetValue()+1)
-			ResolveStatusDB.width = (config.SliderWidth:GetValue())
-			config.BoxWidth:SetNumber(ResolveStatusDB.width)
-			UpdateResolveStatusBar()
 		end
     end)
 	
 	-- Show height config
 	config.SliderHeight = CreateFrame("Slider", "ResolveStatusSliderHeight", config, "OptionsSliderTemplate")
-	config.SliderHeight:SetPoint("TOPLEFT", config, 10, -220)
+	config.SliderHeight:SetPoint("TOPLEFT", config, 10, -238)
 	config.SliderHeight.textLow = _G["ResolveStatusSliderHeight".."Low"]
 	config.SliderHeight.textHigh = _G["ResolveStatusSliderHeight".."High"]
 	config.SliderHeight.text = _G["ResolveStatusSliderHeight".."Text"]
@@ -594,7 +617,7 @@ function CreateResolveConfig()
 	config.SliderHeight:SetValueStep(1)	
 	config.SliderHeight:SetScript("OnValueChanged", function(self,value)
 		config.SliderHeight:SetValue(SimpleRound (value,config.SliderHeight:GetValueStep()))
-		ResolveStatusDB.height = (config.SliderHeight:GetValue())
+		ResolveStatusDB.height = (self:GetValue())
 		config.BoxHeight:SetNumber(ResolveStatusDB.height)
 		UpdateResolveStatusBar()
     end)
@@ -613,9 +636,6 @@ function CreateResolveConfig()
 	config.ButtonHeightMinus:SetScript("OnClick", function(self)
 		if config.SliderHeight:GetValue() > 10 then
 			config.SliderHeight:SetValue(config.SliderHeight:GetValue()-1)
-			ResolveStatusDB.height = (config.SliderHeight:GetValue())
-			config.BoxHeight:SetNumber(ResolveStatusDB.height)
-			UpdateResolveStatusBar()
 		end
     end)
 	
@@ -629,18 +649,12 @@ function CreateResolveConfig()
 		if SetHeight then
 			if SetHeight < 10 then
 				self:SetNumber(10)
-				ResolveStatusDB.height = 10
-				config.SliderHeight:SetValue(ResolveStatusDB.height)
-				UpdateResolveStatusBar()
+				config.SliderHeight:SetValue(10)
 			elseif SetHeight > 100 then
 				self:SetNumber(100)
-				ResolveStatusDB.height = 100
-				config.SliderHeight:SetValue(ResolveStatusDB.height)
-				UpdateResolveStatusBar()
+				config.SliderHeight:SetValue(100)
 			else
-				ResolveStatusDB.height = SetHeight
-				config.SliderHeight:SetValue(ResolveStatusDB.height)
-				UpdateResolveStatusBar()
+				config.SliderHeight:SetValue(SetHeight)
 			end
 		end
 		self:ClearFocus()
@@ -653,15 +667,12 @@ function CreateResolveConfig()
 	config.ButtonHeightPlus:SetScript("OnClick", function(self)
 		if config.SliderHeight:GetValue() < 600 then
 			config.SliderHeight:SetValue(config.SliderHeight:GetValue()+1)
-			ResolveStatusDB.height = (config.SliderHeight:GetValue())
-			config.BoxHeight:SetNumber(ResolveStatusDB.height)
-			UpdateResolveStatusBar()
 		end
     end)
 	
 	-- Show font size config
 	config.SliderFontSize = CreateFrame("Slider", "ResolveStatusSliderFontSize", config, "OptionsSliderTemplate")
-	config.SliderFontSize:SetPoint("TOPLEFT", config, 10, -250)
+	config.SliderFontSize:SetPoint("TOPLEFT", config, 10, -268)
 	config.SliderFontSize.textLow = _G["ResolveStatusSliderFontSize".."Low"]
 	config.SliderFontSize.textHigh = _G["ResolveStatusSliderFontSize".."High"]
 	config.SliderFontSize.text = _G["ResolveStatusSliderFontSize".."Text"]
@@ -674,7 +685,7 @@ function CreateResolveConfig()
 	config.SliderFontSize:SetValueStep(1)
 	config.SliderFontSize:SetScript("OnValueChanged", function(self,value)
 		config.SliderFontSize:SetValue(SimpleRound (value,config.SliderFontSize:GetValueStep()))
-		ResolveStatusDB.fontsize = (config.SliderFontSize:GetValue())
+		ResolveStatusDB.fontsize = (self:GetValue())
 		config.BoxFontSize:SetNumber(ResolveStatusDB.fontsize)
 		UpdateResolveStatusBar()
     end)
@@ -686,41 +697,32 @@ function CreateResolveConfig()
 		end
     end)
 	
-	config.ButtonReset = CreateFrame("Button", "ResolveStatusButtonReset", config, "OptionsButtonTemplate")
-	config.ButtonReset:SetPoint("LEFT", config.SliderFontSize, "RIGHT", 10, 0)
-	config.ButtonReset:SetSize(25,20)
-	config.ButtonReset:SetText("-")
-	config.ButtonReset:SetScript("OnClick", function(self)
+	config.ButtonFontSizeMinus = CreateFrame("Button", "ResolveStatusButtonFontSizeMinus", config, "OptionsButtonTemplate")
+	config.ButtonFontSizeMinus:SetPoint("LEFT", config.SliderFontSize, "RIGHT", 10, 0)
+	config.ButtonFontSizeMinus:SetSize(25,20)
+	config.ButtonFontSizeMinus:SetText("-")
+	config.ButtonFontSizeMinus:SetScript("OnClick", function(self)
 		if config.SliderFontSize:GetValue() > 7 then
 			config.SliderFontSize:SetValue(config.SliderFontSize:GetValue()-1)
-			ResolveStatusDB.fontsize = (config.SliderFontSize:GetValue())
-			config.BoxFontSize:SetNumber(ResolveStatusDB.fontsize)
-			UpdateResolveStatusBar()
 		end
     end)
 	
 	config.BoxFontSize = CreateFrame("EditBox", "ResolveStatusBoxFontSize", config, "InputBoxTemplate")
-	config.BoxFontSize:SetPoint("LEFT", config.ButtonReset,"RIGHT", 5, 0)
+	config.BoxFontSize:SetPoint("LEFT", config.ButtonFontSizeMinus,"RIGHT", 5, 0)
 	config.BoxFontSize:SetSize(25, 20)
 	config.BoxFontSize:SetNumeric(true)
 	config.BoxFontSize:SetAutoFocus(false)
 	config.BoxFontSize:SetScript("OnEnterPressed", function(self)
-		SetHeight = self:GetNumber()
-		if SetHeight then
-			if SetHeight < 7 then
+		SetFontSize = self:GetNumber()
+		if SetFontSize then
+			if SetFontSize < 7 then
 				self:SetNumber(7)
-				ResolveStatusDB.fontsize = 7
-				config.SliderFontSize:SetValue(ResolveStatusDB.fontsize)
-				UpdateResolveStatusBar()
-			elseif SetHeight > 30 then
+				config.SliderFontSize:SetValue(7)
+			elseif SetFontSize > 30 then
 				self:SetNumber(30)
-				ResolveStatusDB.fontsize = 30
-				config.SliderFontSize:SetValue(ResolveStatusDB.fontsize)
-				UpdateResolveStatusBar()
+				config.SliderFontSize:SetValue(30)
 			else
-				ResolveStatusDB.fontsize = SetHeight
-				config.SliderFontSize:SetValue(ResolveStatusDB.fontsize)
-				UpdateResolveStatusBar()
+				config.SliderFontSize:SetValue(SetFontSize)
 			end
 		end
 		self:ClearFocus()
@@ -733,42 +735,77 @@ function CreateResolveConfig()
 	config.ButtonFontSizePlus:SetScript("OnClick", function(self)
 		if config.SliderFontSize:GetValue() < 30 then
 			config.SliderFontSize:SetValue(config.SliderFontSize:GetValue()+1)
-			ResolveStatusDB.fontsize = (config.SliderFontSize:GetValue())
-			config.BoxFontSize:SetNumber(ResolveStatusDB.fontsize)
-			UpdateResolveStatusBar()
 		end
     end)
 	
 	-- Show font selection
 	config.TextFontPath = config:CreateFontString("ResolveStatusTextFontPath", "ARTWORK", "GameFontNormal")
 	config.TextFontPath:SetFont(GameFontNormal:GetFont(), 12)
-	config.TextFontPath:SetPoint("TOPLEFT", config, 15, -280)
-	config.TextFontPath:SetText("|cffffffffFont file (.ttf format)|r")
+	config.TextFontPath:SetPoint("TOPLEFT", config, 15, -303)
+	config.TextFontPath:SetText("|cffffffffFont|r")
+	local FontLastUpdate = 0
+	local fontpath = "Default"
+	local fontchanged = false
+	local customfont = true
+	local Fonts = {
+		"Default",
+		"ace_futurism",
+		"ASansBlack",
+		"Avqest",
+		"barframes",
+		"big_noodle_titling",
+		"concv2c",
+		"DORISPP",
+		"Emblem",
+		"Fitzgerald",
+		"FORCED SQUARE",
+		"GOODTIME",
+		"GOTHIC",
+		"HandelGothicBT",
+		"HARRYP__",
+		"Starcraft",
+		"Custom",
+	}
 	
+	-- Custom font box
 	config.BoxFontPath = CreateFrame("EditBox", "ResolveStatusBoxFontPath", config, "InputBoxTemplate")
-	config.BoxFontPath:SetPoint("TOPLEFT", config.TextFontPath,"BOTTOMLEFT", 0, 0)
-	config.BoxFontPath:SetSize(250, 30)
+	config.BoxFontPath:SetPoint("TOPLEFT", config.TextFontPath,"BOTTOMLEFT", 150, -3)
+	config.BoxFontPath:SetSize(200, 30)
 	config.BoxFontPath:SetAutoFocus(false)
-	config.BoxFontPath:SetScript("OnEnterPressed", function(self)
-		SelectedFont = self:GetText()
-		if not (SelectedFont == "" or SelectedFont == "Default" or SelectedFont == "default" or SelectedFont == "DEFAULT") then
-			 if string.find(SelectedFont,"\.ttf$") then
-				fontpath = SelectedFont
-			else
-				fontpath = SelectedFont.."\.ttf"
+	config.BoxFontPath:Hide()
+	config.BoxFontPath:SetScript("OnUpdate", function(self,elapsed)
+		FontLastUpdate = FontLastUpdate + elapsed;
+		if (FontLastUpdate > 0.5) then
+			if fontchanged then
+				if f.StatusBar.Text:SetFont("Interface\\Addons\\ResolveStatus\\Fonts\\"..fontpath,ResolveStatusDB.fontsize) then
+					self:SetText(fontpath)
+					ResolveStatusDB.fontpath = fontpath
+					customfont = true
+					UpdateResolveStatusBar()
+				else
+					self:SetText("Invalid font")
+				end
+				fontchanged = false
 			end
-			if f.StatusBar.Text:SetFont("Interface\\AddOns\\ResolveStatus\\Fonts\\"..fontpath,ResolveStatusDB.fontsize) then
-				ResolveStatusDB.fontpath = fontpath
-				UpdateResolveStatusBar()
-				self:SetText(ResolveStatusDB.fontpath)
-			else
-				self:SetText("Invalid file")
-			end
-		else
-			ResolveStatusDB.fontpath = "Default"
-			UpdateResolveStatusBar()
-			self:SetText("Default")
+			FontLastUpdate = 0;
 		end
+	end
+	)
+	config.BoxFontPath:SetScript("OnEnterPressed", function(self)
+		local SelectedFont = self:GetText()
+		if string.find(SelectedFont,"\.ttf$") then
+			fontpath = SelectedFont
+		else
+			fontpath = SelectedFont.."\.ttf"
+		end
+		f.StatusBar.Text:SetFont("Interface\\Addons\\ResolveStatus\\Fonts\\"..fontpath,ResolveStatusDB.fontsize)
+		f.StatusBar.Text:SetText("")
+		if ResolveStatusDB.dmgtaken then
+			f.StatusBar.Text:SetText("0% (0)")
+		else
+			f.StatusBar.Text:SetText("0%")
+		end
+		fontchanged = true
 		self:ClearFocus()
 	end)
 	config.BoxFontPath:SetScript("OnEnter", function(self)
@@ -783,12 +820,104 @@ function CreateResolveConfig()
 	config.TextFontExample:SetFont(GameFontNormal:GetFont(), 10)
 	config.TextFontExample:SetPoint("TOPLEFT", config.BoxFontPath,"BOTTOMLEFT", 0, 0)
 	config.TextFontExample:SetJustifyH("LEFT")
-	config.TextFontExample:SetText("|cDDDDDDDDExample: 'big_noodle_titling.ttf'|nType 'Default' or leave blank to reset|r")
-
+	config.TextFontExample:SetText("|cDDDDDDDDExample: 'Adventure.ttf'|r")
+	config.TextFontExample:Hide()
+	
+	-- Font selection dropdown
+	config.DropdownFontPath = CreateFrame("Button", "ResolveStatusDropdownFontPath", config, "UIDropDownMenuTemplate")
+	config.DropdownFontPath:SetPoint("TOPLEFT", config.TextFontPath,"BOTTOMLEFT", -20, -5)
+	config.DropdownFontPath:SetSize(250, 30)
+	UIDropDownMenu_Initialize(config.DropdownFontPath, function(self, level)
+		local info = UIDropDownMenu_CreateInfo()
+		for key,value in pairs(Fonts) do
+			info = UIDropDownMenu_CreateInfo()
+			info.text = value
+			info.value = value
+			info.func = function(self)
+				if value == "Custom" then
+					config.BoxFontPath:Show()
+					config.TextFontExample:Show()
+					config.BoxFontPath:SetText("")
+				elseif value == "Default" then
+					config.BoxFontPath:Hide()
+					config.TextFontExample:Hide()
+					ResolveStatusDB.fontpath = "Default"
+					fontpath = "Default"
+					texturechanged = false
+					self:SetText("Default")
+					UpdateResolveStatusBar()
+				else
+					config.BoxFontPath:Hide()
+					config.TextFontExample:Hide()
+					f.StatusBar.Text:SetFont("Interface\\Addons\\ResolveStatus\\Fonts\\"..value..".ttf",ResolveStatusDB.fontsize)
+					f.StatusBar.Text:SetText("")
+					if ResolveStatusDB.dmgtaken then
+						f.StatusBar.Text:SetText("0% (0)")
+					else
+						f.StatusBar.Text:SetText("0%")
+					end
+					ResolveStatusDB.fontpath = value..".ttf"
+				end
+				UIDropDownMenu_SetSelectedID(config.DropdownFontPath, self:GetID())
+			end
+			UIDropDownMenu_AddButton(info, level)
+			if value..".ttf" == ResolveStatusDB.fontpath or value == ResolveStatusDB.fontpath then
+				customfont = false
+			end
+		end
+		if customfont then
+			UIDropDownMenu_SetSelectedValue(self, "Custom", useValue)
+			config.BoxFontPath:Show()
+			config.TextFontExample:Show()
+			config.BoxFontPath:SetText(ResolveStatusDB.fontpath)
+		else
+			UIDropDownMenu_SetSelectedValue(self, gsub(ResolveStatusDB.fontpath,".ttf",""), useValue)
+			config.BoxFontPath:Hide()
+			config.TextFontExample:Hide()
+		end
+	end
+	)
+	-- Show texture selection
+	config.TextTexturePath = config:CreateFontString("ResolveStatusTextBarTexture", "ARTWORK", "GameFontNormal")
+	config.TextTexturePath:SetFont(GameFontNormal:GetFont(), 12)
+	config.TextTexturePath:SetPoint("TOPLEFT", config, 15, -358)
+	config.TextTexturePath:SetText("|cffffffffBar texture|r")
+	local Textures = {
+		"Default",
+		"Aluminium",
+		"Bantobar",
+		"Charcoal",
+		"Perl",
+		"Smudge",
+		-- "Custom",
+	}
+	
+	-- Texture selection dropdown
+	config.DropdownTexturePath = CreateFrame("Button", "ResolveStatusDropdownTexturePath", config, "UIDropDownMenuTemplate")
+	config.DropdownTexturePath:SetPoint("TOPLEFT", config.TextTexturePath,"BOTTOMLEFT", -20, -5)
+	config.DropdownTexturePath:SetSize(250, 30)
+	UIDropDownMenu_Initialize(config.DropdownTexturePath, function(self, level)
+		local info = UIDropDownMenu_CreateInfo()
+		for key,value in pairs(Textures) do
+			info = UIDropDownMenu_CreateInfo()
+			info.text = value
+			info.value = value
+			info.func = function(self)
+				ResolveStatusDB.texturepath = value
+				UpdateResolveStatusBar()
+				f.StatusBar:SetValue(240)
+				UIDropDownMenu_SetSelectedID(config.DropdownTexturePath, self:GetID())
+			end
+			UIDropDownMenu_AddButton(info, level)
+		end
+		UIDropDownMenu_SetSelectedValue(self, ResolveStatusDB.texturepath, useValue)
+	end)
+	
 	-- Refresh pannel on display
 	config:SetScript("OnShow", function(self)
 		self.ButtonLocked:SetChecked(ResolveStatusDB.locked)
 		self.ButtonBorder:SetChecked(ResolveStatusDB.border)
+		self.ButtonDmgTaken:SetChecked(ResolveStatusDB.dmgtaken)
 		self.ButtonCombat:SetChecked(ResolveStatusDB.combat)
 		self.ButtonInstance:SetChecked(ResolveStatusDB.instance)
 		self.ButtonReportToSelf:SetChecked(ResolveStatusDB.spam)
@@ -800,11 +929,6 @@ function CreateResolveConfig()
 		self.BoxHeight:SetNumber(ResolveStatusDB.height)
 		self.SliderFontSize:SetValue(ResolveStatusDB.fontsize)
 		self.BoxFontSize:SetNumber(ResolveStatusDB.fontsize)
-		if not (ResolveStatusDB.fontpath == "Default") then
-			self.BoxFontPath:SetText(ResolveStatusDB.fontpath)
-		else
-			self.BoxFontPath:SetText("Default")
-		end
 	end)
 end
 
@@ -817,10 +941,13 @@ function f.PLAYER_LOGIN()
 		f:RegisterEvent("UPDATE_SHAPESHIFT_FORM")
 	end
 	f:RegisterEvent("PLAYER_ALIVE")
-	local text = "0% (0)"
 	f.StatusBar:SetMinMaxValues(0,240)
 	f.StatusBar:SetValue(0)
-	f.StatusBar.Text:SetText(text)
+	if ResolveStatusDB.dmgtaken then
+		f.StatusBar.Text:SetText("0% (0)")
+	else
+		f.StatusBar.Text:SetText("0%")
+	end
 	f:UnregisterEvent("PLAYER_LOGIN")
 	toggle(isTank())
 end
@@ -837,6 +964,7 @@ end
 function f.PLAYER_ENTERING_WORLD()
 	toggle(isTank())
 end
+
 f.ACTIVE_TALENT_GROUP_CHANGED = f.PLAYER_ENTERING_WORLD
 f.PLAYER_SPECIALIZATION_CHANGED = f.PLAYER_ENTERING_WORLD
 
@@ -875,7 +1003,11 @@ function f.UNIT_AURA(...)
 	tinsert(f.DamageData,DamageTaken)
 	
 	f.StatusBar:SetValue(ResolveValue)
-	f.StatusBar.Text:SetText(strformat("%s%% (%s)",ResolveValue,DamageTaken))
+	if ResolveStatusDB.dmgtaken then
+		f.StatusBar.Text:SetText(strformat("%s%% (%s)",ResolveValue,DamageTaken))
+	else
+		f.StatusBar.Text:SetText(strformat("%s%%",ResolveValue))
+	end
 end
 
 function f.PLAYER_REGEN_ENABLED() -- out of combat
@@ -910,6 +1042,7 @@ function f.PLAYER_REGEN_ENABLED() -- out of combat
 	wipe(f.ResolveData)
 	wipe(f.DamageData)
 	f.fightStart = 0
+	f.StatusBar:EnableMouse(true)
 	if ResolveStatusDB.combat then
 		f.StatusBar:Hide()
 	end
@@ -920,6 +1053,8 @@ function f.PLAYER_REGEN_DISABLED() -- in combat
 	f.DamageMax = 0
 	f.fightStart = GetTime()
 	f.fightEnd = 0
+	f.StatusBar:EnableMouse(false)
+	local PlayerInInstance, InstanceType = IsInInstance()
 	if (not ResolveStatusDB.instance) or (ResolveStatusDB.instance and (InstanceType == "party" or InstanceType == "raid")) then
 		if ResolveStatusDB.combat then
 			f.StatusBar:Show()

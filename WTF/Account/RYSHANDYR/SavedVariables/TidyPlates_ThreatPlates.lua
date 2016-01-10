@@ -2,6 +2,7 @@
 ThreatPlatesDB = {
 	["char"] = {
 		["Zapunzel - Aggramar"] = {
+			["welcome"] = true,
 			["specInfo"] = {
 				{
 					["name"] = "Frost",
@@ -12,9 +13,9 @@ ThreatPlatesDB = {
 					["role"] = "DAMAGER",
 				}, -- [2]
 			},
-			["welcome"] = true,
 		},
 		["Greenthorn - Aggramar"] = {
+			["welcome"] = true,
 			["specInfo"] = {
 				{
 					["name"] = "Beast Mastery",
@@ -25,9 +26,9 @@ ThreatPlatesDB = {
 					["role"] = "DAMAGER",
 				}, -- [2]
 			},
-			["welcome"] = true,
 		},
 		["Ryjax - Aggramar"] = {
+			["welcome"] = true,
 			["specInfo"] = {
 				{
 					["name"] = "Guardian",
@@ -38,9 +39,9 @@ ThreatPlatesDB = {
 					["role"] = "DAMAGER",
 				}, -- [2]
 			},
-			["welcome"] = true,
 		},
 		["Kylosandrax - Aggramar"] = {
+			["welcome"] = true,
 			["specInfo"] = {
 				{
 					["name"] = "Protection",
@@ -51,12 +52,12 @@ ThreatPlatesDB = {
 					["role"] = "DAMAGER",
 				}, -- [2]
 			},
-			["welcome"] = true,
 			["spec"] = {
 				true, -- [1]
 			},
 		},
 		["Feldspar - Aggramar"] = {
+			["welcome"] = true,
 			["specInfo"] = {
 				{
 					["name"] = "Holy",
@@ -67,7 +68,6 @@ ThreatPlatesDB = {
 					["role"] = "DAMAGER",
 				}, -- [2]
 			},
-			["welcome"] = true,
 		},
 		["Kylozandrax - Earthen Ring"] = {
 			["specInfo"] = {
@@ -80,12 +80,13 @@ ThreatPlatesDB = {
 					["role"] = "DAMAGER",
 				}, -- [2]
 			},
+			["welcome"] = true,
 			["spec"] = {
 				true, -- [1]
 			},
-			["welcome"] = true,
 		},
-		["Banjax - Aggramar"] = {
+		["Ryvok - Terokkar"] = {
+			["welcome"] = true,
 			["specInfo"] = {
 				{
 					["name"] = "Unknown",
@@ -96,10 +97,21 @@ ThreatPlatesDB = {
 					["role"] = "DAMAGER",
 				}, -- [2]
 			},
+		},
+		["Banjax - Aggramar"] = {
 			["welcome"] = true,
+			["specInfo"] = {
+				{
+					["name"] = "Brewmaster",
+					["role"] = "TANK",
+				}, -- [1]
+				{
+					["name"] = "Mistweaver",
+					["role"] = "HEALER",
+				}, -- [2]
+			},
 		},
 		["Stormslinger - Aggramar"] = {
-			["welcome"] = true,
 			["specInfo"] = {
 				{
 					["name"] = "Enhancement",
@@ -110,6 +122,7 @@ ThreatPlatesDB = {
 					["role"] = "DAMAGER",
 				}, -- [2]
 			},
+			["welcome"] = true,
 		},
 		["Ryvok - Aggramar"] = {
 			["specInfo"] = {
@@ -118,16 +131,17 @@ ThreatPlatesDB = {
 					["role"] = "TANK",
 				}, -- [1]
 				{
-					["name"] = "Holy",
-					["role"] = "HEALER",
+					["name"] = "Retribution",
+					["role"] = "DAMAGER",
 				}, -- [2]
 			},
+			["welcome"] = true,
 			["spec"] = {
 				true, -- [1]
 			},
-			["welcome"] = true,
 		},
 		["Bronin - Aggramar"] = {
+			["welcome"] = true,
 			["specInfo"] = {
 				{
 					["name"] = "Blood",
@@ -138,11 +152,7 @@ ThreatPlatesDB = {
 					["role"] = "DAMAGER",
 				}, -- [2]
 			},
-			["welcome"] = true,
 		},
-	},
-	["global"] = {
-		["version"] = "7.011-Alpha",
 	},
 	["profileKeys"] = {
 		["Zapunzel - Aggramar"] = "Default",
@@ -151,10 +161,14 @@ ThreatPlatesDB = {
 		["Kylosandrax - Aggramar"] = "Default",
 		["Feldspar - Aggramar"] = "Default",
 		["Kylozandrax - Earthen Ring"] = "Default",
+		["Ryvok - Terokkar"] = "Default",
 		["Banjax - Aggramar"] = "Default",
 		["Stormslinger - Aggramar"] = "Default",
 		["Ryvok - Aggramar"] = "Default",
 		["Bronin - Aggramar"] = "Default",
+	},
+	["global"] = {
+		["version"] = "7.013-Alpha",
 	},
 	["profiles"] = {
 		["Default"] = {

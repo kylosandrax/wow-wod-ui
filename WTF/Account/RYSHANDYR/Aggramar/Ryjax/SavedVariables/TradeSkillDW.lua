@@ -11,6 +11,11 @@ TradeSkillDW_QueueSettings = {
 		},
 		["selectedIdx"] = 0,
 	},
+	["Jewelcrafting"] = {
+		["queueList"] = {
+		},
+		["selectedIdx"] = 0,
+	},
 	["First Aid"] = {
 		["queueList"] = {
 		},

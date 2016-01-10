@@ -1,8 +1,24 @@
 local E, L, V, P, G = unpack(select(2, ...)); --Inport: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
 local DT = E:GetModule('DataTexts')
 
-local format = string.format
-local join = string.join
+--Cache global variables
+--Lua functions
+local select = select
+local format, join = string.format, string.join
+--WoW API / Variables
+local SetLootSpecialization = SetLootSpecialization
+local GetSpecialization = GetSpecialization
+local GetActiveSpecGroup = GetActiveSpecGroup
+local GetSpecializationInfo = GetSpecializationInfo
+local GetLootSpecialization = GetLootSpecialization
+local GetSpecializationInfoByID = GetSpecializationInfoByID
+local GetNumSpecGroups = GetNumSpecGroups
+local SetActiveSpecGroup = SetActiveSpecGroup
+local EasyMenu = EasyMenu
+local LOOT = LOOT
+local SELECT_LOOT_SPECIALIZATION = SELECT_LOOT_SPECIALIZATION
+local LOOT_SPECIALIZATION_DEFAULT = LOOT_SPECIALIZATION_DEFAULT
+
 local lastPanel, active
 local displayString = '';
 local talent = {}
@@ -18,13 +34,12 @@ local menuList = {
 	{ notCheckable = true }
 }
 
-
 local function OnEvent(self, event)
 	lastPanel = self
 
 	local specIndex = GetSpecialization();
-	if not specIndex then return end	
-	
+	if not specIndex then return end
+
 	active = GetActiveSpecGroup()
 
 	local talent, loot = '', ''
@@ -35,7 +50,7 @@ local function OnEvent(self, event)
 	local specialization = GetLootSpecialization()
 	if specialization == 0 then
 		local specIndex = GetSpecialization();
-		
+
 		if specIndex then
 			local specID, _, _, texture = GetSpecializationInfo(specIndex);
 			loot = format('|T%s:14:14:0:0:64:64:4:60:4:60|t', texture)
@@ -51,7 +66,7 @@ local function OnEvent(self, event)
 		end
 	end
 
-	self.text:SetText(format('%s: %s %s: %s', L['Spec'], talent, LOOT, loot))
+	self.text:SetFormattedText('%s: %s %s: %s', L["Spec"], talent, LOOT, loot)
 end
 
 local function OnEnter(self)
@@ -67,7 +82,7 @@ local function OnEnter(self)
 	local specialization = GetLootSpecialization()
 	if specialization == 0 then
 		local specIndex = GetSpecialization();
-		
+
 		if specIndex then
 			local specID, name = GetSpecializationInfo(specIndex);
 			DT.tooltip:AddLine(format('|cffFFFFFF%s:|r %s', SELECT_LOOT_SPECIALIZATION, format(LOOT_SPECIALIZATION_DEFAULT, name)))
@@ -80,9 +95,9 @@ local function OnEnter(self)
 	end
 
 	DT.tooltip:AddLine(' ')
-	DT.tooltip:AddLine(L['|cffFFFFFFLeft Click:|r Change Talent Specialization'])
-	DT.tooltip:AddLine(L['|cffFFFFFFRight Click:|r Change Loot Specialization'])	
-	
+	DT.tooltip:AddLine(L["|cffFFFFFFLeft Click:|r Change Talent Specialization"])
+	DT.tooltip:AddLine(L["|cffFFFFFFRight Click:|r Change Loot Specialization"])
+
 	DT.tooltip:Show()
 end
 

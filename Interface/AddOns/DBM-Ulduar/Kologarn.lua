@@ -1,7 +1,7 @@
 local mod	= DBM:NewMod("Kologarn", "DBM-Ulduar")
 local L		= mod:GetLocalizedStrings()
 
-mod:SetRevision(("$Revision: 120 $"):sub(12, -3))
+mod:SetRevision(("$Revision: 209 $"):sub(12, -3))
 mod:SetCreatureID(32930)--, 32933, 32934
 mod:SetEncounterID(1137)
 mod:SetModelID(28638)
@@ -18,6 +18,7 @@ mod:RegisterEventsInCombat(
 	"SPELL_DAMAGE",
 	"SPELL_MISSED",
 	"RAID_BOSS_WHISPER",
+	"CHAT_MSG_ADDON",
 	"UNIT_DIED"
 )
 
@@ -32,18 +33,16 @@ local warnGrip					= mod:NewTargetAnnounce(64292, 2)
 local warnCrunchArmor			= mod:NewTargetAnnounce(64002, 2)
 
 local specWarnCrunchArmor2		= mod:NewSpecialWarningStack(64002, false, 2)
-local specWarnEyebeam			= mod:NewSpecialWarningYou(63346)
+local specWarnEyebeam			= mod:NewSpecialWarningRun(63346, nil, nil, nil, 4)
 local yellBeam					= mod:NewYell(63346)
 
 local timerCrunch10             = mod:NewTargetTimer(6, 63355)
-local timerNextShockwave		= mod:NewCDTimer(18, 63982)
-local timerNextEyebeam			= mod:NewCDTimer(17.5, 63346)--Experimental.
-local timerNextGrip				= mod:NewCDTimer(20, 64292)
-local timerRespawnLeftArm		= mod:NewTimer(48, "timerLeftArm")
-local timerRespawnRightArm		= mod:NewTimer(48, "timerRightArm")
+local timerNextShockwave		= mod:NewCDTimer(18, 63982, nil, nil, nil, 2)
+local timerNextEyebeam			= mod:NewCDTimer(17.5, 63346, nil, nil, nil, 3)--Experimental.
+local timerNextGrip				= mod:NewCDTimer(20, 64292, nil, nil, nil, 3)
+local timerRespawnLeftArm		= mod:NewTimer(48, "timerLeftArm", nil, nil, nil, 1)
+local timerRespawnRightArm		= mod:NewTimer(48, "timerRightArm", nil, nil, nil, 1)
 local timerTimeForDisarmed		= mod:NewTimer(10, "achievementDisarmed")	-- 10 HC / 12 nonHC
-
-local soundEyebeam				= mod:NewSound(63346)
 
 mod:AddBoolOption("HealthFrame", true)
 mod:AddBoolOption("SetIconOnGripTarget", true)
@@ -80,23 +79,19 @@ mod.SPELL_MISSED = mod.SPELL_DAMAGE
 function mod:RAID_BOSS_WHISPER(msg)
 	if msg:find(L.FocusedEyebeam) then
 		specWarnEyebeam:Show()
-		soundEyebeam:Play()
 		yellBeam:Yell()
-		self:SendSync("EyeBeamOn", UnitGUID("player"))
 	end
 end
 
-function mod:OnSync(msg, guid)
-	local target
-	if guid then
-		target = DBM:GetFullPlayerNameByGUID(guid)
-	end
-	if msg == "EyeBeamOn" and guid then
-		timerNextEyebeam:Start()
-		if target then
-			warnFocusedEyebeam:Show()
+--per usual, use transcriptor message to get messages from both bigwigs and DBM, all without adding comms to this mod at all
+function mod:CHAT_MSG_ADDON(prefix, msg, channel, targetName)
+	if prefix ~= "Transcriptor" then return end
+	if msg:find(L.FocusedEyebeam) then--
+		targetName = Ambiguate(targetName, "none")
+		if self:AntiSpam(5, targetName) then--Antispam sync by target name, since this doesn't use dbms built in onsync handler.
+			warnFocusedEyebeam:Show(targetName)
 			if self.Options.SetIconOnEyebeamTarget then
-				self:SetIcon(target, 5, 8) 
+				self:SetIcon(targetName, 5, 8) 
 			end
 		end
 	end

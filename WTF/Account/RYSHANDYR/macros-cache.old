@@ -86,6 +86,14 @@ END
 VER 3 0000000000000040 "Pull" "ACHIEVEMENT_GUILDPERK_FASTTRACK_RANK2"
 /dbm pull 10
 END
+VER 3 0000000000000044 "Quester" "INV_SCROLL_11"
+/script SelectGossipAvailableQuest(1)
+/script SelectGossipActiveQuest(1)
+/script CompleteQuest()
+/script SelectGossipOption(1)
+/script AcceptQuest()
+/script GetQuestReward(1)
+END
 VER 3 0000000000000017 "Ready-Check" "INV_Misc_QuestionMark"
 /readycheck
 END

@@ -157,6 +157,37 @@ Skada:AddLoadableModule("Damage", function(Skada, L)
 		end
 	end
 
+	local function SpellAbsorbed(timestamp, eventtype, srcGUID, srcName, srcFlags, dstGUID, dstName, dstFlags, ...)
+        local chk = ...
+        local spellId, spellName, spellSchool, aGUID, aName, aFlags, aRaidFlags, aspellId, aspellName, aspellSchool, aAmount
+
+        if type(chk) == "number" then
+            -- Spell event
+            spellId, spellName, spellSchool, aGUID, aName, aFlags, aRaidFlags, aspellId, aspellName, aspellSchool, aAmount = ...
+            
+            -- Exclude Spirit Shift damage
+            if aspellId == 184553 then
+                return
+            end
+                
+            if aAmount then
+                SpellDamage(timestamp, eventtype, srcGUID, srcName, srcFlags, dstGUID, dstName, dstFlags, spellId, spellName, spellSchool, aAmount)
+            end
+        else
+            -- Swing event
+            aGUID, aName, aFlags, aRaidFlags, aspellId, aspellName, aspellSchool, aAmount = ...
+
+            -- Exclude Spirit Shift damage
+            if aspellId == 184553 then
+                return
+            end
+                
+            if aAmount then
+                SwingDamage(timestamp, eventtype, srcGUID, srcName, srcFlags, dstGUID, dstName, dstFlags, aAmount)   
+            end
+        end
+    end
+        
 	local function SwingMissed(timestamp, eventtype, srcGUID, srcName, srcFlags, dstGUID, dstName, dstFlags, missed)
 		if srcGUID ~= dstGUID then
 			-- Melee misses
@@ -235,6 +266,7 @@ Skada:AddLoadableModule("Damage", function(Skada, L)
 				d.value = player.damage
 				d.id = player.id
 				d.class = player.class
+				d.role = player.role
 				if player.damage > max then
 					max = player.damage
 				end
@@ -478,6 +510,7 @@ Skada:AddLoadableModule("Damage", function(Skada, L)
 				d.id = player.id
 				d.value = dps
 				d.class = player.class
+				d.role = player.role
 				d.valuetext = Skada:FormatNumber(dps)
 				if dps > max then
 					max = dps
@@ -499,6 +532,7 @@ Skada:AddLoadableModule("Damage", function(Skada, L)
 
 		Skada:RegisterForCL(SpellDamage, 'DAMAGE_SHIELD', {src_is_interesting = true, dst_is_not_interesting = true})
 		Skada:RegisterForCL(SpellDamage, 'SPELL_DAMAGE', {src_is_interesting = true, dst_is_not_interesting = true})
+		Skada:RegisterForCL(SpellAbsorbed, 'SPELL_ABSORBED', {src_is_interesting = true, dst_is_not_interesting = true})
 		Skada:RegisterForCL(SpellDamage, 'SPELL_PERIODIC_DAMAGE', {src_is_interesting = true, dst_is_not_interesting = true})
 		Skada:RegisterForCL(SpellDamage, 'SPELL_BUILDING_DAMAGE', {src_is_interesting = true, dst_is_not_interesting = true})
 		Skada:RegisterForCL(SpellDamage, 'RANGE_DAMAGE', {src_is_interesting = true, dst_is_not_interesting = true})

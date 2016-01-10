@@ -1,0 +1,81 @@
+VER 3 010000000000002D "Def-Check" "ABILITY_DUALWIELD"
+/run d=GetDodgeChance() n=3.22 b=5.01 if UnitRace("player")=="Gnome" then n=n-.01 end if UnitRace("player")=="Night Elf" then b=b+2 end p=235.5*d/90.6425-((235.5/90.6425)*b-n)+4 DEFAULT_CHAT_FRAME:AddMessage("Ideal parry: "..string.format("%.2f",p))
+END
+VER 3 0100000000000027 "Ghoul-Heal" "INV_MISC_QUESTIONMARK"
+#showtooltip
+#show
+/cast Raise Dead
+/cast [target=pet,exists] Death Pact 
+END
+VER 3 0100000000000031 "IBF" "INV_MISC_QUESTIONMARK"
+#showtooltip Icebound Fortitude
+/cast Icebound Fortitude
+/dbm broadcast timer 00:12 Shieldwall: Bronin
+END
+VER 3 0100000000000018 "Interrupt" "INV_MISC_QUESTIONMARK"
+/castsequence reset=120 Arcane Torrent, Mind Freeze, Mind Freeze, Mind Freeze, Mind Freeze, Mind Freeze
+END
+VER 3 0100000000000024 "Lichborne" "INV_Misc_QuestionMark"
+#showtooltip Lichborne
+/cast !Lichborne;
+/cast [@player] Death Coil
+END
+VER 3 0100000000000025 "Long-CD" "INV_MISC_QUESTIONMARK"
+#showtooltip
+/cast Empower Rune Weapon
+/cast Dancing Rune Weapon
+END
+VER 3 0100000000000029 "MO-Interrupt" "INV_MISC_QUESTIONMARK"
+#showtooltip
+/cast [target=mouseover] Strangulate
+END
+VER 3 0100000000000026 "Omni-Disease" "INV_MISC_QUESTIONMARK"
+#showtooltip
+#show
+/castsequence reset=target Icy Touch, Plague Strike
+END
+VER 3 0100000000000030 "Parry-Dodge" "INV_MISC_NOTE_05"
+/run d=GetDodgeChance() n=3.22 b=5.01 if UnitRace("player")=="Gnome" then n=n-.01 end if UnitRace("player")=="Night Elf" then b=b+2 end p=235.5*d/90.6425-((235.5/90.6425)*b-n)+4 DEFAULT_CHAT_FRAME:AddMessage("Ideal parry: "..string.format("%.2f",p))
+END
+VER 3 010000000000002B "Rune-Strike" "INV_MISC_QUESTIONMARK"
+#showtooltip
+/startattack
+/cast Rune Strike
+END
+VER 3 0100000000000022 "Short-CD" "INV_Misc_QuestionMark"
+#showtooltip
+#show
+/cast Bone Shield
+END
+VER 3 010000000000002C "Succy" "INV_MISC_QUESTIONMARK"
+#showtooltip
+/castsequence reset=120 Raise Dead, Death Pact
+END
+VER 3 010000000000002F "Trinkets" "INV_MISC_QUESTIONMARK"
+/use 13
+/use 14
+END
+VER 3 010000000000002A "Uber-DeathStrike" "INV_MISC_QUESTIONMARK"
+#showtooltip Death Strike
+/startattack
+/cast Death Strike
+END
+VER 3 010000000000002E "Uber-Pillar" "INV_MISC_QUESTIONMARK"
+#showtooltip Pillar of Frost
+/cast Pillar of Frost
+/cast Raise Dead
+END
+VER 3 0100000000000028 "Vampiric-Heal" "INV_MISC_QUESTIONMARK"
+#showtooltip
+#show
+/use 13
+/use 14
+/cast Blood Tap
+/cast Vampiric Blood
+/cast Rune Tap
+END
+VER 3 0100000000000032 "VB" "INV_MISC_QUESTIONMARK"
+#showtooltip Vampiric Blood
+/cast Vampiric Blood
+/dbm broadcast timer 00:10 LastStand: Bronin
+END

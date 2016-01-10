@@ -1,6 +1,19 @@
+--Cache global variables
+--Lua functions
+local _G = _G
+local print, tostring, select = print, tostring, select
+local format = format
+--WoW API / Variables
+local GetMouseFocus = GetMouseFocus
+local FrameStackTooltip_Toggle = FrameStackTooltip_Toggle
+
+--Global variables that we don't cache, list them here for the mikk's Find Globals script
+-- GLOBALS: SLASH_FRAME1, SLASH_FRAMELIST1, SLASH_TEXLIST1, FRAME, ChatFrame1
+-- GLOBALS: FrameStackTooltip, UIParentLoadAddOn, CopyChatFrame, ElvUI
+
 --[[
 	Command to grab frame information when mouseing over a frame
-	
+
 	Frame Name
 	Width
 	Height
@@ -26,12 +39,12 @@ SlashCmdList["FRAME"] = function(arg)
 		if arg:GetParent() and arg:GetParent():GetName() then
 			ChatFrame1:AddMessage("Parent: |cffFFD100"..arg:GetParent():GetName())
 		end
- 
+
 		ChatFrame1:AddMessage("Width: |cffFFD100"..format("%.2f",arg:GetWidth()))
 		ChatFrame1:AddMessage("Height: |cffFFD100"..format("%.2f",arg:GetHeight()))
 		ChatFrame1:AddMessage("Strata: |cffFFD100"..arg:GetFrameStrata())
 		ChatFrame1:AddMessage("Level: |cffFFD100"..arg:GetFrameLevel())
- 
+
 		if xOfs then
 			ChatFrame1:AddMessage("X: |cffFFD100"..format("%.2f",xOfs))
 		end
@@ -84,7 +97,7 @@ SlashCmdList["FRAMELIST"] = function(msg)
 	end
 end
 
-function TextureList(frame)
+local function TextureList(frame)
 	frame = _G[frame] or FRAME
 	--[[for key, obj in pairs(frame) do
 		if type(obj) == "table" and obj.GetObjectType and obj:GetObjectType() == "Texture" then

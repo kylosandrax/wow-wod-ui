@@ -1,27 +1,27 @@
 local E, L, V, P, G = unpack(select(2, ...)); --Inport: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
 
-local Astrolabe = DongleStub("Astrolabe-1.0") 
-local format = string.format
-local sub = string.sub
-local upper = string.upper
-
-local atan2 = math.atan2
-local modf = math.modf
-local ceil = math.ceil
-local floor = math.floor
-local abs = math.abs
+--Cache global variables
+local select, tonumber, assert, type, unpack = select, tonumber, assert, type, unpack
+local tinsert, tremove = tinsert, tremove
+local atan2, modf, ceil, floor, abs, sqrt, pi, mod = math.atan2, math.modf, math.ceil, math.floor, math.abs, math.sqrt, math.pi, mod
+local format, sub, upper = string.format, string.sub, string.upper
+--WoW API / Variables
+local CreateFrame = CreateFrame
+local UnitPosition = UnitPosition
+local GetPlayerFacing = GetPlayerFacing
+local BreakUpLargeNumbers = BreakUpLargeNumbers
+local GetScreenWidth, GetScreenHeight = GetScreenWidth, GetScreenHeight
 
 --Return short value of a number
-
 function E:ShortValue(v)
-	if v >= 1e9 then
-		return ("%.1fb"):format(v / 1e9):gsub("%.?0+([kmb])$", "%1")
-	elseif v >= 1e6 then
-		return ("%.1fm"):format(v / 1e6):gsub("%.?0+([kmb])$", "%1")
-	elseif v >= 1e3 or v <= -1e3 then
-		return ("%.1fk"):format(v / 1e3):gsub("%.?0+([kmb])$", "%1")
+	if abs(v) >= 1e9 then
+		return format("%.1fG", v / 1e9)
+	elseif abs(v) >= 1e6 then
+		return format("%.1fM", v / 1e6)
+	elseif abs(v) >= 1e3 then
+		return format("%.1fk", v / 1e3)
 	else
-		return v
+		return format("%d", v)
 	end
 end
 
@@ -72,16 +72,42 @@ function E:HexToRGB(hex)
 	return tonumber(rhex, 16), tonumber(ghex, 16), tonumber(bhex, 16)
 end
 
+--From http://wow.gamepedia.com/UI_coordinates
+function E:FramesOverlap(frameA, frameB)
+	if not frameA or not frameB then return	end
+
+	local sA, sB = frameA:GetEffectiveScale(), frameB:GetEffectiveScale();
+	if not sA or not sB then return	end
+
+	local frameALeft = frameA:GetLeft()
+	local frameARight = frameA:GetRight()
+	local frameABottom = frameA:GetBottom()
+	local frameATop = frameA:GetTop()
+	
+	local frameBLeft = frameB:GetLeft()
+	local frameBRight = frameB:GetRight()
+	local frameBBottom = frameB:GetBottom()
+	local frameBTop = frameB:GetTop()
+
+	if not frameALeft or not frameARight or not frameABottom or not frameATop then return end
+	if not frameBLeft or not frameBRight or not frameBBottom or not frameBTop then return end
+	
+	return ((frameALeft*sA) < (frameBRight*sB))
+		and ((frameBLeft*sB) < (frameARight*sA))
+		and ((frameABottom*sA) < (frameBTop*sB))
+		and ((frameBBottom*sB) < (frameATop*sA));
+end
+
 function E:GetScreenQuadrant(frame)
 	local x, y = frame:GetCenter()
 	local screenWidth = GetScreenWidth()
 	local screenHeight = GetScreenHeight()
 	local point
-	
+
 	if not frame:GetCenter() then
 		return "UNKNOWN", frame:GetName()
 	end
-	
+
 	if (x > (screenWidth / 4) and x < (screenWidth / 4)*3) and y > (screenHeight / 4)*3 then
 		point = "TOP"
 	elseif x < (screenWidth / 4) and y > (screenHeight / 4)*3 then
@@ -108,7 +134,7 @@ end
 function E:GetXYOffset(position, override)
 	local default = E.PixelMode and 0 or 1
 	local x, y = override or default, override or default
-	
+
 	if position == 'TOP' or position == 'TOPLEFT' or position == 'TOPRIGHT' then
 		return 0, y
 	elseif position == 'BOTTOM' or position == 'BOTTOMLEFT' or position == 'BOTTOMRIGHT' then
@@ -123,9 +149,9 @@ end
 local styles = {
 	['CURRENT'] = '%s',
 	['CURRENT_MAX'] = '%s - %s',
-	['CURRENT_PERCENT'] =  '%s - %s%%',
-	['CURRENT_MAX_PERCENT'] = '%s - %s | %s%%',
-	['PERCENT'] = '%s%%',
+	['CURRENT_PERCENT'] =  '%s - %.1f%%',
+	['CURRENT_MAX_PERCENT'] = '%s - %s | %.1f%%',
+	['PERCENT'] = '%.1f%%',
 	['DEFICIT'] = '-%s'
 }
 
@@ -133,9 +159,9 @@ function E:GetFormattedText(style, min, max)
 	assert(styles[style], 'Invalid format style: '..style)
 	assert(min, 'You need to provide a current value. Usage: E:GetFormattedText(style, min, max)')
 	assert(max, 'You need to provide a maximum value. Usage: E:GetFormattedText(style, min, max)')
-	
+
 	if max == 0 then max = 1 end
-	
+
 	local useStyle = styles[style]
 
 	if style == 'DEFICIT' then
@@ -146,20 +172,17 @@ function E:GetFormattedText(style, min, max)
 			return format(useStyle, E:ShortValue(deficit))
 		end
 	elseif style == 'PERCENT' then
-		local s = format(useStyle, format("%.1f", min / max * 100))
-		s = s:gsub(".0%%", "%%")
+		local s = format(useStyle, min / max * 100)
 		return s
 	elseif style == 'CURRENT' or ((style == 'CURRENT_MAX' or style == 'CURRENT_MAX_PERCENT' or style == 'CURRENT_PERCENT') and min == max) then
 		return format(styles['CURRENT'],  E:ShortValue(min))
 	elseif style == 'CURRENT_MAX' then
 		return format(useStyle,  E:ShortValue(min), E:ShortValue(max))
 	elseif style == 'CURRENT_PERCENT' then
-		local s = format(useStyle, E:ShortValue(min), format("%.1f", min / max * 100))
-		s = s:gsub(".0%%", "%%")
+		local s = format(useStyle, E:ShortValue(min), min / max * 100)
 		return s
 	elseif style == 'CURRENT_MAX_PERCENT' then
-		local s = format(useStyle, E:ShortValue(min), E:ShortValue(max), format("%.1f", min / max * 100))
-		s = s:gsub(".0%%", "%%")
+		local s = format(useStyle, E:ShortValue(min), E:ShortValue(max), min / max * 100)
 		return s
 	end
 end
@@ -271,37 +294,22 @@ function E:GetTimeInfo(s, threshhold)
 	end
 end
 
-local ninetyDegreeAngleInRadians = (3.141592653589793 / 2) 
-local function GetPosition(unit, mapScan)
-	local m, f, x, y
-	if unit == "player" or UnitIsUnit("player", unit) then
-		m, f, x, y = Astrolabe:GetCurrentPlayerPosition()
-	else
-		m, f, x, y = Astrolabe:GetUnitPosition(unit, mapScan or WorldMapFrame:IsVisible())
-	end
+function E:GetDistance(unit1, unit2)
+	local x1, y1, _, map1 = UnitPosition(unit1)
 
-	if not (m and y) then
-		return false
-	else
-		return true, m, f, x, y
-	end
-end
+	if not x1 then return end
 
-function E:GetDistance(unit1, unit2, mapScan)
-	local canCalculate, m1, f1, x1, y1 = GetPosition(unit1, mapScan)
+	local x2, y2, _, map2 = UnitPosition(unit2)
 
-	if not canCalculate then return end
+	if not x2 then return end
 
-	local canCalculate, m2, f2, x2, y2 = GetPosition(unit2, mapScan)
+	if map1 ~= map2 then return end
 
-	if not canCalculate then return end
+	local dX = x2 - x1
+	local dY = y2 - y1
+	local distance = sqrt(dX * dX + dY * dY)
 
-	local distance, xDelta, yDelta = Astrolabe:ComputeDistance(m1, f1, x1, y1, m2, f2, x2, y2)
-	if distance and xDelta and yDelta then
-		return distance, -ninetyDegreeAngleInRadians -GetPlayerFacing() - atan2(yDelta, xDelta) 
-	elseif distance then
-		return distance
-	end
+	return distance, atan2(dY, dX) - GetPlayerFacing()
 end
 
 --Money text formatting, code taken from Scrooge by thelibrarian ( http://www.wowace.com/addons/scrooge/ )

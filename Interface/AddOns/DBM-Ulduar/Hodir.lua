@@ -1,7 +1,7 @@
 local mod	= DBM:NewMod("Hodir", "DBM-Ulduar")
 local L		= mod:GetLocalizedStrings()
 
-mod:SetRevision(("$Revision: 147 $"):sub(12, -3))
+mod:SetRevision(("$Revision: 209 $"):sub(12, -3))
 mod:SetCreatureID(32845,32926)
 mod:SetEncounterID(1135)
 mod:SetModelID(28743)
@@ -25,17 +25,16 @@ local specWarnStormCloud	= mod:NewSpecialWarningYou(65123)
 local specWarnBitingCold	= mod:NewSpecialWarningMove(62188, false)
 
 local enrageTimer			= mod:NewBerserkTimer(475)
-local timerFlashFreeze		= mod:NewCastTimer(9, 61968)
+local timerFlashFreeze		= mod:NewCastTimer(9, 61968, nil, nil, nil, 2)
 local timerFrozenBlows		= mod:NewBuffActiveTimer(20, 63512)
-local timerFlashFrCD		= mod:NewCDTimer(50, 61968)
+local timerFlashFrCD		= mod:NewCDTimer(50, 61968, nil, nil, nil, 2)
 local timerAchieve			= mod:NewAchievementTimer(179, 3182, "TimerSpeedKill")
 
 local yellStormCloud		= mod:NewYell(65133)
-local soundFlashFreeze		= mod:NewSound(61968)
 
 mod:AddBoolOption("SetIconOnStormCloud")
 
-local stormCloudIcon
+local stormCloudIcon = 8
 
 function mod:OnCombatStart(delay)
 	enrageTimer:Start(-delay)
@@ -49,7 +48,6 @@ function mod:SPELL_CAST_START(args)
 		timerFlashFreeze:Start()
 		warnFlashFreeze:Show()
 		timerFlashFrCD:Start()
-		soundFlashFreeze:Play()
 	end
 end
 

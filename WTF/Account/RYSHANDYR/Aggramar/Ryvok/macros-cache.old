@@ -13,13 +13,13 @@ VER 3 0100000000000024 "MO-ES" "INV_MISC_QUESTIONMARK"
 #showtooltip
 /cast [target=mouseover,help] Execution Sentence; [help] Execution Sentence; Execution Sentence
 END
-VER 3 0100000000000026 "MO-HoP" "INV_MISC_QUESTIONMARK"
-#showtooltip
-/cast [target=mouseover,help] Hand of Purity; [help] Hand of Purity; Hand of Purity
-END
 VER 3 0100000000000023 "MO-HoP" "INV_MISC_QUESTIONMARK"
 #showtooltip
 /cast [target=mouseover,help] Hand of Protection; [help] Hand of Protection; Hand of Protection
+END
+VER 3 0100000000000026 "MO-HoP" "INV_MISC_QUESTIONMARK"
+#showtooltip
+/cast [target=mouseover,help] Hand of Purity; [help] Hand of Purity; Hand of Purity
 END
 VER 3 0100000000000022 "MO-HoSac" "INV_MISC_QUESTIONMARK"
 #showtooltip

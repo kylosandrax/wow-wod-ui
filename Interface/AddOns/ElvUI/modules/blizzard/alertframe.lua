@@ -1,6 +1,23 @@
 local E, L, DF = unpack(select(2, ...))
 local B = E:GetModule('Blizzard');
 
+--Cache global variables
+--Lua functions
+local _G = _G
+local pairs = pairs
+--WoW API / Variables
+local AlertFrame_FixAnchors = AlertFrame_FixAnchors
+local MAX_ACHIEVEMENT_ALERTS = MAX_ACHIEVEMENT_ALERTS
+
+--Global variables that we don't cache, list them here for mikk's FindGlobals script
+-- GLOBALS: AlertFrame, AlertFrameMover, MissingLootFrame, GroupLootContainer
+-- GLOBALS: LOOT_WON_ALERT_FRAMES, LOOT_UPGRADE_ALERT_FRAMES, MONEY_WON_ALERT_FRAMES
+-- GLOBALS: AchievementAlertFrame1, CriteriaAlertFrame1, ChallengeModeAlertFrame1
+-- GLOBALS: DungeonCompletionAlertFrame1, StorePurchaseAlertFrame, ScenarioAlertFrame1
+-- GLOBALS: GuildChallengeAlertFrame, DigsiteCompleteToastFrame, GarrisonBuildingAlertFrame
+-- GLOBALS: GarrisonMissionAlertFrame, GarrisonFollowerAlertFrame, GarrisonShipFollowerAlertFrame
+-- GLOBALS: GarrisonShipMissionAlertFrame, UIPARENT_MANAGED_FRAME_POSITIONS
+
 local AlertFrameHolder = CreateFrame("Frame", "AlertFrameHolder", E.UIParent)
 AlertFrameHolder:SetWidth(180)
 AlertFrameHolder:SetHeight(20)
@@ -34,7 +51,7 @@ function E:PostAlertMove(screenQuadrant)
 					frame:Point("TOP", lastframe, "BOTTOM", 0, -4)
 				else
 					frame:Point("BOTTOM", lastframe, "TOP", 0, 4)
-				end	
+				end
 			else
 				if POSITION == "TOP" then
 					frame:Point("TOP", AlertFrameHolder, "BOTTOM", 0, -4)
@@ -43,17 +60,17 @@ function E:PostAlertMove(screenQuadrant)
 				end
 			end
 			lastframe = frame
-			
+
 			if frame:IsShown() then
 				lastShownFrame = frame
 			end
 		end
-		
+
 		AlertFrame:ClearAllPoints()
 		if lastShownFrame then
-			AlertFrame:SetAllPoints(lastShownFrame)			
+			AlertFrame:SetAllPoints(lastShownFrame)
 		else
-			AlertFrame:SetAllPoints(AlertFrameHolder)					
+			AlertFrame:SetAllPoints(AlertFrameHolder)
 		end
 	else
 		AlertFrame:ClearAllPoints()
@@ -75,10 +92,10 @@ function B:AlertFrame_SetLootAnchors(alertAnchor)
 		if ( GroupLootContainer:IsShown() ) then
 			GroupLootContainer:ClearAllPoints()
 			GroupLootContainer:SetPoint(POSITION, MissingLootFrame, ANCHOR_POINT, 0, YOFFSET)
-		end		
+		end
 	elseif ( GroupLootContainer:IsShown() or FORCE_POSITION) then
 		GroupLootContainer:ClearAllPoints()
-		GroupLootContainer:SetPoint(POSITION, alertAnchor, ANCHOR_POINT)	
+		GroupLootContainer:SetPoint(POSITION, alertAnchor, ANCHOR_POINT)
 	end
 end
 
@@ -188,7 +205,7 @@ function B:AlertFrame_SetDigsiteCompleteToastFrameAnchors(alertAnchor)
         alertAnchor = DigsiteCompleteToastFrame;
     end
 end
- 
+
 function B:AlertFrame_SetGarrisonBuildingAlertFrameAnchors(alertAnchor)
     if ( GarrisonBuildingAlertFrame and GarrisonBuildingAlertFrame:IsShown() ) then
 		GarrisonBuildingAlertFrame:ClearAllPoints()
@@ -196,7 +213,7 @@ function B:AlertFrame_SetGarrisonBuildingAlertFrameAnchors(alertAnchor)
         alertAnchor = GarrisonBuildingAlertFrame;
     end
 end
- 
+
 function B:AlertFrame_SetGarrisonMissionAlertFrameAnchors(alertAnchor)
     if ( GarrisonMissionAlertFrame and GarrisonMissionAlertFrame:IsShown() ) then
 		GarrisonMissionAlertFrame:ClearAllPoints()
@@ -204,12 +221,28 @@ function B:AlertFrame_SetGarrisonMissionAlertFrameAnchors(alertAnchor)
         alertAnchor = GarrisonMissionAlertFrame;
     end
 end
- 
+
 function B:AlertFrame_SetGarrisonFollowerAlertFrameAnchors(alertAnchor)
     if ( GarrisonFollowerAlertFrame and GarrisonFollowerAlertFrame:IsShown() ) then
 		GarrisonFollowerAlertFrame:ClearAllPoints()
         GarrisonFollowerAlertFrame:SetPoint(POSITION, alertAnchor, ANCHOR_POINT, 0, YOFFSET);
         alertAnchor = GarrisonFollowerAlertFrame;
+    end
+end
+
+function B:AlertFrame_SetGarrisonShipFollowerAlertFrameAnchors(alertAnchor)
+    if ( GarrisonShipFollowerAlertFrame and GarrisonShipFollowerAlertFrame:IsShown() ) then
+		GarrisonShipFollowerAlertFrame:ClearAllPoints()
+        GarrisonShipFollowerAlertFrame:SetPoint(POSITION, alertAnchor, ANCHOR_POINT, 0, YOFFSET);
+        alertAnchor = GarrisonShipFollowerAlertFrame;
+    end
+end
+
+function B:AlertFrame_SetGarrisonShipMissionAlertFrameAnchors(alertAnchor)
+    if ( GarrisonShipMissionAlertFrame and GarrisonShipMissionAlertFrame:IsShown() ) then
+		GarrisonShipMissionAlertFrame:ClearAllPoints()
+        GarrisonShipMissionAlertFrame:SetPoint(POSITION, alertAnchor, ANCHOR_POINT, 0, YOFFSET);
+        alertAnchor = GarrisonShipMissionAlertFrame;
     end
 end
 
@@ -233,4 +266,6 @@ function B:AlertMovers()
 	self:SecureHook('AlertFrame_SetGarrisonBuildingAlertFrameAnchors')
 	self:SecureHook('AlertFrame_SetGarrisonMissionAlertFrameAnchors')
 	self:SecureHook('AlertFrame_SetGarrisonFollowerAlertFrameAnchors')
+	self:SecureHook('AlertFrame_SetGarrisonShipMissionAlertFrameAnchors')
+	self:SecureHook('AlertFrame_SetGarrisonShipFollowerAlertFrameAnchors')
 end

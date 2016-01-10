@@ -1,0 +1,37 @@
+
+DraenorTreasuresDB = {
+	["profileKeys"] = {
+		["Zapunzel - Aggramar"] = "Default",
+		["Ryvok - Terokkar"] = "Default",
+		["Greenthorn - Aggramar"] = "Default",
+		["Ryjax - Aggramar"] = "Default",
+		["Stormslinger - Aggramar"] = "Default",
+		["Kylosandrax - Aggramar"] = "Default",
+		["Kromethious - Aggramar"] = "Default",
+		["Feldspar - Aggramar"] = "Default",
+		["Kxtrader - Aggramar"] = "Default",
+		["Kxchanter - Aggramar"] = "Default",
+		["Kyloc - Aggramar"] = "Default",
+		["Banjax - Aggramar"] = "Default",
+		["Kylosandrix - Aggramar"] = "Default",
+		["Ryvok - Aggramar"] = "Default",
+		["Bronin - Aggramar"] = "Default",
+	},
+	["profiles"] = {
+		["Default"] = {
+			["rare_h_soa"] = false,
+			["rare_h_ffr"] = false,
+			["rare_h_smv"] = false,
+			["rare_h_tj"] = false,
+			["SMVRares"] = false,
+			["GorgrondRares"] = false,
+			["TaladorRares"] = false,
+			["SoARares"] = false,
+			["FFRRares"] = false,
+			["rare_h_ng"] = false,
+			["NagrandRares"] = false,
+			["rare_h_td"] = false,
+			["rare_h_gg"] = false,
+		},
+	},
+}

@@ -5,7 +5,7 @@
 --]]----------------------------------------------------------------------
 
 local OVALE, Ovale = ...
-Ovale = LibStub("AceAddon-3.0"):NewAddon(Ovale, OVALE, "AceEvent-3.0", "AceSerializer-3.0", "AceTimer-3.0")
+Ovale = LibStub("AceAddon-3.0"):NewAddon(Ovale, OVALE, "AceEvent-3.0")
 
 -- Export "Ovale" symbol to global namespace.
 _G["Ovale"] = Ovale
@@ -16,7 +16,9 @@ local AceGUI = LibStub("AceGUI-3.0")
 -- Localized strings table.
 local L = nil
 
+local assert = assert
 local format = string.format
+local ipairs = ipairs
 local next = next
 local pairs = pairs
 local select = select
@@ -31,28 +33,34 @@ local unpack = unpack
 local wipe = wipe
 local API_GetItemInfo = GetItemInfo
 local API_GetTime = GetTime
-local API_IsInGroup = IsInGroup
-local API_RegisterAddonMessagePrefix = RegisterAddonMessagePrefix
-local API_SendAddonMessage = SendAddonMessage
 local API_UnitCanAttack = UnitCanAttack
+local API_UnitClass = UnitClass
 local API_UnitExists = UnitExists
+local API_UnitGUID = UnitGUID
 local API_UnitHasVehicleUI = UnitHasVehicleUI
 local API_UnitIsDead = UnitIsDead
 local DEFAULT_CHAT_FRAME = DEFAULT_CHAT_FRAME
-local LE_PARTY_CATEGORY_INSTANCE = LE_PARTY_CATEGORY_INSTANCE
+local INFINITY = math.huge
 
-local OVALE_VERSION = "6.0.28"
+local OVALE_VERSION = "6.2.16"
 local REPOSITORY_KEYWORD = "@" .. "project-version" .. "@"
 
 -- Table of strings to display once per session.
 local self_oneTimeMessage = {}
+
+-- List of the last MAX_REFRESH_INTERVALS elapsed times between refreshes.
+local MAX_REFRESH_INTERVALS = 500
+local self_refreshIntervals = {}
+local self_refreshIndex = 1
 --</private-static-properties>
 
 --<public-static-properties>
--- Project version number.
-Ovale.version = (OVALE_VERSION == REPOSITORY_KEYWORD) and "development version" or OVALE_VERSION
 -- Localization string table.
 Ovale.L = nil
+-- Player's class.
+Ovale.playerClass = select(2, API_UnitClass("player"))
+-- Player's GUID (initialized after PLAYER_LOGIN event).
+Ovale.playerGUID = nil
 -- AceDB-3.0 database to handle SavedVariables (managed by OvaleOptions).
 Ovale.db = nil
 --the frame with the icons
@@ -63,7 +71,7 @@ Ovale.list = {}
 -- Checkbox and dropdown GUI controls.
 Ovale.checkBoxWidget = {}
 Ovale.listWidget = {}
--- List if units that require refreshing the best action.
+-- List of units that require refreshing the best action.
 Ovale.refreshNeeded = {}
 -- Prefix of messages received via CHAT_MSG_ADDON for Ovale.
 Ovale.MSG_PREFIX = OVALE
@@ -86,9 +94,13 @@ end
 --</private-static-methods>
 
 --<public-static-methods>
+-- GLOBALS: BINDING_HEADER_OVALE
+-- GLOBALS: BINDING_NAME_OVALE_CHECKBOX0
+-- GLOBALS: BINDING_NAME_OVALE_CHECKBOX1
+-- GLOBALS: BINDING_NAME_OVALE_CHECKBOX2
+-- GLOBALS: BINDING_NAME_OVALE_CHECKBOX3
+-- GLOBALS: BINDING_NAME_OVALE_CHECKBOX4
 function Ovale:OnInitialize()
-	-- Register message prefix for the addon.
-	API_RegisterAddonMessagePrefix(self.MSG_PREFIX)
 	-- Localization.
 	L = Ovale.L
 	-- Key bindings.
@@ -102,7 +114,8 @@ function Ovale:OnInitialize()
 end
 
 function Ovale:OnEnable()
-	self:RegisterEvent("CHAT_MSG_ADDON")
+	self.playerGUID = API_UnitGUID("player")
+
 	self:RegisterEvent("PLAYER_ENTERING_WORLD")
 	self:RegisterEvent("PLAYER_TARGET_CHANGED")
 	self:RegisterMessage("Ovale_CombatStarted")
@@ -113,7 +126,6 @@ function Ovale:OnEnable()
 end
 
 function Ovale:OnDisable()
-	self:UnregisterEvent("CHAT_MSG_ADDON")
 	self:UnregisterEvent("PLAYER_ENTERING_WORLD")
 	self:UnregisterEvent("PLAYER_TARGET_CHANGED")
 	self:UnregisterMessage("Ovale_CombatEnded")
@@ -121,57 +133,16 @@ function Ovale:OnDisable()
 	self.frame:Hide()
 end
 
-do
-	local versionReply = {}
-	local timer
-
-	function Ovale:CHAT_MSG_ADDON(event, ...)
-		local prefix, message, channel, sender = ...
-		if prefix == self.MSG_PREFIX then
-			local ok, msgType, version = self:Deserialize(message)
-			if ok then
-				if msgType == "V" then
-					local msg = self:Serialize("VR", self.version)
-					local channel = API_IsInGroup(LE_PARTY_CATEGORY_INSTANCE) and "INSTANCE_CHAT" or "RAID"
-					API_SendAddonMessage(self.MSG_PREFIX, msg, channel)
-				elseif msgType == "VR" then
-					versionReply[sender] = version
-				end
-			end
-		end
-	end
-
-	function Ovale:VersionCheck()
-		if not timer then
-			wipe(versionReply)
-			local message = self:Serialize("V", self.version)
-			local channel = API_IsInGroup(LE_PARTY_CATEGORY_INSTANCE) and "INSTANCE_CHAT" or "RAID"
-			API_SendAddonMessage(self.MSG_PREFIX, message, channel)
-			timer = self:ScheduleTimer("PrintVersionCheck", 3)
-		end
-	end
-
-	function Ovale:PrintVersionCheck()
-		if next(versionReply) then
-			for sender, version in pairs(versionReply) do
-				self:Print(">>> %s is using Ovale %s", sender, version)
-			end
-		else
-			self:Print(">>> No other Ovale users present.")
-		end
-		timer = nil
-	end
-end
-
 --Called when the player target change
 --Used to update the visibility e.g. if the user chose
 --to hide Ovale if a friendly unit is targeted
 function Ovale:PLAYER_ENTERING_WORLD()
+	wipe(self_refreshIntervals)
+	self_refreshIndex = 1
 	self:ClearOneTimeMessages()
 end
 
 function Ovale:PLAYER_TARGET_CHANGED()
-	self.refreshNeeded.target = true
 	self:UpdateVisibility()
 end
 
@@ -289,7 +260,6 @@ function Ovale:UpdateControls()
 	end
 end
 
-
 function Ovale:UpdateFrame()
 	self.frame:ReleaseChildren()
 	self.frame:UpdateIcons()
@@ -297,8 +267,26 @@ function Ovale:UpdateFrame()
 	self:UpdateVisibility()
 end
 
+function Ovale:GetCheckBox(name)
+	local widget
+	if type(name) == "string" then
+		widget = self.checkBoxWidget[name]
+	elseif type(name) == "number" then
+		-- "name" is a number, so count checkboxes until we reach the k'th one (indexed from 0).
+		local k = 0
+		for _, frame in pairs(self.checkBoxWidget) do
+			if k == name then
+				widget = frame
+				break
+			end
+			k = k + 1
+		end
+	end
+	return widget
+end
+
 function Ovale:IsChecked(name)
-	local widget = self.checkBoxWidget[name]
+	local widget = self:GetCheckBox(name)
 	return widget and widget:GetValue()
 end
 
@@ -307,31 +295,51 @@ function Ovale:GetListValue(name)
 	return widget and widget:GetValue()
 end
 
--- Set the k'th checkbox control to the specified on/off (true/false) value.
-function Ovale:SetCheckBox(k, on)
-	local profile = self.db.profile
-	for name, widget in pairs(self.checkBoxWidget) do
-		if k == 0 then
+-- Set the checkbox control to the specified on/off (true/false) value.
+function Ovale:SetCheckBox(name, on)
+	local widget = self:GetCheckBox(name)
+	if widget then
+		local oldValue = widget:GetValue()
+		if oldValue ~= on then
 			widget:SetValue(on)
-			profile.check[name] = on
-			break
+			OnCheckBoxValueChanged(widget)
 		end
-		k = k - 1
 	end
 end
 
--- Toggle the k'th checkbox control.
-function Ovale:ToggleCheckBox(k)
-	local profile = self.db.profile
-	for name, widget in pairs(self.checkBoxWidget) do
-		if k == 0 then
-			local on = not widget:GetValue()
-			widget:SetValue(on)
-			profile.check[name] = on
-			break
-		end
-		k = k - 1
+-- Toggle the checkbox control.
+function Ovale:ToggleCheckBox(name)
+	local widget = self:GetCheckBox(name)
+	if widget then
+		local on = not widget:GetValue()
+		widget:SetValue(on)
+		OnCheckBoxValueChanged(widget)
 	end
+end
+
+function Ovale:AddRefreshInterval(milliseconds)
+	if milliseconds < INFINITY then
+		self_refreshIntervals[self_refreshIndex] = milliseconds
+		self_refreshIndex = (self_refreshIndex < MAX_REFRESH_INTERVALS) and (self_refreshIndex + 1) or 1
+	end
+end
+
+function Ovale:GetRefreshIntervalStatistics()
+	local sumRefresh, minRefresh, maxRefresh, count = 0, INFINITY, 0, 0
+	for k, v in ipairs(self_refreshIntervals) do
+		if v > 0 then
+			if minRefresh > v then
+				minRefresh = v
+			end
+			if maxRefresh < v then
+				maxRefresh = v
+			end
+			sumRefresh = sumRefresh + v
+			count = count + 1
+		end
+	end
+	local avgRefresh = (count > 0) and (sumRefresh / count) or 0
+	return avgRefresh, minRefresh, maxRefresh, count
 end
 
 function Ovale:FinalizeString(s)
@@ -399,6 +407,15 @@ function Ovale:PrintOneTimeMessages()
 		end
 	end
 end
+
+function Ovale:GetMethod(methodName, subModule)
+	local func, arg = self[methodName], self
+	if not func then
+		func, arg = subModule[methodName], subModule
+	end
+	assert(func ~= nil)
+	return func, arg
+end
 --</public-static-methods>
 
 --<private-static-properties>
@@ -417,6 +434,7 @@ do
 		Error = Ovale.Error,
 		Log = DoNothing,
 		Print = Ovale.Print,
+		GetMethod = Ovale.GetMethod,
 	}
 
 	Ovale:SetDefaultModulePrototype(modulePrototype)

@@ -1,6 +1,6 @@
 
 TradeSkillDW_Settings = {
-	["NumButtons"] = 25,
-	["expanded"] = true,
+	["expanded"] = false,
 	["frameStrata"] = "MEDIUM",
+	["NumButtons"] = 25,
 }

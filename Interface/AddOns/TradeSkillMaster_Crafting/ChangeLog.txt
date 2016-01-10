@@ -1,3 +1,26 @@
+v3.0.1
+*Fix issue with gathering not appearing if no queue for the current player.
+
+v3.0
+*Initial 3.0 version!
+\\
+
+v2.6.19
+*Updated to 6.2.
+*Fixed bug with material links not showing up.
+
+v2.6.18
+*Fixing interface version.
+
+v2.6.17
+*Updated for patch 6.1.
+
+v2.6.16
+*Added TradeSkillMaster_ItemTracker as a required dependency.
+
+v2.6.15
+*Fixed an issue where the cost per mat was displayed incorrectly if more than one item was made per craft.
+
 v2.6.14
 *Fixed an issue with restock queue and crafts that produce multiple items.
 *Fixed an issue where crafting tab would show negative amount queued.

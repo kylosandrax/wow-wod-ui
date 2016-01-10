@@ -23,7 +23,7 @@ local function cleanupVersion(version)
 end
 
 local ADDON_NAME = ...
-local ADDON_VERSION = cleanupVersion("0.9")
+local ADDON_VERSION = cleanupVersion("6.2.0")
 
 -- Define Bar for now but the rest is at the bottom of the file.
 local Bar = {}
@@ -108,9 +108,11 @@ local SpellIds = {
 	["Divine Aegis"] = 47753,
 	["Spirit Shell"] = 114908,
 	["Angelic Bulwark"] = 114214,
+	["Clarity of Will"] = 152118,
 	-- Paladin
 	["Illuminated Healing"] = 86273,
 	["Sacred Shield"] = 65148,
+	["Saved by the Light"] = 157047,
 	-- Death Knight
 	["Blood Shield"] = 77535,
 	["Death Barrier"] = 115635,
@@ -139,6 +141,8 @@ local SpellIds = {
 	["Weak Ancient Barrier"] = 142863,
 	["Ancient Barrier"] = 142864,
 	["Strong Ancient Barrier"] = 142865,
+	["Nullification Barrier"] = 156803,
+	["Nullification Barrier (Player)"] = 163134,
 }
 local SpellIdsRev = {}
 for k,v in pairs(SpellIds) do
@@ -195,10 +199,12 @@ local AbsorbsTracked = {
 		["Spirit Shell"] = true,
 		["Angelic Bulwark"] = true,
 		["Power Word: Shield (Divine Insight)"] = true,
+		["Clarity of Will"] = true,
 	},
 	["Paladin"] = {
 		["Illuminated Healing"] = true,
 		["Sacred Shield"] = true,
+		["Saved by the Light"] = true,
 	},
 	["Death Knight"] = {
 		["Blood Shield"] = true,
@@ -237,6 +243,7 @@ local AbsorbsTracked = {
 		["Weak Ancient Barrier"] = true,
 		["Ancient Barrier"] = true,
 		["Strong Ancient Barrier"] = true,
+		["Nullification Barrier"] = true,
 	},
 }
 

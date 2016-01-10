@@ -1,0 +1,5 @@
+
+ResolveHistoryDB = {
+	["Kxtrader - Aggramar"] = {
+	},
+}

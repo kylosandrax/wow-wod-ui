@@ -2,7 +2,7 @@ local AddonName, Hermes = ...
 
 Hermes.SPELL_MONITOR_SCHEMA = {
 	["schema"] = 60000,
-	["revision"] = 1,
+	["revision"] = 2,
 	["spellmetadata"] = {
 		-- Death Knight
 		[47528] 	= { ["duration"] = "4" },
@@ -26,6 +26,9 @@ Hermes.SPELL_MONITOR_SCHEMA = {
 		[114203] 	= { ["duration"] = "15" },
 		[114207] 	= { ["duration"] = "10" },
 		
+		-- Hunter
+		[172106] 	= { ["duration"] = "6" },
+		
 		-- Druid
 		[22812] 	= { ["duration"] = "12" },
 		[22842] 	= { ["duration"] = "20" },
@@ -37,11 +40,13 @@ Hermes.SPELL_MONITOR_SCHEMA = {
 		[102351] 	= { ["duration"] = "30" },
 		[102342] 	= { ["duration"] = "12" },
 		[124974] 	= { ["duration"] = "30" },
+		[106898] 	= { ["duration"] = "8" },
 		
 		-- Mage
 		[45438] 	= { ["duration"] = "10" },
 		[80353] 	= { ["duration"] = "40" },
 		[2139] 		= { ["duration"] = "6" },
+		[159916]	= { ["duration"] = "6" },
 		
 		-- Priest
 		[109964] 	= { ["duration"] = "15" },
@@ -71,6 +76,7 @@ Hermes.SPELL_MONITOR_SCHEMA = {
 		[96231] 	= { ["duration"] = "4" },
 		[853] 		= { ["duration"] = "6" },
 		[105593] 	= { ["duration"] = "6" },
+		[86659] 	= { ["duration"] = "8" },
 		
 		-- Rogue
 		[2094] 		= { ["duration"] = "60" },
@@ -85,10 +91,13 @@ Hermes.SPELL_MONITOR_SCHEMA = {
 		[5394] 		= { ["duration"] = "15" },
 		[98008] 	= { ["duration"] = "6" },
 		[57994] 	= { ["duration"] = "3" },
-		[108280] 	= { ["duration"] = "11" },
+		[108280] 	= { ["duration"] = "10" },
 		[108281] 	= { ["duration"] = "10" },
 		
 		-- Warlock
+		
+		-- Warrior
+		[114030] = { ["duration"] = "12" }
 	},
 	["requirements"] = {
 		[698] 	= { { ["k"] = 10, ["level"] = 42, } },
@@ -98,6 +107,9 @@ Hermes.SPELL_MONITOR_SCHEMA = {
 		[1038] 	= { { ["k"] = 10, ["level"] = 66, } },
 		[97462] = { { ["k"] = 10, ["level"] = 83, } },
 		[2139] 	= { { ["k"] = 10, ["level"] = 10, } },
+		[159916] 	= { { ["k"] = 10, ["level"] = 87, } },
+		[172106] 	= { { ["k"] = 10, ["level"] = 84, } },
+		[106898] 	= { { ["k"] = 10, ["level"] = 84, } },
 		[57994] = { { ["k"] = 10, ["level"] = 16, } },
 		[29893] = { { ["k"] = 10, ["level"] = 68, } },
 		[6940] 	= { { ["k"] = 10, ["level"] = 80, } },
@@ -126,15 +138,16 @@ Hermes.SPELL_MONITOR_SCHEMA = {
 		[20608] = { { ["k"] = 10, ["level"] = 30, } },
 		[48707] = { { ["k"] = 10, ["level"] = 68, } },
 		[20484] = { { ["k"] = 10, ["level"] = 20, } },
-		[740] 	= { { ["k"] = 10, ["level"] = 68, } },
+		[740] 	= { { ["k"] = 10, ["level"] = 74, } },
 		[61999] = { { ["k"] = 10, ["level"] = 72, } },
 		[64843] = { { ["k"] = 10, ["level"] = 78, } },
 		[633] 	= { { ["k"] = 10, ["level"] = 16, } },
 		[86150] = { { ["k"] = 10, ["level"] = 85, } },
+		[86659] = { { ["k"] = 10, ["level"] = 75, } },
 		
 		[109964] = { { ["k"] = 10, ["level"] = 28, } },
 		[114018] = { { ["k"] = 10, ["level"] = 76, } },
-		[108280] = { { ["k"] = 10, ["level"] = 20, } },
+		[108280] = { { ["k"] = 10, ["level"] = 65, } },
 		[114028] = { { ["k"] = 10, ["level"] = 20, } },
 		[114207] = { { ["k"] = 10, ["level"] = 87, } },
 		[114203] = { { ["k"] = 10, ["level"] = 87, } },
@@ -146,6 +159,9 @@ Hermes.SPELL_MONITOR_SCHEMA = {
 		
 		-- Priest
 		[108920] = { { ["k"] = 10, ["level"] = 15, } }, -- Void Tendrils
+		
+		-- Warrior
+		[114030] = { { ["k"] = 10, ["level"] = 75 } },
 		
 		-----------------------------------
 		-- Talent Requirements
@@ -172,6 +188,7 @@ Hermes.SPELL_MONITOR_SCHEMA = {
 		-- Warrior
 		[102060]	= { { ["k"] = 25, ["talentIndex"] = 9 } },
 		[114028]	= { { ["k"] = 25, ["talentIndex"] = 13 } },
+		[114030]	= { { ["k"] = 25, ["talentIndex"] = 15 } },
 		
 		-- Shaman
 		[108281]	= { { ["k"] = 25, ["talentIndex"] = 14 } }, -- Ancestral Guidance
@@ -189,6 +206,8 @@ Hermes.SPELL_MONITOR_SCHEMA = {
 		
 		-- Druid (Restoration)
 		[102342] 	= { { ["k"] = 30, ["specialization"] = 105 } },
+		[124974] 	= { { ["k"] = 30, ["specialization"] = 105 } },
+		[740] 	= { { ["k"] = 30, ["specialization"] = 105 } },
 		
 		-- Mage (Frost)
 		[31687] 	= { { ["k"] = 30, ["specialization"] = 64 } },
@@ -197,6 +216,7 @@ Hermes.SPELL_MONITOR_SCHEMA = {
 		[98008] 	= { { ["k"] = 30, ["specialization"] = 264 } },
 		[5394] 		= { { ["k"] = 30, ["specialization"] = 264 } },	-- Healing Stream Totem
 		[16190] 	= { { ["k"] = 30, ["specialization"] = 264 } },	-- Mana Tide Totem
+		[108280] 	= { { ["k"] = 30, ["specialization"] = 264 } },	-- Healing Tide Totem
 		
 		-- Priest (Shadow)
 		[15286]		= { { ["k"] = 30, ["specialization"] = 258 } }, -- Vampiric Embrace
@@ -215,6 +235,15 @@ Hermes.SPELL_MONITOR_SCHEMA = {
 		-- Monk (Mistweaver)
 		[116849]		= { { ["k"] = 30, ["specialization"] = 270 } }, -- Life Cocoon
 		[115310]		= { { ["k"] = 30, ["specialization"] = 270 } }, -- Revival
+		
+		-- Paladin (Protection)
+		[86659]		= { { ["k"] = 30, ["specialization"] = 66 } }, -- Guardian of Ancient Kings
+		
+		-- Paladin (Holy)
+		[31821]		= { { ["k"] = 30, ["specialization"] = 65 } }, -- Devotion Aura
+		
+		-- Warrior (Arms,Fury)
+		[97462]		= { { ["k"] = 35, ["specialization"] = 73 } }, -- Rallying Cry
 
 	},
 	
@@ -222,11 +251,15 @@ Hermes.SPELL_MONITOR_SCHEMA = {
 		[31224] 	= 90,
 		[42650] 	= 600,
 		[33891] 	= 180,
+		[159916]	= 120,
 		[16190] 	= 180,
+		[86659] 	= 180,
 		[20066] 	= 15,
 		[20707] 	= 900,
 		[57934] 	= 30,
 		[20594] 	= 120,
+		[106898] 	= 120,
+		[172106] 	= 180,
 		[49576] 	= 35,
 		[59752] 	= 120,
 		[48707] 	= 45,
@@ -259,7 +292,7 @@ Hermes.SPELL_MONITOR_SCHEMA = {
 		[12975] 	= 180,
 		[97462] 	= 180,
 		[32182] 	= 300,
-		[740] 		= 480,
+		[740] 		= 60 * 8,
 		[64382] 	= 300,
 		[1044] 		= 25,
 		[31821] 	= 60 * 3,
@@ -306,8 +339,9 @@ Hermes.SPELL_MONITOR_SCHEMA = {
 		[108920]	= 30,
 		[102342]	= 120,
 		[76577]		= 60 * 3,
+		
+		[114030]	= 60 * 2,
 	},
 	["adjustments"] = {
-		[740] = { { 	["offset"] = -300, 	["specialization"] = 105, 	["k"] = 30 } },
 	},
 }

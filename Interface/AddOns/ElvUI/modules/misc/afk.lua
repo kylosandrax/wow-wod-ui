@@ -3,18 +3,59 @@ local AFKString = _G["AFK"]
 local AFK = E:NewModule('AFK', 'AceEvent-3.0', 'AceTimer-3.0');
 local CH = E:GetModule("Chat")
 
-local CAMERA_SPEED = 0.035
+--Cache global variables
+--Lua functions
+local _G = _G
+local GetTime = GetTime
+local tostring = tostring
+local floor = floor
 local format, strsub = string.format, string.sub
+--WoW API / Variables
+local CreateFrame = CreateFrame
+local InCombatLockdown = InCombatLockdown
+local MoveViewLeftStart = MoveViewLeftStart
+local MoveViewLeftStop = MoveViewLeftStop
+local CloseAllBags = CloseAllBags
+local IsInGuild = IsInGuild
+local GetGuildInfo = GetGuildInfo
+local PVEFrame_ToggleFrame = PVEFrame_ToggleFrame
+local GetBattlefieldStatus = GetBattlefieldStatus
+local UnitIsAFK = UnitIsAFK
+local SetCVar = SetCVar
+local Screenshot = Screenshot
+local IsShiftKeyDown = IsShiftKeyDown
+local GetColoredName = GetColoredName
+local RemoveExtraSpaces = RemoveExtraSpaces
+local Chat_GetChatCategory = Chat_GetChatCategory
+local ChatFrame_GetMobileEmbeddedTexture = ChatFrame_GetMobileEmbeddedTexture
+local ChatHistory_GetAccessID = ChatHistory_GetAccessID
+local GetScreenWidth = GetScreenWidth
+local GetScreenHeight = GetScreenHeight
+local UnitFactionGroup = UnitFactionGroup
+local RAID_CLASS_COLORS = RAID_CLASS_COLORS
+local CUSTOM_CLASS_COLORS = CUSTOM_CLASS_COLORS
+local DND = DND
 
+--Global variables that we don't cache, list them here for mikk's FindGlobals script
+-- GLOBALS: UIParent, PVEFrame, ElvUIAFKPlayerModel, ChatTypeInfo
+
+local CAMERA_SPEED = 0.035
 local ignoreKeys = {
 	LALT = true,
 	LSHIFT = true,
-	RSHIFT = true
+	RSHIFT = true,
 }
+local printKeys = {
+	["PRINTSCREEN"] = true,
+}
+
+if IsMacClient() then
+	printKeys[_G["KEY_PRINTSCREEN_MAC"]] = true
+end
 
 function AFK:UpdateTimer()
 	local time = GetTime() - self.startTime
-	self.AFKMode.bottom.time:SetText(format("%02d:%02d", floor(time/60), time % 60))
+	self.AFKMode.bottom.time:SetFormattedText("%02d:%02d", floor(time/60), time % 60)
 end
 
 function AFK:SetAFK(status)
@@ -22,11 +63,12 @@ function AFK:SetAFK(status)
 	if(status) then
 		MoveViewLeftStart(CAMERA_SPEED);
 		self.AFKMode:Show()
+		CloseAllBags()
 		UIParent:Hide()
 
 		if(IsInGuild()) then
 			local guildName, guildRankName = GetGuildInfo("player");
-			self.AFKMode.bottom.guild:SetText(guildName.."-"..guildRankName)
+			self.AFKMode.bottom.guild:SetFormattedText("%s-%s", guildName, guildRankName)
 		else
 			self.AFKMode.bottom.guild:SetText(L["No Guild"])
 		end
@@ -113,8 +155,12 @@ end
 
 local function OnKeyDown(self, key)
 	if(ignoreKeys[key]) then return end
-	AFK:SetAFK(false)
-	AFK:ScheduleTimer('OnEvent', 60)
+	if printKeys[key] then
+		Screenshot()
+	else
+		AFK:SetAFK(false)
+		AFK:ScheduleTimer('OnEvent', 60)
+	end
 end
 
 local function Chat_OnMouseWheel(self, delta)
@@ -157,22 +203,23 @@ local function Chat_OnEvent(self, event, arg1, arg2, arg3, arg4, arg5, arg6, arg
 		playerLink = "|Hplayer:"..arg2..":"..arg11..":"..chatGroup..(chatTarget and ":"..chatTarget or "").."|h";
 	else
 		playerLink = "|HBNplayer:"..arg2..":"..arg13..":"..arg11..":"..chatGroup..(chatTarget and ":"..chatTarget or "").."|h";
-	end	
+	end
 
 	local message = arg1;
 	if ( arg14 ) then	--isMobile
 		message = ChatFrame_GetMobileEmbeddedTexture(info.r, info.g, info.b)..message;
 	end
-	body = format(_G["CHAT_"..type.."_GET"]..message, playerLink.."["..coloredName.."]".."|h");	
+
+	body = format(_G["CHAT_"..type.."_GET"]..message, playerLink.."["..coloredName.."]".."|h");
 
 	local accessID = ChatHistory_GetAccessID(chatGroup, chatTarget);
-	local typeID = ChatHistory_GetAccessID(type, chatTarget, arg12 == "" and arg13 or arg12);	
+	local typeID = ChatHistory_GetAccessID(type, chatTarget, arg12 == "" and arg13 or arg12);
 	if CH.db.shortChannels then
 		body = body:gsub("|Hchannel:(.-)|h%[(.-)%]|h", CH.ShortChannel)
-		body = body:gsub("^(.-|h) "..L['whispers'], "%1")
-		body = body:gsub("<"..AFKString..">", "[|cffFF0000"..L['AFK'].."|r] ")
-		body = body:gsub("<"..DND..">", "[|cffE7E716"..L['DND'].."|r] ")
-		body = body:gsub("%[BN_CONVERSATION:", '%['.."")			
+		body = body:gsub("^(.-|h) "..L["whispers"], "%1")
+		body = body:gsub("<"..AFKString..">", "[|cffFF0000"..L["AFK"].."|r] ")
+		body = body:gsub("<"..DND..">", "[|cffE7E716"..L["DND"].."|r] ")
+		body = body:gsub("%[BN_CONVERSATION:", '%['.."")
 	end
 
 	self:AddMessage(CH:ConcatenateTimeStamp(body), info.r, info.g, info.b, info.id, false, accessID, typeID);
@@ -190,7 +237,7 @@ function AFK:LoopAnimations()
 end
 
 function AFK:Initialize()
-	local classColor = RAID_CLASS_COLORS[E.myclass]
+	local classColor = CUSTOM_CLASS_COLORS and CUSTOM_CLASS_COLORS[E.myclass] or RAID_CLASS_COLORS[E.myclass]
 
 	self.AFKMode = CreateFrame("Frame", "ElvUIAFKFrame")
 	self.AFKMode:SetFrameLevel(1)
@@ -225,15 +272,22 @@ function AFK:Initialize()
 
 	local factionGroup = UnitFactionGroup("player");
 	--factionGroup = "Alliance"
+	local size, offsetX, offsetY = 140, -20, -16
+	local nameOffsetX, nameOffsetY = -10, -28
+	if factionGroup == "Neutral" then
+		factionGroup = "Panda"
+		size, offsetX, offsetY = 90, 15, 10
+		nameOffsetX, nameOffsetY = 20, -5
+	end
 	self.AFKMode.bottom.faction = self.AFKMode.bottom:CreateTexture(nil, 'OVERLAY')
-	self.AFKMode.bottom.faction:SetPoint("BOTTOMLEFT", self.AFKMode.bottom, "BOTTOMLEFT", -20, -16)
+	self.AFKMode.bottom.faction:SetPoint("BOTTOMLEFT", self.AFKMode.bottom, "BOTTOMLEFT", offsetX, offsetY)
 	self.AFKMode.bottom.faction:SetTexture("Interface\\Timer\\"..factionGroup.."-Logo")
-	self.AFKMode.bottom.faction:SetSize(140, 140)
+	self.AFKMode.bottom.faction:SetSize(size, size)
 
 	self.AFKMode.bottom.name = self.AFKMode.bottom:CreateFontString(nil, 'OVERLAY')
 	self.AFKMode.bottom.name:FontTemplate(nil, 20)
-	self.AFKMode.bottom.name:SetText(E.myname.."-"..E.myrealm)
-	self.AFKMode.bottom.name:SetPoint("TOPLEFT", self.AFKMode.bottom.faction, "TOPRIGHT", -10, -28)
+	self.AFKMode.bottom.name:SetFormattedText("%s-%s", E.myname, E.myrealm)
+	self.AFKMode.bottom.name:SetPoint("TOPLEFT", self.AFKMode.bottom.faction, "TOPRIGHT", nameOffsetX, nameOffsetY)
 	self.AFKMode.bottom.name:SetTextColor(classColor.r, classColor.g, classColor.b)
 
 	self.AFKMode.bottom.guild = self.AFKMode.bottom:CreateFontString(nil, 'OVERLAY')
@@ -248,12 +302,17 @@ function AFK:Initialize()
 	self.AFKMode.bottom.time:SetPoint("TOPLEFT", self.AFKMode.bottom.guild, "BOTTOMLEFT", 0, -6)
 	self.AFKMode.bottom.time:SetTextColor(0.7, 0.7, 0.7)
 
-	self.AFKMode.bottom.model = CreateFrame("PlayerModel", "ElvUIAFKPlayerModel", self.AFKMode.bottom)
-	self.AFKMode.bottom.model:SetPoint("BOTTOMRIGHT", self.AFKMode.bottom, "BOTTOMRIGHT", 120, -100)
-	self.AFKMode.bottom.model:SetSize(800, 800)
-	self.AFKMode.bottom.model:SetCamDistanceScale(1.15)
+	--Use this frame to control position of the model
+	self.AFKMode.bottom.modelHolder = CreateFrame("Frame", nil, self.AFKMode.bottom)
+	self.AFKMode.bottom.modelHolder:SetSize(150, 150)
+	self.AFKMode.bottom.modelHolder:SetPoint("BOTTOMRIGHT", self.AFKMode.bottom, "BOTTOMRIGHT", -200, 220)
+
+	self.AFKMode.bottom.model = CreateFrame("PlayerModel", "ElvUIAFKPlayerModel", self.AFKMode.bottom.modelHolder)
+	self.AFKMode.bottom.model:SetPoint("CENTER", self.AFKMode.bottom.modelHolder, "CENTER")
+	self.AFKMode.bottom.model:SetSize(GetScreenWidth() * 2, GetScreenHeight() * 2) --YES, double screen size. This prevents clipping of models. Position is controlled with the helper frame.
+	self.AFKMode.bottom.model:SetCamDistanceScale(4.5) --Since the model frame is huge, we need to zoom out quite a bit.
 	self.AFKMode.bottom.model:SetFacing(6)
-	self.AFKMode.bottom.model:SetScript("OnUpdateModel", function(self) 
+	self.AFKMode.bottom.model:SetScript("OnUpdateModel", function(self)
 		local timePassed = GetTime() - self.startTime
 		if(timePassed > self.duration) and self.isIdle ~= true then
 			self:SetAnimation(0)
@@ -263,7 +322,7 @@ function AFK:Initialize()
 	end)
 
 	self:Toggle()
-	self.isActive = false	
+	self.isActive = false
 end
 
 

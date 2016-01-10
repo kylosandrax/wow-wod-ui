@@ -9,43 +9,58 @@
 -- This file contains all the APIs regarding TSM's main frame (what shows when you type '/tsm').
 
 local TSM = select(2, ...)
+local MainFrame = TSM:NewModule("MainFrame")
 local L = LibStub("AceLocale-3.0"):GetLocale("TradeSkillMaster") -- loads the localization table
-local AceGUI = LibStub("AceGUI-3.0") -- load the AceGUI libraries
-
-local private = {icons={}, currentIcon=0}
-TSMAPI:RegisterForTracing(private, "TradeSkillMaster.MainFrame_private")
-local lib = TSMAPI
+local private = {icons={}, frame=nil}
 
 
---- Opens the main TSM window.
-function TSMAPI:OpenFrame()
-	if not TSM.Frame then return end
-	TSM.Frame:Show()
-	if #TSM.Frame.children > 0 then
-		TSM.Frame:ReleaseChildren()
+
+-- ============================================================================
+-- TSMAPI Functions
+-- ============================================================================
+
+function TSMAPI.Operations:ShowOptions(moduleName, operation, groupPath)
+	TSM.loadModuleOptionsTab = {module=moduleName, operation=operation, group=groupPath}
+	MainFrame:SelectIcon("TradeSkillMaster", L["Operations"])
+	TSM.loadModuleOptionsTab = nil
+end
+
+
+
+-- ============================================================================
+-- Module Functions
+-- ============================================================================
+
+function MainFrame:Show()
+	if not private.frame then
+		local mainFrame = LibStub("AceGUI-3.0"):Create("TSMMainFrame")
+		mainFrame:SetIconText(TSM._version)
+		mainFrame:SetIconLabels(L["Options / Core Features"], L["Module Features"])
+		mainFrame:SetLayout("Fill")
+		
+		for _, icon in ipairs(private.icons) do
+			icon.texture = icon.icon
+			if icon.side == "options" then
+				icon.where = "topLeft"
+			else
+				icon.where = "topRight"
+			end
+			
+			mainFrame:AddIcon(icon)
+		end
+		private.frame = mainFrame
+		
+		TSMAPI.Delay:AfterFrame(1, function() private.frame:SetWidth(private.frame.frame.options.width) private.frame:SetHeight(private.frame.frame.options.height) end)
+	end
+	private.frame:Show()
+	if #private.frame.children > 0 then
+		private.frame:ReleaseChildren()
 	else
-		TSMAPI:SelectIcon("TradeSkillMaster", L["TSM Status / Options"])
-	end
-	if TSM.db.global.infoMessage < 1001 then
-		TSM.db.global.infoMessage = 1001
-		StaticPopupDialogs["TSM_INFO_MESSAGE"] = StaticPopupDialogs["TSM_INFO_MESSAGE"] or {
-			text = format(L["More advanced options are now designated by %sred text|r. Beginners are encourages to come back to these once they have a solid understanding of the basics."], TSMAPI.Design:GetInlineColor("advanced")),
-			button1 = OKAY,
-			OnAccept = function()
-				TSM:Printf(L["More advanced options are now designated by %sred text|r. Beginners are encourages to come back to these once they have a solid understanding of the basics."], TSMAPI.Design:GetInlineColor("advanced"))
-			end,
-			timeout = 0,
-		}
-		TSMAPI:ShowStaticPopupDialog("TSM_INFO_MESSAGE")
+		MainFrame:SelectIcon("TradeSkillMaster", L["TSM Features"])
 	end
 end
 
---- Closes the main TSM window.
-function TSMAPI:CloseFrame()
-	TSM.Frame:Hide()
-end
-
-function TSM:RegisterMainFrameIcon(displayName, icon, loadGUI, moduleName, side)
+function MainFrame:RegisterMainFrameIcon(displayName, icon, loadGUI, moduleName, side)
 	if not (displayName and icon and loadGUI and moduleName) then
 		return nil, "invalid args", displayName, icon, loadGUI, moduleName
 	end
@@ -55,7 +70,7 @@ function TSM:RegisterMainFrameIcon(displayName, icon, loadGUI, moduleName, side)
 	end
 	
 	local icon = {name=displayName, moduleName=moduleName, icon=icon, loadGUI=loadGUI, side=(strlower(side or "module"))}
-	if TSM.Frame then
+	if private.frame then
 		icon.texture = icon.icon
 		if icon.side == "options" then
 			icon.where = "topLeft"
@@ -63,77 +78,20 @@ function TSM:RegisterMainFrameIcon(displayName, icon, loadGUI, moduleName, side)
 			icon.where = "topRight"
 		end
 		
-		TSM.Frame:AddIcon(icon)
+		private.frame:AddIcon(icon)
 	end
 	
 	tinsert(private.icons, icon)
 end
 
---- Selects an icon in the main TSM window once it's open.
--- @param moduleName Which module the icon belongs to (unlocalized).
--- @param iconName The text that shows in the tooltip of the icon to be clicked (localized).
--- @return Returns an error message as the second return value upon error.
-function TSMAPI:SelectIcon(moduleName, iconName)
-	if not moduleName then return nil, "no moduleName passed" end
-	
+function MainFrame:SelectIcon(moduleName, iconName)
+	if not private.frame or not private.frame:IsVisible() then
+		MainFrame:Show()
+	end
+	TSMAPI:Assert(type(moduleName) == "string", "Invalid moduleName parameter")
 	for _, data in ipairs(private.icons) do
 		if data.moduleName == moduleName and data.name == iconName then
 			data.frame:Click()
 		end
 	end
-end
-
-function TSMAPI:ShowOperationOptions(moduleName, operation, groupPath)
-	TSMAPI:OpenFrame()
-	TSM.loadModuleOptionsTab = {module=moduleName, operation=operation, group=groupPath}
-	TSMAPI:SelectIcon("TradeSkillMaster", L["Module Operations / Options"])
-	TSM.loadModuleOptionsTab = nil
-end
-
-
-function TSM:CreateMainFrame()
-	local mainFrame = AceGUI:Create("TSMMainFrame")
-	local version = TSM._version
-	mainFrame:SetIconText(version)
-	mainFrame:SetIconLabels(L["Options"], L["Modules"])
-	mainFrame:SetLayout("Fill")
-	
-	for _, icon in ipairs(private.icons) do
-		icon.texture = icon.icon
-		if icon.side == "crafting" then
-			icon.where = "bottom"
-		elseif icon.side == "options" then
-			icon.where = "topLeft"
-		else
-			icon.where = "topRight"
-		end
-		
-		mainFrame:AddIcon(icon)
-	end
-	TSM.Frame = mainFrame
-	
-	TSMAPI:CreateTimeDelay("mainFrameSize", .5, function() mainFrame:SetWidth(mainFrame.frame.options.width) mainFrame:SetHeight(mainFrame.frame.options.height) end)
-end
-
-
-function TSM:TSMFrameIsVisible()
-	return TSM.Frame and TSM.Frame:IsVisible()
-end
-
-function private:FramePathHelper(frame, path)
-	if not frame.children or not frame.children[1] then return end
-	frame = frame.children[1]
-	if frame.type == "TSMTreeGroup" then
-		tinsert(path, {type="TreeGroup", value={("\001"):split(frame.status.selected)}})
-	elseif frame.type == "TSMTabGroup" then
-		tinsert(path, {type="TabGroup", value=frame.localstatus.selected})
-	end
-	return private:FramePathHelper(frame, path)
-end
-function TSM:GetTSMFrameSelectionPath()
-	if not TSM:TSMFrameIsVisible() then return end
-	local path = {}
-	tinsert(path, {type="Icon", value=TSM.Frame.selected.info.name})
-	private:FramePathHelper(TSM.Frame, path)
-	return path
 end

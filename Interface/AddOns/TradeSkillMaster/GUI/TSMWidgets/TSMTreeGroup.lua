@@ -341,6 +341,7 @@ local methods = {
 
 		button.text:SetShadowColor(0, 0, 0, 0)
 		button.text:SetPoint("CENTER")
+		button.text:SetHeight(14) -- Prevents text wrapping
 
 		button:SetScript("OnClick",Button_OnClick)
 		button:SetScript("OnDoubleClick", Button_OnDoubleClick)
@@ -554,6 +555,13 @@ local methods = {
 	["SelectByValue"] = function(self, uniquevalue)
 		self:Select(uniquevalue, ("\001"):split(uniquevalue))
 	end,
+	
+	["Reload"] = function(self)
+		local status = self.status or self.localstatus
+		if status and status.selected then
+			self:Fire("OnGroupSelected", status.selected)
+		end
+	end,
 
 	["ShowScroll"] = function(self, show)
 		self.showscroll = show
@@ -728,6 +736,7 @@ local function Constructor()
 		widget[method] = func
 	end
 	treeframe.obj, dragger.obj, scrollbar.obj = widget, widget, widget
+	widget.Add = TSM.AddGUIElement
 	
 	return AceGUI:RegisterAsContainer(widget)
 end

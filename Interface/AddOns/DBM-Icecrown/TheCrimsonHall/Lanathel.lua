@@ -1,7 +1,7 @@
 local mod	= DBM:NewMod("Lanathel", "DBM-Icecrown", 3)
 local L		= mod:GetLocalizedStrings()
 
-mod:SetRevision(("$Revision: 122 $"):sub(12, -3))
+mod:SetRevision(("$Revision: 208 $"):sub(12, -3))
 mod:SetCreatureID(37955)
 mod:SetEncounterID(1103)
 mod:SetModelID(31165)
@@ -20,7 +20,7 @@ mod:RegisterEventsInCombat(
 )
 
 local warnPactDarkfallen			= mod:NewTargetAnnounce(71340, 4)
-local warnBloodMirror				= mod:NewTargetAnnounce(71510, 3, nil, mod:IsTank() or mod:IsHealer())
+local warnBloodMirror				= mod:NewTargetAnnounce(71510, 3, nil, "Tank|Healer")
 local warnSwarmingShadows			= mod:NewTargetAnnounce(71266, 4)
 local warnInciteTerror				= mod:NewSpellAnnounce(73070, 3)
 local warnVampricBite				= mod:NewTargetAnnounce(70946, 2)
@@ -35,20 +35,18 @@ local specWarnEssenceoftheBloodQueen= mod:NewSpecialWarningYou(70867)
 local specWarnBloodthirst			= mod:NewSpecialWarningYou(70877)
 local yellBloodthirst				= mod:NewYell(70877, L.YellFrenzy)
 local specWarnSwarmingShadows		= mod:NewSpecialWarningMove(71266)
-local specWarnMindConrolled			= mod:NewSpecialWarningTarget(70923, mod:IsTank())
+local specWarnMindConrolled			= mod:NewSpecialWarningTarget(70923, "Tank")
 
-local timerNextInciteTerror			= mod:NewNextTimer(100, 73070)
-local timerFirstBite				= mod:NewNextTimer(15, 70946)
-local timerNextPactDarkfallen		= mod:NewNextTimer(30.5, 71340)
-local timerNextSwarmingShadows		= mod:NewNextTimer(30.5, 71266)
+local timerNextInciteTerror			= mod:NewNextTimer(100, 73070, nil, nil, nil, 6)
+local timerFirstBite				= mod:NewNextTimer(15, 70946, nil, "Dps", nil, 5)
+local timerNextPactDarkfallen		= mod:NewNextTimer(30.5, 71340, nil, nil, nil, 3)
+local timerNextSwarmingShadows		= mod:NewNextTimer(30.5, 71266, nil, nil, nil, 3)
 local timerInciteTerror				= mod:NewBuffActiveTimer(4, 73070)
-local timerBloodBolt				= mod:NewBuffActiveTimer(6, 71772)
-local timerBloodThirst				= mod:NewBuffFadesTimer(10, 70877)
-local timerEssenceoftheBloodQueen	= mod:NewBuffFadesTimer(60, 70867)
+local timerBloodBolt				= mod:NewBuffActiveTimer(6, 71772, nil, nil, nil, 2)
+local timerBloodThirst				= mod:NewBuffFadesTimer(10, 70877, nil, nil, nil, 5)
+local timerEssenceoftheBloodQueen	= mod:NewBuffFadesTimer(60, 70867, nil, nil, nil, 5)
 
 local berserkTimer					= mod:NewBerserkTimer(320)
-
-local soundSwarmingShadows			= mod:NewSound(71266)
 
 mod:AddBoolOption("BloodMirrorIcon", false)
 mod:AddBoolOption("SwarmingShadowsIcon", true)
@@ -192,7 +190,6 @@ function mod:CHAT_MSG_RAID_BOSS_EMOTE(msg, _, _, _, target)
 		timerNextSwarmingShadows:Start()
 		if target == UnitName("player") then
 			specWarnSwarmingShadows:Show()
-			soundSwarmingShadows:Play()
 		end
 		if self.Options.SwarmingShadowsIcon then
 			self:SetIcon(target, 8, 6)

@@ -1,7 +1,7 @@
 local mod	= DBM:NewMod("Auriaya", "DBM-Ulduar")
 local L		= mod:GetLocalizedStrings()
 
-mod:SetRevision(("$Revision: 112 $"):sub(12, -3))
+mod:SetRevision(("$Revision: 209 $"):sub(12, -3))
 
 mod:SetCreatureID(33515)--34014--Add this (kitties) to pull detection when it can be ignored in kill
 mod:SetEncounterID(1131)
@@ -18,15 +18,6 @@ mod:RegisterEventsInCombat(
 	"UNIT_DIED"
 )
 
-local canInterrupt
-do
-	local class = select(2, UnitClass("player"))
-	canInterrupt = class == "SHAMAN"
-		or class == "WARRIOR"
-		or class == "ROGUE"
-		or class == "MAGE"
-end
-
 local warnSwarm 		= mod:NewTargetAnnounce(64396, 2)
 local warnFear 			= mod:NewSpellAnnounce(64386, 3)
 local warnFearSoon	 	= mod:NewSoonAnnounce(64386, 1)
@@ -34,16 +25,16 @@ local warnCatDied 		= mod:NewAnnounce("WarnCatDied", 3, 64455)
 local warnCatDiedOne	= mod:NewAnnounce("WarnCatDiedOne", 3, 64455)
 local warnSonic			= mod:NewSpellAnnounce(64688, 2)
 
-local specWarnBlast		= mod:NewSpecialWarning("SpecWarnBlast", canInterrupt)
+local specWarnBlast		= mod:NewSpecialWarningInterrupt(64389)
 local specWarnVoid 		= mod:NewSpecialWarningMove(64675)
 
 local enrageTimer		= mod:NewBerserkTimer(600)
-local timerDefender 	= mod:NewTimer(35, "timerDefender", 64455)
-local timerFear			= mod:NewCastTimer(64386)
-local timerNextFear 	= mod:NewNextTimer(35.5, 64386)
-local timerNextSwarm 	= mod:NewNextTimer(36, 64396)
-local timerNextSonic 	= mod:NewNextTimer(27, 64688)
-local timerSonic		= mod:NewCastTimer(64688)
+local timerDefender 	= mod:NewTimer(35, "timerDefender", 64455, nil, nil, 1)
+local timerFear			= mod:NewCastTimer(64386, nil, nil, nil, 4)
+local timerNextFear 	= mod:NewNextTimer(35.5, 64386, nil, nil, nil, 4)
+local timerNextSwarm 	= mod:NewNextTimer(36, 64396, nil, nil, nil, 1)
+local timerNextSonic 	= mod:NewNextTimer(27, 64688, nil, nil, nil, 2)
+local timerSonic		= mod:NewCastTimer(64688, nil, nil, nil, 2)
 
 mod:AddBoolOption("HealthFrame", true)
 
@@ -63,7 +54,7 @@ function mod:SPELL_CAST_START(args)
 		specWarnBlast:Show()
 	elseif args.spellId == 64386 then -- Terrifying Screech
 		warnFear:Show()
-		timerFear:Start()
+--		timerFear:Start()
 		timerNextFear:Schedule(2)
 		warnFearSoon:Schedule(34)
 	elseif args:IsSpellID(64688, 64422) then --Sonic Screech

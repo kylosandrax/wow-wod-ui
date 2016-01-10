@@ -28,7 +28,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 
 local LIBNAME = "LibExtraTip"
 local VERSION_MAJOR = 1
-local VERSION_MINOR = 328
+local VERSION_MINOR = 332
 -- Minor Version cannot be a SVN Revison in case this library is used in multiple repositories
 -- Should be updated manually with each (non-trivial) change
 
@@ -37,7 +37,7 @@ local LIBSTRING = LIBNAME.."_"..VERSION_MAJOR.."_"..VERSION_MINOR
 local lib = LibStub:NewLibrary(LIBNAME.."-"..VERSION_MAJOR, VERSION_MINOR)
 if not lib then return end
 
-LibStub("LibRevision"):Set("$URL: http://svn.norganna.org/libs/trunk/LibExtraTip/LibExtraTip.lua $","$Rev: 350 $","5.15.DEV.", 'auctioneer', 'libs')
+LibStub("LibRevision"):Set("$URL: http://svn.norganna.org/libs/trunk/LibExtraTip/LibExtraTip.lua $","$Rev: 390 $","5.15.DEV.", 'auctioneer', 'libs')
 
 -- Call function to deactivate any outdated version of the library.
 -- (calls the OLD version of this function, NOT the one defined in this
@@ -127,9 +127,17 @@ local function OnTooltipSetItem(tooltip)
 	if self.sortedCallbacks and #self.sortedCallbacks > 0 then
 		tooltip:Show()
 
-		local _,item = tooltip:GetItem()
-		-- For generated tooltips
-		if not item and reg.item then item = reg.item end
+		local testname, item = tooltip:GetItem()
+		if not item then
+			item = reg.item or reg.additional.link
+		elseif testname == "" then
+			-- Blizzard broke tooltip:GetItem() in 6.2. Detect and fix the bug if possible. Remove workaround when fixed by Blizzard. [LTT-56]
+			-- thanks to sapu for identifying bug and suggesting workaround
+			local checkItemID = strmatch(item, ":(%d+):") -- this match string should find the itemID in any link
+			if not checkItemID or checkItemID == "0" then -- it's usually "0"
+				item = reg.item or reg.additional.link -- try to find a valid link from another source (or set to nil if we can't find one)
+			end
+		end
 
 		if item and not reg.hasItem then
 			local name,link,quality,ilvl,minlvl,itype,isubtype,stack,equiploc,texture = GetItemInfo(item)
@@ -370,9 +378,6 @@ local function hook(tip, method, prehook, posthook)
 	local orig = tip[method]
 	if not orig then
 		-- There should be an original method - abort if it's missing
-		if nLog then
-			nLog.AddMessage("LibExtraTip", "Hooks", N_NOTICE, "Missing method", "LibExtraTip:hook detected missing method: "..tostring(method))
-		end
 		return
 	end
 	control = {prehook or false, posthook or false}
@@ -450,9 +455,6 @@ local function hookglobal(func, posthook)
 	control = {posthook}
 	local orig = _G[func]
 	if type(orig) ~= "function" then
-		if nLog then
-			nLog.AddMessage("LibExtraTip", "Hooks", N_WARNING, "Global hook - not a function", "LibExtraTip:hookglobal attempted to hook "..tostring(func).." which is not a global function name")
-		end
 		return
 	end
 	local stub = function(...)
@@ -767,7 +769,7 @@ function lib:AddMoneyLine(tooltip,text,money,r,g,b,embed,concise)
 		reg.extraTip:AddDoubleLine(text,moneyText,r,g,b,1,1,1)
 		reg.extraTipUsed = true
 	else
-		tooltip:AddDoubleLine(text,moneyText,lr,lg,lb,1,1,1)
+		tooltip:AddDoubleLine(text,moneyText,r,g,b,1,1,1)
 	end
 end
 
@@ -811,7 +813,7 @@ end
 	@param detail additional detail items to set for the callbacks (optional)
 	@return true if successful
 	@since 1.325
-	
+
 	-- ref: BattlePetToolTip_Show in FrameXML\BattlePetTooltip.lua
 	-- ref: FloatingBattlePet_Show in FrameXML\FloatingPetBattleTooltip.lua
 ]]
@@ -997,7 +999,7 @@ function lib:GenerateTooltipMethodTable() -- Sets up hooks to give the quantity 
 			OnTooltipCleared(self)
 			local reg = tooltipRegistry[self]
 			reg.ignoreOnCleared = true
-			local _,_,q,_,cu,_,_,minb,inc,bo,ba,hb,own = GetAuctionItemInfo(type,index)
+			local _,_,q,_,cu,_,_,minb,inc,bo,ba,hb,_,own,ownf = GetAuctionItemInfo(type,index)
 			reg.quantity = q
 			reg.additional.event = "SetAuctionItem"
 			reg.additional.eventType = type
@@ -1009,6 +1011,8 @@ function lib:GenerateTooltipMethodTable() -- Sets up hooks to give the quantity 
 			reg.additional.bidAmount = ba
 			reg.additional.highBidder = hb
 			reg.additional.owner = own
+			reg.additional.ownerFull = ownf
+			reg.item = GetAuctionItemLink(type,index) -- Workaround [LTT-56], Remove when fixed by Blizzard
 		end,
 
 		SetAuctionSellItem = function(self)
@@ -1113,6 +1117,7 @@ function lib:GenerateTooltipMethodTable() -- Sets up hooks to give the quantity 
 			reg.additional.numAvailable = na
 			reg.additional.canUse = cu
 			reg.additional.extendedCost = ec
+			reg.item = GetMerchantItemLink(index) -- Workaround [LTT-56], Remove when fixed by Blizzard
 		end,
 
 		SetQuestItem = function(self,type,index)
@@ -1185,6 +1190,7 @@ function lib:GenerateTooltipMethodTable() -- Sets up hooks to give the quantity 
 				local _,_,q,rc = GetTradeSkillReagentInfo(index,reagentIndex)
 				reg.quantity = q
 				reg.additional.playerReagentCount = rc
+				reg.additional.link = GetTradeSkillReagentItemLink(index, reagentIndex)
 			else
 				local link = GetTradeSkillItemLink(index)
 				reg.additional.link = link
@@ -1296,13 +1302,13 @@ function lib:GenerateTooltipMethodTable() -- Sets up hooks to give the quantity 
 			reg.additional.eventIndex = index
 		end,
 
-		-- SetUnit = function(self, unit)
-			-- OnTooltipCleared(self)
-			-- local reg = tooltipRegistry[self]
-			-- reg.ignoreOnCleared = true
-			-- reg.additional.event = "SetUnit"
-			-- reg.additional.eventUnit= unit
-		-- end,
+		SetUnit = function(self, unit)
+			OnTooltipCleared(self)
+			local reg = tooltipRegistry[self]
+			reg.ignoreOnCleared = true
+			reg.additional.event = "SetUnit"
+			reg.additional.eventUnit= unit
+		end,
 
 		--[[ disabled due to taint issues
 		SetUnitAura = function(self, unit, index, filter)
@@ -1374,7 +1380,7 @@ function lib:GenerateTooltipMethodTable() -- Sets up hooks to give the quantity 
 		SetSpellBookItem = posthookClearIgnore,
 		SetTalent = posthookClearIgnore,
 		SetTrainerService = posthookClearIgnore,
-		-- SetUnit = posthookClearIgnore,
+		SetUnit = posthookClearIgnore,
 		--SetUnitAura = posthookClearIgnore,
 		SetUnitBuff = posthookClearIgnore,
 		SetUnitDebuff = posthookClearIgnore,
@@ -1403,6 +1409,7 @@ do -- ExtraTip "class" definition
 		local n = numTips + 1
 		numTips = n
 		local o = CreateFrame("GameTooltip",LIBSTRING.."Tooltip"..n,UIParent,"GameTooltipTemplate")
+		o:SetClampedToScreen(false) -- workaround for tooltip overlap problem [LTT-55]: allow extra tip to get pushed off screen instead
 
 		for _,method in pairs(methods) do
 			o[method] = self[method]

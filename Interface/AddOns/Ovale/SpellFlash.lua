@@ -1,5 +1,5 @@
 --[[--------------------------------------------------------------------
-    Copyright (C) 2014 Johnny C. Lam.
+    Copyright (C) 2014, 2015 Johnny C. Lam.
     See the file LICENSE.txt for copying permission.
 --]]--------------------------------------------------------------------
 
@@ -18,10 +18,13 @@ local OvaleSpellBook = nil
 local OvaleStance = nil
 
 local pairs = pairs
+local type = type
+local API_GetTime = GetTime
 local API_UnitHasVehicleUI = UnitHasVehicleUI
 local API_UnitExists = UnitExists
 local API_UnitIsDead = UnitIsDead
 local API_UnitCanAttack = UnitCanAttack
+-- GLOBALS: _G
 
 -- Local reference to SpellFlashCore addon.
 local SpellFlashCore = nil
@@ -211,6 +214,7 @@ do
 	for k, v in pairs(options) do
 		OvaleOptions.options.args.apparence.args[k] = v
 	end
+	OvaleOptions:RegisterOptions(OvaleSpellFlash)
 end
 --</private-static-properties>
 
@@ -278,19 +282,22 @@ end
 function OvaleSpellFlash:Flash(state, node, element, start, now)
 	-- SpellFlash settings.
 	local db = Ovale.db.profile.apparence.spellFlash
+	now = now or API_GetTime()
 	if self:IsSpellFlashEnabled() and start and start - now <= db.threshold / 1000 then
 		-- Check that element is an action.
 		if element and element.type == "action" then
-			local spellId, spellTarget
+			local spellId, spellInfo
 			if element.lowername == "spell" then
-				spellId = element.params[1]
-				spellTarget = element.params.target or state.defaultTarget
+				spellId = element.positionalParams[1]
+				spellInfo = OvaleData.spellInfo[spellId]
 			end
+			local interrupt = spellInfo and spellInfo.interrupt
+
 			-- Flash color.
 			local color = COLORTABLE["white"]
-			local flash = element.params and element.params.flash
-			local iconFlash = node.params.flash
-			local iconHelp = node.params.help
+			local flash = element.namedParams and element.namedParams.flash
+			local iconFlash = node.namedParams.flash
+			local iconHelp = node.namedParams.help
 			if flash and COLORTABLE[flash] then
 				-- Highest priority is known flash color set in the action parameters.
 				color = COLORTABLE[flash]
@@ -301,7 +308,6 @@ function OvaleSpellFlash:Flash(state, node, element, start, now)
 				-- Fall back to color based on the help set in the icon parameters.
 				color = FLASH_COLOR[iconHelp]
 				-- Adjust color if it's a "cd" ability that is showing an interrupt.
-				local interrupt = spellId and state:GetSpellInfoProperty(spellId, "interrupt", spellTarget)
 				if interrupt == 1 and iconHelp == "cd" then
 					color = colorInterrupt
 				end
@@ -311,7 +317,6 @@ function OvaleSpellFlash:Flash(state, node, element, start, now)
 			local size = db.size * 100
 			if iconHelp == "cd" then
 				-- Adjust to half size for "cd" abilities.
-				local interrupt = spellId and state:GetSpellInfoProperty(spellId, "interrupt", spellTarget)
 				if interrupt ~= 1 then
 					size = size * 0.5
 				end
@@ -330,10 +335,21 @@ function OvaleSpellFlash:Flash(state, node, element, start, now)
 				SpellFlashCore.FlashAction(spellId, color, size, brightness)
 			elseif element.lowername == "item" then
 				-- Item ID.
-				local itemId = element.params[1]
+				local itemId = element.positionalParams[1]
 				SpellFlashCore.FlashItem(itemId, color, size, brightness)
 			end
 		end
+	end
+end
+
+function OvaleSpellFlash:UpgradeSavedVariables()
+	local profile = Ovale.db.profile
+
+	-- SpellFlash options have been moved and renamed.
+	if profile.apparence.spellFlash and type(profile.apparence.spellFlash) ~= "table" then
+		local enabled = profile.apparence.spellFlash
+		profile.apparence.spellFlash = {}
+		profile.apparence.spellFlash.enabled = enabled
 	end
 end
 --</public-static-methods>

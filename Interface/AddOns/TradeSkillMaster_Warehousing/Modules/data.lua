@@ -27,7 +27,7 @@ function data:getEmptyRestoreGroup(container, isGuildBank)
 		for slotid = 1, TSM.util.getContainerNumSlotsSrc(bagid) do
 			local id, quan = TSM.util.getContainerItemIDSrc(bagid, slotid)
 			if id then
-				if not isGuildBank or not TSMAPI:IsSoulbound(bagid, slotid) then
+				if not isGuildBank or not TSMAPI.Item:IsSoulbound(bagid, slotid) then
 					if not tmp[id] then tmp[id] = 0 end
 					tmp[id] = tmp[id] + quan
 				end --end if
@@ -43,21 +43,21 @@ function data:getEmptyRestoreGroup(container, isGuildBank)
 	return grp
 end
 
-function data:unIndexMoveGroupTree(grpInfo, src)
+function data:unIndexMoveGroupTree(grpInfo, src, dest)
 	local newgrp = {}
-	local totalItems = data:getTotalItems(src)
+	local totalItems = data:getTotalItems(src, dest)
 	for groupName, info in pairs(grpInfo) do
-		groupName = TSMAPI:FormatGroupPath(groupName, true)
+		groupName = TSMAPI.Groups:FormatPath(groupName, true)
 		for _, opName in ipairs(info.operations) do
-			TSMAPI:UpdateOperation("Warehousing", opName)
+			TSMAPI.Operations:Update("Warehousing", opName)
 			local opSettings = TSM.operations[opName]
 			if not opSettings then
-				-- operation doesn't exist anymore in Crafting
+				-- operation doesn't exist anymore in Warehousing
 				TSM:Printf(L["'%s' has a Warehousing operation of '%s' which no longer exists."], groupName, opName)
 			else
 				-- it's a valid operation
 				for itemString in pairs(info.items) do
-					itemString = TSMAPI:GetItemString(itemString)
+					itemString = TSMAPI.Item:ToItemString(itemString)
 					local totalq = 0
 					if totalItems then
 						totalq = totalItems[itemString] or 0
@@ -67,7 +67,6 @@ function data:unIndexMoveGroupTree(grpInfo, src)
 						if opSettings.moveQtyEnabled and opSettings.keepBagQtyEnabled then -- move specified quantity but keep x in bags
 							local q = (totalq - opSettings.keepBagQuantity)
 							if q > 0 then
-								--newgrp[itemString] = min(tonumber(q), tonumber(opSettings.moveQuantity))
 								newgrp[itemString] = max(tonumber(q * -1), tonumber(opSettings.moveQuantity * -1))
 							end
 						elseif opSettings.moveQtyEnabled then -- move specified quantity
@@ -86,7 +85,7 @@ function data:unIndexMoveGroupTree(grpInfo, src)
 						local stacksize = 1
 						if opSettings.stackSizeEnabled and opSettings.stackSize then -- only move in multiples of the stack size set
 							stacksize = opSettings.stackSize
-							end
+						end
 						if opSettings.moveQtyEnabled and opSettings.keepBankQtyEnabled then -- move specified quantity but keep x in bank
 							local q = (totalq - opSettings.keepBankQuantity)
 							if q > 0 then
@@ -112,13 +111,14 @@ function data:unIndexMoveGroupTree(grpInfo, src)
 	return newgrp
 end
 
-function data:unIndexRestockGroupTree(grpInfo)
+function data:unIndexRestockGroupTree(grpInfo, src)
 	local newgrp = {}
-	local totalItems = data:getTotalItems("bags")
+	local totalItems = data:getTotalItems(src)
+	local bagItems = data:getTotalItems("bags")
 	for groupName, info in pairs(grpInfo) do
-		groupName = TSMAPI:FormatGroupPath(groupName, true)
+		groupName = TSMAPI.Groups:FormatPath(groupName, true)
 		for _, opName in ipairs(info.operations) do
-			TSMAPI:UpdateOperation("Warehousing", opName)
+			TSMAPI.Operations:Update("Warehousing", opName)
 			local opSettings = TSM.operations[opName]
 			if not opSettings then
 				-- operation doesn't exist anymore in Crafting
@@ -131,9 +131,18 @@ function data:unIndexRestockGroupTree(grpInfo)
 						totalq = totalItems[itemString] or 0
 					end
 					if opSettings.restockQtyEnabled then -- work out qty to add or remove from bags
-						local q = opSettings.restockQuantity - totalq
+						local stacksize = 1
+						if opSettings.restockStackSizeEnabled and opSettings.restockStackSize then -- only move in multiples of the stack size set
+							stacksize = opSettings.stackSize
+						end
+						local q
+						if opSettings.restockKeepBankQtyEnabled then
+							q = min(opSettings.restockQuantity, totalq - opSettings.restockKeepBankQuantity)
+						else
+							q = min(opSettings.restockQuantity, totalq)
+						end
 						if q ~= 0 then
-							newgrp[itemString] = tonumber(q)
+							newgrp[itemString] = floor(tonumber(q)  / tonumber(stacksize)) * tonumber(stacksize) - (bagItems[itemString] or 0)
 						end
 					end
 				end
@@ -148,10 +157,10 @@ function data:unIndexItem(searchString, src, quantity)
 	local totalItems = data:getTotalItems(src) -- table of itemstrings and total qty in source
 
 	if totalItems then
-		local matchedString = TSMAPI:GetBaseItemString(TSMAPI:GetItemString(searchString))
+		local matchedString = TSMAPI.Item:ToBaseItemString(TSMAPI.Item:ToItemString(searchString))
 		if matchedString then
 			for itemString, totalQty in pairs(totalItems) do
-				if TSMAPI:GetBaseItemString(itemString) == matchedString then
+				if TSMAPI.Item:ToBaseItemString(itemString) == matchedString then
 					if quantity then
 						if src == "bags" then
 							newgrp[itemString] = tonumber(quantity * -1)
@@ -169,7 +178,7 @@ function data:unIndexItem(searchString, src, quantity)
 			end
 		else
 			for itemString, totalQty in pairs(totalItems) do
-				local name = strlower(TSMAPI:GetSafeItemInfo(itemString))
+				local name = strlower(TSMAPI.Item:GetInfo(itemString))
 				if strfind(name, strlower(searchString)) then
 					if quantity then
 						if src == "bags" then
@@ -191,12 +200,12 @@ function data:unIndexItem(searchString, src, quantity)
 	return newgrp
 end
 
-function data:getTotalItems(src)
+function data:getTotalItems(src, dest)
 	local results = {}
 	if src == "bank" then
 		local function ScanBankBag(bag)
 			for slot = 1, GetContainerNumSlots(bag) do
-				local itemString = TSMAPI:GetBaseItemString(GetContainerItemLink(bag, slot), true)
+				local itemString = TSMAPI.Item:ToBaseItemString(GetContainerItemLink(bag, slot), true)
 				if itemString then
 					local quantity = select(2, GetContainerItemInfo(bag, slot))
 					if not results[itemString] then results[itemString] = 0 end
@@ -218,8 +227,12 @@ function data:getTotalItems(src)
 		for bag = 1, GetNumGuildBankTabs() do
 			for slot = 1, MAX_GUILDBANK_SLOTS_PER_TAB or 98 do
 				local link = GetGuildBankItemLink(bag, slot)
-				local itemString = TSMAPI:GetBaseItemString(link, true)
+				local itemString = TSMAPI.Item:ToBaseItemString(link, true)
 				if itemString then
+					if itemString == "i:82800" then
+						local speciesID = GameTooltip:SetGuildBankItem(bag, slot)
+						itemString = speciesID and ("p:" .. speciesID)
+					end
 					local quantity = select(2, GetGuildBankItemInfo(bag, slot))
 					if not results[itemString] then results[itemString] = 0 end
 					results[itemString] = results[itemString] + quantity
@@ -229,8 +242,10 @@ function data:getTotalItems(src)
 
 		return results
 	elseif src == "bags" then
-		for _, _, itemString, quantity in TSMAPI:GetBagIterator(true) do
-			results[itemString] = (results[itemString] or 0) + quantity
+		for bag, slot, itemString, quantity in TSMAPI.Inventory:BagIterator(true, true, true) do
+			if dest == "bank" or not TSMAPI.Item:IsSoulbound(bag, slot) then
+				results[itemString] = (results[itemString] or 0) + quantity
+			end
 		end
 
 		return results

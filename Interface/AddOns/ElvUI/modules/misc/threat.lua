@@ -1,10 +1,30 @@
 local E, L, V, P, G = unpack(select(2, ...)); --Inport: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
 local THREAT = E:NewModule('Threat', 'AceEvent-3.0');
 
+--Cache global variables
+--Lua functions
+local pairs, select = pairs, select
+local twipe = table.wipe
+--WoW API / Variables
+local CreateFrame = CreateFrame
+local UnitReaction = UnitReaction
+local UnitClass = UnitClass
+local UnitIsPlayer = UnitIsPlayer
+local IsInGroup, IsInRaid = IsInGroup, IsInRaid
+local UnitExists = UnitExists
+local UnitName = UnitName
+local UnitIsUnit = UnitIsUnit
+local UnitDetailedThreatSituation = UnitDetailedThreatSituation
+local GetThreatStatusColor = GetThreatStatusColor
+local RAID_CLASS_COLORS = RAID_CLASS_COLORS
+local CUSTOM_CLASS_COLORS = CUSTOM_CLASS_COLORS
+local UNKNOWN = UNKNOWN
+
+--Global variables that we don't cache, list them here for mikk's FindGlobals script
+-- GLOBALS: RightChatDataPanel, LeftChatDataPanel, ElvUF, UIParent
+
 E.Threat = THREAT
 THREAT.list = {};
-
-local twipe = table.wipe
 
 function THREAT:UpdatePosition()
 	if self.db.position == 'RIGHTCHAT' then
@@ -12,9 +32,9 @@ function THREAT:UpdatePosition()
 		self.bar:SetParent(RightChatDataPanel)
 	else
 		self.bar:SetInside(LeftChatDataPanel)
-		self.bar:SetParent(LeftChatDataPanel)	
+		self.bar:SetParent(LeftChatDataPanel)
 	end
-	
+
 	self.bar.text:FontTemplate(nil, self.db.textSize)
 	self.bar:SetFrameStrata('MEDIUM')
 end
@@ -27,7 +47,7 @@ function THREAT:GetLargestThreatOnList(percent)
 			largestUnit = unit
 		end
 	end
-	
+
 	return (percent - largestValue), largestUnit
 end
 
@@ -35,7 +55,7 @@ function THREAT:GetColor(unit)
 	local unitReaction = UnitReaction(unit, 'player')
 	local _, unitClass = UnitClass(unit)
 	if (UnitIsPlayer(unit)) then
-		local class = RAID_CLASS_COLORS[unitClass]
+		local class = CUSTOM_CLASS_COLORS and CUSTOM_CLASS_COLORS[unitClass] or RAID_CLASS_COLORS[unitClass]
 		if not class then return 194, 194, 194 end
 		return class.r*255, class.g*255, class.b*255
 	elseif (unitReaction) then
@@ -57,7 +77,7 @@ function THREAT:Update()
 			if petExists then
 				self.list['pet'] = select(3, UnitDetailedThreatSituation('pet', 'target'))
 			end
-			
+
 			if isInRaid then
 				for i=1, 40 do
 					if UnitExists('raid'..i) and not UnitIsUnit('raid'..i, 'player') then
@@ -68,15 +88,15 @@ function THREAT:Update()
 				for i=1, 4 do
 					if UnitExists('party'..i) then
 						self.list['party'..i] = select(3, UnitDetailedThreatSituation('party'..i, 'target'))
-					end			
+					end
 				end
 			end
-			
+
 			local leadPercent, largestUnit = self:GetLargestThreatOnList(percent)
 			if leadPercent > 0 and largestUnit ~= nil then
 				local r, g, b = self:GetColor(largestUnit)
-				self.bar.text:SetFormattedText(L['ABOVE_THREAT_FORMAT'], name, percent, leadPercent, r, g, b, UnitName(largestUnit) or UNKNOWN)
-				
+				self.bar.text:SetFormattedText(L["ABOVE_THREAT_FORMAT"], name, percent, leadPercent, r, g, b, UnitName(largestUnit) or UNKNOWN)
+
 				if E.role == 'Tank' then
 					self.bar:SetStatusBarColor(0, 0.839, 0)
 					self.bar:SetValue(leadPercent)
@@ -97,7 +117,7 @@ function THREAT:Update()
 	else
 		self.bar:Hide()
 	end
-	
+
 	twipe(self.list)
 end
 
@@ -119,16 +139,16 @@ end
 
 function THREAT:Initialize()
 	self.db = E.db.general.threat
-	
+
 	self.bar = CreateFrame('StatusBar', 'ElvUI_ThreatBar', UIParent)
 	self.bar:SetStatusBarTexture(E['media'].normTex)
 	self.bar:SetMinMaxValues(0, 100)
 	self.bar:CreateBackdrop('Default')
-	
+
 	self.bar.text = self.bar:CreateFontString(nil, 'OVERLAY')
 	self.bar.text:FontTemplate(nil, self.db.textSize)
 	self.bar.text:SetPoint('CENTER', self.bar, 'CENTER')
-	
+
 	self:UpdatePosition()
 	self:ToggleEnable()
 end

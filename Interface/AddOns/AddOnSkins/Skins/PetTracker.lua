@@ -18,6 +18,7 @@ function AS:PetTracker()
 	AS:StripTextures(PetTrackerMapFilter, true)
 	AS:SkinEditBox(PetTrackerMapFilter)
 	AS:SkinTooltip(PetTrackerMapFilterSuggestions)
+
 	for i = 1, PetTrackerMapFilterSuggestions:GetNumChildren() do
 		local Button = select(i, PetTrackerMapFilterSuggestions:GetChildren())
 		Button:SetFrameLevel(PetTrackerMapFilterSuggestions:GetFrameLevel() + 1)
@@ -38,18 +39,13 @@ function AS:PetTracker()
 		end
 	end)
 
-	for i = 1, 6 do
-        local button = _G["PetTrackerAbilityAction"..i]
-        if button then
-            AS:SkinIconButton(button)
-			AS:SkinTexture(button.Icon)
-        end
-    end
-
 	if AS:CheckAddOn('PetTracker_Switcher') then
-		AS:SkinFrame(PetTrackerSwap)
-		AS:SkinCloseButton(PetTrackerSwapCloseButton)
 		PetTrackerSwap:HookScript('OnUpdate', function(self)
+			if not self.IsSkinned then
+				AS:SkinFrame(self)
+				AS:SkinCloseButton(PetTrackerSwapCloseButton)
+				self.IsSkinned = true
+			end
 			AS:StripTextures(PetTrackerSwapInset)
 			for i = 1, self:GetNumChildren() do
 				local Region = select(i, self:GetChildren())
@@ -63,7 +59,7 @@ function AS:PetTracker()
 			end
 			for i = 1, 6 do
 				if not _G['PetTrackerBattleSlot'..i].IsSkinned then
-					_G['PetTrackerBattleSlot'..i]:SetTemplate('Transparent')
+					AS:SetTemplate(_G['PetTrackerBattleSlot'..i], 'Transparent')
 					_G['PetTrackerBattleSlot'..i].Bg:Hide()
 					AS:SkinTexture(_G['PetTrackerBattleSlot'..i].Icon)
 					_G['PetTrackerBattleSlot'..i].IconBorder:Hide()
@@ -94,9 +90,9 @@ function AS:PetTracker()
 		end)
 	end
 	if AS:CheckAddOn('PetTracker_Journal') then
-		LoadAddOn('Blizzard_PetJournal')
+		LoadAddOn('Blizzard_Collections')
 		AS:SkinCheckBox(PetTrackerTrackToggle)
-		AS:SkinTab(PetJournalParentTab4)
+		AS:SkinTab(CollectionsJournalTab5)
 		PetTrackerTamerJournal:HookScript('OnShow', function(self)
 			if not self.IsSkinned then
 				AS:StripTextures(PetTrackerTamerJournal.Count)
@@ -125,7 +121,7 @@ function AS:PetTracker()
 				end
 				self.IsSkinned = true
 				for i = 1, 3 do
-					_G['PetTrackerJournalSlot'..i]:SetTemplate('Transparent')
+					AS:SetTemplate(_G['PetTrackerJournalSlot'..i], 'Transparent')
 					_G['PetTrackerJournalSlot'..i].Bg:Hide()
 					_G['PetTrackerJournalSlot'..i].Quality:Hide()
 					_G['PetTrackerJournalSlot'..i].Hover:Kill()
@@ -176,6 +172,16 @@ function AS:PetTracker()
 			end)
 		end
 	end
+
+	AS:Delay(5, function()
+		for i = 1, 6 do
+			local button = _G["PetTrackerAbilityAction"..i]
+			if button then
+				AS:SkinIconButton(button)
+				AS:SkinTexture(button.Icon)
+			end
+		end
+	end);
 end
 
 AS:RegisterSkin('PetTracker', AS.PetTracker)

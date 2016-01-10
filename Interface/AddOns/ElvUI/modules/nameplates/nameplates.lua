@@ -2,15 +2,50 @@ local E, L, V, P, G = unpack(select(2, ...)); --Inport: Engine, Locales, Private
 local NP = E:NewModule('NamePlates', 'AceHook-3.0', 'AceEvent-3.0', 'AceTimer-3.0')
 local LSM = LibStub("LibSharedMedia-3.0")
 
-local numChildren = -1
-local twipe = table.wipe
-local tsort = table.sort
-local tinsert = table.insert
-local band = bit.band
-local gsub = string.gsub
-local tolower = string.lower
-local targetIndicator
+--Cache global variables
+--Lua functions
 local _G = _G
+local tonumber, pairs, select, tostring, unpack = tonumber, pairs, select, tostring, unpack
+local twipe, tsort, tinsert, wipe = table.wipe, table.sort, table.insert, wipe
+local band = bit.band
+local floor = math.floor
+local gsub, format, strsplit = string.gsub, format, strsplit
+--WoW API / Variables
+local CreateFrame = CreateFrame
+local GetTime = GetTime
+local UnitGUID = UnitGUID
+local UnitHealthMax = UnitHealthMax
+local GetNumBattlefieldScores = GetNumBattlefieldScores
+local GetBattlefieldScore = GetBattlefieldScore
+local GetNumArenaOpponentSpecs = GetNumArenaOpponentSpecs
+local UnitName = UnitName
+local GetArenaOpponentSpec = GetArenaOpponentSpec
+local GetSpecializationInfoByID = GetSpecializationInfoByID
+local InCombatLockdown = InCombatLockdown
+local UnitExists = UnitExists
+local IsInInstance = IsInInstance
+local SetCVar = SetCVar
+local IsAddOnLoaded = IsAddOnLoaded
+local GetComboPoints = GetComboPoints
+local UnitHasVehicleUI = UnitHasVehicleUI
+local GetSpellInfo = GetSpellInfo
+local GetSpellTexture = GetSpellTexture
+local UnitBuff, UnitDebuff = UnitBuff, UnitDebuff
+local UnitPlayerControlled = UnitPlayerControlled
+local GetRaidTargetIndex = GetRaidTargetIndex
+local WorldFrame = WorldFrame
+local RAID_CLASS_COLORS = RAID_CLASS_COLORS
+local CUSTOM_CLASS_COLORS = CUSTOM_CLASS_COLORS
+local UNKNOWN = UNKNOWN
+local MAX_COMBO_POINTS = MAX_COMBO_POINTS
+local COMBATLOG_OBJECT_CONTROL_PLAYER = COMBATLOG_OBJECT_CONTROL_PLAYER
+
+--Global variables that we don't cache, list them here for mikk's FindGlobals script
+-- GLOBALS: UIParent, AURA_TYPE_BUFF, AURA_TYPE_DEBUFF
+
+local numChildren = -1
+local targetIndicator
+local targetAlpha = 1
 
 --Pattern to remove cross realm label added to the end of plate names
 --Taken from http://www.wowace.com/addons/libnameplateregistry-1-0/
@@ -36,10 +71,10 @@ NP.BuffCache = {}
 NP.DebuffCache = {}
 
 NP.HealerSpecs = {
-	[L['Restoration']] = true,
-	[L['Holy']] = true,
-	[L['Discipline']] = true,
-	[L['Mistweaver']] = true,
+	[L["Restoration"]] = true,
+	[L["Holy"]] = true,
+	[L["Discipline"]] = true,
+	[L["Mistweaver"]] = true,
 }
 
 NP.RaidTargetReference = {
@@ -57,7 +92,7 @@ NP.RaidIconCoordinate = {
 	[0]		= { [0]		= "STAR", [0.25]	= "MOON", },
 	[0.25]	= { [0]		= "CIRCLE", [0.25]	= "SQUARE",	},
 	[0.5]	= { [0]		= "DIAMOND", [0.25]	= "CROSS", },
-	[0.75]	= { [0]		= "TRIANGLE", [0.25]	= "SKULL", }, 
+	[0.75]	= { [0]		= "TRIANGLE", [0.25]	= "SKULL", },
 }
 
 NP.ComboColors = {
@@ -66,6 +101,17 @@ NP.ComboColors = {
 	[3] = {0.65, 0.63, 0.35},
 	[4] = {0.65, 0.63, 0.35},
 	[5] = {0.33, 0.59, 0.33}
+}
+
+NP.RaidMarkColors = {
+	["STAR"] = {r = 0.85, g = 0.81, b = 0.27},
+	["MOON"] = {r = 0.60,g = 0.75,b = 0.85},
+	["CIRCLE"] = {r = 0.93,g = 0.51,b = 0.06},
+	["SQUARE"] = {r = 0,g = 0.64,b = 1},
+	["DIAMOND"] = {r = 0.7,g = 0.06,b = 0.84},
+	["CROSS"] = {r = 0.82,g = 0.18,b = 0.18},
+	["TRIANGLE"] = {r = 0.14,g = 0.66,b = 0.14},
+	["SKULL"] = {r = 0.89,g = 0.83,b = 0.74},
 }
 
 local AURA_UPDATE_INTERVAL = 0.1
@@ -94,11 +140,11 @@ local TimeColors = {
 function NP:SetTargetIndicatorDimensions()
 	if(self.db.targetIndicator.style == 'arrow') then
 		targetIndicator:SetHeight(self.db.targetIndicator.height)
-		targetIndicator:SetWidth(self.db.targetIndicator.width)		
+		targetIndicator:SetWidth(self.db.targetIndicator.width)
 	elseif(self.db.targetIndicator.style == 'doubleArrow' or self.db.targetIndicator.style == 'doubleArrowInverted') then
 		targetIndicator.left:SetHeight(self.db.targetIndicator.height)
 		targetIndicator.left:SetWidth(self.db.targetIndicator.width)
-		targetIndicator.right:SetWidth(self.db.targetIndicator.width)	
+		targetIndicator.right:SetWidth(self.db.targetIndicator.width)
 		targetIndicator.right:SetHeight(self.db.targetIndicator.height)
 	end
 end
@@ -112,12 +158,12 @@ function NP:PositionTargetIndicator(myPlate)
 		targetIndicator.left:SetPoint("RIGHT", myPlate.healthBar, "LEFT", -self.db.targetIndicator.xOffset, 0)
 		targetIndicator.right:SetPoint("LEFT", myPlate.healthBar, "RIGHT", self.db.targetIndicator.xOffset, 0)
 		targetIndicator:SetFrameLevel(0)
-		targetIndicator:SetFrameStrata("BACKGROUND")		
+		targetIndicator:SetFrameStrata("BACKGROUND")
 	elseif(self.db.targetIndicator.style == 'doubleArrowInverted') then
 		targetIndicator.right:SetPoint("RIGHT", myPlate.healthBar, "LEFT", -self.db.targetIndicator.xOffset, 0)
 		targetIndicator.left:SetPoint("LEFT", myPlate.healthBar, "RIGHT", self.db.targetIndicator.xOffset, 0)
 		targetIndicator:SetFrameLevel(0)
-		targetIndicator:SetFrameStrata("BACKGROUND")		
+		targetIndicator:SetFrameStrata("BACKGROUND")
 	elseif(self.db.targetIndicator.style == 'glow') then
 		targetIndicator:SetOutside(myPlate.healthBar, 3, 3)
 		targetIndicator:SetFrameLevel(0)
@@ -134,7 +180,7 @@ function NP:ColorTargetIndicator(r, g, b)
 		targetIndicator.left:SetVertexColor(r, g, b)
 		targetIndicator.right:SetVertexColor(r, g, b)
 	elseif(self.db.targetIndicator.style == 'glow') then
-		targetIndicator:SetBackdropBorderColor(r, g, b)	
+		targetIndicator:SetBackdropBorderColor(r, g, b)
 	end
 end
 
@@ -146,7 +192,7 @@ function NP:SetTargetIndicator()
 	elseif(self.db.targetIndicator.style == 'doubleArrow' or self.db.targetIndicator.style == 'doubleArrowInverted') then
 		targetIndicator = self.doubleArrowIndicator
 		targetIndicator.left:ClearAllPoints()
-		targetIndicator.right:ClearAllPoints()		
+		targetIndicator.right:ClearAllPoints()
 		self.arrowIndicator:Hide()
 		self.glowIndicator:Hide()
 	elseif(self.db.targetIndicator.style == 'glow') then
@@ -190,7 +236,7 @@ function NP:OnUpdate(elapsed)
 		self.elapsed = 0
 	else
 		self.elapsed = (self.elapsed or 0) + elapsed
-	end	
+	end
 end
 
 function NP:CheckFilterAndHealers(myPlate)
@@ -205,14 +251,14 @@ function NP:CheckFilterAndHealers(myPlate)
 			if(not myPlate:IsShown()) then
 				myPlate:Show()
 			end
-			
+
 			if db.customColor then
 				self.customColor = db.color
-				myPlate.healthBar:SetStatusBarColor(db.color.r, db.color.g, db.color.b)	
+				myPlate.healthBar:SetStatusBarColor(db.color.r, db.color.g, db.color.b)
 			else
-				self.customColor = nil	
+				self.customColor = nil
 			end
-			
+
 			if db.customScale and db.customScale ~= 1 then
 				myPlate.healthBar:Height(NP.db.healthBar.height * db.customScale)
 				myPlate.healthBar:Width(NP.db.healthBar.width * db.customScale)
@@ -252,7 +298,7 @@ end
 function NP:CheckArenaHealers()
 	local numOpps = GetNumArenaOpponentSpecs()
 	if not (numOpps > 1) then return end
-	
+
 	for i=1, 5 do
 		local name = UnitName(format('arena%d', i))
 		if name and name ~= UNKNOWN then
@@ -261,7 +307,7 @@ function NP:CheckArenaHealers()
 			if s and s > 0 then
 				_, talentSpec = GetSpecializationInfoByID(s)
 			end
-			
+
 			if talentSpec and talentSpec ~= UNKNOWN and self.HealerSpecs[talentSpec] then
 				self.Healers[name] = talentSpec
 			end
@@ -270,27 +316,17 @@ function NP:CheckArenaHealers()
 end
 
 function NP:UpdateLevelAndName(myPlate)
-	local region = select(4, self:GetRegions())
-	if region and region:GetObjectType() == 'FontString' then
-		self.level = region
-	end
-	
 	if not NP.db.showLevel then
 		myPlate.level:SetText("")
 		myPlate.level:Hide()
 	else
-		if self.level:IsShown() then
-			local level, elite, boss, mylevel = self.level:GetObjectType() == 'FontString' and tonumber(self.level:GetText()) or nil, self.eliteIcon:IsShown(), self.bossIcon:IsShown(), UnitLevel("player")
-			if boss then
-				myPlate.level:SetText("??")
-				myPlate.level:SetTextColor(0.8, 0.05, 0)
-			elseif level then
-				myPlate.level:SetText(level..(elite and "+" or ""))
-				myPlate.level:SetTextColor(self.level:GetTextColor())
-			end
-		elseif self.bossIcon:IsShown() and myPlate.level:GetText() ~= '??' then
+		local level, elite, boss = self.level:GetObjectType() == 'FontString' and tonumber(self.level:GetText()) or nil, self.eliteIcon:IsShown(), self.bossIcon:IsShown()
+		if boss then
 			myPlate.level:SetText("??")
 			myPlate.level:SetTextColor(0.8, 0.05, 0)
+		elseif level then
+			myPlate.level:SetText(level..(elite and "+" or ""))
+			myPlate.level:SetTextColor(self.level:GetTextColor())
 		end
 
 		if self.isSmall then
@@ -306,7 +342,15 @@ function NP:UpdateLevelAndName(myPlate)
 		myPlate.name:Hide()
 	else
 		myPlate.name:SetText(self.name:GetText())
+		myPlate.name.stringHeight = myPlate.name:GetStringHeight()
 		if not myPlate.name:IsShown() then myPlate.name:Show() end
+	end
+
+	if self.raidIcon:IsShown() then
+		myPlate.raidIcon:Show()
+		myPlate.raidIcon:SetTexCoord(self.raidIcon:GetTexCoord())
+	else
+		myPlate.raidIcon:Hide()
 	end
 end
 
@@ -318,7 +362,7 @@ function NP:GetReaction(frame)
 		if class == 'MONK' then
 			bb = bb - 0.01
 		end
-		
+
 		if RAID_CLASS_COLORS[class].r == r and RAID_CLASS_COLORS[class].g == g and RAID_CLASS_COLORS[class].b == bb then
 			return class
 		end
@@ -360,21 +404,25 @@ local color, scale
 function NP:ColorizeAndScale(myPlate)
 	local unitType = NP:GetReaction(self)
 	local scale = 1
+	local canAttack = false
 
 	self.unitType = unitType
-	if RAID_CLASS_COLORS[unitType] then
+	if CUSTOM_CLASS_COLORS and CUSTOM_CLASS_COLORS[unitType] then
+		color = CUSTOM_CLASS_COLORS[unitType]
+	elseif RAID_CLASS_COLORS[unitType] then
 		color = RAID_CLASS_COLORS[unitType]
 	elseif unitType == "TAPPED_NPC" then
 		color = NP.db.reactions.tapped
 	elseif unitType == "HOSTILE_NPC" or unitType == "NEUTRAL_NPC" then
 		local classRole = E.role
 		local threatReaction = NP:GetThreatReaction(self)
+		canAttack = true
 		if(not NP.db.threat.enable) then
 			if unitType == "NEUTRAL_NPC" then
 				color = NP.db.reactions.neutral
 			else
 				color = NP.db.reactions.enemy
-			end			
+			end
 		elseif threatReaction == 'FULL_THREAT' then
 			if classRole == 'Tank' then
 				color = NP.db.threat.goodColor
@@ -419,24 +467,27 @@ function NP:ColorizeAndScale(myPlate)
 	else
 		color = NP.db.reactions.enemy
 	end
+	
+	if self.raidIcon:IsShown() and NP.db.healthBar.colorByRaidIcon then
+		NP:CheckRaidIcon(self)
+		local raidColor = NP.RaidMarkColors[self.raidIconType]
+		color = raidColor or color
+	end
 
-	if (NP.db.healthBar.lowHPScale.enable and 
-		NP.db.healthBar.lowHPScale.changeColor and 
-		myPlate.lowHealth:IsShown() and 
-		(color == NP.db.reactions.enemy or color == NP.db.reactions.neutral)) then
-	   		color = NP.db.healthBar.lowHPScale.color
+	if (NP.db.healthBar.lowHPScale.enable and NP.db.healthBar.lowHPScale.changeColor and myPlate.lowHealth:IsShown() and canAttack) then
+		color = NP.db.healthBar.lowHPScale.color
 	end
 
 	if(not self.customColor) then
 		myPlate.healthBar:SetStatusBarColor(color.r, color.g, color.b)
 
 		if(NP.db.targetIndicator.enable and NP.db.targetIndicator.colorMatchHealthBar and self.unit == "target") then
-			NP:ColorTargetIndicator(color.r, color.g, color.b)	
+			NP:ColorTargetIndicator(color.r, color.g, color.b)
 		end
 	elseif(self.unit == "target" and NP.db.targetIndicator.colorMatchHealthBar and NP.db.targetIndicator.enable) then
-		NP:ColorTargetIndicator(self.customColor.r, self.customColor.g, self.customColor.b)			
+		NP:ColorTargetIndicator(self.customColor.r, self.customColor.g, self.customColor.b)
 	end
-	
+
 	local w = NP.db.healthBar.width * scale
 	local h = NP.db.healthBar.height * scale
 	if NP.db.healthBar.lowHPScale.enable then
@@ -454,7 +505,7 @@ function NP:ColorizeAndScale(myPlate)
 	end
 	if(not self.customScale and not self.isSmall and myPlate.healthBar:GetWidth() ~= w) then
 		myPlate.healthBar:SetSize(w, h)
-		self.castBar.icon:SetSize(NP.db.castBar.height + h + 5, NP.db.castBar.height + h + 5)
+		myPlate.castBar.icon:SetSize(NP.db.castBar.height + h + 5, NP.db.castBar.height + h + 5)
 	end
 end
 
@@ -462,7 +513,7 @@ function NP:SetAlpha(myPlate)
 	if self:GetAlpha() < 1 then
 		myPlate:SetAlpha(NP.db.nonTargetAlpha)
 	else
-		myPlate:SetAlpha(1)
+		myPlate:SetAlpha(targetAlpha)
 	end
 end
 
@@ -471,6 +522,7 @@ function NP:SetUnitInfo(myPlate)
 	if self:GetAlpha() == 1 and NP.targetName and (NP.targetName == plateName) then
 		self.guid = UnitGUID("target")
 		self.unit = "target"
+		self.maxHP = UnitHealthMax("target")
 		myPlate:SetFrameLevel(2)
 		myPlate.overlay:Hide()
 
@@ -484,12 +536,14 @@ function NP:SetUnitInfo(myPlate)
 	elseif self.highlight:IsShown() and UnitExists("mouseover") and (UnitName("mouseover") == plateName) then
 		if(self.unit ~= "mouseover") then
 			myPlate:SetFrameLevel(1)
-			myPlate.overlay:Show()			
+			myPlate.overlay:Show()
 			NP:UpdateAurasByUnitID('mouseover')
 			NP:UpdateComboPointsByUnitID('mouseover')
 		end
 		self.guid = UnitGUID("mouseover")
-		self.unit = "mouseover"		
+		self.unit = "mouseover"
+		self.maxHP = UnitHealthMax("mouseover")
+		NP:UpdateAurasByUnitID('mouseover')
 	else
 		myPlate:SetFrameLevel(0)
 		myPlate.overlay:Hide()
@@ -507,7 +561,7 @@ function NP:PLAYER_ENTERING_WORLD()
 	elseif inInstance and instanceType == 'arena' and self.db.raidHealIcon.markHealers then
 		self:RegisterEvent('UNIT_NAME_UPDATE', 'CheckArenaHealers')
 		self:RegisterEvent("ARENA_OPPONENT_UPDATE", 'CheckArenaHealers');
-		self:CheckArenaHealers()	
+		self:CheckArenaHealers()
 	else
 		self:UnregisterEvent('UNIT_NAME_UPDATE')
 		self:UnregisterEvent("ARENA_OPPONENT_UPDATE")
@@ -529,9 +583,11 @@ function NP:PLAYER_TARGET_CHANGED()
 		self.targetName = UnitName("target")
 		WorldFrame.elapsed = 0.1
 		NP.NumTargetChecks = 0
+		targetAlpha = E.db.nameplate.targetAlpha
 	else
 		targetIndicator:Hide()
 		self.targetName = nil
+		targetAlpha = 1
 	end
 end
 
@@ -566,7 +622,7 @@ function NP:Initialize()
 
 	self.PlateParent = CreateFrame("Frame", nil, WorldFrame)
 	self.PlateParent:SetFrameStrata("BACKGROUND")
-	self.PlateParent:SetFrameLevel(0)	
+	self.PlateParent:SetFrameLevel(0)
 	WorldFrame:HookScript('OnUpdate', NP.OnUpdate)
 	self:RegisterEvent("PLAYER_ENTERING_WORLD")
 	self:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
@@ -589,16 +645,16 @@ function NP:Initialize()
 	self.glowIndicator = CreateFrame("Frame", nil, WorldFrame)
 	self.glowIndicator:SetFrameLevel(0)
 	self.glowIndicator:SetFrameStrata("BACKGROUND")
-	self.glowIndicator:SetBackdrop( {	
+	self.glowIndicator:SetBackdrop( {
  		edgeFile = LSM:Fetch("border", "ElvUI GlowBorder"), edgeSize = 3,
  		insets = {left = 5, right = 5, top = 5, bottom = 5},
- 	})		
+ 	})
 	self.glowIndicator:SetBackdropColor(0, 0, 0, 0)
 	self.glowIndicator:SetScale(E.PixelMode and 2.5 or 3)
 	self.glowIndicator:Hide()
 
 	self:SetTargetIndicator()
-	self.viewPort = IsAddOnLoaded("SunnArt");
+	self.viewPort = IsAddOnLoaded("SunnArt") or IsAddOnLoaded("CT_Viewport") or IsAddOnLoaded("Btex");
 	self:CombatToggle(true)
 end
 
@@ -615,7 +671,7 @@ function NP:ForEachPlate(functionToRun, ...)
 	end
 end
 
-function NP:RoundColors(r, g, b)	
+function NP:RoundColors(r, g, b)
 	return floor(r*100+.5)/100, floor(g*100+.5)/100, floor(b*100+.5)/100
 end
 
@@ -627,8 +683,8 @@ end
 function NP:OnShow()
 	local myPlate = NP.CreatedPlates[self]
 	local objectType
-	for object in pairs(self.queue) do		
-		objectType = object:GetObjectType()  
+	for object in pairs(self.queue) do
+		objectType = object:GetObjectType()
 		if objectType == "Texture" then
 			object.OldTexture = object:GetTexture()
 			object:SetTexture("")
@@ -637,11 +693,12 @@ function NP:OnShow()
 			object:SetWidth(0.001)
 		elseif objectType == 'StatusBar' then
 			object:SetStatusBarTexture("")
-		else
-			object:Hide()
+		end
+		if object ~= self.bossIcon and object ~= self.eliteIcon then
+			object:Hide() -- HIDE EVERYTHING or SUFFER FROM LOW FPS, THIS IS BIGGEST ISSUE
 		end
 	end
-	
+
 	if(not NP.CheckFilterAndHealers(self, myPlate)) then return end
 	self.isSmall = (self.healthBar:GetEffectiveScale() < 1 and NP.db.smallPlates)
 	myPlate:SetSize(self:GetSize())
@@ -655,9 +712,8 @@ function NP:OnShow()
 		myPlate.name:SetPoint("BOTTOMRIGHT", myPlate.level, "BOTTOMLEFT", -2, 0)
 	end
 
-	
 	NP.UpdateLevelAndName(self, myPlate)
-	NP.ColorizeAndScale(self, myPlate)	
+	NP.ColorizeAndScale(self, myPlate)
 
 	NP.HealthBar_OnValueChanged(self.healthBar, self.healthBar:GetValue())
 	myPlate.nameText = gsub(self.name:GetText(), FSPAT,'')
@@ -671,7 +727,7 @@ function NP:OnShow()
 
 	if(not NP.db.targetIndicator.colorMatchHealthBar) then
 		NP:ColorTargetIndicator(NP.db.targetIndicator.color.r, NP.db.targetIndicator.color.g, NP.db.targetIndicator.color.b)
-	end	
+	end
 end
 
 function NP:OnHide()
@@ -680,6 +736,7 @@ function NP:OnHide()
 	self.unitType = nil
 	self.guid = nil
 	self.unit = nil
+	self.maxHP = nil
 	self.raidIconType = nil
 	self.customColor = nil
 	self.customScale = nil
@@ -689,31 +746,33 @@ function NP:OnHide()
 		targetIndicator:Hide()
 	end
 
+	myPlate:SetAlpha(0)
 	myPlate.lowHealth:Hide()
 	myPlate.healerIcon:Hide()
 
 	myPlate.healthBar:SetSize(NP.db.healthBar.width, NP.db.healthBar.height)
-	self.castBar.icon:Size(NP.db.castBar.height + NP.db.healthBar.height + 5)
+	myPlate.castBar.icon:Size(NP.db.castBar.height + NP.db.healthBar.height + 5)
 
 	if myPlate.BuffWidget then
-		for index = 1, #myPlate.BuffWidget.icons do 
+		for index = 1, #myPlate.BuffWidget.icons do
 			NP.PolledHideIn(myPlate.BuffWidget.icons[index], 0)
-		end		
+		end
 	end
 
 	if myPlate.DebuffWidget then
-		for index = 1, #myPlate.DebuffWidget.icons do 
+		for index = 1, #myPlate.DebuffWidget.icons do
 			NP.PolledHideIn(myPlate.DebuffWidget.icons[index], 0)
-		end		
+		end
 	end
 
 	for i=1, MAX_COMBO_POINTS do
 		myPlate.cPoints[i]:Hide()
-	end	
+	end
 
 	--UIFrameFadeOut(myPlate, 0.1, myPlate:GetAlpha(), 0)
 	--myPlate:Hide()
-	myPlate:SetPoint("BOTTOMLEFT", self, "BOTTOMLEFT") --Prevent nameplate being in random location on screen when first shown
+	-- DOING THIS KILLS YOUR FPS
+	--myPlate:SetPoint("BOTTOMLEFT", self, "BOTTOMLEFT") --Prevent nameplate being in random location on screen when first shown
 end
 
 function NP:SizeAuraHeader(myPlate, width, auraHeader, dbTable)
@@ -725,9 +784,9 @@ function NP:SizeAuraHeader(myPlate, width, auraHeader, dbTable)
 
 	for index = 1, numAuras do
 		if not auraHeader.icons[index] then
-			auraHeader.icons[index] = NP:CreateAuraIcon(auraHeader, myPlate, dbTable); 
+			auraHeader.icons[index] = NP:CreateAuraIcon(auraHeader, myPlate, dbTable);
 		end
-		
+
 
 		auraHeader.icons[index]:SetWidth(auraWidth)
 		auraHeader.icons[index]:SetHeight(auraHeight)
@@ -736,13 +795,13 @@ function NP:SizeAuraHeader(myPlate, width, auraHeader, dbTable)
 			if(index == 1) then
 				auraHeader.icons[index]:SetPoint("LEFT", auraHeader, 0, 0)
 			else
-				auraHeader.icons[index]:SetPoint("LEFT", auraHeader.icons[index-1], "RIGHT", baseSpacing, 0) 
+				auraHeader.icons[index]:SetPoint("LEFT", auraHeader.icons[index-1], "RIGHT", baseSpacing, 0)
 			end
 		else
 			if(index == 1) then
 				auraHeader.icons[index]:SetPoint("RIGHT", auraHeader, 0, 0)
 			else
-				auraHeader.icons[index]:SetPoint("RIGHT", auraHeader.icons[index-1], "LEFT", -baseSpacing, 0) 
+				auraHeader.icons[index]:SetPoint("RIGHT", auraHeader.icons[index-1], "LEFT", -baseSpacing, 0)
 			end
 		end
 	end
@@ -764,7 +823,8 @@ function NP:HealthBar_OnSizeChanged(width, height)
 end
 
 function NP:HealthBar_OnValueChanged(value)
-	local myPlate = NP.CreatedPlates[self:GetParent():GetParent()]
+	local blizzPlate = self:GetParent():GetParent()
+	local myPlate = NP.CreatedPlates[blizzPlate]
 	local minValue, maxValue = self:GetMinMaxValues()
 	myPlate.healthBar:SetMinMaxValues(minValue, maxValue)
 	myPlate.healthBar:SetValue(value)
@@ -782,10 +842,17 @@ function NP:HealthBar_OnValueChanged(value)
 		myPlate.lowHealth:Hide()
 	end
 
+	--With patch 6.2.2 the min and max values were changed to 0 and 1. Hopefully this is a bug.
+	--Force percentage display for the time being, as we have no other way to reliably get health values
 	--Health Text
-	if NP.db.healthBar.text.enable and value and maxValue and maxValue > 1 and self:GetScale() == 1 then
+	-- if NP.db.healthBar.text.enable and value and maxValue and maxValue > 1 and self:GetScale() == 1 then
+	if NP.db.healthBar.text.enable and value and maxValue and self:GetScale() == 1 then
 		myPlate.healthBar.text:Show()
-		myPlate.healthBar.text:SetText(E:GetFormattedText(NP.db.healthBar.text.format, value, maxValue))
+		if blizzPlate.maxHP then
+			myPlate.healthBar.text:SetText(E:GetFormattedText(NP.db.healthBar.text.format, floor(blizzPlate.maxHP * value), blizzPlate.maxHP))
+		else
+			myPlate.healthBar.text:SetText(E:GetFormattedText("PERCENT", value, maxValue))
+		end
 	elseif myPlate.healthBar.text:IsShown() then
 		myPlate.healthBar.text:Hide()
 	end
@@ -797,7 +864,8 @@ end
 
 local green =  {r = 0, g = 1, b = 0}
 function NP:CastBar_OnValueChanged(value)
-	local myPlate = NP.CreatedPlates[self:GetParent():GetParent()]
+	local blizzPlate = self:GetParent():GetParent()
+	local myPlate = NP.CreatedPlates[blizzPlate]
 	local min, max = self:GetMinMaxValues()
 	local isChannel = value < myPlate.castBar:GetValue()
 	myPlate.castBar:SetMinMaxValues(min, max)
@@ -814,7 +882,10 @@ function NP:CastBar_OnValueChanged(value)
 		else
 			color = NP.db.castBar.color
 		end
-	end			
+	end
+
+	myPlate.castBar.name:SetText(blizzPlate.castBar.name:GetText())
+	myPlate.castBar.icon:SetTexture(blizzPlate.castBar.icon:GetTexture())
 
 	myPlate.castBar:SetStatusBarColor(color.r, color.g, color.b)
 end
@@ -833,10 +904,13 @@ function NP:UpdateSettings()
 	local myPlate = NP.CreatedPlates[self]
 	local font = LSM:Fetch("font", NP.db.font)
 	local fontSize, fontOutline = NP.db.fontSize, NP.db.fontOutline
+	local wrapName = NP.db.wrapName
 
 	--Name
 	myPlate.name:FontTemplate(font, fontSize, fontOutline)
 	myPlate.name:SetTextColor(1, 1, 1)
+	myPlate.name:SetHeight(2.5*fontSize)
+	myPlate.name:SetWordWrap(wrapName)
 
 	--Level
 	myPlate.level:FontTemplate(font, fontSize, fontOutline)
@@ -845,7 +919,7 @@ function NP:UpdateSettings()
 	if not self.customScale and not self.isSmall then
 		myPlate.healthBar:SetSize(NP.db.healthBar.width, NP.db.healthBar.height)
 	end
-	
+
 	myPlate.healthBar:SetStatusBarTexture(E.media.normTex)
 
 	myPlate.healthBar.text:FontTemplate(font, fontSize, fontOutline)
@@ -854,13 +928,13 @@ function NP:UpdateSettings()
 	myPlate.castBar:SetSize(NP.db.healthBar.width, NP.db.castBar.height)
 	myPlate.castBar:SetStatusBarTexture(E.media.normTex)
 	myPlate.castBar.time:FontTemplate(font, fontSize, fontOutline)
-	self.castBar.name:FontTemplate(font, fontSize, fontOutline)
-	self.castBar.icon:Size(NP.db.castBar.height + NP.db.healthBar.height + 5)	
+	myPlate.castBar.name:FontTemplate(font, fontSize, fontOutline)
+	myPlate.castBar.icon:Size(NP.db.castBar.height + NP.db.healthBar.height + 5)
 
 	--Raid Icon
-	self.raidIcon:ClearAllPoints()
-	self.raidIcon:SetPoint(E.InversePoints[NP.db.raidHealIcon.attachTo], myPlate.healthBar, NP.db.raidHealIcon.attachTo, NP.db.raidHealIcon.xOffset, NP.db.raidHealIcon.yOffset)	
-	self.raidIcon:SetSize(NP.db.raidHealIcon.size, NP.db.raidHealIcon.size)
+	myPlate.raidIcon:ClearAllPoints()
+	myPlate.raidIcon:SetPoint(E.InversePoints[NP.db.raidHealIcon.attachTo], myPlate.healthBar, NP.db.raidHealIcon.attachTo, NP.db.raidHealIcon.xOffset, NP.db.raidHealIcon.yOffset)
+	myPlate.raidIcon:SetSize(NP.db.raidHealIcon.size, NP.db.raidHealIcon.size)
 
 	--Healer Icon
 	myPlate.healerIcon:ClearAllPoints()
@@ -869,7 +943,7 @@ function NP:UpdateSettings()
 
 	--Buffs
 	local auraFont = LSM:Fetch("font", NP.db.buffs.font)
-	for index = 1, #myPlate.BuffWidget.icons do 
+	for index = 1, #myPlate.BuffWidget.icons do
 		if myPlate.BuffWidget.icons and myPlate.BuffWidget.icons[index] then
 			myPlate.BuffWidget.icons[index].TimeLeft:FontTemplate(auraFont, NP.db.buffs.fontSize, NP.db.buffs.fontOutline)
 			myPlate.BuffWidget.icons[index].Stacks:FontTemplate(auraFont, NP.db.buffs.fontSize, NP.db.buffs.fontOutline)
@@ -884,11 +958,11 @@ function NP:UpdateSettings()
 
 	local yOffset = NP.db.debuffs.stretchTexture and -8 or -2
 	myPlate.BuffWidget:SetPoint('BOTTOMRIGHT', myPlate.DebuffWidget, 'TOPRIGHT', 0, yOffset)
-	myPlate.BuffWidget:SetPoint('BOTTOMLEFT', myPlate.DebuffWidget, 'TOPLEFT', 0, yOffset)	
+	myPlate.BuffWidget:SetPoint('BOTTOMLEFT', myPlate.DebuffWidget, 'TOPLEFT', 0, yOffset)
 
 	--Debuffs
 	auraFont = LSM:Fetch("font", NP.db.debuffs.font)
-	for index = 1, #myPlate.DebuffWidget.icons do 
+	for index = 1, #myPlate.DebuffWidget.icons do
 		if myPlate.DebuffWidget.icons and myPlate.DebuffWidget.icons[index] then
 			myPlate.DebuffWidget.icons[index].TimeLeft:FontTemplate(auraFont, NP.db.debuffs.fontSize, NP.db.debuffs.fontOutline)
 			myPlate.DebuffWidget.icons[index].Stacks:FontTemplate(auraFont, NP.db.debuffs.fontSize, NP.db.debuffs.fontOutline)
@@ -899,13 +973,18 @@ function NP:UpdateSettings()
 				myPlate.DebuffWidget.icons[index].Icon:SetTexCoord(.07, .93, .07, .93)
 			end
 		end
-	end	
+	end
+
+	local stringHeight = myPlate.name:GetStringHeight()
+	local yOffset = stringHeight > 0 and stringHeight or myPlate.name.stringHeight
+	myPlate.DebuffWidget:SetPoint('BOTTOMRIGHT', myPlate.healthBar, 'TOPRIGHT', 0, yOffset)
+	myPlate.DebuffWidget:SetPoint('BOTTOMLEFT', myPlate.healthBar, 'TOPLEFT', 0, yOffset)
 
 	--ComboPoints
 	if(NP.db.comboPoints and not myPlate.cPoints:IsShown()) then
-		myPlate.cPoints:Show()	
+		myPlate.cPoints:Show()
 	elseif(myPlate.cPoints:IsShown()) then
-		myPlate.cPoints:Hide()	
+		myPlate.cPoints:Hide()
 	end
 
 	NP.OnShow(self)
@@ -913,17 +992,36 @@ function NP:UpdateSettings()
 end
 
 function NP:CreatePlate(frame)
-	frame.barFrame, frame.nameFrame = frame:GetChildren()
-	frame.healthBar, frame.castBar = frame.barFrame:GetChildren()
-	frame.threat, frame.border, frame.highlight, frame.level, frame.bossIcon, frame.raidIcon, frame.eliteIcon = frame.barFrame:GetRegions()
-	frame.name = frame.nameFrame:GetRegions()
-	frame.healthBar.texture = frame.healthBar:GetRegions()
-	frame.castBar.texture, frame.castBar.border, frame.castBar.shield, frame.castBar.icon, frame.castBar.name, frame.castBar.shadow = frame.castBar:GetRegions()
+	frame.healthBar = frame.ArtContainer.HealthBar
+	-- frame.healthBar.texture = frame.healthBar:GetRegions() --No parentKey, yet?
+
+	-- frame.absorbBar = frame.ArtContainer.AbsorbBar
+	frame.border = frame.ArtContainer.Border
+	frame.highlight = frame.ArtContainer.Highlight
+	frame.level = frame.ArtContainer.LevelText
+	frame.raidIcon = frame.ArtContainer.RaidTargetIcon
+	frame.eliteIcon = frame.ArtContainer.EliteIcon
+	frame.threat = frame.ArtContainer.AggroWarningTexture
+	frame.bossIcon = frame.ArtContainer.HighLevelIcon
+	frame.name = frame.NameContainer.NameText
+	
+	frame.castBar = frame.ArtContainer.CastBar
+	-- frame.castBar.texture = frame.castBar:GetRegions() --No parentKey, yet?
+	frame.castBar.border = frame.ArtContainer.CastBarBorder
+	frame.castBar.icon = frame.ArtContainer.CastBarSpellIcon
+	frame.castBar.shield = frame.ArtContainer.CastBarFrameShield
+	frame.castBar.name = frame.ArtContainer.CastBarText
+	frame.castBar.shadow = frame.ArtContainer.CastBarTextBG
 
 	local myPlate = CreateFrame("Frame", nil, self.PlateParent)
 	if(self.viewPort) then
 		myPlate:SetPoint("BOTTOMLEFT", frame, "BOTTOMLEFT")
 	end
+	
+	--Hidden Frame (used to hide castbar icon)
+	myPlate.hiddenFrame = CreateFrame("Frame", nil, myPlate)
+	myPlate.hiddenFrame:Hide()
+
 	--HealthBar
 	myPlate.healthBar = CreateFrame("StatusBar", nil, myPlate)
 	myPlate.healthBar:SetPoint('BOTTOM', myPlate, 'BOTTOM', 0, 5)
@@ -938,8 +1036,8 @@ function NP:CreatePlate(frame)
 
 	--CastBar
 	myPlate.castBar = CreateFrame("StatusBar", nil, myPlate)
-	myPlate.castBar:SetPoint('TOPLEFT', myPlate.healthBar, 'BOTTOMLEFT', 0, -5)	
-	myPlate.castBar:SetPoint('TOPRIGHT', myPlate.healthBar, 'BOTTOMRIGHT', 0, -5)	
+	myPlate.castBar:SetPoint('TOPLEFT', myPlate.healthBar, 'BOTTOMLEFT', 0, -5)
+	myPlate.castBar:SetPoint('TOPRIGHT', myPlate.healthBar, 'BOTTOMRIGHT', 0, -5)
 	myPlate.castBar:SetFrameStrata("BACKGROUND")
 	myPlate.castBar:SetFrameLevel(0)
 	NP:CreateBackdrop(myPlate.castBar)
@@ -948,18 +1046,17 @@ function NP:CreatePlate(frame)
 	myPlate.castBar.time:SetPoint("TOPRIGHT", myPlate.castBar, "BOTTOMRIGHT", 6, -2)
 	myPlate.castBar.time:SetJustifyH("RIGHT")
 
-	frame.castBar.name:SetParent(myPlate.castBar)
-	frame.castBar.name:ClearAllPoints()
-	frame.castBar.name:SetPoint("TOPLEFT", myPlate.castBar, "BOTTOMLEFT", 0, -2)
-	frame.castBar.name:SetPoint("TOPRIGHT", myPlate.castBar.time, "TOPLEFT", 0, -2)
-	frame.castBar.name:SetJustifyH("LEFT")
+	myPlate.castBar.name = myPlate.castBar:CreateFontString(nil, 'OVERLAY')
+	myPlate.castBar.name:SetPoint("TOPLEFT", myPlate.castBar, "BOTTOMLEFT", 0, -2)
+	myPlate.castBar.name:SetPoint("TOPRIGHT", myPlate.castBar.time, "TOPLEFT", 0, -2)
+	myPlate.castBar.name:SetJustifyH("LEFT")
 
-	frame.castBar.icon:SetParent(myPlate.castBar)
-	frame.castBar.icon:SetTexCoord(.07, .93, .07, .93)
-	frame.castBar.icon:SetDrawLayer("OVERLAY")
-	frame.castBar.icon:ClearAllPoints()
-	frame.castBar.icon:SetPoint("TOPLEFT", myPlate.healthBar, "TOPRIGHT", 5, 0)
-	NP:CreateBackdrop(myPlate.castBar, frame.castBar.icon)
+	frame.castBar.icon:SetParent(myPlate.hiddenFrame)
+	myPlate.castBar.icon = myPlate.castBar:CreateTexture(nil, 'OVERLAY')
+	myPlate.castBar.icon:SetTexCoord(.07, .93, .07, .93)
+	myPlate.castBar.icon:SetDrawLayer("OVERLAY")
+	myPlate.castBar.icon:SetPoint("TOPLEFT", myPlate.healthBar, "TOPRIGHT", 5, 0)
+	NP:CreateBackdrop(myPlate.castBar, myPlate.castBar.icon)
 
 	--Level
 	myPlate.level = myPlate:CreateFontString(nil, 'OVERLAY')
@@ -969,9 +1066,16 @@ function NP:CreatePlate(frame)
 	--Name
 	myPlate.name = myPlate:CreateFontString(nil, 'OVERLAY')
 	myPlate.name:SetJustifyH("LEFT")
+	myPlate.name:SetJustifyV("BOTTOM")
+	myPlate.name.stringHeight = frame.name:GetStringHeight()
 
 	--Raid Icon
-	frame.raidIcon:SetParent(myPlate)
+	frame.raidIcon:SetAlpha(0)
+	-- DO NOT REUSE BLIZZARD's, make our own!
+	myPlate.raidIcon = myPlate:CreateTexture(nil, 'ARTWORK')
+	myPlate.raidIcon:SetSize(frame.raidIcon:GetSize())
+	myPlate.raidIcon:SetTexture([[Interface\TargetingFrame\UI-RaidTargetingIcons]])
+	myPlate.raidIcon:Hide()
 
 	--Healer Icon
 	myPlate.healerIcon = myPlate:CreateTexture(nil, 'ARTWORK')
@@ -986,32 +1090,34 @@ function NP:CreatePlate(frame)
 	myPlate.overlay:Hide()
 
 	local debuffHeader = CreateFrame("Frame", nil, myPlate)
-	debuffHeader:SetHeight(32); debuffHeader:Show()
-	debuffHeader:SetPoint('BOTTOMRIGHT', myPlate.healthBar, 'TOPRIGHT', 0, 10)
-	debuffHeader:SetPoint('BOTTOMLEFT', myPlate.healthBar, 'TOPLEFT', 0, 10)
+	local yOffset = myPlate.name.stringHeight or 10
+	debuffHeader:SetHeight(32);
+	debuffHeader:Show()
+	debuffHeader:SetPoint('BOTTOMRIGHT', myPlate.healthBar, 'TOPRIGHT', 0, yOffset)
+	debuffHeader:SetPoint('BOTTOMLEFT', myPlate.healthBar, 'TOPLEFT', 0, yOffset)
 	debuffHeader:SetFrameStrata("BACKGROUND")
-	debuffHeader:SetFrameLevel(0)	
+	debuffHeader:SetFrameLevel(0)
 	debuffHeader.PollFunction = NP.UpdateAuraTime
 	debuffHeader.icons = {}
-	myPlate.DebuffWidget = debuffHeader		
+	myPlate.DebuffWidget = debuffHeader
 
 	--Buffs
 	local buffHeader = CreateFrame("Frame", nil, myPlate)
 	buffHeader:SetHeight(32); buffHeader:Show()
 	buffHeader:SetFrameStrata("BACKGROUND")
-	buffHeader:SetFrameLevel(0)	
+	buffHeader:SetFrameLevel(0)
 	buffHeader.PollFunction = NP.UpdateAuraTime
 	buffHeader.icons = {}
-	myPlate.BuffWidget = buffHeader		
+	myPlate.BuffWidget = buffHeader
 
 	--Low-Health Indicator
 	myPlate.lowHealth = CreateFrame("Frame", nil, myPlate)
 	myPlate.lowHealth:SetFrameLevel(0)
 	myPlate.lowHealth:SetOutside(myPlate.healthBar, 3, 3)
-	myPlate.lowHealth:SetBackdrop( {	
+	myPlate.lowHealth:SetBackdrop( {
  		edgeFile = LSM:Fetch("border", "ElvUI GlowBorder"), edgeSize = 3,
  		insets = {left = 5, right = 5, top = 5, bottom = 5},
- 	})		
+ 	})
 	myPlate.lowHealth:SetBackdropColor(0, 0, 0, 0)
 	myPlate.lowHealth:SetBackdropBorderColor(1, 1, 0, 0.9)
 	myPlate.lowHealth:SetScale(E.PixelMode and 1.5 or 2)
@@ -1034,10 +1140,10 @@ function NP:CreatePlate(frame)
 		else
 			myPlate.cPoints[i]:SetPoint("LEFT", myPlate.cPoints[i-1], "RIGHT", 2, 0)
 		end
-		
+
 		myPlate.cPoints[i]:Hide()
-	end	
-	
+	end
+
 	--Script Handlers
 	frame:HookScript("OnShow", NP.OnShow)
 	frame:HookScript("OnHide", NP.OnHide)
@@ -1059,6 +1165,8 @@ function NP:CreatePlate(frame)
 	NP:QueueObject(frame, frame.castBar.shadow)
 	NP:QueueObject(frame, frame.bossIcon)
 	NP:QueueObject(frame, frame.eliteIcon)
+	NP:QueueObject(frame, frame.castBar.name)
+	NP:QueueObject(frame, frame.castBar.icon)
 
 	self.CreatedPlates[frame] = myPlate
 	NP.UpdateSettings(frame)
@@ -1082,8 +1190,8 @@ function NP:ScanFrames(...)
 	for index = 1, select('#', ...) do
 		local frame = select(index, ...)
 		local name = frame:GetName()
-		
-		if(not NP.CreatedPlates[frame] and (name and name:find("NamePlate%d"))) then
+
+		if(not NP.CreatedPlates[frame] and (name and name:find("^NamePlate%d"))) then
 			NP:CreatePlate(frame)
 		end
 	end
@@ -1092,97 +1200,97 @@ end
 function NP:CreateBackdrop(parent, point)
 	point = point or parent
 	local noscalemult = E.mult * UIParent:GetScale()
-	
+
 	if point.bordertop then return end
 
 	point.backdrop = parent:CreateTexture(nil, "BORDER")
 	point.backdrop:SetDrawLayer("BORDER", -4)
 	point.backdrop:SetAllPoints(point)
-	point.backdrop:SetTexture(unpack(E["media"].backdropfadecolor))		
-	
-	if E.PixelMode then 
+	point.backdrop:SetTexture(unpack(E["media"].backdropfadecolor))
+
+	if E.PixelMode then
 		point.bordertop = parent:CreateTexture(nil, "BORDER")
 		point.bordertop:SetPoint("TOPLEFT", point, "TOPLEFT", -noscalemult, noscalemult)
 		point.bordertop:SetPoint("TOPRIGHT", point, "TOPRIGHT", noscalemult, noscalemult)
 		point.bordertop:SetHeight(noscalemult)
-		point.bordertop:SetTexture(unpack(E["media"].bordercolor))	
+		point.bordertop:SetTexture(unpack(E["media"].bordercolor))
 		point.bordertop:SetDrawLayer("BORDER", 1)
-		
+
 		point.borderbottom = parent:CreateTexture(nil, "BORDER")
 		point.borderbottom:SetPoint("BOTTOMLEFT", point, "BOTTOMLEFT", -noscalemult, -noscalemult)
 		point.borderbottom:SetPoint("BOTTOMRIGHT", point, "BOTTOMRIGHT", noscalemult, -noscalemult)
 		point.borderbottom:SetHeight(noscalemult)
-		point.borderbottom:SetTexture(unpack(E["media"].bordercolor))	
+		point.borderbottom:SetTexture(unpack(E["media"].bordercolor))
 		point.borderbottom:SetDrawLayer("BORDER", 1)
-		
+
 		point.borderleft = parent:CreateTexture(nil, "BORDER")
 		point.borderleft:SetPoint("TOPLEFT", point, "TOPLEFT", -noscalemult, noscalemult)
 		point.borderleft:SetPoint("BOTTOMLEFT", point, "BOTTOMLEFT", noscalemult, -noscalemult)
 		point.borderleft:SetWidth(noscalemult)
-		point.borderleft:SetTexture(unpack(E["media"].bordercolor))	
+		point.borderleft:SetTexture(unpack(E["media"].bordercolor))
 		point.borderleft:SetDrawLayer("BORDER", 1)
-		
+
 		point.borderright = parent:CreateTexture(nil, "BORDER")
 		point.borderright:SetPoint("TOPRIGHT", point, "TOPRIGHT", noscalemult, noscalemult)
 		point.borderright:SetPoint("BOTTOMRIGHT", point, "BOTTOMRIGHT", -noscalemult, -noscalemult)
 		point.borderright:SetWidth(noscalemult)
-		point.borderright:SetTexture(unpack(E["media"].bordercolor))	
-		point.borderright:SetDrawLayer("BORDER", 1)			
+		point.borderright:SetTexture(unpack(E["media"].bordercolor))
+		point.borderright:SetDrawLayer("BORDER", 1)
 	else
 		point.bordertop = parent:CreateTexture(nil, "ARTWORK")
 		point.bordertop:SetPoint("TOPLEFT", point, "TOPLEFT", -noscalemult*2, noscalemult*2)
 		point.bordertop:SetPoint("TOPRIGHT", point, "TOPRIGHT", noscalemult*2, noscalemult*2)
 		point.bordertop:SetHeight(noscalemult)
-		point.bordertop:SetTexture(unpack(E.media.bordercolor))	
+		point.bordertop:SetTexture(unpack(E.media.bordercolor))
 		point.bordertop:SetDrawLayer("ARTWORK", -6)
-		
+
 		point.bordertop.backdrop = parent:CreateTexture(nil, "ARTWORK")
 		point.bordertop.backdrop:SetPoint("TOPLEFT", point.bordertop, "TOPLEFT", -noscalemult, noscalemult)
 		point.bordertop.backdrop:SetPoint("TOPRIGHT", point.bordertop, "TOPRIGHT", noscalemult, noscalemult)
 		point.bordertop.backdrop:SetHeight(noscalemult * 3)
-		point.bordertop.backdrop:SetTexture(0, 0, 0)	
-		point.bordertop.backdrop:SetDrawLayer("ARTWORK", -7) 
+		point.bordertop.backdrop:SetTexture(0, 0, 0)
+		point.bordertop.backdrop:SetDrawLayer("ARTWORK", -7)
 
 		point.borderbottom = parent:CreateTexture(nil, "ARTWORK")
 		point.borderbottom:SetPoint("BOTTOMLEFT", point, "BOTTOMLEFT", -noscalemult*2, -noscalemult*2)
 		point.borderbottom:SetPoint("BOTTOMRIGHT", point, "BOTTOMRIGHT", noscalemult*2, -noscalemult*2)
 		point.borderbottom:SetHeight(noscalemult)
-		point.borderbottom:SetTexture(unpack(E.media.bordercolor))	
+		point.borderbottom:SetTexture(unpack(E.media.bordercolor))
 		point.borderbottom:SetDrawLayer("ARTWORK", -6)
 
 		point.borderbottom.backdrop = parent:CreateTexture(nil, "ARTWORK")
 		point.borderbottom.backdrop:SetPoint("BOTTOMLEFT", point.borderbottom, "BOTTOMLEFT", -noscalemult, -noscalemult)
 		point.borderbottom.backdrop:SetPoint("BOTTOMRIGHT", point.borderbottom, "BOTTOMRIGHT", noscalemult, -noscalemult)
 		point.borderbottom.backdrop:SetHeight(noscalemult * 3)
-		point.borderbottom.backdrop:SetTexture(0, 0, 0)	
-		point.borderbottom.backdrop:SetDrawLayer("ARTWORK", -7)			
-		
+		point.borderbottom.backdrop:SetTexture(0, 0, 0)
+		point.borderbottom.backdrop:SetDrawLayer("ARTWORK", -7)
+
 		point.borderleft = parent:CreateTexture(nil, "ARTWORK")
 		point.borderleft:SetPoint("TOPLEFT", point, "TOPLEFT", -noscalemult*2, noscalemult*2)
 		point.borderleft:SetPoint("BOTTOMLEFT", point, "BOTTOMLEFT", noscalemult*2, -noscalemult*2)
 		point.borderleft:SetWidth(noscalemult)
-		point.borderleft:SetTexture(unpack(E.media.bordercolor))	
+		point.borderleft:SetTexture(unpack(E.media.bordercolor))
 		point.borderleft:SetDrawLayer("ARTWORK", -6)
 
 		point.borderleft.backdrop = parent:CreateTexture(nil, "ARTWORK")
 		point.borderleft.backdrop:SetPoint("TOPLEFT", point.borderleft, "TOPLEFT", -noscalemult, noscalemult)
 		point.borderleft.backdrop:SetPoint("BOTTOMLEFT", point.borderleft, "BOTTOMLEFT", -noscalemult, -noscalemult)
 		point.borderleft.backdrop:SetWidth(noscalemult * 3)
-		point.borderleft.backdrop:SetTexture(0, 0, 0)	
-		point.borderleft.backdrop:SetDrawLayer("ARTWORK", -7)					
-		
+		point.borderleft.backdrop:SetTexture(0, 0, 0)
+		point.borderleft.backdrop:SetDrawLayer("ARTWORK", -7)
+
 		point.borderright = parent:CreateTexture(nil, "ARTWORK")
 		point.borderright:SetPoint("TOPRIGHT", point, "TOPRIGHT", noscalemult*2, noscalemult*2)
 		point.borderright:SetPoint("BOTTOMRIGHT", point, "BOTTOMRIGHT", -noscalemult*2, -noscalemult*2)
 		point.borderright:SetWidth(noscalemult)
-		point.borderright:SetTexture(unpack(E.media.bordercolor))	
-		point.borderright:SetDrawLayer("ARTWORK", -6)	
+		point.borderright:SetTexture(unpack(E.media.bordercolor))
+		point.borderright:SetDrawLayer("ARTWORK", -6)
 
 		point.borderright.backdrop = parent:CreateTexture(nil, "ARTWORK")
 		point.borderright.backdrop:SetPoint("TOPRIGHT", point.borderright, "TOPRIGHT", noscalemult, noscalemult)
 		point.borderright.backdrop:SetPoint("BOTTOMRIGHT", point.borderright, "BOTTOMRIGHT", noscalemult, -noscalemult)
 		point.borderright.backdrop:SetWidth(noscalemult * 3)
-		point.borderright.backdrop:SetTexture(0, 0, 0)	
+		point.borderright.backdrop:SetTexture(0, 0, 0)
 		point.borderright.backdrop:SetDrawLayer("ARTWORK", -7)
 	end
 end
@@ -1197,17 +1305,17 @@ function NP:UpdateComboPoints(frame)
 	if(not numPoints) then
 		for i=1, MAX_COMBO_POINTS do
 			myPlate.cPoints[i]:Hide()
-		end			
-		return 
+		end
+		return
 	end
-	
+
 	for i=1, MAX_COMBO_POINTS do
 		if(i <= numPoints) then
 			myPlate.cPoints[i]:Show()
 		else
 			myPlate.cPoints[i]:Hide()
 		end
-	end	
+	end
 end
 
 function NP:UpdateComboPointsByUnitID(unitID)
@@ -1218,7 +1326,7 @@ function NP:UpdateComboPointsByUnitID(unitID)
 	local frame = NP:SearchForFrame(guid)
 	if(frame) then
 		NP:UpdateComboPoints(frame)
-	end	
+	end
 end
 
 function NP:UNIT_COMBO_POINTS(event, unit)
@@ -1237,7 +1345,7 @@ do
 	local WatcherframeActive = false
 	local select = select
 	local timeToUpdate = 0
-	
+
 	local function CheckFramelist(self)
 		local curTime = GetTime()
 		if curTime < timeToUpdate then return end
@@ -1245,39 +1353,39 @@ do
 		timeToUpdate = curTime + AURA_UPDATE_INTERVAL
 
 		for frame, expiration in pairs(Framelist) do
-			if expiration < curTime then 
-				frame:Hide(); 
+			if expiration < curTime then
+				frame:Hide();
 				Framelist[frame] = nil
-			else 
-				if frame.Poll then 
-					frame.Poll(NP, frame, expiration) 
+			else
+				if frame.Poll then
+					frame.Poll(NP, frame, expiration)
 				end
-				framecount = framecount + 1 
+				framecount = framecount + 1
 			end
 		end
 
-		if framecount == 0 then 
-			Watcherframe:SetScript("OnUpdate", nil); 
-			WatcherframeActive = false 
+		if framecount == 0 then
+			Watcherframe:SetScript("OnUpdate", nil);
+			WatcherframeActive = false
 		end
 	end
-	
+
 	function PolledHideIn(frame, expiration)
 		if(not frame) then return end
-		if expiration == 0 then 
+		if expiration == 0 then
 			frame:Hide()
 			Framelist[frame] = nil
 		else
 			Framelist[frame] = expiration
 			frame:Show()
-			
-			if not WatcherframeActive then 
+
+			if not WatcherframeActive then
 				Watcherframe:SetScript("OnUpdate", CheckFramelist)
 				WatcherframeActive = true
 			end
 		end
 	end
-	
+
 	NP.PolledHideIn = PolledHideIn
 end
 
@@ -1304,7 +1412,7 @@ function NP:CreateAuraIcon(frame, parent, dbTable)
 		button.bord:SetTexture(unpack(E["media"].bordercolor))
 		button.bord:SetPoint("TOPLEFT",button,"TOPLEFT", noscalemult,-noscalemult)
 		button.bord:SetPoint("BOTTOMRIGHT",button,"BOTTOMRIGHT",-noscalemult,noscalemult)
-		
+
 		button.Icon = button:CreateTexture(nil, "BORDER")
 		button.Icon:SetPoint("TOPLEFT",button,"TOPLEFT", noscalemult*2,-noscalemult*2)
 		button.Icon:SetPoint("BOTTOMRIGHT",button,"BOTTOMRIGHT",-noscalemult*2,noscalemult*2)
@@ -1313,23 +1421,23 @@ function NP:CreateAuraIcon(frame, parent, dbTable)
 			button.Icon:SetTexCoord(.07, 0.93, .23, 0.77)
 		else
 			button.Icon:SetTexCoord(.07, .93, .07, .93)
-		end			
+		end
 	else
 		button.bg = button:CreateTexture(nil, "BACKGROUND")
 		button.bg:SetTexture(0, 0, 0, 1)
 		button.bg:SetAllPoints(button)
-		
+
 		button.bord = button:CreateTexture(nil, "BACKGROUND")
 		button.bord:SetDrawLayer('BACKGROUND', 2)
 		button.bord:SetTexture(unpack(E["media"].bordercolor))
 		button.bord:SetPoint("TOPLEFT",button,"TOPLEFT", noscalemult,-noscalemult)
 		button.bord:SetPoint("BOTTOMRIGHT",button,"BOTTOMRIGHT",-noscalemult,noscalemult)
-		
+
 		button.bg2 = button:CreateTexture(nil, "BACKGROUND")
 		button.bg2:SetDrawLayer('BACKGROUND', 3)
 		button.bg2:SetTexture(0, 0, 0, 1)
 		button.bg2:SetPoint("TOPLEFT",button,"TOPLEFT", noscalemult*2,-noscalemult*2)
-		button.bg2:SetPoint("BOTTOMRIGHT",button,"BOTTOMRIGHT",-noscalemult*2,noscalemult*2)	
+		button.bg2:SetPoint("BOTTOMRIGHT",button,"BOTTOMRIGHT",-noscalemult*2,noscalemult*2)
 
 		button.Icon = button:CreateTexture(nil, "BORDER")
 		button.Icon:SetPoint("TOPLEFT",button,"TOPLEFT", noscalemult*3,-noscalemult*3)
@@ -1338,22 +1446,22 @@ function NP:CreateAuraIcon(frame, parent, dbTable)
 			button.Icon:SetTexCoord(.07, 0.93, .23, 0.77)
 		else
 			button.Icon:SetTexCoord(.07, .93, .07, .93)
-		end			
+		end
 	end
-	
+
 	local font = LSM:Fetch("font", db.font)
 	button.TimeLeft = button:CreateFontString(nil, 'OVERLAY')
 	button.TimeLeft:SetFont(font, db.fontSize, db.fontOutline)
 	button.TimeLeft:Point('TOPLEFT', 2, 2)
-	button.TimeLeft:SetJustifyH('CENTER')	
-	
+	button.TimeLeft:SetJustifyH('CENTER')
+
 	button.Stacks = button:CreateFontString(nil,"OVERLAY")
 	button.Stacks:SetFont(font, db.fontSize, db.fontOutline)
 	button.Stacks:SetPoint("BOTTOMRIGHT", button, "BOTTOMRIGHT", 2, -2)
 
 	button.Poll = frame.PollFunction
-	button:Hide() 
-	
+	button:Hide()
+
 	return button
 end
 
@@ -1364,14 +1472,14 @@ function NP:UpdateAuraTime(frame, expiration)
 	if timervalue < 4 then
 		format = E.TimeFormats[4][2]
 	end
-	frame.TimeLeft:SetFormattedText(("%s%s|r"):format(TimeColors[formatid], format), timervalue)	
+	frame.TimeLeft:SetFormattedText(("%s%s|r"):format(TimeColors[formatid], format), timervalue)
 end
 
 function NP:ClearAuraContext(frame)
 	AuraList[frame] = nil
 end
 
-function NP:RemoveAuraInstance(guid, spellID)
+function NP:RemoveAuraInstance(guid, spellID, caster)
 	if guid and spellID and NP.AuraList[guid] then
 		local instanceID = tostring(guid)..tostring(spellID)..(tostring(caster or "UNKNOWN_CASTER"))
 		local auraID = spellID..(tostring(caster or "UNKNOWN_CASTER"))
@@ -1410,7 +1518,7 @@ function NP:SetAuraInstance(guid, spellID, expiration, stacks, caster, duration,
 	if (db.showPersonal and caster == UnitGUID('player')) then
 		filter = true;
 	end
-	
+
 	local trackFilter = E.global['unitframe']['aurafilters'][db.additionalFilter]
 	if db.additionalFilter and trackFilter then
 		local name = GetSpellInfo(spellID)
@@ -1429,7 +1537,7 @@ function NP:SetAuraInstance(guid, spellID, expiration, stacks, caster, duration,
 			end
 		end
 	end
-	
+
 	if E.global.unitframe.InvalidSpells[spellID] then
 		filter = false;
 	end
@@ -1465,7 +1573,7 @@ end
 function NP:COMBAT_LOG_EVENT_UNFILTERED(_, _, event, ...)
 	local _, sourceGUID, sourceName, sourceFlags, sourceRaidFlags, destGUID, destName, destFlags, destRaidFlags, spellID, spellName, _, auraType, stackCount  = ...
 
-	if event == "SPELL_AURA_APPLIED" or event == "SPELL_AURA_REFRESH" or event == "SPELL_AURA_APPLIED_DOSE" or event == "SPELL_AURA_REMOVED_DOSE" or event == "SPELL_AURA_BROKEN" or event == "SPELL_AURA_BROKEN_SPELL" or event == "SPELL_AURA_REMOVED" then	
+	if event == "SPELL_AURA_APPLIED" or event == "SPELL_AURA_REFRESH" or event == "SPELL_AURA_APPLIED_DOSE" or event == "SPELL_AURA_REMOVED_DOSE" or event == "SPELL_AURA_BROKEN" or event == "SPELL_AURA_BROKEN_SPELL" or event == "SPELL_AURA_REMOVED" then
 		if event == "SPELL_AURA_APPLIED" or event == "SPELL_AURA_REFRESH" then
 			local duration = NP:GetSpellDuration(spellID)
 			local texture = GetSpellTexture(spellID)
@@ -1475,11 +1583,11 @@ function NP:COMBAT_LOG_EVENT_UNFILTERED(_, _, event, ...)
 			local texture = GetSpellTexture(spellID)
 			NP:SetAuraInstance(destGUID, spellID, GetTime() + (duration or 0), stackCount, sourceGUID, duration, texture, auraType, AURA_TARGET_HOSTILE)
 		elseif event == "SPELL_AURA_BROKEN" or event == "SPELL_AURA_BROKEN_SPELL" or event == "SPELL_AURA_REMOVED" then
-			NP:RemoveAuraInstance(destGUID, spellID)
-		end	
+			NP:RemoveAuraInstance(destGUID, spellID, sourceGUID)
+		end
 
 		local name, raidIcon
-		if band(destFlags, COMBATLOG_OBJECT_CONTROL_PLAYER) > 0 and destName then 
+		if band(destFlags, COMBATLOG_OBJECT_CONTROL_PLAYER) > 0 and destName then
 			local rawName = strsplit("-", destName)			-- Strip server name from players
 			NP.ByName[rawName] = destGUID
 			name = rawName
@@ -1497,7 +1605,7 @@ function NP:COMBAT_LOG_EVENT_UNFILTERED(_, _, event, ...)
 		if(frame and not frame.isSmall) then
 			NP:UpdateAuras(frame)
 		end
-	end	
+	end
 end
 
 function NP:WipeAuraList(guid)
@@ -1529,7 +1637,7 @@ function NP:UpdateAurasByUnitID(unit)
 		NP:SetAuraInstance(guid, spellID, expirationTime, count, UnitGUID(unitCaster or ""), duration, texture, AURA_TYPE_DEBUFF)
 		index = index + 1
 		name , _, texture, count, _, duration, expirationTime, unitCaster, _, _, spellID, _, isBossDebuff = UnitDebuff(unit, index)
-	end	
+	end
 
 	index = 1
 	local name, _, texture, count, _, duration, expirationTime, unitCaster, _, _, spellID = UnitBuff(unit, index);
@@ -1538,13 +1646,13 @@ function NP:UpdateAurasByUnitID(unit)
 		NP:SetAuraInstance(guid, spellID, expirationTime, count, UnitGUID(unitCaster or ""), duration, texture, AURA_TYPE_BUFF)
 		index = index + 1
 		name, _, texture, count, _, duration, expirationTime, unitCaster, _, _, spellID = UnitBuff(unit, index);
-	end	
-	
+	end
+
 	local raidIcon, name
 	if UnitPlayerControlled(unit) then name = UnitName(unit) end
 	raidIcon = RaidIconIndex[GetRaidTargetIndex(unit) or ""]
 	if raidIcon then self.ByRaidIcon[raidIcon] = guid end
-	
+
 	local frame = self:SearchForFrame(guid, raidIcon, name)
 	if frame and not frame.isSmall then
 		NP:UpdateAuras(frame)
@@ -1555,30 +1663,30 @@ function NP:UpdateIcon(frame, texture, expiration, stacks)
 	if frame and texture and expiration then
 		-- Icon
 		frame.Icon:SetTexture(texture)
-		
+
 		-- Stacks
-		if stacks > 1 then 
+		if stacks > 1 then
 			frame.Stacks:SetText(stacks)
-		else 
-			frame.Stacks:SetText("") 
+		else
+			frame.Stacks:SetText("")
 		end
-		
+
 		-- Expiration
 		frame:Show()
 		NP.PolledHideIn(frame, expiration)
-	else 
+	else
 		NP.PolledHideIn(frame, 0)
 	end
 end
 
-local function sortByExpiration(a, b) 
+local function sortByExpiration(a, b)
 	return a.expiration < b.expiration
 end
 
 function NP:UpdateIconGrid(frame, guid)
 	local myPlate = NP.CreatedPlates[frame]
-	local buffs = myPlate.BuffWidget 
-	local debuffs = myPlate.DebuffWidget 
+	local buffs = myPlate.BuffWidget
+	local debuffs = myPlate.DebuffWidget
 	local AurasOnUnit = self:GetAuraList(guid)
 	local BuffSlotIndex = 1
 	local DebuffSlotIndex = 1
@@ -1607,31 +1715,31 @@ function NP:UpdateIconGrid(frame, guid)
 	end
 
 	tsort(self.BuffCache, sortByExpiration)
-	tsort(self.DebuffCache, sortByExpiration)	
+	tsort(self.DebuffCache, sortByExpiration)
 
 	for index = 1,  #self.BuffCache do
 		local cachedaura = self.BuffCache[index]
-		if cachedaura.spellID and cachedaura.expiration then 
-			self:UpdateIcon(buffs.icons[BuffSlotIndex], cachedaura.texture, cachedaura.expiration, cachedaura.stacks) 
+		if cachedaura.spellID and cachedaura.expiration then
+			self:UpdateIcon(buffs.icons[BuffSlotIndex], cachedaura.texture, cachedaura.expiration, cachedaura.stacks)
 			BuffSlotIndex = BuffSlotIndex + 1
 		end
 
-		if(BuffSlotIndex > NP.db.buffs.numAuras) then 
-			break 
+		if(BuffSlotIndex > NP.db.buffs.numAuras) then
+			break
 		end
 	end
 
 	for index = 1,  #self.DebuffCache do
 		local cachedaura = self.DebuffCache[index]
-		if cachedaura.spellID and cachedaura.expiration then 
-			self:UpdateIcon(debuffs.icons[DebuffSlotIndex], cachedaura.texture, cachedaura.expiration, cachedaura.stacks) 
+		if cachedaura.spellID and cachedaura.expiration then
+			self:UpdateIcon(debuffs.icons[DebuffSlotIndex], cachedaura.texture, cachedaura.expiration, cachedaura.stacks)
 			DebuffSlotIndex = DebuffSlotIndex + 1
 		end
 
-		if(DebuffSlotIndex > NP.db.debuffs.numAuras) then 
-			break 
+		if(DebuffSlotIndex > NP.db.debuffs.numAuras) then
+			break
 		end
-	end		
+	end
 
 	-- Clear Extra Slots
 	if buffs.icons[BuffSlotIndex] then
@@ -1643,7 +1751,7 @@ function NP:UpdateIconGrid(frame, guid)
 	end
 
 	self.BuffCache = wipe(self.BuffCache)
-	self.DebuffCache = wipe(self.DebuffCache)	
+	self.DebuffCache = wipe(self.DebuffCache)
 end
 
 function NP:UpdateAuras(frame)
@@ -1653,13 +1761,13 @@ function NP:UpdateAuras(frame)
 
 	if not guid then
 		-- Attempt to ID widget via Name or Raid Icon
-		if RAID_CLASS_COLORS[frame.unitType] then 
+		if RAID_CLASS_COLORS[frame.unitType] then
 			local name = gsub(frame.name:GetText(), FSPAT,'')
 			guid = NP.ByName[name]
-		elseif frame.raidIcon:IsShown() then 
-			guid = NP.ByRaidIcon[frame.raidIconType] 
+		elseif frame.raidIcon:IsShown() then
+			guid = NP.ByRaidIcon[frame.raidIconType]
 		end
-		
+
 		if guid then
 			frame.guid = guid
 		else
@@ -1683,7 +1791,7 @@ end
 function NP:CheckRaidIcon(frame)
 	if frame.raidIcon:IsShown() then
 		local ux, uy = frame.raidIcon:GetTexCoord()
-		frame.raidIconType = NP.RaidIconCoordinate[ux][uy]	
+		frame.raidIconType = NP.RaidIconCoordinate[ux][uy]
 	else
 		frame.raidIconType = nil;
 	end
@@ -1713,7 +1821,7 @@ function NP:SearchNameplateByIconName(raidIcon)
 		if frame and frame:IsShown() and frame.raidIcon:IsShown() and (frame.raidIconType == raidIcon) then
 			return frame
 		end
-	end		
+	end
 end
 
 function NP:SearchForFrame(guid, raidIcon, name)
@@ -1722,7 +1830,7 @@ function NP:SearchForFrame(guid, raidIcon, name)
 	if guid then frame = self:SearchNameplateByGUID(guid) end
 	if (not frame) and name then frame = self:SearchNameplateByName(name) end
 	if (not frame) and raidIcon then frame = self:SearchNameplateByIconName(raidIcon) end
-	
+
 	return frame
 end
 

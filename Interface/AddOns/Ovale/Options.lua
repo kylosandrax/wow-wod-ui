@@ -15,13 +15,15 @@ local AceConfig = LibStub("AceConfig-3.0")
 local AceConfigDialog = LibStub("AceConfigDialog-3.0")
 local L = Ovale.L
 
+local ipairs = ipairs
 local pairs = pairs
+local tinsert = table.insert
 local type = type
 local API_InterfaceOptionsFrame_OpenToCategory = InterfaceOptionsFrame_OpenToCategory
-local API_UnitClass = UnitClass
+-- GLOBALS: LibStub
 
--- Player's class.
-local _, self_class = API_UnitClass("player")
+-- List of registered modules providing options.
+local self_register = {}
 --</private-static-properties>
 
 --<public-static-properties>
@@ -55,7 +57,6 @@ OvaleOptions.defaultDB = {
 			raccourcis = true,
 			smallIconScale = 0.8,
 			targetText = "●",
-			updateInterval = 0.1,
 			-- Options
 			iconShiftX = 0,
 			iconShiftY = 0,
@@ -64,6 +65,7 @@ OvaleOptions.defaultDB = {
 			predictif = false,
 			secondIconScale = 1,
 			-- Advanced
+			taggedEnemies = false,
 			auraLag = 400,
 		},
 	},
@@ -294,21 +296,6 @@ OvaleOptions.options = {
 							name = L["Caractère de portée"],
 							desc = L["Ce caractère est affiché dans un coin de l'icône pour indiquer si la cible est à portée"],
 						},
-						updateInterval =
-						{
-							order = 100,
-							type = "range",
-							name = L["Update interval"],
-							desc = L["Maximum time to wait (in milliseconds) before refreshing icons."],
-							min = 0, max = 500, step = 10,
-							get = function(info)
-								return Ovale.db.profile.apparence.updateInterval * 1000
-							end,
-							set = function(info, value)
-								Ovale.db.profile.apparence.updateInterval = value / 1000
-								OvaleOptions:SendMessage("Ovale_OptionChanged")
-							end
-						},
 					},
 				},
 				optionsAppearance =
@@ -372,9 +359,15 @@ OvaleOptions.options = {
 					name = "Advanced",
 					args =
 					{
+						taggedEnemies = {
+							order = 10,
+							type = "toggle",
+							name = L["Only count tagged enemies"],
+							desc = L["Only count a mob as an enemy if it is directly affected by a player's spells."],
+						},
 						auraLag =
 						{
-							order = 10,
+							order = 20,
 							type = "range",
 							name = L["Aura lag"],
 							desc = L["Lag (in milliseconds) between when an spell is cast and when the affected aura is applied or removed"],
@@ -416,10 +409,13 @@ OvaleOptions.options = {
 					type = "execute",
 					func = function() OvaleOptions:ToggleConfig() end,
 				},
-				ping = {
-					name = "Ping for Ovale users in group",
+				refresh = {
+					name = L["Display refresh statistics"],
 					type = "execute",
-					func = function() Ovale:VersionCheck() end,
+					func = function()
+						local avgRefresh, minRefresh, maxRefresh, count = Ovale:GetRefreshIntervalStatistics()
+						Ovale:Print("Refresh intervals: count = %d, avg = %d, min = %d, max = %d (ms)", count, avgRefresh, minRefresh, maxRefresh)
+					end,
 				},
 			},
 		},
@@ -445,6 +441,8 @@ function OvaleOptions:OnInitialize()
 	db.RegisterCallback( self, "OnProfileCopied", "HandleProfileChanges" )
 
 	Ovale.db = db
+
+	-- Upgrade saved variables to current format.
 	self:UpgradeSavedVariables()
 
 	AceConfig:RegisterOptionsTable(OVALE, self.options.args.apparence)
@@ -460,71 +458,36 @@ function OvaleOptions:OnEnable()
 	self:HandleProfileChanges()
 end
 
-do
-	local NEW_DEBUG_NAMES = {
-		action_bar = "OvaleActionBar",
-		aura = "OvaleAura",
-		combo_points = "OvaleComboPoints",
-		compile = "OvaleCompile",
-		damage_taken = "OvaleDamageTaken",
-		enemy = "OvaleEnemies",
-		guid = "OvaleGUID",
-		missing_spells = false,
-		paper_doll = "OvalePaperDoll",
-		power = "OvalePower",
-		snapshot = false,
-		spellbook = "OvaleSpellBook",
-		state = "OvaleState",
-		steady_focus = "OvaleSteadyFocus",
-		unknown_spells = false,
-	}
+function OvaleOptions:RegisterOptions(addon)
+	tinsert(self_register, addon)
+end
 
-	function OvaleOptions:UpgradeSavedVariables()
-		local global = Ovale.db.global
-		local profile = Ovale.db.profile
+function OvaleOptions:UpgradeSavedVariables()
+	local profile = Ovale.db.profile
 
-		-- All profile-specific debug options are removed.  They are now in the global database.
-		profile.debug = nil
-
-		-- Debugging options have changed names.
-		for old, new in pairs(NEW_DEBUG_NAMES) do
-			if global.debug[old] and new then
-				global.debug[new] = global.debug[old]
-			end
-			global.debug[old] = nil
-		end
-
-		-- If a debug option is toggled off, it is "stored" as nil, not "false".
-		for k, v in pairs(global.debug) do
-			if not v then
-				global.debug[k] = nil
-			end
-		end
-
-		-- Merge two options that had the same meaning.
-		if profile.display ~= nil then
-			profile.apparence.enableIcons = profile.display
-			profile.display = nil
-		end
-
-		-- The frame position settings changed from left/top to offsetX/offsetY.
-		if profile.left or profile.top then
-			profile.left = nil
-			profile.top = nil
-			Ovale:OneTimeMessage("The Ovale icon frames position has been reset.")
-		end
-
-		-- SpellFlash options have been moved and renamed.
-		if profile.apparence.spellFlash and type(profile.apparence.spellFlash) ~= "table" then
-			local enabled = profile.apparence.spellFlash
-			profile.apparence.spellFlash = {}
-			profile.apparence.spellFlash.enabled = enabled
-		end
-
-		-- Re-register defaults so that any tables created during the upgrade are "populated"
-		-- by the default database automatically.
-		Ovale.db:RegisterDefaults(self.defaultDB)
+	-- Merge two options that had the same meaning.
+	if profile.display ~= nil and type(profile.display) == "boolean" then
+		profile.apparence.enableIcons = profile.display
+		profile.display = nil
 	end
+
+	-- The frame position settings changed from left/top to offsetX/offsetY.
+	if profile.left or profile.top then
+		profile.left = nil
+		profile.top = nil
+		Ovale:OneTimeMessage("The Ovale icon frames position has been reset.")
+	end
+
+	-- Invoke module-specific upgrade for Saved Variables.
+	for _, addon in ipairs(self_register) do
+		if addon.UpgradeSavedVariables then
+			addon:UpgradeSavedVariables()
+		end
+	end
+
+	-- Re-register defaults so that any tables created during the upgrade are "populated"
+	-- by the default database automatically.
+	Ovale.db:RegisterDefaults(self.defaultDB)
 end
 
 function OvaleOptions:HandleProfileChanges()

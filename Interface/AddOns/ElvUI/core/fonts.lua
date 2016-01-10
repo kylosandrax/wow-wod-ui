@@ -1,6 +1,26 @@
 local E, L, V, P, G = unpack(select(2, ...)); --Inport: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
 local LSM = LibStub("LibSharedMedia-3.0")
 
+--Cache global variables
+--WoW API / Variables
+local GetChatWindowInfo = GetChatWindowInfo
+local SetCVar = SetCVar
+
+--Global variables that we don't cache, list them here for the mikk's Find Globals script
+-- GLOBALS: CHAT_FONT_HEIGHTS, UNIT_NAME_FONT, DAMAGE_TEXT_FONT, STANDARD_TEXT_FONT
+-- GLOBALS: InterfaceOptionsCombatTextPanelTargetDamage, InterfaceOptionsCombatTextPanelPeriodicDamage
+-- GLOBALS: InterfaceOptionsCombatTextPanelPetDamage, InterfaceOptionsCombatTextPanelHealing
+-- GLOBALS: GameTooltipHeader, SystemFont_Shadow_Large_Outline, NumberFont_OutlineThick_Mono_Small
+-- GLOBALS: NumberFont_Outline_Huge, NumberFont_Outline_Large, NumberFont_Outline_Med
+-- GLOBALS: NumberFont_Shadow_Med, NumberFont_Shadow_Small, QuestFont, QuestFont_Large
+-- GLOBALS: SystemFont_Large, GameFontNormalMed3, SystemFont_Shadow_Huge1, SystemFont_Med1
+-- GLOBALS: SystemFont_Med3, SystemFont_OutlineThick_Huge2, SystemFont_Outline_Small
+-- GLOBALS: SystemFont_Shadow_Large, SystemFont_Shadow_Med1, SystemFont_Shadow_Med3
+-- GLOBALS: SystemFont_Shadow_Outline_Huge2, SystemFont_Shadow_Small, SystemFont_Small
+-- GLOBALS: SystemFont_Tiny, Tooltip_Med,  Tooltip_Small, ZoneTextString, SubZoneTextString
+-- GLOBALS: PVPInfoTextString, PVPArenaTextString, CombatTextFont, FriendsFont_Normal
+-- GLOBALS: FriendsFont_Small, FriendsFont_Large, FriendsFont_UserText
+
 local function SetFont(obj, font, size, style, r, g, b, sr, sg, sb, sox, soy)
 	obj:SetFont(font, size, style)
 	if sr and sg and sb then obj:SetShadowColor(sr, sg, sb) end
@@ -17,8 +37,7 @@ function E:UpdateBlizzardFonts()
 	local MONOCHROME = ''
 	local _, editBoxFontSize, _, _, _, _, _, _, _, _ = GetChatWindowInfo(1)
 
-	UIDROPDOWNMENU_DEFAULT_TEXT_HEIGHT = 12
-	CHAT_FONT_HEIGHTS = {12, 13, 14, 15, 16, 17, 18, 19, 20}
+	CHAT_FONT_HEIGHTS = {6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20}
 
 	if self.db.general.font:lower():find('pixel') then
 		MONOCHROME = 'MONOCHROME'
@@ -43,7 +62,7 @@ function E:UpdateBlizzardFonts()
 	--NAMEPLATE_FONT     = NAMEFONT
 	DAMAGE_TEXT_FONT   = COMBAT
 	STANDARD_TEXT_FONT = NORMAL
-	
+
 	if self.private.general.replaceBlizzFonts then
 		-- Base fonts
 		--SetFont(NumberFontNormal,					LSM:Fetch('font', 'ElvUI Pixel'), 10, 'MONOCHROMEOUTLINE', 1, 1, 1, 0, 0, 0)
@@ -77,7 +96,7 @@ function E:UpdateBlizzardFonts()
 		SetFont(SubZoneTextString,					NORMAL, 25, MONOCHROME.."OUTLINE")
 		SetFont(PVPInfoTextString,					NORMAL, 22, MONOCHROME.."OUTLINE")
 		SetFont(PVPArenaTextString,					NORMAL, 22, MONOCHROME.."OUTLINE")
-		SetFont(CombatTextFont,                     COMBAT, 100, "OUTLINE") -- number here just increase the font quality.
+		SetFont(CombatTextFont,                     COMBAT, 200, "OUTLINE") -- number here just increase the font quality.
 		SetFont(FriendsFont_Normal, NORMAL, self.db.general.fontSize)
 		SetFont(FriendsFont_Small, NORMAL, self.db.general.fontSize)
 		SetFont(FriendsFont_Large, NORMAL, self.db.general.fontSize)

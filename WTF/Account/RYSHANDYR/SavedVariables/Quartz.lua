@@ -17,8 +17,6 @@ Quartz3DB = {
 				},
 			},
 		},
-		["EnemyCasts"] = {
-		},
 		["Player"] = {
 			["profiles"] = {
 				["Default"] = {
@@ -26,6 +24,8 @@ Quartz3DB = {
 					["x"] = 1143.00012207031,
 				},
 			},
+		},
+		["EnemyCasts"] = {
 		},
 		["GCD"] = {
 		},
@@ -47,9 +47,9 @@ Quartz3DB = {
 				},
 			},
 		},
-		["Range"] = {
-		},
 		["Mirror"] = {
+		},
+		["Range"] = {
 		},
 		["Latency"] = {
 		},
@@ -59,10 +59,13 @@ Quartz3DB = {
 		["Greenthorn - Aggramar"] = "Default",
 		["Ryjax - Aggramar"] = "Default",
 		["Kylosandrax - Aggramar"] = "Default",
+		["Stormslinger - Aggramar"] = "Default",
 		["Feldspar - Aggramar"] = "Default",
 		["Kylozandrax - Earthen Ring"] = "Default",
+		["Ryvok - Terokkar"] = "Default",
+		["Kyloc - Aggramar"] = "Default",
 		["Banjax - Aggramar"] = "Default",
-		["Stormslinger - Aggramar"] = "Default",
+		["Kylosandrix - Aggramar"] = "Default",
 		["Ryvok - Aggramar"] = "Default",
 		["Bronin - Aggramar"] = "Default",
 	},
@@ -71,9 +74,9 @@ Quartz3DB = {
 			["modules"] = {
 				["Buff"] = false,
 				["Timer"] = false,
-				["Focus"] = false,
 				["Pet"] = false,
 				["Mirror"] = false,
+				["Focus"] = false,
 			},
 		},
 	},

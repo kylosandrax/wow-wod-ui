@@ -1,6 +1,18 @@
 local E, L, V, P, G = unpack(select(2, ...)); --Inport: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
 local DT = E:GetModule('DataTexts')
 
+--Cache global variables
+--WoW API / Variables
+local GetNumRandomDungeons = GetNumRandomDungeons
+local GetLFGRandomDungeonInfo = GetLFGRandomDungeonInfo
+local GetLFGRoleShortageRewards = GetLFGRoleShortageRewards
+local ToggleFrame = ToggleFrame
+local LFG_ROLE_NUM_SHORTAGE_TYPES = LFG_ROLE_NUM_SHORTAGE_TYPES
+local BATTLEGROUND_HOLIDAY = BATTLEGROUND_HOLIDAY
+
+--Global variables that we don't cache, list them here for mikk's FindGlobals script
+-- GLOBALS: LFDParentFrame
+
 local TANK_ICON = "|TInterface\\AddOns\\ElvUI\\media\\textures\\tank.tga:14:14|t"
 local HEALER_ICON = "|TInterface\\AddOns\\ElvUI\\media\\textures\\healer.tga:14:14|t"
 local DPS_ICON = "|TInterface\\AddOns\\ElvUI\\media\\textures\\dps.tga:14:14|t"
@@ -17,7 +29,7 @@ local function MakeIconString(tank, healer, damage)
 	end
 	if damage then
 		str = str..DPS_ICON
-	end	
+	end
 
 	return str
 end
@@ -35,7 +47,7 @@ local function OnEvent(self, event, ...)
 			if eligible and forHealer and itemCount > 0 then healerReward = true; unavailable = false; end
 			if eligible and forDamage and itemCount > 0 then dpsReward = true; unavailable = false; end
 		end
-	end	
+	end
 
 	if unavailable then
 		self.text:SetText(NOBONUSREWARDS)
@@ -51,7 +63,7 @@ end
 
 local function ValueColorUpdate(hex, r, g, b)
 	NOBONUSREWARDS = BATTLEGROUND_HOLIDAY..": "..hex.."N/A|r"
-	
+
 	if lastPanel ~= nil then
 		OnEvent(lastPanel)
 	end
@@ -75,7 +87,7 @@ local function OnEnter(self)
 			if eligible and forHealer and itemCount > 0 then healerReward = true end
 			if eligible and forDamage and itemCount > 0 then dpsReward = true end
 		end
-		
+
 		if not unavailable then
 			allUnavailable = false
 			local rolesString = MakeIconString(tankReward, healerReward, dpsReward)

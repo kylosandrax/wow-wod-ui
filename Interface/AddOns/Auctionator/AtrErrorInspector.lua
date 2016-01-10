@@ -1,5 +1,6 @@
 
 local addonName, addonTable = ...
+local ZT = addonTable.ztt.ZT;
 local zc = addonTable.zc
 local zz = zc.md
 local _
@@ -84,7 +85,7 @@ function Atr_Error_Handler (...)
 	
 		Atr_LUA_Error:Show();
 		
-		local dcp = zc.Val (AUCTIONATOR_DC_PAUSE, "<nil>") ;
+		local fschunk = zc.Val (AUCTIONATOR_FS_CHUNK, "<nil>") ;
 		
 		local dbversion = 0;
 		if (AUCTIONATOR_PRICE_DATABASE and AUCTIONATOR_PRICE_DATABASE["__dbversion"]) then
@@ -97,7 +98,7 @@ function Atr_Error_Handler (...)
 		end
 		
 		Atr_LUA_ErrorMsg:SetText (msg.."\n------------\nVERS:"..AuctionatorVersion.."   MEM:"..Atr_GetAuctionatorMemString().."   DB:"..Atr_GetDBsize()..
-										"   SE:"..GetCVar("scripterrors").."  SL:"..numShoppingLists.."  DCP:"..dcp.."  DBVERS:"..dbversion..
+										"   SE:"..GetCVar("scripterrors").."  SL:"..numShoppingLists.."  FSCHUNK:"..fschunk.."  DBVERS:"..dbversion..
 										"\n------------\nREALMS: "..GetRealmFacInfoString()..
 										"\n------------\nSTACK: "..funcstr..
 										"\n------------\nADDONS: "..BuildAddonsString());

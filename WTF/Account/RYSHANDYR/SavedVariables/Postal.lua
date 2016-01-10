@@ -1,41 +1,48 @@
 
 Postal3DB = {
-	["global"] = {
-		["BlackBook"] = {
-			["alts"] = {
-				"Banjax|Aggramar|Horde|8|MONK", -- [1]
-				"Bronin|Aggramar|Horde|100|DEATHKNIGHT", -- [2]
-				"Feldspar|Aggramar|Horde|81|PRIEST", -- [3]
-				"Greenthorn|Aggramar|Horde|82|HUNTER", -- [4]
-				"Kylosandrax|Aggramar|Horde|93|WARRIOR", -- [5]
-				"Kylozandrax|Earthen Ring|Horde|71|WARRIOR", -- [6]
-				"Ryjax|Aggramar|Horde|90|DRUID", -- [7]
-				"Ryvok|Aggramar|Horde|90|PALADIN", -- [8]
-				"Stormslinger|Aggramar|Horde|90|SHAMAN", -- [9]
-				"Zapunzel|Aggramar|Horde|76|MAGE", -- [10]
-			},
-		},
-	},
 	["profileKeys"] = {
 		["Zapunzel - Aggramar"] = "Zapunzel - Aggramar",
 		["Greenthorn - Aggramar"] = "Greenthorn - Aggramar",
 		["Ryjax - Aggramar"] = "Ryjax - Aggramar",
 		["Kylosandrax - Aggramar"] = "Kylosandrax - Aggramar",
+		["Stormslinger - Aggramar"] = "Stormslinger - Aggramar",
 		["Feldspar - Aggramar"] = "Feldspar - Aggramar",
 		["Kylozandrax - Earthen Ring"] = "Kylozandrax - Earthen Ring",
+		["Ryvok - Terokkar"] = "Ryvok - Terokkar",
+		["Kyloc - Aggramar"] = "Kyloc - Aggramar",
 		["Banjax - Aggramar"] = "Banjax - Aggramar",
-		["Stormslinger - Aggramar"] = "Stormslinger - Aggramar",
+		["Kylosandrix - Aggramar"] = "Kylosandrix - Aggramar",
 		["Ryvok - Aggramar"] = "Ryvok - Aggramar",
 		["Bronin - Aggramar"] = "Bronin - Aggramar",
+	},
+	["global"] = {
+		["BlackBook"] = {
+			["alts"] = {
+				"Banjax|Aggramar|Horde|90|MONK", -- [1]
+				"Bronin|Aggramar|Horde|100|DEATHKNIGHT", -- [2]
+				"Feldspar|Aggramar|Horde|81|PRIEST", -- [3]
+				"Greenthorn|Aggramar|Horde|83|HUNTER", -- [4]
+				"Kyloc|Aggramar|Horde|1|WARLOCK", -- [5]
+				"Kylosandrax|Aggramar|Horde|95|WARRIOR", -- [6]
+				"Kylosandrix|Aggramar|Horde|4|WARRIOR", -- [7]
+				"Kylozandrax|Earthen Ring|Horde|71|WARRIOR", -- [8]
+				"Ryjax|Aggramar|Horde|93|DRUID", -- [9]
+				"Ryvok|Aggramar|Horde|91|PALADIN", -- [10]
+				"Ryvok|Terokkar|Horde|1|PALADIN", -- [11]
+				"Stormslinger|Aggramar|Horde|96|SHAMAN", -- [12]
+				"Zapunzel|Aggramar|Horde|76|MAGE", -- [13]
+			},
+		},
 	},
 	["profiles"] = {
 		["Zapunzel - Aggramar"] = {
 			["BlackBook"] = {
 				["recent"] = {
-					"Bronin|Aggramar|Horde", -- [1]
-					"Kylosandrax|Aggramar|Horde", -- [2]
-					"Ryjax|Aggramar|Horde", -- [3]
-					"Ryvok|Aggramar|Horde", -- [4]
+					"Kylosandrax|Aggramar|Horde", -- [1]
+					"Banjax|Aggramar|Horde", -- [2]
+					"Bronin|Aggramar|Horde", -- [3]
+					"Ryjax|Aggramar|Horde", -- [4]
+					"Ryvok|Aggramar|Horde", -- [5]
 				},
 			},
 		},
@@ -49,22 +56,25 @@ Postal3DB = {
 		["Ryjax - Aggramar"] = {
 			["BlackBook"] = {
 				["recent"] = {
-					"Bronin|Aggramar|Horde", -- [1]
-					"Kylosandrax|Aggramar|Horde", -- [2]
+					"Zapunzel|Aggramar|Horde", -- [1]
+					"Bronin|Aggramar|Horde", -- [2]
+					"Kylosandrax|Aggramar|Horde", -- [3]
 				},
 			},
 		},
 		["Kylosandrax - Aggramar"] = {
 			["BlackBook"] = {
 				["recent"] = {
-					"Banjax|Aggramar|Horde", -- [1]
-					"Ryjax|Aggramar|Horde", -- [2]
-					"Zapunzel|Aggramar|Horde", -- [3]
-					"Ryvok|Aggramar|Horde", -- [4]
-					"Feldspar|Aggramar|Horde", -- [5]
-					"Bronin|Aggramar|Horde", -- [6]
+					"Zapunzel|Aggramar|Horde", -- [1]
+					"Bronin|Aggramar|Horde", -- [2]
+					"Ryjax|Aggramar|Horde", -- [3]
+					"Banjax|Aggramar|Horde", -- [4]
+					"Ryvok|Aggramar|Horde", -- [5]
+					"Feldspar|Aggramar|Horde", -- [6]
 				},
 			},
+		},
+		["Stormslinger - Aggramar"] = {
 		},
 		["Feldspar - Aggramar"] = {
 			["BlackBook"] = {
@@ -78,15 +88,24 @@ Postal3DB = {
 		},
 		["Kylozandrax - Earthen Ring"] = {
 		},
-		["Banjax - Aggramar"] = {
+		["Ryvok - Terokkar"] = {
 		},
-		["Stormslinger - Aggramar"] = {
+		["Kyloc - Aggramar"] = {
+		},
+		["Banjax - Aggramar"] = {
+			["BlackBook"] = {
+				["recent"] = {
+					"Ryjax|Aggramar|Horde", -- [1]
+				},
+			},
+		},
+		["Kylosandrix - Aggramar"] = {
 		},
 		["Ryvok - Aggramar"] = {
 			["BlackBook"] = {
 				["recent"] = {
-					"Feldspar|Aggramar|Horde", -- [1]
-					"Kylosandrax|Aggramar|Horde", -- [2]
+					"Kylosandrax|Aggramar|Horde", -- [1]
+					"Feldspar|Aggramar|Horde", -- [2]
 					"Zapunzel|Aggramar|Horde", -- [3]
 					"Ryjax|Aggramar|Horde", -- [4]
 					"Bronin|Aggramar|Horde", -- [5]
@@ -96,10 +115,10 @@ Postal3DB = {
 		["Bronin - Aggramar"] = {
 			["BlackBook"] = {
 				["recent"] = {
-					"Banjax|Aggramar|Horde", -- [1]
+					"Zapunzel|Aggramar|Horde", -- [1]
 					"Ryjax|Aggramar|Horde", -- [2]
 					"Kylosandrax|Aggramar|Horde", -- [3]
-					"Zapunzel|Aggramar|Horde", -- [4]
+					"Banjax|Aggramar|Horde", -- [4]
 					"Meiji|Aggramar|Horde", -- [5]
 					"Feldspar|Aggramar|Horde", -- [6]
 					"Ryvok|Aggramar|Horde", -- [7]

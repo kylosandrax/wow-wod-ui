@@ -1,6 +1,6 @@
 --[[
 Name: LibBabble-CreatureType-3.0
-Revision: $Rev: 147 $
+Revision: $Rev: 156 $
 Maintainers: ckknight, nevcairiel, Ackis
 Website: http://www.wowace.com/projects/libbabble-creaturetype-3-0/
 Dependencies: None
@@ -8,7 +8,7 @@ License: MIT
 ]]
 
 local MAJOR_VERSION = "LibBabble-CreatureType-3.0"
-local MINOR_VERSION = 90000 + tonumber(("$Rev: 147 $"):match("%d+"))
+local MINOR_VERSION = 90000 + tonumber(("$Rev: 156 $"):match("%d+"))
 
 if not LibStub then error(MAJOR_VERSION .. " requires LibStub.") end
 local lib = LibStub("LibBabble-3.0"):New(MAJOR_VERSION, MINOR_VERSION)
@@ -272,7 +272,7 @@ elseif GAME_LOCALE == "koKR" then
 	lib:SetCurrentTranslations {
 	-- Aberration = "",
 	-- Abyssal = "",
-	-- Basilisk = "",
+	Basilisk = "바실리스크", -- Needs review
 	Bat = "박쥐",
 	Bear = "곰",
 	Beast = "야수",
@@ -282,15 +282,15 @@ elseif GAME_LOCALE == "koKR" then
 	["Carrion Bird"] = "독수리",
 	Cat = "살쾡이",
 	Chimaera = "키메라",
-	-- Clefthoof = "",
+	Clefthoof = "갈래발굽", -- Needs review
 	["Core Hound"] = "심장부 사냥개",
 	Crab = "게",
-	-- Crane = "",
+	Crane = "학", -- Needs review
 	Critter = "동물",
 	Crocolisk = "악어",
 	Demon = "악마",
 	Devilsaur = "데빌사우루스",
-	-- Direhorn = "",
+	Direhorn = "공포뿔", -- Needs review
 	Dog = "개",
 	Doomguard = "파멸의 수호병",
 	Dragonhawk = "용매",
@@ -298,15 +298,15 @@ elseif GAME_LOCALE == "koKR" then
 	Elemental = "정령",
 	Felguard = "지옥수호병",
 	Felhunter = "지옥사냥개",
-	-- ["Fel Imp"] = "",
+	["Fel Imp"] = "지옥 임프", -- Needs review
 	Fox = "여우",
 	["Gas Cloud"] = "가스",
 	Ghoul = "구울",
 	Giant = "거인",
-	-- Goat = "",
+	Goat = "염소", -- Needs review
 	Gorilla = "고릴라",
 	Humanoid = "인간형",
-	-- Hydra = "",
+	Hydra = "히드라", -- Needs review
 	Hyena = "하이에나",
 	Imp = "임프",
 	Mechanical = "기계",
@@ -315,41 +315,41 @@ elseif GAME_LOCALE == "koKR" then
 	["Nether Ray"] = "황천의 가오리",
 	["Non-combat Pet"] = "애완동물",
 	["Not specified"] = "기타",
-	-- Observer = "",
-	-- Porcupine = "",
-	-- Quilen = "",
+	Observer = "감시자", -- Needs review
+	Porcupine = "호저", -- Needs review
+	Quilen = "기렌", -- Needs review
 	Raptor = "랩터",
 	Ravager = "칼날발톱",
 	["Remote Control"] = "무선조종 장난감",
 	Rhino = "코뿔소",
-	-- Riverbeast = "",
-	-- Rylak = "",
+	Riverbeast = "강물하마", -- Needs review
+	Rylak = "라일라크", -- Needs review
 	Scorpid = "전갈",
 	Serpent = "뱀",
 	["Shale Spider"] = "혈암 거미",
-	-- Shivarra = "",
+	Shivarra = "쉬바라", -- Needs review
 	Silithid = "실리시드",
 	Spider = "거미",
 	["Spirit Beast"] = "야수 정령",
 	Sporebat = "포자날개",
-	-- Stag = "",
+	Stag = "사슴", -- Needs review
 	Succubus = "서큐버스",
 	Tallstrider = "타조",
-	-- Terrorguard = "",
+	Terrorguard = "공포수호병", -- Needs review
 	Totem = "토템",
 	Turtle = "거북",
 	Undead = "언데드",
-	-- Voidlord = "",
+	Voidlord = "공허군주", -- Needs review
 	Voidwalker = "보이드워커",
 	["Warp Stalker"] = "차원의 추적자",
 	Wasp = "말벌",
 	["Water Elemental"] = "물 정령",
-	-- ["Water Strider"] = "",
-	-- ["Wild Pet"] = "",
+	["Water Strider"] = "소금쟁이", -- Needs review
+	["Wild Pet"] = "야생 애완동물", -- Needs review
 	["Wind Serpent"] = "천둥매",
 	Wolf = "늑대",
 	Worm = "벌레",
-	-- Wrathguard = "",
+	Wrathguard = "격노수호병", -- Needs review
 }
 elseif GAME_LOCALE == "esES" then
 	lib:SetCurrentTranslations {
@@ -519,86 +519,86 @@ elseif GAME_LOCALE == "esMX" then
 }
 elseif GAME_LOCALE == "ptBR" then
 	lib:SetCurrentTranslations {
-	Aberration = "Aberração", -- Needs review
-	Abyssal = "Abissal", -- Needs review
-	Basilisk = "Basilisco", -- Needs review
-	Bat = "Morcego", -- Needs review
-	Bear = "Urso", -- Needs review
-	Beast = "Fera", -- Needs review
-	Beetle = "Abelha", -- Needs review
-	["Bird of Prey"] = "Ave de Rapina", -- Needs review
-	Boar = "Javali", -- Needs review
-	["Carrion Bird"] = "Pássaro Carniçeiro", -- Needs review
-	Cat = "Gato", -- Needs review
-	Chimaera = "Quimera", -- Needs review
-	Clefthoof = "Fenoceronte", -- Needs review
-	["Core Hound"] = "Cão Feroz", -- Needs review
-	Crab = "Carangueijo", -- Needs review
-	Crane = "Garça", -- Needs review
-	Critter = "Bicho", -- Needs review
-	Crocolisk = "Crocodilo", -- Needs review
-	Demon = "Demônio", -- Needs review
-	Devilsaur = "Dinomau", -- Needs review
-	Direhorn = "Escornante", -- Needs review
-	Dog = "Cachorro", -- Needs review
-	Doomguard = "Demonarca", -- Needs review
-	Dragonhawk = "Falcão Dracônico", -- Needs review
-	Dragonkin = "Dracônico", -- Needs review
-	Elemental = "Elemental", -- Needs review
-	Felguard = "Guarda Vil", -- Needs review
-	Felhunter = "Caçador Vil", -- Needs review
-	["Fel Imp"] = "Diabrete Vil", -- Needs review
-	Fox = "Raposa", -- Needs review
-	["Gas Cloud"] = "Gasoso", -- Needs review
-	Ghoul = "Vampiro", -- Needs review
-	Giant = "Gigante", -- Needs review
-	Goat = "Bode", -- Needs review
-	Gorilla = "Gorila", -- Needs review
-	Humanoid = "Humanoide", -- Needs review
-	Hydra = "Hidra", -- Needs review
-	Hyena = "Hiena", -- Needs review
-	Imp = "Diabinho", -- Needs review
-	Mechanical = "Mecânico", -- Needs review
-	Monkey = "Macaco", -- Needs review
-	Moth = "Mariposa", -- Needs review
-	["Nether Ray"] = "Raio Etéreo", -- Needs review
-	["Non-combat Pet"] = "Mascote não-combatente", -- Needs review
-	["Not specified"] = "Não especificado", -- Needs review
-	Observer = "Observador", -- Needs review
-	Porcupine = "Porco-espinho", -- Needs review
-	Quilen = "Quílen", -- Needs review
-	Raptor = "Raptor", -- Needs review
-	Ravager = "Devastador", -- Needs review
+	Aberration = "Aberração",
+	Abyssal = "Abissal",
+	Basilisk = "Basilisco",
+	Bat = "Morcego",
+	Bear = "Urso",
+	Beast = "Fera",
+	Beetle = "Besouro",
+	["Bird of Prey"] = "Ave de Rapina",
+	Boar = "Javali",
+	["Carrion Bird"] = "Pássaro Carniçeiro",
+	Cat = "Gato",
+	Chimaera = "Quimera",
+	Clefthoof = "Fenoceronte",
+	["Core Hound"] = "Cão-Magma",
+	Crab = "Carangueijo",
+	Crane = "Garça",
+	Critter = "Bicho",
+	Crocolisk = "Crocolisco",
+	Demon = "Demônio",
+	Devilsaur = "Demossauro",
+	Direhorn = "Escornante",
+	Dog = "Cachorro",
+	Doomguard = "Demonarca",
+	Dragonhawk = "Falcodrago",
+	Dragonkin = "Dracônico",
+	Elemental = "Elemental",
+	Felguard = "Guarda Vil",
+	Felhunter = "Caçador Vil",
+	["Fel Imp"] = "Diabrete Vil",
+	Fox = "Raposa",
+	["Gas Cloud"] = "Nuvem de Gás",
+	Ghoul = "Carniçal",
+	Giant = "Gigante",
+	Goat = "Bode",
+	Gorilla = "Gorila",
+	Humanoid = "Humanoide",
+	Hydra = "Hidra",
+	Hyena = "Hiena",
+	Imp = "Diabrete",
+	Mechanical = "Mecânico",
+	Monkey = "Macaco",
+	Moth = "Mariposa",
+	["Nether Ray"] = "Arraia Etérea",
+	["Non-combat Pet"] = "Mascote não-combatente",
+	["Not specified"] = "Não especificado",
+	Observer = "Observador",
+	Porcupine = "Porco-espinho",
+	Quilen = "Quílen",
+	Raptor = "Raptor",
+	Ravager = "Assolador",
 	["Remote Control"] = "Controle Remoto", -- Needs review
 	Rhino = "Rinoceronte", -- Needs review
-	Riverbeast = "Fera-do-rio", -- Needs review
-	Rylak = "Rylak", -- Needs review
-	Scorpid = "Escorpiônico", -- Needs review
-	Serpent = "Serpente", -- Needs review
-	["Shale Spider"] = "Aranha Xistosa", -- Needs review
-	Shivarra = "Shivarra", -- Needs review
-	Silithid = "Silitídeo", -- Needs review
-	Spider = "Aranha", -- Needs review
-	["Spirit Beast"] = "Espírito Besta", -- Needs review
-	Sporebat = "Morcego Esporoso", -- Needs review
-	Stag = "Cervo", -- Needs review
-	Succubus = "Súcubo", -- Needs review
-	Tallstrider = "Passolargo", -- Needs review
-	Terrorguard = "Deimoguarda", -- Needs review
-	Totem = "Totem", -- Needs review
-	Turtle = "Tartaruga", -- Needs review
-	Undead = "Renegado", -- Needs review
-	Voidlord = "Senhor do Caos", -- Needs review
-	Voidwalker = "Caminhante do Vazio", -- Needs review
-	["Warp Stalker"] = "Espreitador Dimensional", -- Needs review
-	Wasp = "Vespa", -- Needs review
-	["Water Elemental"] = "Elemental da Água", -- Needs review
-	["Water Strider"] = "Caminhante das Águas", -- Needs review
-	-- ["Wild Pet"] = "",
-	["Wind Serpent"] = "Cobra Naja", -- Needs review
-	Wolf = "Lobo", -- Needs review
-	Worm = "Minhoca", -- Needs review
-	Wrathguard = "Guardião Colérico", -- Needs review
+	Riverbeast = "Fera-do-rio",
+	Rylak = "Rylak",
+	Scorpid = "Escorpídeo",
+	Serpent = "Serpente",
+	["Shale Spider"] = "Aranha Xistosa",
+	Shivarra = "Shivarra",
+	Silithid = "Silitídeo",
+	Spider = "Aranha",
+	["Spirit Beast"] = "Fera Espiritual",
+	Sporebat = "Quirósporo",
+	Stag = "Cervo",
+	Succubus = "Súcubo",
+	Tallstrider = "Moa",
+	Terrorguard = "Deimoguarda",
+	Totem = "Totem",
+	Turtle = "Tartaruga",
+	Undead = "Morto-vivo",
+	Voidlord = "Senhor do Caos",
+	Voidwalker = "Emissário do Caos",
+	["Warp Stalker"] = "Espreitador Dimensional",
+	Wasp = "Vespa",
+	["Water Elemental"] = "Elemental da Água",
+	["Water Strider"] = "Caminhante das Águas",
+	["Wild Pet"] = "Mascote Selvagem", -- Needs review
+	["Wind Serpent"] = "Serpente Alada",
+	Wolf = "Lobo",
+	Worm = "Verme",
+	Wrathguard = "Guardião Colérico",
 }
 elseif GAME_LOCALE == "itIT" then
 	lib:SetCurrentTranslations {
@@ -677,7 +677,7 @@ elseif GAME_LOCALE == "itIT" then
 	Wasp = "Vespa",
 	["Water Elemental"] = "Elementale d'Acqua",
 	["Water Strider"] = "Gerride",
-	-- ["Wild Pet"] = "",
+	["Wild Pet"] = "Creatura Selvaggia",
 	["Wind Serpent"] = "Serpente Volante",
 	Wolf = "Lupo",
 	Worm = "Verme",

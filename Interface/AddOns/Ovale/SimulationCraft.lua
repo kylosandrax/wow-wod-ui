@@ -1,5 +1,5 @@
 --[[--------------------------------------------------------------------
-    Copyright (C) 2014 Johnny C. Lam.
+    Copyright (C) 2014, 2015 Johnny C. Lam.
     See the file LICENSE.txt for copying permission.
 --]]--------------------------------------------------------------------
 
@@ -11,19 +11,24 @@ Ovale.OvaleSimulationCraft = OvaleSimulationCraft
 local AceConfig = LibStub("AceConfig-3.0")
 local AceConfigDialog = LibStub("AceConfigDialog-3.0")
 local L = Ovale.L
+local OvaleDebug = Ovale.OvaleDebug
 local OvaleOptions = Ovale.OvaleOptions
 local OvalePool = Ovale.OvalePool
 
 -- Forward declarations for module dependencies.
 local OvaleAST = nil
+local OvaleCompile = nil
 local OvaleData = nil
+local OvaleHonorAmongThieves = nil
 local OvaleLexer = nil
 local OvalePower = nil
+local OvaleScripts = nil
 
 local format = string.format
 local gmatch = string.gmatch
 local gsub = string.gsub
 local ipairs = ipairs
+local next = next
 local pairs = pairs
 local rawset = rawset
 local strfind = string.find
@@ -65,13 +70,19 @@ local MODIFIER_KEYWORD = {
 	["line_cd"] = true,
 	["max_cycle_targets"] = true,
 	["max_energy"] = true,
+	["min_frenzy"] = true,
 	["moving"] = true,
 	["name"] = true,
+	["nonlethal"] = true,
 	["sec"] = true,
 	["slot"] = true,
 	["sync"] = true,
 	["sync_weapons"] = true,
 	["target"] = true,
+	["target_if"] = true,
+	["target_if_first"] = true,		-- "target_if_<type>" is a fake modifier.
+	["target_if_max"] = true,
+	["target_if_min"] = true,
 	["travel_speed"] = true,
 	["type"] = true,
 	["wait"] = true,
@@ -108,10 +119,16 @@ local SPECIAL_ACTION = {
 }
 
 local RUNE_OPERAND = {
+	["Blood"] = "blood",
+	["Frost"] = "frost",
+	["Unholy"] = "unholy",
 	["blood"] = "blood",
+	["blood.death"] = "blood",
 	["death"] = "death",
 	["frost"] = "frost",
+	["frost.death"] = "frost",
 	["unholy"] = "unholy",
+	["unholy.death"] = "unholy",
 	["rune.blood"] = "blood",
 	["rune.death"] = "death",
 	["rune.frost"] = "frost",
@@ -140,11 +157,12 @@ local MATCHES = nil
 local UNARY_OPERATOR = {
 	["!"]  = { "logical", 15 },
 	["-"]  = { "arithmetic", 50 },
+	["@"]  = { "arithmetic", 50 },
 }
 local BINARY_OPERATOR = {
 	-- logical
-	["|"]  = { "logical", 5, "associative" },
-	["^"]  = { "logical", 8, "associative" },
+	["|"]  = { "logical",  5, "associative" },
+	["^"]  = { "logical",  8, "associative" },
 	["&"]  = { "logical", 10, "associative" },
 	-- comparison
 	["!="] = { "compare", 20 },
@@ -185,27 +203,6 @@ local EMIT_DISAMBIGUATION = {}
 local EMIT_EXTRA_PARAMETERS = {}
 local OPERAND_TOKEN_PATTERN = "[^.]+"
 
-local TOTEM_TYPE = {
-	["prismatic_crystal"] = "crystal",	-- XXX
-	["capacitor_totem"] = "air",
-	["cloudburst_totem"] = "water",
-	["earth_elemental_totem"] = "earth",
-	["earthbind_totem"] = "earth",
-	["earthgrab_totem"] = "earth",
-	["fire_elemental_totem"] = "fire",
-	["grounding_totem"] = "air",
-	["healing_stream_totem"] = "water",
-	["healing_tide_totem"] = "water",
-	["magma_totem"] = "fire",
-	["mana_tide_totem"] = "water",
-	["searing_totem"] = "fire",
-	["spirit_link_totem"] = "air",
-	["storm_elemental_totem"] = "air",
-	["stone_bulwark_totem"] = "earth",
-	["tremor_totem"] = "earth",
-	["windwalk_totem"] = "air",
-}
-
 local POTION_STAT = {
 	["draenic_agility"]		= "agility",
 	["draenic_armor"]		= "armor",
@@ -217,6 +214,12 @@ local POTION_STAT = {
 	["tolvir"]				= "agility",
 	["virmens_bite"]		= "agility",
 }
+
+-- Mark() and Sweep() static variables.
+-- functionDefined[name] = true if the function is declared with AddFunction(), or false otherwise.
+local self_functionDefined = {}
+-- functionUsed[name] = true if the function is used within the script, or false otherwise.
+local self_functionUsed = {}
 
 local self_outputPool = OvalePool("OvaleSimulationCraft_outputPool")
 local self_childrenPool = OvalePool("OvaleSimulationCraft_childrenPool")
@@ -252,6 +255,27 @@ do
 	for k, v in pairs(actions) do
 		OvaleOptions.options.args.actions.args[k] = v
 	end
+	OvaleOptions:RegisterOptions(OvaleSimulationCraft)
+end
+
+-- XXX Temporary hard-coding of tags and tag priorities.
+local OVALE_TAGS = { "main", "shortcd", "cd" }
+local OVALE_TAG_PRIORITY = {}
+do
+	for i, tag in pairs(OVALE_TAGS) do
+		OVALE_TAG_PRIORITY[tag] = i * 10
+	end
+end
+
+do
+	local defaultDB = {
+		overrideCode = "",
+	}
+	-- Insert defaults into OvaleOptions.
+	for k, v in pairs(defaultDB) do
+		OvaleOptions.defaultDB.profile[k] = v
+	end
+	OvaleOptions:RegisterOptions(OvaleSimulationCraft)
 end
 --</private-static-properties>
 
@@ -426,7 +450,7 @@ local function UnparseExpression(node)
 		if rhsPrecedence and precedence > rhsPrecedence then
 			rhsExpression = "(" .. Unparse(rhsNode) .. ")"
 		elseif rhsPrecedence and precedence == rhsPrecedence then
-			if BINARY_OPERATOR[node.operator][3] == "associative" then
+			if BINARY_OPERATOR[node.operator][3] == "associative" and node.operator == rhsNode.operator then
 				rhsExpression = Unparse(rhsNode)
 			else
 				rhsExpression = "(" .. Unparse(rhsNode) .. ")"
@@ -484,18 +508,6 @@ local function SyntaxError(tokenStream, ...)
 	OvaleSimulationCraft:Print(tconcat(context, " "))
 end
 
--- Left-rotate tree to preserve precedence.
-local function LeftRotateTree(node)
-	local rhsNode = node.child[2]
-	while node.type == rhsNode.type and node.operator == rhsNode.operator and BINARY_OPERATOR[node.operator][3] == "associative" and rhsNode.expressionType == "binary" do
-		node.child[2] = rhsNode.child[1]
-		rhsNode.child[1] = node
-		node = rhsNode
-		rhsNode = node.child[2]
-	end
-	return node
-end
-
 -- Forward declarations of parser functions needed to implement a recursive descent parser.
 local ParseAction = nil
 local ParseActionList = nil
@@ -526,6 +538,10 @@ ParseAction = function(action, nodeList, annotation)
 		-- Fix bugs in SimulationCraft action lists.
 		-- ",," into ","
 		stream = gsub(stream, ",,", ",")
+		-- "&&" into "&"
+		stream = gsub(stream, "%&%&", "&")
+		-- "target.target." into "target."
+		stream = gsub(stream, "target%.target%.", "target.")
 	end
 	do
 		-- Changes to SimulationCraft action lists for easier translation into Ovale timespan concept.
@@ -541,6 +557,30 @@ ParseAction = function(action, nodeList, annotation)
 		-- "ticks_remain<=N" into "ticks_remain<N+1"
 		stream = gsub(stream, "([^_%.])(ticks_remain)(<?=)([0-9]+)", TicksRemainTranslationHelper)
 		stream = gsub(stream, "([a-z_%.]+%.ticks_remain)(<?=)([0-9]+)", TicksRemainTranslationHelper)
+	end
+	do
+		-- Convert "@" absolute value unary operator for easier translation into Ovale timespan concept.
+		-- "@expr1<N" into "(expr1<N&expr1>-N)"
+		stream = gsub(stream, "%@([a-z_%.]+)<(=?)([0-9]+)", "(%1<%2%3&%1>%2-%3)")
+		-- "@expr1>N" into "(expr1>N|expr1<-N)"
+		stream = gsub(stream, "%@([a-z_%.]+)>(=?)([0-9]+)", "(%1>%2%3|%1<%2-%3)")
+	end
+	do
+		-- Convert "!foo.cooldown.up" into "foo.cooldown.down" to avoid emitting "not not ...".
+		stream = gsub(stream, "!([a-z_%.]+)%.cooldown%.up", "%1.cooldown.down")
+	end
+	do
+		--[[
+			Mage APLs have a custom "target_if=max:..." modifier to the "choose_target"
+			action which does not adhere to the language standard.
+		--]]
+		stream = gsub(stream, ",target_if=first:", ",target_if_first=")
+		stream = gsub(stream, ",target_if=max:", ",target_if_max=")
+		stream = gsub(stream, ",target_if=min:", ",target_if_min=")
+	end
+	do
+		--"sim.target" is the "priority target" property of the simulator, change into "sim_target".
+		stream = gsub(stream, "sim.target", "sim_target")
 	end
 	local tokenStream = OvaleLexer("SimulationCraft", GetTokenIterator(stream))
 	-- Consume the action.
@@ -580,6 +620,9 @@ ParseAction = function(action, nodeList, annotation)
 		node.action = action
 		node.name = name
 		node.child = child
+		-- Save first action for "sync=action" references.
+		annotation.sync = annotation.sync or {}
+		annotation.sync[name] = annotation.sync[name] or node
 	else
 		self_childrenPool:Release(child)
 	end
@@ -683,7 +726,12 @@ ParseExpression = function(tokenStream, nodeList, annotation, minPrecedence)
 						lhsNode.asType = asType
 						rhsNode.asType = asType
 						-- Left-rotate tree to preserve precedence.
-						node = LeftRotateTree(node)
+						while node.type == rhsNode.type and node.operator == rhsNode.operator and BINARY_OPERATOR[node.operator][3] == "associative" and rhsNode.expressionType == "binary" do
+							node.child[2] = rhsNode.child[1]
+							rhsNode.child[1] = node
+							node = rhsNode
+							rhsNode = node.child[2]
+						end
 					end
 				end
 			end
@@ -764,6 +812,9 @@ ParseModifier = function(tokenStream, nodeList, annotation)
 	local expressionNode
 	if ok then
 		ok, expressionNode = ParseExpression(tokenStream, nodeList, annotation)
+		if ok and expressionNode and name == "sec" then
+			expressionNode.asType = "value"
+		end
 	end
 	return ok, name, expressionNode
 end
@@ -814,6 +865,10 @@ ParseOperand = function(tokenStream, nodeList, annotation)
 		node.type = "operand"
 		node.name = name
 		node.rune = RUNE_OPERAND[name]
+		if node.rune then
+			local firstCharacter = strsub(name, 1, 1)
+			node.includeDeath = (firstCharacter == "B" or firstCharacter == "F" or firstCharacter == "U")
+		end
 		annotation.operand = annotation.operand or {}
 		annotation.operand[#annotation.operand + 1] = node
 	end
@@ -896,7 +951,7 @@ do
 	end
 end
 
-local function OvaleFunctionName(name, annotation)
+local function CamelSpecialization(annotation)
 	local output = self_outputPool:Get()
 	local profileName, class, specialization = annotation.name, annotation.class, annotation.specialization
 	if specialization then
@@ -917,17 +972,23 @@ local function OvaleFunctionName(name, annotation)
 	elseif strmatch(profileName, "_[gG]ladiator_") then
 		output[#output + 1] = "gladiator"
 	end
-	output[#output + 1] = name
-	output[#output + 1] = "actions"
 	local outputString = CamelCase(tconcat(output, " "))
 	self_outputPool:Release(output)
 	return outputString
 end
 
+local function OvaleFunctionName(name, annotation)
+	local functionName = CamelCase(name .. " actions")
+	if annotation.specialization then
+		functionName = CamelSpecialization(annotation) .. functionName
+	end
+	return functionName
+end
+
 local function AddSymbol(annotation, symbol)
 	local symbolTable = annotation.symbolTable or {}
 	-- Add the symbol to the table if it's not already present and it's not a globally-defined spell list name.
-	if not symbolTable[symbol] and not OvaleData.buffSpellList[symbol] then
+	if not symbolTable[symbol] and not OvaleData.DEFAULT_SPELL_LIST[symbol] then
 		symbolTable[symbol] = true
 		symbolTable[#symbolTable + 1] = symbol
 	end
@@ -975,10 +1036,19 @@ end
 local function InitializeDisambiguation()
 	AddDisambiguation("bloodlust_buff",			"burst_haste_buff")
 	AddDisambiguation("trinket_proc_all_buff",	"trinket_proc_any_buff")
+	-- WoD legendary ring
+	AddDisambiguation("etheralus_the_eternal_reward",			"legendary_ring_spirit")
+	AddDisambiguation("maalus_the_blood_drinker",				"legendary_ring_agility")
+	AddDisambiguation("nithramus_the_allseer",					"legendary_ring_intellect")
+	AddDisambiguation("sanctus_sigil_of_the_unbroken",			"legendary_ring_bonus_armor")
+	AddDisambiguation("thorasus_the_stone_heart_of_draenor",	"legendary_ring_strength")
 	-- Death Knight
 	AddDisambiguation("arcane_torrent",			"arcane_torrent_runicpower",	"DEATHKNIGHT")
 	AddDisambiguation("blood_fury",				"blood_fury_ap",				"DEATHKNIGHT")
 	AddDisambiguation("breath_of_sindragosa_debuff",	"breath_of_sindragosa_buff",	"DEATHKNIGHT")
+	AddDisambiguation("legendary_ring",			"legendary_ring_bonus_armor",	"DEATHKNIGHT",	"blood")
+	AddDisambiguation("legendary_ring",			"legendary_ring_strength",		"DEATHKNIGHT",	"frost")
+	AddDisambiguation("legendary_ring",			"legendary_ring_strength",		"DEATHKNIGHT",	"unholy")
 	AddDisambiguation("soul_reaper",			"soul_reaper_blood",			"DEATHKNIGHT",	"blood")
 	AddDisambiguation("soul_reaper",			"soul_reaper_frost",			"DEATHKNIGHT",	"frost")
 	AddDisambiguation("soul_reaper",			"soul_reaper_unholy",			"DEATHKNIGHT",	"unholy")
@@ -994,33 +1064,47 @@ local function InitializeDisambiguation()
 	AddDisambiguation("force_of_nature",		"force_of_nature_melee",		"DRUID",		"feral")
 	AddDisambiguation("force_of_nature",		"force_of_nature_tank",			"DRUID",		"guardian")
 	AddDisambiguation("heart_of_the_wild",		"heart_of_the_wild_tank",		"DRUID",		"guardian")
-	AddDisambiguation("incarnation",			"incarnation_caster",			"DRUID",		"balance")
-	AddDisambiguation("incarnation",			"incarnation_melee",			"DRUID",		"feral")
-	AddDisambiguation("incarnation",			"incarnation_tank",				"DRUID",		"guardian")
+	AddDisambiguation("incarnation",			"incarnation_chosen_of_elune",	"DRUID",		"balance")
+	AddDisambiguation("incarnation",			"incarnation_king_of_the_jungle",	"DRUID",	"feral")
+	AddDisambiguation("incarnation",			"incarnation_son_of_ursoc",		"DRUID",		"guardian")
+	AddDisambiguation("legendary_ring",			"legendary_ring_agility",		"DRUID",		"feral")
+	AddDisambiguation("legendary_ring",			"legendary_ring_bonus_armor",	"DRUID",		"guardian")
+	AddDisambiguation("legendary_ring",			"legendary_ring_intellect",		"DRUID",		"balance")
+	AddDisambiguation("legendary_ring",			"legendary_ring_spirit",		"DRUID",		"restoration")
 	AddDisambiguation("moonfire",				"moonfire_cat",					"DRUID",		"feral")
 	AddDisambiguation("omen_of_clarity",		"omen_of_clarity_melee",		"DRUID",		"feral")
 	AddDisambiguation("rejuvenation_debuff",	"rejuvenation_buff",			"DRUID")
 	-- Hunter
 	AddDisambiguation("arcane_torrent",			"arcane_torrent_focus",			"HUNTER")
+	AddDisambiguation("beast_cleave",			"pet_beast_cleave",				"HUNTER",		"beast_mastery")
 	AddDisambiguation("blood_fury",				"blood_fury_ap",				"HUNTER")
 	AddDisambiguation("focusing_shot",			"focusing_shot_marksmanship",	"HUNTER",		"marksmanship")
+	AddDisambiguation("frenzy",					"pet_frenzy",					"HUNTER",		"beast_mastery")
+	AddDisambiguation("legendary_ring",			"legendary_ring_agility",		"HUNTER")
 	-- Mage
 	AddDisambiguation("arcane_torrent",			"arcane_torrent_mana",			"MAGE")
 	AddDisambiguation("arcane_charge_buff",		"arcane_charge_debuff",			"MAGE",			"arcane")
 	AddDisambiguation("blood_fury",				"blood_fury_sp",				"MAGE")
-	AddDisambiguation("water_jet",				"pet_water_jet",				"MAGE",			"frost")
+	AddDisambiguation("legendary_ring",			"legendary_ring_intellect",		"MAGE")
+	AddDisambiguation("water_jet",				"water_elemental_water_jet",	"MAGE",			"frost")
 	-- Monk
 	AddDisambiguation("arcane_torrent",			"arcane_torrent_chi",			"MONK")
 	AddDisambiguation("blood_fury",				"blood_fury_apsp",				"MONK")
 	AddDisambiguation("chi_explosion",			"chi_explosion_heal",			"MONK",			"mistweaver")
 	AddDisambiguation("chi_explosion",			"chi_explosion_melee",			"MONK",			"windwalker")
 	AddDisambiguation("chi_explosion",			"chi_explosion_tank",			"MONK",			"brewmaster")
+	AddDisambiguation("legendary_ring",			"legendary_ring_agility",		"MONK",			"windwalker")
+	AddDisambiguation("legendary_ring",			"legendary_ring_bonus_armor",	"MONK",			"brewmaster")
+	AddDisambiguation("legendary_ring",			"legendary_ring_spirit",		"MONK",			"mistweaver")
 	AddDisambiguation("zen_sphere_debuff",		"zen_sphere_buff",				"MONK")
 	-- Paladin
 	AddDisambiguation("arcane_torrent",			"arcane_torrent_holy",			"PALADIN")
 	AddDisambiguation("avenging_wrath",			"avenging_wrath_heal",			"PALADIN",		"holy")
 	AddDisambiguation("avenging_wrath",			"avenging_wrath_melee",			"PALADIN",		"retribution")
 	AddDisambiguation("blood_fury",				"blood_fury_apsp",				"PALADIN")
+	AddDisambiguation("legendary_ring",			"legendary_ring_bonus_armor",	"PALADIN",		"protection")
+	AddDisambiguation("legendary_ring",			"legendary_ring_spirit",		"PALADIN",		"holy")
+	AddDisambiguation("legendary_ring",			"legendary_ring_strength",		"PALADIN",		"retribution")
 	AddDisambiguation("sacred_shield_debuff",	"sacred_shield_buff",			"PALADIN")
 	-- Priest
 	AddDisambiguation("arcane_torrent",			"arcane_torrent_mana",			"PRIEST")
@@ -1035,10 +1119,14 @@ local function InitializeDisambiguation()
 	AddDisambiguation("halo",					"halo_caster",					"PRIEST",		"shadow")
 	AddDisambiguation("halo",					"halo_heal",					"PRIEST",		"discipline")
 	AddDisambiguation("halo",					"halo_heal",					"PRIEST",		"holy")
+	AddDisambiguation("legendary_ring",			"legendary_ring_intellect",		"PRIEST",		"shadow")
+	AddDisambiguation("legendary_ring",			"legendary_ring_spirit",		"PRIEST",		"discipline")
+	AddDisambiguation("legendary_ring",			"legendary_ring_spirit",		"PRIEST",		"holy")
 	AddDisambiguation("renew_debuff",			"renew_buff",					"PRIEST")
 	-- Rogue
 	AddDisambiguation("arcane_torrent",			"arcane_torrent_energy",		"ROGUE")
 	AddDisambiguation("blood_fury",				"blood_fury_ap",				"ROGUE")
+	AddDisambiguation("legendary_ring",			"legendary_ring_agility",		"ROGUE")
 	AddDisambiguation("stealth_buff",			"stealthed_buff",				"ROGUE")
 	-- Shaman
 	AddDisambiguation("arcane_torrent",			"arcane_torrent_mana",			"SHAMAN")
@@ -1046,6 +1134,10 @@ local function InitializeDisambiguation()
 	AddDisambiguation("ascendance",				"ascendance_heal",				"SHAMAN",		"restoration")
 	AddDisambiguation("ascendance",				"ascendance_melee",				"SHAMAN",		"enhancement")
 	AddDisambiguation("blood_fury",				"blood_fury_apsp",				"SHAMAN")
+	AddDisambiguation("legendary_ring",			"legendary_ring_agility",		"SHAMAN",		"enhancement")
+	AddDisambiguation("legendary_ring",			"legendary_ring_intellect",		"SHAMAN",		"elemental")
+	AddDisambiguation("legendary_ring",			"legendary_ring_spirit",		"SHAMAN",		"restoration")
+	AddDisambiguation("unleashed_fury",			"unleashed_fury_melee",			"SHAMAN",		"enhancement")
 	-- Warlock
 	AddDisambiguation("arcane_torrent",			"arcane_torrent_mana",			"WARLOCK")
 	AddDisambiguation("blood_fury",				"blood_fury_sp",				"WARLOCK")
@@ -1055,13 +1147,391 @@ local function InitializeDisambiguation()
 	AddDisambiguation("glyph_of_dark_soul_instability",	"glyph_of_dark_soul",	"WARLOCK",		"destruction")
 	AddDisambiguation("glyph_of_dark_soul_knowledge",	"glyph_of_dark_soul",	"WARLOCK",		"demonology")
 	AddDisambiguation("glyph_of_dark_soul_misery",		"glyph_of_dark_soul",	"WARLOCK",		"affliction")
+	AddDisambiguation("legendary_ring",			"legendary_ring_intellect",		"WARLOCK")
 	-- Warrior
 	AddDisambiguation("arcane_torrent",			"arcane_torrent_rage",			"WARRIOR")
 	AddDisambiguation("blood_fury",				"blood_fury_ap",				"WARRIOR")
 	AddDisambiguation("execute",				"execute_arms",					"WARRIOR",		"arms")
+	AddDisambiguation("legendary_ring",			"legendary_ring_bonus_armor",	"WARRIOR",		"protection")
+	AddDisambiguation("legendary_ring",			"legendary_ring_strength",		"WARRIOR",		"arms")
+	AddDisambiguation("legendary_ring",			"legendary_ring_strength",		"WARRIOR",		"fury")
 	AddDisambiguation("shield_barrier",			"shield_barrier_melee",			"WARRIOR",		"arms")
 	AddDisambiguation("shield_barrier",			"shield_barrier_melee",			"WARRIOR",		"fury")
 	AddDisambiguation("shield_barrier",			"shield_barrier_tank",			"WARRIOR",		"protection")
+end
+
+local function IsTotem(name)
+	if strsub(name, 1, 13) == "wild_mushroom" then
+		-- Druids.
+		return true
+	elseif name == "prismatic_crystal" or name == "rune_of_power" then
+		-- Mages.
+		return true
+	elseif strsub(name, -7, -1) == "_statue" then
+		-- Monks.
+		return true
+	elseif strsub(name, -6, -1) == "_totem" then
+		-- Shamans.
+		return true
+	end
+	return false
+end
+
+--[[--------------------------
+	Split-by-tag functions
+--]]--------------------------
+
+local function NewLogicalNode(operator, lhsNode, rhsNode, nodeList)
+	nodeList = nodeList or rhsNode
+	local node = OvaleAST:NewNode(nodeList, true)
+	node.type = "logical"
+	node.operator = operator
+	if operator == "not" then
+		node.expressionType = "unary"
+		node.child[1] = lhsNode
+	else
+		node.expressionType = "binary"
+		node.child[1] = lhsNode
+		node.child[2] = rhsNode
+	end
+	return node
+end
+
+local function ConcatenatedConditionNode(conditionList, nodeList, annotation)
+	local conditionNode
+	if #conditionList > 0 then
+		if #conditionList == 1 then
+			conditionNode = conditionList[1]
+		elseif #conditionList > 1 then
+			local lhsNode = conditionList[1]
+			local rhsNode = conditionList[2]
+			conditionNode = NewLogicalNode("or", lhsNode, rhsNode, nodeList)
+			for k = 3, #conditionList do
+				lhsNode = conditionNode
+				rhsNode = conditionList[k]
+				conditionNode = NewLogicalNode("or", lhsNode, rhsNode, nodeList)
+			end
+		end
+	end
+	return conditionNode
+end
+
+local function ConcatenatedBodyNode(bodyList, nodeList, annotation)
+	local bodyNode
+	if #bodyList > 0 then
+		bodyNode = OvaleAST:NewNode(nodeList, true)
+		bodyNode.type = "group"
+		for k, node in ipairs(bodyList) do
+			bodyNode.child[k] = node
+		end
+	end
+	return bodyNode
+end
+
+local function OvaleTaggedFunctionName(name, tag)
+	local bodyName, conditionName
+	local prefix, suffix = strmatch(name, "([A-Z]%w+)(Actions)")
+	if prefix and suffix then
+		local camelTag
+		if tag == "shortcd" then
+			camelTag = "ShortCd"
+		else
+			camelTag = CamelCase(tag)
+		end
+		bodyName = prefix .. camelTag .. suffix
+		conditionName = prefix .. camelTag .. "PostConditions"
+	end
+	return bodyName, conditionName
+end
+
+local function TagPriority(tag)
+	return OVALE_TAG_PRIORITY[tag] or 10
+end
+
+local SPLIT_BY_TAG_VISITOR = nil
+-- Forward declarations of split-by-tag functions.
+local SplitByTag = nil
+local SplitByTagAction = nil
+local SplitByTagAddFunction = nil
+local SplitByTagCustomFunction = nil
+local SplitByTagGroup = nil
+local SplitByTagIf = nil
+local SplitByTagState = nil
+
+SplitByTag = function(tag, node, nodeList, annotation)
+	local visitor = SPLIT_BY_TAG_VISITOR[node.type]
+	if not visitor then
+		OvaleSimulationCraft:Error("Unable to split-by-tag node of type '%s'.", node.type)
+	else
+		return visitor(tag, node, nodeList, annotation)
+	end
+end
+
+SplitByTagAction = function(tag, node, nodeList, annotation)
+	local bodyNode, conditionNode
+	local actionTag, invokesGCD
+	local name = "UNKNOWN"
+	local actionType = node.func
+	if actionType == "item" or actionType == "spell" then
+		local firstParamNode = node.rawPositionalParams[1]
+		local id, name
+		if firstParamNode.type == "variable" then
+			name = firstParamNode.name
+			id = annotation.dictionary and annotation.dictionary[name]
+		elseif firstParamNode.type == "value" then
+			name = firstParamNode.value
+			id = name
+		end
+		if id then
+			if actionType == "item" then
+				actionTag, invokesGCD = OvaleData:GetItemTagInfo(id)
+			elseif actionType == "spell" then
+				actionTag, invokesGCD = OvaleData:GetSpellTagInfo(id)
+			end
+		end
+	elseif actionType == "texture" then
+		-- Textures are assumed to be "main" tag and invoke the GCD.
+		actionTag = "main"
+		invokesGCD = true
+	end
+	-- Default to "main" tag and assume the GCD is invoked.'
+	if not actionTag then
+		actionTag = "main"
+		invokesGCD = true
+		OvaleSimulationCraft:Print("Warning: Unable to determine tag for '%s', assuming '%s'.", name, actionTag)
+	end
+	if actionTag == tag then
+		bodyNode = node
+	elseif invokesGCD and TagPriority(actionTag) < TagPriority(tag) then
+		conditionNode = node
+	end
+	return bodyNode, conditionNode
+end
+
+SplitByTagAddFunction = function(tag, node, nodeList, annotation)
+	local bodyName, conditionName = OvaleTaggedFunctionName(node.name, tag)
+
+	-- Split the function body by the tag.
+	local bodyNode, conditionNode = SplitByTag(tag, node.child[1], nodeList, annotation)
+	if not bodyNode or bodyNode.type ~= "group" then
+		local newGroupNode = OvaleAST:NewNode(nodeList, true)
+		newGroupNode.type = "group"
+		newGroupNode.child[1] = bodyNode
+		bodyNode = newGroupNode
+	end
+	if not conditionNode or conditionNode.type ~= "group" then
+		local newGroupNode = OvaleAST:NewNode(nodeList, true)
+		newGroupNode.type = "group"
+		newGroupNode.child[1] = conditionNode
+		conditionNode = newGroupNode
+	end
+
+	-- Wrap groups in AddFunction() nodes.
+	local bodyFunctionNode = OvaleAST:NewNode(nodeList, true)
+	bodyFunctionNode.type = "add_function"
+	bodyFunctionNode.name = bodyName
+	bodyFunctionNode.child[1] = bodyNode
+
+	local conditionFunctionNode = OvaleAST:NewNode(nodeList, true)
+	conditionFunctionNode.type = "add_function"
+	conditionFunctionNode.name = conditionName
+	conditionFunctionNode.child[1] = conditionNode
+
+	return bodyFunctionNode, conditionFunctionNode
+end
+
+SplitByTagCustomFunction = function(tag, node, nodeList, annotation)
+	local bodyNode, conditionNode
+	local functionName = node.name
+	if annotation.taggedFunctionName[functionName] then
+		local bodyName, conditionName = OvaleTaggedFunctionName(functionName, tag)
+		-- Body.
+		bodyNode = OvaleAST:NewNode(nodeList)
+		bodyNode.name = bodyName
+		bodyNode.lowername = strlower(bodyName)
+		bodyNode.type = "custom_function"
+		bodyNode.func = bodyName
+		bodyNode.asString = bodyName .. "()"
+		-- Post conditions.
+		conditionNode = OvaleAST:NewNode(nodeList)
+		conditionNode.name = conditionName
+		conditionNode.lowername = strlower(conditionName)
+		conditionNode.type = "custom_function"
+		conditionNode.func = conditionName
+		conditionNode.asString = conditionName .. "()"
+	else
+		local functionTag = annotation.functionTag[functionName]
+		if not functionTag then
+			if strfind(functionName, "Bloodlust") then
+				functionTag = "cd"
+			elseif strfind(functionName, "GetInMeleeRange") then
+				functionTag = "shortcd"
+			elseif strfind(functionName, "InterruptActions") then
+				functionTag = "cd"
+			elseif strfind(functionName, "SummonPet") then
+				functionTag = "shortcd"
+			elseif strfind(functionName, "UseItemActions") then
+				functionTag = "cd"
+			elseif strfind(functionName, "UsePotion") then
+				functionTag = "cd"
+			end
+		end
+		if functionTag then
+			if functionTag == tag then
+				bodyNode = node
+			end
+		else
+			OvaleSimulationCraft:Print("Warning: Unable to determine tag for '%s()'.", node.name)
+			bodyNode = node
+		end
+	end
+	return bodyNode, conditionNode
+end
+
+SplitByTagGroup = function(tag, node, nodeList, annotation)
+	local index = #node.child
+	local bodyList = {}
+	local conditionList = {}
+	local remainderList = {}
+	while index > 0 do
+		local childNode = node.child[index]
+		index = index - 1
+		if childNode.type ~= "comment" then
+			local bodyNode, conditionNode = SplitByTag(tag, childNode, nodeList, annotation)
+			if conditionNode then
+				tinsert(conditionList, 1, conditionNode)
+				tinsert(remainderList, 1, conditionNode)
+			end
+			if bodyNode then
+				if #conditionList == 0 then
+					tinsert(bodyList, 1, bodyNode)
+				elseif #bodyList == 0 then
+					wipe(conditionList)
+					tinsert(bodyList, 1, bodyNode)
+				else -- if #conditionList > 0 and #bodyList > 0 then
+					-- New body with pre-existing condition, so convert to an "unless" node.
+					local unlessNode = OvaleAST:NewNode(nodeList, true)
+					unlessNode.type = "unless"
+					unlessNode.child[1] = ConcatenatedConditionNode(conditionList, nodeList, annotation)
+					unlessNode.child[2] = ConcatenatedBodyNode(bodyList, nodeList, annotation)
+					wipe(bodyList)
+					wipe(conditionList)
+					tinsert(bodyList, 1, unlessNode)
+					-- Add a blank line above this "unless" node.
+					local commentNode = OvaleAST:NewNode(nodeList)
+					commentNode.type = "comment"
+					tinsert(bodyList, 1, commentNode)
+					-- Insert the new body.
+					tinsert(bodyList, 1, bodyNode)
+				end
+				-- Peek at the previous statement to check if this is part of a "pool_resource" statement pair.
+				if index > 0 then
+					childNode = node.child[index]
+					if childNode.type ~= "comment" then
+						bodyNode, conditionNode = SplitByTag(tag, childNode, nodeList, annotation)
+						if not bodyNode and index > 1 then
+							-- The previous statement is not part of this tag, so check the comments above it for "pool_resource".
+							local start = index - 1
+							for k = index - 1, 1, -1 do
+								childNode = node.child[k]
+								if childNode.type == "comment" then
+									if childNode.comment and strsub(childNode.comment, 1, 5) == "pool_" then
+										-- Found the starting "pool_resource" comment.
+										start = k
+										break
+									end
+								else
+									break
+								end
+							end
+							if start < index - 1 then
+								--[[
+									This was part of a "pool_resource" statement pair where the previous statement
+									is not part of this tag, so insert the comment block here as well for documentation,
+									and "advance" the index to skip the previous statement altogether.
+								--]]
+								for k = index - 1, start, -1 do
+									tinsert(bodyList, 1, node.child[k])
+								end
+								index = start - 1
+							end
+						end
+					end
+				end
+				-- Insert the comment block from above the new body.
+				while index > 0 do
+					childNode = node.child[index]
+					if childNode.type == "comment" then
+						tinsert(bodyList, 1, childNode)
+						index = index - 1
+					else
+						break
+					end
+				end
+			end
+		end
+	end
+
+	local bodyNode = ConcatenatedBodyNode(bodyList, nodeList, annotation)
+	local conditionNode = ConcatenatedConditionNode(conditionList, nodeList, annotation)
+	local remainderNode = ConcatenatedConditionNode(remainderList, nodeList, annotation)
+	if bodyNode then
+		if conditionNode then
+			-- Combine conditions and body into an "unless" node.
+			local unlessNode = OvaleAST:NewNode(nodeList, true)
+			unlessNode.type = "unless"
+			unlessNode.child[1] = conditionNode
+			unlessNode.child[2] = bodyNode
+			-- Create "group" node around the "unless" node.
+			local groupNode = OvaleAST:NewNode(nodeList, true)
+			groupNode.type = "group"
+			groupNode.child[1] = unlessNode
+			-- Set return values.
+			bodyNode = groupNode
+		end
+		conditionNode = remainderNode
+	end
+	return bodyNode, conditionNode
+end
+
+SplitByTagIf = function(tag, node, nodeList, annotation)
+	local bodyNode, conditionNode = SplitByTag(tag, node.child[2], nodeList, annotation)
+	if conditionNode then
+		-- Combine pre-existing conditions and new conditions into an "and" node.
+		local lhsNode = node.child[1]
+		local rhsNode = conditionNode
+		if node.type == "unless" then
+			-- Flip the boolean condition if the original node was an "unless" node.
+			lhsNode = NewLogicalNode("not", lhsNode, nodeList)
+		end
+		local andNode = NewLogicalNode("and", lhsNode, rhsNode, nodeList)
+		conditionNode = andNode
+	end
+	if bodyNode then
+		-- Combine pre-existing conditions and body into an "if/unless" node.
+		local ifNode = OvaleAST:NewNode(nodeList, true)
+		ifNode.type = node.type
+		ifNode.child[1] = node.child[1]
+		ifNode.child[2] = bodyNode
+		bodyNode = ifNode
+	end
+	return bodyNode, conditionNode
+end
+
+SplitByTagState = function(tag, node, nodeList, annotation)
+	return node
+end
+
+do
+	SPLIT_BY_TAG_VISITOR = {
+		["action"] = SplitByTagAction,
+		["add_function"] = SplitByTagAddFunction,
+		["custom_function"] = SplitByTagCustomFunction,
+		["group"] = SplitByTagGroup,
+		["if"] = SplitByTagIf,
+		["state"] = SplitByTagState,
+		["unless"] = SplitByTagIf,
+	}
 end
 
 local EMIT_VISITOR = nil
@@ -1083,6 +1553,7 @@ local EmitOperandDisease = nil
 local EmitOperandDot = nil
 local EmitOperandGlyph = nil
 local EmitOperandPet = nil
+local EmitOperandPreviousSpell = nil
 local EmitOperandRaidEvent = nil
 local EmitOperandRune = nil
 local EmitOperandSeal = nil
@@ -1095,7 +1566,7 @@ local EmitOperandTrinket = nil
 Emit = function(parseNode, nodeList, annotation, action)
 	local visitor = EMIT_VISITOR[parseNode.type]
 	if not visitor then
-		OvaleSimulationCraft:Print("Unable to emit node of type '%s'.", parseNode.type)
+		OvaleSimulationCraft:Error("Unable to emit node of type '%s'.", parseNode.type)
 	else
 		return visitor(parseNode, nodeList, annotation, action)
 	end
@@ -1103,12 +1574,18 @@ end
 
 EmitAction = function(parseNode, nodeList, annotation)
 	local node
-	local canonicalizedName = gsub(parseNode.name, ":", "_")
+	local canonicalizedName = strlower(gsub(parseNode.name, ":", "_"))
 	local class = annotation.class
 	local specialization = annotation.specialization
-	local action = Disambiguate(canonicalizedName, class, specialization)
+	local camelSpecialization = CamelSpecialization(annotation)
+	local role = annotation.role
+	local action = strlower(Disambiguate(canonicalizedName, class, specialization))
 
-	if action == "auto_attack" or action == "auto_shot" then
+	if action == "auto_attack" and not annotation.melee then
+		-- skip
+	elseif action == "auto_shot" then
+		-- skip
+	elseif action == "choose_target" then
 		-- skip
 	elseif action == "elixir" or action == "flask" or action == "food" then
 		-- skip
@@ -1121,50 +1598,49 @@ EmitAction = function(parseNode, nodeList, annotation)
 		local modifier = parseNode.child
 		local isSpellAction = true
 		if class == "DEATHKNIGHT" and action == "antimagic_shell" then
-			-- Only suggest Anti-Magic Shell if there is incoming damage to absorb to generate runic power.
-			conditionCode = "IncomingDamage(1.5) > 0"
-		elseif class == "DEATHKNIGHT" and action == "blood_tap" then
-			-- Blood Tap requires a minimum of five stacks of Blood Charge to be on the player.
-			local buffName = "blood_charge_buff"
-			AddSymbol(annotation, buffName)
-			conditionCode = format("BuffStacks(%s) >= 5", buffName)
-		elseif class == "DEATHKNIGHT" and action == "dark_transformation" then
-			-- Dark Transformation requires a five stacks of Shadow Infusion to be on the player/pet.
-			local buffName = "shadow_infusion_buff"
-			AddSymbol(annotation, buffName)
-			conditionCode = format("BuffStacks(%s) >= 5", buffName)
+			-- Only suggest Anti-Magic Shell if there is incoming magic damage to absorb to generate runic power.
+			conditionCode = "IncomingDamage(1.5 magic=1) > 0"
 		elseif class == "DEATHKNIGHT" and action == "horn_of_winter" then
 			-- Only cast Horn of Winter if not already raid-buffed.
 			conditionCode = "BuffExpires(attack_power_multiplier_buff any=1)"
 		elseif class == "DEATHKNIGHT" and action == "mind_freeze" then
-			bodyCode = "InterruptActions()"
+			bodyCode = camelSpecialization .. "InterruptActions()"
 			annotation[action] = class
+			annotation.interrupt = class
 			isSpellAction = false
 		elseif class == "DEATHKNIGHT" and action == "plague_leech" then
 			-- Plague Leech requires diseases to exist on the target.
 			-- Scripts should be checking that there is least one pair of fully-depleted runes,
 			-- but they mostly don't, so add the check for all uses of Plague Leech.
 			conditionCode = "target.DiseasesTicking() and { Rune(blood) < 1 or Rune(frost) < 1 or Rune(unholy) < 1 }"
+		elseif class == "DRUID" and action == "pulverize" then
+			--[[
+				WORKAROUND: Work around Blizzard bug where Pulverize can only be used within 15s of
+				when the existing Lacerate stack was applied, regardless of how much time is left on
+				the DoT: http://us.battle.net/wow/en/forum/topic/15354966771
+			--]]
+			local debuffName = "lacerate_debuff"
+			AddSymbol(annotation, debuffName)
+			conditionCode = format("target.DebuffGain(%s) <= BaseDuration(%s)", debuffName, debuffName)
 		elseif class == "DRUID" and specialization == "guardian" and action == "rejuvenation" then
 			-- Only cast Rejuvenation as a guardian druid if it is Enhanced Rejuvenation (castable in bear form).
 			local spellName = "enhanced_rejuvenation"
 			AddSymbol(annotation, spellName)
 			conditionCode = format("SpellKnown(%s)", spellName)
-		elseif class == "DRUID" and action == "prowl" then
-			-- Don't Prowl if already stealthed.
-			conditionCode = "BuffExpires(stealthed_buff any=1)"
-		elseif class == "DRUID" and action == "pulverize" then
-			-- Pulverize requires 3 stacks of Lacerate on the target.
-			local debuffName = "lacerate_debuff"
-			AddSymbol(annotation, debuffName)
-			conditionCode = format("target.DebuffStacks(%s) >= 3", debuffName)
 		elseif class == "DRUID" and action == "skull_bash" then
-			bodyCode = "InterruptActions()"
+			bodyCode = camelSpecialization .. "InterruptActions()"
 			annotation[action] = class
+			annotation.interrupt = class
 			isSpellAction = false
 		elseif class == "DRUID" and action == "wild_charge" then
-			-- Check that Wild Charge can be used on the target.
-			conditionCode = format("target.InRange(%s)", action)
+			bodyCode = camelSpecialization .. "GetInMeleeRange()"
+			annotation[action] = class
+			isSpellAction = false
+		elseif class == "HUNTER" and action == "counter_shot" then
+			bodyCode = camelSpecialization .. "InterruptActions()"
+			annotation[action] = class
+			annotation.interrupt = class
+			isSpellAction = false
 		elseif class == "HUNTER" and action == "exotic_munitions" then
 			if modifier.ammo_type then
 				local name = Unparse(modifier.ammo_type)
@@ -1182,19 +1658,6 @@ EmitAction = function(parseNode, nodeList, annotation)
 			AddSymbol(annotation, glyphName)
 			annotation.trap_launcher = class
 			conditionCode = format("CheckBoxOn(opt_trap_launcher) and not Glyph(%s)", glyphName)
-		elseif class == "HUNTER" and action == "focus_fire" then
-			-- Focus Fire requires at least one stack of Frenzy.
-			local buffName = "frenzy_buff"
-			AddSymbol(annotation, buffName)
-			if modifier.five_stacks then
-				local value = tonumber(Unparse(modifier.five_stacks))
-				if value == 1 then
-					conditionCode = format("BuffStacks(%s any=1) == 5", buffName)
-				end
-			end
-			if not conditionCode then
-				conditionCode = format("BuffPresent(%s any=1)", buffName)
-			end
 		elseif class == "HUNTER" and action == "kill_command" then
 			-- Kill Command requires that a pet that can move freely.
 			conditionCode = "pet.Present() and not pet.IsIncapacitated() and not pet.IsFeared() and not pet.IsStunned()"
@@ -1204,22 +1667,30 @@ EmitAction = function(parseNode, nodeList, annotation)
 		elseif class == "MAGE" and action == "arcane_brilliance" then
 			-- Only cast Arcane Brilliance if not already raid-buffed.
 			conditionCode = "BuffExpires(critical_strike_buff any=1) or BuffExpires(spell_power_multiplier_buff any=1)"
-		elseif class == "MAGE" and action == "arcane_missiles" then
-			-- Arcane Missiles can only be fired if the Arcane Missiles! buff is present.
-			local buffName = "arcane_missiles_buff"
-			AddSymbol(annotation, buffName)
-			conditionCode = format("BuffPresent(%s)", buffName)
 		elseif class == "MAGE" and action == "counterspell" then
-			bodyCode = "InterruptActions()"
+			bodyCode = camelSpecialization .. "InterruptActions()"
 			annotation[action] = class
+			annotation.interrupt = class
 			isSpellAction = false
 		elseif class == "MAGE" and strfind(action, "pet_") then
 			conditionCode = "pet.Present()"
-		elseif class == "MAGE" and action == "start_pyro_chain" then
-			bodyCode = "SetState(pyro_chain 1)"
-			isSpellAction = false
-		elseif class == "MAGE" and action == "stop_pyro_chain" then
-			bodyCode = "SetState(pyro_chain 0)"
+		elseif class == "MAGE" and (action == "start_burn_phase" or action == "start_pyro_chain" or action == "stop_burn_phase" or action == "stop_pyro_chain") then
+			--[[
+				Translate the mage state actions using Ovale state variables:
+
+					start_<state>	SetState(<state> 1)
+					stop_<state>	SetState(<state> 0)
+
+				Also insert checks so that the state is set only if it changes.
+			--]]
+			local stateAction, stateVariable = strmatch(action, "([^_]+)_(.*)")
+			local value = (stateAction == "start") and 1 or 0
+			if value == 0 then
+				conditionCode = format("GetState(%s) > 0", stateVariable)
+			else -- if value == 1 then
+				conditionCode = format("not GetState(%s) > 0", stateVariable)
+			end
+			bodyCode = format("SetState(%s %d)", stateVariable, value)
 			isSpellAction = false
 		elseif class == "MAGE" and action == "time_warp" then
 			-- Only suggest Time Warp if it will have an effect.
@@ -1238,22 +1709,49 @@ EmitAction = function(parseNode, nodeList, annotation)
 		elseif class == "MONK" and action == "gift_of_the_ox" then
 			-- skip
 			isSpellAction = false
-		elseif class == "MONK" and action == "touch_of_death" then
-			-- Touch of Death can only be used if the Death Note buff is present on the player.
-			local buffName = "death_note_buff"
-			AddSymbol(annotation, buffName)
-			conditionCode = format("BuffPresent(%s)", buffName)
+		elseif class == "MONK" and action == "nimble_brew" then
+			-- Only suggest Nimble Brew to break snares, roots, and stuns.
+			conditionCode = "IsFeared() or IsRooted() or IsStunned()"
+		elseif class == "MONK" and action == "spear_hand_strike" then
+			bodyCode = camelSpecialization .. "InterruptActions()"
+			annotation[action] = class
+			annotation.interrupt = class
+			isSpellAction = false
+		elseif class == "MONK" and action == "storm_earth_and_fire" then
+			--[[
+				Only suggest SEF if it's toggled on and if there are enough enemies to
+				warrant sending out another SEF clone.
+			--]]
+			conditionCode = [[
+				CheckBoxOn(opt_storm_earth_and_fire) and Enemies() > 1
+					and { Enemies() < 3 and BuffStacks(storm_earth_and_fire_buff) < 1
+						  or Enemies() >= 3 and BuffStacks(storm_earth_and_fire_buff) < 2 }
+			]]
+			annotation[action] = class
 		elseif class == "PALADIN" and action == "blessing_of_kings" then
 			-- Only cast Blessing of Kings if it won't overwrite the player's own Blessing of Might.
 			conditionCode = "BuffExpires(mastery_buff)"
+		elseif class == "PALADIN" and action == "judgment" then
+			-- If "cycle_targets=1" is used with Judgment, then it is for the Glyph of Double Jeopardy.
+			if modifier.cycle_targets then
+				AddSymbol(annotation, action)
+				bodyCode = "Spell(" .. action .. " text=double)"
+				isSpellAction = false
+			end
 		elseif class == "PALADIN" and action == "rebuke" then
-			bodyCode = "InterruptActions()"
+			bodyCode = camelSpecialization .. "InterruptActions()"
 			annotation[action] = class
+			annotation.interrupt = class
 			isSpellAction = false
-		elseif class == "PRIEST" and action == "insanity" then
-			local buffName = "shadow_word_insanity_buff"
-			AddSymbol(annotation, buffName)
-			conditionCode = format("BuffPresent(%s)", buffName)
+		elseif class == "PALADIN" and action == "righteous_fury" then
+			-- Only suggest Righteous Fury if the check is toggled on.
+			conditionCode = "CheckBoxOn(opt_righteous_fury_check)"
+			annotation[action] = class
+		elseif class == "PRIEST" and action == "silence" then
+			bodyCode = camelSpecialization .. "InterruptActions()"
+			annotation[action] = class
+			annotation.interrupt = class
+			isSpellAction = false
 		elseif class == "ROGUE" and action == "apply_poison" then
 			if modifier.lethal then
 				local name = Unparse(modifier.lethal)
@@ -1265,16 +1763,40 @@ EmitAction = function(parseNode, nodeList, annotation)
 			else
 				isSpellAction = false
 			end
+		elseif class == "ROGUE" and specialization == "combat" and action == "blade_flurry" then
+			annotation.blade_flurry = class
+			conditionCode = "CheckBoxOn(opt_blade_flurry)"
 		elseif class == "ROGUE" and action == "honor_among_thieves" then
-			-- skip
+			if modifier.cooldown then
+				local cooldown = Unparse(modifier.cooldown)
+				local buffName = action .. "_cooldown_buff"
+				annotation[buffName] = cooldown
+				annotation[action] = class
+			end
 			isSpellAction = false
 		elseif class == "ROGUE" and action == "kick" then
-			bodyCode = "InterruptActions()"
+			bodyCode = camelSpecialization .. "InterruptActions()"
 			annotation[action] = class
+			annotation.interrupt = class
 			isSpellAction = false
-		elseif class == "ROGUE" and action == "stealth" then
-			-- Don't Stealth if already stealthed.
-			conditionCode = "BuffExpires(stealthed_buff any=1)"
+		elseif class == "ROGUE" and action == "premeditation" then
+			-- Don't suggest Premeditation if already at the combo point cap.
+			conditionCode = "ComboPoints() < 5"
+		elseif class == "ROGUE" and specialization == "combat" and action == "slice_and_dice" then
+			-- Don't suggest Slice and Dice if a more powerful buff is already in effect.
+			local buffName = "slice_and_dice_buff"
+			AddSymbol(annotation, buffName)
+			conditionCode = format("BuffRemaining(%s) < BaseDuration(%s)", buffName, buffName)
+		elseif class == "ROGUE" and (specialization == "assassination" or specialization == "combat") and action == "vanish" then
+			--[[
+				Allow toggling Vanish suggestions for Assassination and Combat so they can be used
+				situationally.  Vanish is a major DPS cooldown for Subtlety so the suggestion can't
+				be toggled for that specialization.
+			--]]
+			annotation.vanish = class
+			local spellName = "preparation"
+			AddSymbol(annotation, spellName)
+			conditionCode = format("CheckBoxOn(opt_vanish) or not SpellCooldown(%s) > 0", spellName)
 		elseif class == "SHAMAN" and strsub(action, 1, 11) == "ascendance_" then
 			-- Ascendance doesn't go on cooldown until after the buff expires, so don't
 			-- suggest Ascendance if already in Ascendance.
@@ -1282,27 +1804,18 @@ EmitAction = function(parseNode, nodeList, annotation)
 			AddSymbol(annotation, buffName)
 			conditionCode = format("BuffExpires(%s)", buffName)
 		elseif class == "SHAMAN" and action == "bloodlust" then
-			bodyCode = "Bloodlust()"
+			bodyCode = camelSpecialization .. "Bloodlust()"
 			annotation[action] = class
 			isSpellAction = false
-		elseif class == "SHAMAN" and action == "lava_beam" then
-			-- Lava Beam is the elemental Ascendance version of Chain Lightning.
-			local buffName = "ascendance_caster_buff"
-			AddSymbol(annotation, buffName)
-			conditionCode = format("BuffPresent(%s)", buffName)
 		elseif class == "SHAMAN" and action == "magma_totem" then
 			-- Only suggest Magma Totem if within melee range of the target.
 			local spellName = "primal_strike"
 			AddSymbol(annotation, spellName)
 			conditionCode = format("target.InRange(%s)", spellName)
-		elseif class == "SHAMAN" and action == "windstrike" then
-			-- Windstrike is the enhancement Ascendance version of Stormstrike.
-			local buffName = "ascendance_melee_buff"
-			AddSymbol(annotation, buffName)
-			conditionCode = format("BuffPresent(%s)", buffName)
 		elseif class == "SHAMAN" and action == "wind_shear" then
-			bodyCode = "InterruptActions()"
+			bodyCode = camelSpecialization .. "InterruptActions()"
 			annotation[action] = class
+			annotation.interrupt = class
 			isSpellAction = false
 		elseif class == "WARLOCK" and action == "cancel_metamorphosis" then
 			local spellName = "metamorphosis"
@@ -1322,7 +1835,7 @@ EmitAction = function(parseNode, nodeList, annotation)
 			conditionCode = "Enemies() > 1"
 		elseif class == "WARLOCK" and action == "service_pet" then
 			if annotation.pet then
-				local spellName = "grimoire_" .. annotation.pet
+				local spellName = "service_" .. annotation.pet
 				AddSymbol(annotation, spellName)
 				bodyCode = format("Spell(%s)", spellName)
 			else
@@ -1342,27 +1855,55 @@ EmitAction = function(parseNode, nodeList, annotation)
 			isSpellAction = false
 		elseif class == "WARLOCK" and action == "wrathguard_wrathstorm" then
 			conditionCode = "pet.Present() and pet.CreatureFamily(Wrathguard)"
+		elseif class == "WARRIOR" and action == "battle_shout" and role == "tank" then
+			-- Only cast Battle Shout if it won't overwrite the player's own Commanding Shout.
+			conditionCode = "BuffExpires(stamina_buff)"
 		elseif class == "WARRIOR" and action == "charge" then
-			conditionCode = "target.InRange(charge)"
+			conditionCode = "CheckBoxOn(opt_melee_range) and target.InRange(charge)"
+		elseif class == "WARRIOR" and action == "commanding_shout" and role == "attack" then
+			-- Only cast Commanding Shout if it won't overwrite the player's own Battle Shout.
+			conditionCode = "BuffExpires(attack_power_multiplier_buff)"
+		elseif class == "WARRIOR" and action == "enraged_regeneration" then
+			-- Only suggest Enraged Regeneration at below 80% health.
+			conditionCode = "HealthPercent() < 80"
+		elseif class == "WARRIOR" and strsub(action, 1, 7) == "execute" then
+			if modifier.target then
+				local target = tonumber(Unparse(modifier.target))
+				if target then
+					-- Skip "execute" actions if they are not on the main target.
+					isSpellAction = false
+				end
+			end
+		elseif class == "WARRIOR" and action == "heroic_charge" then
+			--[[
+				"Heroic Charge" is moving out of melee range enough to Charge back to the target
+				in order to gain more rage.
+			--]]
+			-- skip
+			isSpellAction = false
 		elseif class == "WARRIOR" and action == "heroic_leap" then
 			-- Use Charge as a range-finder for Heroic Leap.
 			local spellName = "charge"
 			AddSymbol(annotation, spellName)
-			conditionCode = format("target.InRange(%s)", spellName)
-		elseif class == "WARRIOR" and action == "victory_rush" then
-			-- Victory Rush requires the Victorious buff to be on the player.
-			local buffName = "victorious_buff"
-			AddSymbol(annotation, buffName)
-			conditionCode = format("BuffPresent(%s)", buffName)
-		elseif class == "WARRIOR" and action == "raging_blow" then
-			-- Raging Blow can only be used if the Raging Blow buff is present on the player.
-			local buffName = "raging_blow_buff"
-			AddSymbol(annotation, buffName)
-			conditionCode = format("BuffPresent(%s)", buffName)
+			conditionCode = format("CheckBoxOn(opt_melee_range) and target.InRange(%s)", spellName)
+		elseif class == "WARRIOR" and action == "pummel" then
+			bodyCode = camelSpecialization .. "InterruptActions()"
+			annotation[action] = class
+			annotation.interrupt = class
+			isSpellAction = false
+		elseif action == "auto_attack" then
+			bodyCode = camelSpecialization .. "GetInMeleeRange()"
+			isSpellAction = false
 		elseif action == "call_action_list" or action == "run_action_list" or action == "swap_action_list" then
 			if modifier.name then
 				local name = Unparse(modifier.name)
-				bodyCode = OvaleFunctionName(name, annotation) .. "()"
+				local functionName = OvaleFunctionName(name, annotation)
+				bodyCode = functionName .. "()"
+				-- Special-case the "burn" action list for arcane mages.
+				if class == "MAGE" and specialization == "arcane" and (name == "burn" or name == "init_burn") then
+					conditionCode = "CheckBoxOn(opt_arcane_mage_burn_phase)"
+					annotation.opt_arcane_mage_burn_phase = class
+				end
 			end
 			isSpellAction = false
 		elseif action == "cancel_buff" then
@@ -1376,7 +1917,7 @@ EmitAction = function(parseNode, nodeList, annotation)
 				isSpellAction = false
 			end
 		elseif action == "mana_potion" then
-			bodyCode = "UsePotionMana()"
+			bodyCode = camelSpecialization .. "UsePotionMana()"
 			annotation.use_potion_mana = class
 			isSpellAction = false
 		elseif action == "pool_resource" then
@@ -1394,16 +1935,16 @@ EmitAction = function(parseNode, nodeList, annotation)
 				local name = Unparse(modifier.name)
 				local stat = POTION_STAT[name]
 				if stat == "agility" then
-					bodyCode = "UsePotionAgility()"
+					bodyCode = camelSpecialization .. "UsePotionAgility()"
 					annotation.use_potion_agility = class
 				elseif stat == "armor" then
-					bodyCode = "UsePotionArmor()"
+					bodyCode = camelSpecialization .. "UsePotionArmor()"
 					annotation.use_potion_armor = class
 				elseif stat == "intellect" then
-					bodyCode = "UsePotionIntellect()"
+					bodyCode = camelSpecialization .. "UsePotionIntellect()"
 					annotation.use_potion_intellect = class
 				elseif stat == "strength" then
-					bodyCode = "UsePotionStrength()"
+					bodyCode = camelSpecialization .. "UsePotionStrength()"
 					annotation.use_potion_strength = class
 				end
 				isSpellAction = false
@@ -1422,43 +1963,61 @@ EmitAction = function(parseNode, nodeList, annotation)
 				isSpellAction = false
 			end
 		elseif action == "summon_pet" then
-			bodyCode = "SummonPet()"
+			bodyCode = camelSpecialization .. "SummonPet()"
 			annotation[action] = class
 			isSpellAction = false
 		elseif action == "use_item" then
-			if true then
+			local legendaryRing = false
+			if modifier.slot then
+				local slot = Unparse(modifier.slot)
+				if strmatch(slot, "finger") then
+					legendaryRing = Disambiguate("legendary_ring", class, specialization)
+				end
+			elseif modifier.name then
+				local name = Unparse(modifier.name)
+				name = Disambiguate(name, class, specialization)
+				if strmatch(name, "legendary_ring") then
+					legendaryRing = name
+				elseif false then
+					-- Use named item and require the symbol name.
+					bodyCode = format("Item(%s usable=1)", name)
+					AddSymbol(annotation, name)
+				end
+			end
+			if legendaryRing then
+				conditionCode = format("CheckBoxOn(opt_%s)", legendaryRing)
+				bodyCode = format("Item(%s usable=1)", legendaryRing)
+				AddSymbol(annotation, legendaryRing)
+				annotation.use_legendary_ring = legendaryRing
+			else
 				--[[
 					When "use_item" is encountered in an action list, it is usually meant to use
-					all of the equipped items at the same time, so all hand tinkers and on-use
-					trinkets.  Assume a "UseItemActions()" function is available that does this.
+					all of the equipped trinkets at the same time.
 				--]]
-				bodyCode = "UseItemActions()"
+				bodyCode = camelSpecialization .. "UseItemActions()"
 				annotation[action] = true
-			else
-				if modifier.name == "name" then
-					local name = Unparse(modifier.name)
-					if strmatch(name, "gauntlets") or strmatch(name, "gloves") or strmatch(name, "grips") or strmatch(name, "handguards") then
-						bodyCode = "Item(HandsSlot usable=1)"
-					end
-				elseif modifier.slot then
-					local slot = Unparse(modifier.slot)
-					if slot == "hands" then
-						bodyCode = "Item(HandsSlot usable=1)"
-					elseif strmatch(slot, "trinket") then
-						bodyCode = "{ Item(Trinket0Slot usable=1) Item(Trinket1Slot usable=1) }"
-						expressionType = "group"
-					end
-				end
 			end
 			isSpellAction = false
 		elseif action == "wait" then
 			if modifier.sec then
-				-- Create a special "wait" AST node that will be transformed in
-				-- a later step into something OvaleAST can understand and unparse.
-				bodyNode = OvaleAST:NewNode(nodeList)
-				bodyNode.type = "simc_wait"
-				-- "wait,sec=expr" means to halt the processing of the action list if "expr > 0".
-				conditionNode = Emit(modifier.sec, nodeList, annotation, action)
+				local seconds = tonumber(Unparse(modifier.sec))
+				if seconds then
+					--[[
+						Ovale does not support SimulationCraft's concept of "waiting for N seconds".
+						Just skip if the modifier sec=N is present, where N is a number.
+					--]]
+				else
+					--[[
+						Create a special "wait" AST node that will be transformed in
+						a later step into something OvaleAST can understand and unparse.
+					--]]
+					bodyNode = OvaleAST:NewNode(nodeList)
+					bodyNode.type = "simc_wait"
+					-- "wait,sec=expr" means to halt the processing of the action list if "expr > 0".
+					local expressionNode = Emit(modifier.sec, nodeList, annotation, action)
+					local code = OvaleAST:Unparse(expressionNode)
+					conditionCode = code .. " > 0"
+				end
 			end
 			isSpellAction = false
 		end
@@ -1572,49 +2131,57 @@ EmitActionList = function(parseNode, nodeList, annotation)
 				elseif poolResourceNode then
 					-- This is the action following "pool_resource,for_next=1".
 					child[#child + 1] = statementNode
+					local bodyNode
+					local poolingConditionNode
+					if statementNode.child then
+						-- This is a conditional statement, so set the body to the "then" clause.
+						poolingConditionNode = statementNode.child[1]
+						bodyNode = statementNode.child[2]
+					else
+						bodyNode = statementNode
+					end
 					local powerType = CamelCase(poolResourceNode.powerType)
 					local extra_amount = poolResourceNode.extra_amount
-					if extra_amount then
-						local commentNode = OvaleAST:NewNode(nodeList)
-						commentNode.type = "comment"
-						commentNode.comment = format("Remove any '%s() >= %d' condition from the following statement.", powerType, extra_amount)
-						child[#child + 1] = commentNode
+					if extra_amount and poolingConditionNode then
+						-- Remove any 'Energy() >= N' conditions from the pooling condition.
+						local code = OvaleAST:Unparse(poolingConditionNode)
+						local extraAmountPattern = powerType .. "%(%) >= [%d.]+"
+						local replaceString = format("True(pool_%s %d)", poolResourceNode.powerType, extra_amount)
+						code = gsub(code, extraAmountPattern, replaceString)
+						poolingConditionNode = OvaleAST:ParseCode("expression", code, nodeList, annotation.astAnnotation)
 					end
-					if statementNode.type == "if" or statementNode.type == "unless" then
-						local bodyNode = statementNode.child[2]
-						if bodyNode.type == "action" and bodyNode.rawParams and bodyNode.rawParams[1] then
-							local name = OvaleAST:Unparse(bodyNode.rawParams[1])
-							-- Create a condition node that includes checking that the spell is not on cooldown.
-							local powerCondition
-							if extra_amount then
-								powerCondition = format("TimeTo%s(%d)", powerType, extra_amount)
-							else
-								powerCondition = format("TimeTo%sFor(%s)", powerType, name)
-							end
-							local code = format("SpellUsable(%s) and SpellCooldown(%s) < %s", name, name, powerCondition)
-							local conditionNode = OvaleAST:NewNode(nodeList, true)
+					if bodyNode.type == "action" and bodyNode.rawPositionalParams and bodyNode.rawPositionalParams[1] then
+						local name = OvaleAST:Unparse(bodyNode.rawPositionalParams[1])
+						-- Create a condition node that includes checking that the spell is not on cooldown.
+						local powerCondition
+						if extra_amount then
+							powerCondition = format("TimeTo%s(%d)", powerType, extra_amount)
+						else
+							powerCondition = format("TimeTo%sFor(%s)", powerType, name)
+						end
+						local code = format("SpellUsable(%s) and SpellCooldown(%s) < %s", name, name, powerCondition)
+						local conditionNode = OvaleAST:ParseCode("expression", code, nodeList, annotation.astAnnotation)
+						if statementNode.child then
+							local rhsNode = conditionNode
+							conditionNode = OvaleAST:NewNode(nodeList, true)
 							conditionNode.type = "logical"
 							conditionNode.expressionType = "binary"
 							conditionNode.operator = "and"
-							conditionNode.child[1] = statementNode.child[1]
-							conditionNode.child[2] = OvaleAST:ParseCode("expression", code, nodeList, annotation.astAnnotation)
-							-- Create node to hold the rest of the statements.
-							local restNode = OvaleAST:NewNode(nodeList, true)
-							child[#child + 1] = restNode
-							if statementNode.type == "if" then
-								restNode.type = "unless"
-							elseif statementNode.type == "unless" then
-								restNode.type = "if"
-							end
-							restNode.child[1] = conditionNode
-							restNode.child[2] = OvaleAST:NewNode(nodeList, true)
-							restNode.child[2].type = "group"
-							child = restNode.child[2].child
+							conditionNode.child[1] = poolingConditionNode
+							conditionNode.child[2] = rhsNode
 						end
-					else
-						-- We are pooling for this action, but it has no condition, which means
-						-- pool continually and skip the rest of the action list.
-						emit = false
+						-- Create node to hold the rest of the statements.
+						local restNode = OvaleAST:NewNode(nodeList, true)
+						child[#child + 1] = restNode
+						if statementNode.type == "unless" then
+							restNode.type = "if"
+						else
+							restNode.type = "unless"
+						end
+						restNode.child[1] = conditionNode
+						restNode.child[2] = OvaleAST:NewNode(nodeList, true)
+						restNode.child[2].type = "group"
+						child = restNode.child[2].child
 					end
 					poolResourceNode = nil
 				elseif statementNode.type == "simc_wait" then
@@ -1700,7 +2267,15 @@ EmitExpression = function(parseNode, nodeList, annotation, action)
 			elseif parseNode.type == "compare" or parseNode.type == "arithmetic" then
 				operator = parseNode.operator
 			end
-			if parseNode.type == "compare" and parseNode.child[1].rune then
+			if parseNode.type == "arithmetic" and parseNode.child[1].rune and parseNode.child[1].includeDeath and parseNode.child[2].name == "death" then
+				--[[
+					Special handling for "Blood-death", "Frost-death", and "Unholy-death" arithmetic expressions.
+					These are trying to express the concept of "non-death runes of the given type".
+				--]]
+				local code = "Rune(" .. parseNode.child[1].rune .. " death=0)"
+				annotation.astAnnotation = annotation.astAnnotation or {}
+				node = OvaleAST:ParseCode("expression", code, nodeList, annotation.astAnnotation)
+			elseif parseNode.type == "compare" and parseNode.child[1].rune then
 				--[[
 					Special handling for rune comparisons.
 					This ONLY handles rune expressions of the form "<rune><operator><number>".
@@ -1717,21 +2292,28 @@ EmitExpression = function(parseNode, nodeList, annotation, action)
 				if runeType and number then
 					local code
 					local op = parseNode.operator
+					local runeFunction = (strsub(lhsNode.name, -6) == ".death") and "DeathRune" or "Rune"
+					local runeCondition
+					if lhsNode.includeDeath then
+						runeCondition = runeFunction .. "(" .. runeType .. " death=1)"
+					else
+						runeCondition = runeFunction .. "(" .. runeType .. ")"
+					end
 					if op == ">" then
-						code = format("Rune(%s) >= %d", runeType, number + 1)
+						code = format("%s >= %d", runeCondition, number + 1)
 					elseif op == ">=" then
-						code = format("Rune(%s) >= %d", runeType, number)
+						code = format("%s >= %d", runeCondition, number)
 					elseif op == "=" then
 						if runeType ~= "death" and number == 2 then
 							-- We can never have more than 2 non-death runes of the same type.
-							code = format("Rune(%s) >= %d", runeType, number)
+							code = format("%s >= %d", runeCondition, number)
 						else
-							code = format("Rune(%s) >= %d and Rune(%s) < %d", runeType, number, runeType, number + 1)
+							code = format("%s >= %d and %s < %d", runeCondition, number, runeCondition, number + 1)
 						end
 					elseif op == "<=" then
-						code = format("Rune(%s) < %d", runeType, number + 1)
+						code = format("%s < %d", runeCondition, number + 1)
 					elseif op == "<" then
-						code = format("Rune(%s) < %d", runeType, number)
+						code = format("%s < %d", runeCondition, number)
 					end
 					if not node and code then
 						annotation.astAnnotation = annotation.astAnnotation or {}
@@ -1741,12 +2323,12 @@ EmitExpression = function(parseNode, nodeList, annotation, action)
 			elseif (parseNode.operator == "=" or parseNode.operator == "!=") and (parseNode.child[1].name == "target" or parseNode.child[1].name == "current_target") then
 				--[[
 					Special handling for "target=X" or "current_target=X" expressions.
-					TODO: This whole section will need to be updated once Prismatic Crystals can be summoned.
 				--]]
 				local rhsNode = parseNode.child[2]
 				local name = rhsNode.name
-				if name == "prismatic_crystal" then
-					name = '"Prismatic Crystal"'
+				-- Strip out any leading "target." or "pet." prefixes.
+				if strfind(name, "^[%a_]+%.") then
+					name = strmatch(name, "^[%a_]+%.([%a_]+)")
 				end
 				local code
 				if parseNode.operator == "=" then
@@ -1754,6 +2336,7 @@ EmitExpression = function(parseNode, nodeList, annotation, action)
 				else -- if parseNode.operator == "!=" then
 					code = format("not target.Name(%s)", name)
 				end
+				AddSymbol(annotation, name)
 				annotation.astAnnotation = annotation.astAnnotation or {}
 				node = OvaleAST:ParseCode("expression", code, nodeList, annotation.astAnnotation)
 			elseif (parseNode.operator == "=" or parseNode.operator == "!=") and parseNode.child[1].name == "last_judgment_target" then
@@ -1763,9 +2346,24 @@ EmitExpression = function(parseNode, nodeList, annotation, action)
 				--]]
 				local code
 				if parseNode.operator == "=" then
-					code = "False(last_judgement_target)"
-				else -- if parseNode.operator == "!=" then
 					code = "True(last_judgement_target)"
+				else -- if parseNode.operator == "!=" then
+					local buffName = "glyph_of_double_jeopardy_buff"
+					code = "BuffPresent(" .. buffName .. ")"
+					AddSymbol(annotation, buffName)
+				end
+				annotation.astAnnotation = annotation.astAnnotation or {}
+				node = OvaleAST:ParseCode("expression", code, nodeList, annotation.astAnnotation)
+			elseif (parseNode.operator == "=" or parseNode.operator == "!=") and parseNode.child[1].name == "sim_target" then
+				--[[
+					Special handling for "sim_target=X" expressions.
+					Ovale has no concept of the "primary", "main" or "boss" target, so "sim_target=X" is always true.
+				--]]
+				local code
+				if parseNode.operator == "=" then
+					code = "True(target_is_sim_target)"
+				else -- if parseNode.operator == "!=" then
+					code = "False(target_is_sim_target)"
 				end
 				annotation.astAnnotation = annotation.astAnnotation or {}
 				node = OvaleAST:ParseCode("expression", code, nodeList, annotation.astAnnotation)
@@ -1777,7 +2375,6 @@ EmitExpression = function(parseNode, nodeList, annotation, action)
 					node.type = opInfo[1]
 					node.expressionType = "binary"
 					node.operator = operator
-					node.precedence = opInfo[2]
 					node.child[1] = lhsNode
 					node.child[2] = rhsNode
 				elseif lhsNode then
@@ -1826,6 +2423,13 @@ EmitModifier = function(modifier, parseNode, nodeList, annotation, action)
 
 	if modifier == "if" then
 		node = Emit(parseNode, nodeList, annotation, action)
+	elseif modifier == "five_stacks" and action == "focus_fire" then
+		local value = tonumber(Unparse(parseNode))
+		if value == 1 then
+			local buffName = "pet_frenzy_buff"
+			AddSymbol(annotation, buffName)
+			code = format("pet.BuffStacks(%s) >= 5", buffName)
+		end
 	elseif modifier == "line_cd" then
 		if not SPECIAL_ACTION[action] then
 			AddSymbol(annotation, action)
@@ -1836,23 +2440,75 @@ EmitModifier = function(modifier, parseNode, nodeList, annotation, action)
 		local debuffName = action .. "_debuff"
 		AddSymbol(annotation, debuffName)
 		local expressionCode = OvaleAST:Unparse(Emit(parseNode, nodeList, annotation, action))
-		code = format("DebuffCountOnAny(%s) <= Enemies() and DebuffCountOnAny(%s) <= %s", debuffName, debuffName, expressionCode)
+		code = format("DebuffCountOnAny(%s) < Enemies() and DebuffCountOnAny(%s) <= %s", debuffName, debuffName, expressionCode)
 	elseif modifier == "max_energy" then
 		local value = tonumber(Unparse(parseNode))
 		if value == 1 then
 			-- SimulationCraft's max_energy is the maximum energy cost of the action if used.
 			code = format("Energy() >= EnergyCost(%s max=1)", action)
 		end
+	elseif modifier == "min_frenzy" and action == "focus_fire" then
+		local value = tonumber(Unparse(parseNode))
+		if value then
+			local buffName = "pet_frenzy_buff"
+			AddSymbol(annotation, buffName)
+			code = format("pet.BuffStacks(%s) >= %d", buffName, value)
+		end
 	elseif modifier == "moving" then
 		local value = tonumber(Unparse(parseNode))
-		if value == 1 then
+		if value == 0 then
+			code = "not Speed() > 0"
+		else
 			code = "Speed() > 0"
 		end
 	elseif modifier == "sync" then
 		local name = Unparse(parseNode)
-		name = Disambiguate(name, class, specialization)
-		AddSymbol(annotation, name)
-		code = format("not SpellCooldown(%s) > 0", name)
+		-- Fix only known case where we need to disambiguate a name within a SimulationCraft profile.
+		if name == "whirlwind_mh" then
+			name = "whirlwind"
+		end
+		node = annotation.astAnnotation and annotation.astAnnotation.sync and annotation.astAnnotation.sync[name]
+		if not node then
+			local syncParseNode = annotation.sync[name]
+			if syncParseNode then
+				local syncActionNode = EmitAction(syncParseNode, nodeList, annotation)
+				local syncActionType = syncActionNode.type
+				if syncActionType == "action" then
+					node = syncActionNode
+				elseif syncActionType == "custom_function" then
+					node = syncActionNode
+				elseif syncActionType == "if" or syncActionType == "unless" then
+					local lhsNode = syncActionNode.child[1]
+					if syncActionType == "unless" then
+						-- Flip the boolean condition for an "unless" node.
+						local notNode = OvaleAST:NewNode(nodeList, true)
+						notNode.type = "logical"
+						notNode.expressionType = "unary"
+						notNode.operator = "not"
+						notNode.child[1] = lhsNode
+						lhsNode = notNode
+					end
+					local rhsNode = syncActionNode.child[2]
+					local andNode = OvaleAST:NewNode(nodeList, true)
+					andNode.type = "logical"
+					andNode.expressionType = "binary"
+					andNode.operator = "and"
+					andNode.child[1] = lhsNode
+					andNode.child[2] = rhsNode
+					node = andNode
+				else
+					OvaleSimulationCraft:Print("Warning: Unable to emit action for 'sync=%s'.", name)
+					name = Disambiguate(name, class, specialization)
+					AddSymbol(annotation, name)
+					code = format("Spell(%s)", name)
+				end
+			end
+		end
+		if node then
+			annotation.astAnnotation = annotation.astAnnotation or {}
+			annotation.astAnnotation.sync = annotation.astAnnotation.sync or {}
+			annotation.astAnnotation.sync[name] = node
+		end
 	end
 	if not node and code then
 		annotation.astAnnotation = annotation.astAnnotation or {}
@@ -1918,6 +2574,8 @@ EmitOperand = function(parseNode, nodeList, annotation, action)
 			ok, node = EmitOperandGlyph(operand, parseNode, nodeList, annotation, action)
 		elseif token == "pet" then
 			ok, node = EmitOperandPet(operand, parseNode, nodeList, annotation, action)
+		elseif token == "prev" or token == "prev_gcd" or token == "prev_off_gcd" then
+			ok, node = EmitOperandPreviousSpell(operand, parseNode, nodeList, annotation, action)
 		elseif token == "seal" then
 			ok, node = EmitOperandSeal(operand, parseNode, nodeList, annotation, action)
 		elseif token == "set_bonus" then
@@ -1955,26 +2613,21 @@ EmitOperandAction = function(operand, parseNode, nodeList, annotation, action, t
 		property = operand
 	end
 
-	name = Disambiguate(name, annotation.class, annotation.specialization)
+	local class, specialization = annotation.class, annotation.specialization
+	name = strlower(Disambiguate(name, class, specialization))
 	target = target and (target .. ".") or ""
 	local buffName = name .. "_debuff"
-	buffName = Disambiguate(buffName, annotation.class, annotation.specialization)
+	buffName = Disambiguate(buffName, class, specialization)
 	local prefix = strfind(buffName, "_buff$") and "Buff" or "Debuff"
 	local buffTarget = (prefix == "Debuff") and "target." or target
 	local talentName = name .. "_talent"
-	talentName = Disambiguate(talentName, annotation.class, annotation.specialization)
+	talentName = Disambiguate(talentName, class, specialization)
 	local symbol = name
 
 	local code
 	if property == "active" then
-		if strsub(name, -6) == "_totem" then
-			local totemType = TOTEM_TYPE[name]
-			if totemType then
-				code = format("TotemPresent(%s totem=%s)", totemType, name)
-			else
-				code = format("TotemPresent(%s)", name)
-				symbol = false
-			end
+		if IsTotem(name) then
+			code = format("TotemPresent(%s)", name)
 		else
 			code = format("%s%sPresent(%s)", target, prefix, buffName)
 			symbol = buffName
@@ -1991,16 +2644,24 @@ EmitOperandAction = function(operand, parseNode, nodeList, annotation, action, t
 		code = format("SpellCooldown(%s)", name)
 	elseif property == "cooldown_react" then
 		code = format("not SpellCooldown(%s) > 0", name)
+	elseif property == "crit_damage" then
+		code = format("%sCritDamage(%s)", target, name)
 	elseif property == "duration" then
 		code = format("BaseDuration(%s)", buffName)
 		symbol = buffName
 	elseif property == "enabled" then
-		code = format("Talent(%s)", talentName)
+		if parseNode.asType == "boolean" then
+			code = format("Talent(%s)", talentName)
+		else
+			code = format("TalentPoints(%s)", talentName)
+		end
 		symbol = talentName
 	elseif property == "execute_time" then
 		code = format("ExecuteTime(%s)", name)
 	elseif property == "gcd" then
 		code = "GCD()"
+	elseif property == "hit_damage" then
+		code = format("%sDamage(%s)", target, name)
 	elseif property == "in_flight" or property == "in_flight_to_target" then
 		code = format("InFlightToTarget(%s)", name)
 	elseif property == "miss_react" then
@@ -2011,14 +2672,8 @@ EmitOperandAction = function(operand, parseNode, nodeList, annotation, action, t
 	elseif property == "recharge_time" then
 		code = format("SpellChargeCooldown(%s)", name)
 	elseif property == "remains" then
-		if strsub(name, -6) == "_totem" then
-			local totemType = TOTEM_TYPE[name]
-			if totemType then
-				code = format("TotemRemaining(%s totem=%s)", totemType, name)
-			else
-				code = format("TotemRemaining(%s)", name)
-				symbol = false
-			end
+		if IsTotem(name) then
+			code = format("TotemRemaining(%s)", name)
 		else
 			code = format("%s%sRemaining(%s)", buffTarget, prefix, buffName)
 			symbol = buffName
@@ -2036,15 +2691,14 @@ EmitOperandAction = function(operand, parseNode, nodeList, annotation, action, t
 		code = format("%sTicksRemaining(%s)", buffTarget, buffName)
 		symbol = buffName
 	elseif property == "travel_time" then
-		-- Translate to the maximum travel time since we can't gauge the distance dynamically.
-		code = format("MaxTravelTime(%s)", name)
+		code = format("TravelTime(%s)", name)
 	else
 		ok = false
 	end
 	if ok and code then
 		annotation.astAnnotation = annotation.astAnnotation or {}
 		node = OvaleAST:ParseCode("expression", code, nodeList, annotation.astAnnotation)
-		if symbol then
+		if not SPECIAL_ACTION[symbol] then
 			AddSymbol(annotation, symbol)
 		end
 	end
@@ -2060,7 +2714,7 @@ EmitOperandActiveDot = function(operand, parseNode, nodeList, annotation, action
 	local token = tokenIterator()
 	if token == "active_dot" then
 		local name = tokenIterator()
-		name = Disambiguate(name, annotation.class, annotation.specialization)
+		name = strlower(Disambiguate(name, annotation.class, annotation.specialization))
 		local dotName = name .. "_debuff"
 		dotName = Disambiguate(dotName, annotation.class, annotation.specialization)
 		local prefix = strfind(dotName, "_buff$") and "Buff" or "Debuff"
@@ -2088,19 +2742,24 @@ EmitOperandBuff = function(operand, parseNode, nodeList, annotation, action, tar
 	if token == "aura" or token == "buff" or token == "debuff" then
 		local name = tokenIterator()
 		local property = tokenIterator()
-		name = Disambiguate(name, annotation.class, annotation.specialization)
+		name = strlower(Disambiguate(name, annotation.class, annotation.specialization))
 		local buffName = (token == "debuff") and name .. "_debuff" or name .. "_buff"
 		buffName = Disambiguate(buffName, annotation.class, annotation.specialization)
 		local prefix = strfind(buffName, "_buff$") and "Buff" or "Debuff"
-		local any = OvaleData.buffSpellList[buffName] and " any=1" or ""
+		local any = OvaleData.DEFAULT_SPELL_LIST[buffName] and " any=1" or ""
 		target = target and (target .. ".") or ""
 
 		-- Unholy death knight's Dark Transformation applies the buff to the ghoul/pet.
-		if buffName == "dark_transformation_buff" then
-			if target == "" then
-				target = "pet."
-			end
-			any = " any=1"
+		if buffName == "dark_transformation_buff" and target == "" then
+			target = "pet."
+		end
+		-- Hunter's Beast Cleave is a buff on the hunter's pet.
+		if buffName == "pet_beast_cleave_buff" and target == "" then
+			target = "pet."
+		end
+		-- Hunter's Frenzy is a buff on both the player and the pet, but track the pet one.
+		if buffName == "pet_frenzy_buff" and target == "" then
+			target = "pet."
 		end
 
 		-- Assume that the "potion" action has already been seen.
@@ -2164,10 +2823,14 @@ do
 		["chi"]					= "Chi()",
 		["chi.max"]				= "MaxChi()",
 		["combo_points"]		= "ComboPoints()",
+		["crit_pct_current"]	= "SpellCritChance()",
 		["demonic_fury"]		= "DemonicFury()",
+		["desired_targets"]		= "Enemies(tagged=1)",
 		["eclipse_change"]		= "TimeToEclipse()",	-- XXX
 		["eclipse_energy"]		= "EclipseEnergy()",	-- XXX
+		["enemies"]				= "Enemies()",
 		["energy"]				= "Energy()",
+		["energy.deficit"]		= "EnergyDeficit()",
 		["energy.max"]			= "MaxEnergy()",
 		["energy.regen"]		= "EnergyRegenRate()",
 		["energy.time_to_max"]	= "TimeToMaxEnergy()",
@@ -2189,13 +2852,16 @@ do
 		["mana.max"]			= "MaxMana()",
 		["mana.pct"]			= "ManaPercent()",
 		["rage"]				= "Rage()",
+		["rage.deficit"]		= "RageDeficit()",
 		["rage.max"]			= "MaxRage()",
 		["runic_power"]			= "RunicPower()",
 		["shadow_orb"]			= "ShadowOrbs()",
+		["solar_max"]			= "TimeToEclipse(solar)",	-- XXX
 		["soul_shard"]			= "SoulShards()",
 		["stat.multistrike_pct"]= "MultistrikeChance()",
 		["time"]				= "TimeInCombat()",
 		["time_to_die"]			= "TimeToDie()",
+		["time_to_die.remains"]	= "TimeToDie()",
 		["unholy.frac"]			= "Rune(unholy)",
 	}
 
@@ -2205,6 +2871,7 @@ do
 
 		local class = annotation.class
 		local specialization = annotation.specialization
+		local camelSpecialization = CamelSpecialization(annotation)
 
 		target = target and (target .. ".") or ""
 		local code
@@ -2215,22 +2882,29 @@ do
 			code = format("BuffDirection(%s)", name)
 			AddSymbol(annotation, name)
 		elseif class == "PALADIN" and operand == "time_to_hpg" then
+			code = camelSpecialization .. "TimeToHPG()"
 			if specialization == "holy" then
-				code = "HolyTimeToHPG()"
 				annotation.time_to_hpg_heal = class
 			elseif specialization == "protection" then
-				code = "ProtectionTimeToHPG()"
 				annotation.time_to_hpg_tank = class
 			elseif specialization == "retribution" then
-				code = "RetributionTimeToHPG()"
 				annotation.time_to_hpg_melee = class
 			end
+		elseif class == "PRIEST" and operand == "shadowy_apparitions_in_flight" then
+			--[[
+				Ovale does not currently track Shadowy Apparitions.  For now, always
+				assume there is one in flight.
+			--]]
+			code = "1"
 		elseif class == "ROGUE" and operand == "anticipation_charges" then
 			local name = "anticipation_buff"
 			code = format("BuffStacks(%s)", name)
 			AddSymbol(annotation, name)
 		elseif class == "WARLOCK" and operand == "burning_ember" then
 			code = format("%sBurningEmbers() / 10", target)
+		elseif strsub(operand, 1, 22) == "active_enemies_within." then
+			-- "active_enemies_within.<distance>" is roughly equivalent to the number of enemies.
+			code = "Enemies()"
 		elseif strfind(operand, "^incoming_damage_") then
 			local seconds, measure = strmatch(operand, "^incoming_damage_([%d]+)(m?s?)$")
 			seconds = tonumber(seconds)
@@ -2241,6 +2915,13 @@ do
 				code = format("IncomingDamage(%f) > 0", seconds)
 			else
 				code = format("IncomingDamage(%f)", seconds)
+			end
+		elseif strsub(operand, 1, 10) == "main_hand." then
+			local weaponType = strsub(operand, 11)
+			if weaponType == "1h" then
+				code = "HasWeapon(main type=one_handed)"
+			elseif weaponType == "2h" then
+				code = "HasWeapon(main type=two_handed)"
 			end
 		elseif operand == "mastery_value" then
 			code = format("%sMasteryEffect() / 100", target)
@@ -2256,7 +2937,15 @@ do
 				code = format("False(role_%s)", role)
 			end
 		elseif operand == "spell_haste" or operand == "stat.spell_haste" then
-			code = format("%sSpellHaste() / 100", target)
+			-- "spell_haste" is the player's spell factor, e.g.,
+			-- 25% haste corresponds to a "spell_haste" value of 1/(1 + 0.25) = 0.8.
+			code = "100 / { 100 + SpellHaste() }"
+		elseif strsub(operand, 1, 14) == "spell_targets." then
+			-- "spell_target.<spell>" is roughly equivalent to the number of enemies.
+			code = "Enemies()"
+		elseif operand == "t18_class_trinket" then
+			code = format("HasTrinket(%s)", operand)
+			AddSymbol(annotation, operand)
 		else
 			ok = false
 		end
@@ -2278,7 +2967,7 @@ EmitOperandCooldown = function(operand, parseNode, nodeList, annotation, action)
 	if token == "cooldown" then
 		local name = tokenIterator()
 		local property = tokenIterator()
-		name = Disambiguate(name, annotation.class, annotation.specialization)
+		name = strlower(Disambiguate(name, annotation.class, annotation.specialization))
 		local prefix = "Spell"
 
 		-- Assume that the "potion" action has already been seen.
@@ -2363,7 +3052,7 @@ EmitOperandDot = function(operand, parseNode, nodeList, annotation, action, targ
 	if token == "dot" then
 		local name = tokenIterator()
 		local property = tokenIterator()
-		name = Disambiguate(name, annotation.class, annotation.specialization)
+		name = strlower(Disambiguate(name, annotation.class, annotation.specialization))
 		local dotName = name .. "_debuff"
 		dotName = Disambiguate(dotName, annotation.class, annotation.specialization)
 		local prefix = strfind(dotName, "_buff$") and "Buff" or "Debuff"
@@ -2378,6 +3067,8 @@ EmitOperandDot = function(operand, parseNode, nodeList, annotation, action, targ
 			code = format("%s%sRemaining(%s)", target, prefix, dotName)
 		elseif property == "stack" then
 			code = format("%s%sStacks(%s)", target, prefix, dotName)
+		elseif property == "tick_dmg" then
+			code = format("%sTickValue(%s)", target, prefix, dotName)
 		elseif property == "ticking" then
 			code = format("%s%sPresent(%s)", target, prefix, dotName)
 		elseif property == "ticks_remain" then
@@ -2406,7 +3097,7 @@ EmitOperandGlyph = function(operand, parseNode, nodeList, annotation, action)
 	if token == "glyph" then
 		local name = tokenIterator()
 		local property = tokenIterator()
-		name = Disambiguate(name, annotation.class, annotation.specialization)
+		name = strlower(Disambiguate(name, annotation.class, annotation.specialization))
 		local glyphName = "glyph_of_" .. name
 		glyphName = Disambiguate(glyphName, annotation.class, annotation.specialization)
 
@@ -2439,22 +3130,16 @@ EmitOperandPet = function(operand, parseNode, nodeList, annotation, action)
 	if token == "pet" then
 		local name = tokenIterator()
 		local property = tokenIterator()
-		name = Disambiguate(name, annotation.class, annotation.specialization)
-		local totemType = TOTEM_TYPE[name]
+		name = strlower(Disambiguate(name, annotation.class, annotation.specialization))
+		local isTotem = IsTotem(name)
 
 		local code
-		if property == "active" then
-			if totemType then
-				code = format("TotemPresent(%s totem=%s)", totemType, name)
-			else
-				code = format("TotemPresent(%s)", name)
-			end
-		elseif property == "remains" then
-			if totemType then
-				code = format("TotemRemaining(%s totem=%s)", totemType, name)
-			else
-				code = format("TotemRemaining(%s)", name)
-			end
+		if isTotem and property == "active" then
+			code = format("TotemPresent(%s)", name)
+		elseif isTotem and property == "remains" then
+			code = format("TotemRemaining(%s)", name)
+		elseif property == "active" then
+			code = "pet.Present()"
 		else
 			-- Strip the "pet.<name>." from the operand and re-evaluate.
 			local pattern = format("^pet%%.%s%%.([%%w_.]+)", name)
@@ -2469,9 +3154,17 @@ EmitOperandPet = function(operand, parseNode, nodeList, annotation, action)
 					ok, node = EmitOperandCharacter(petOperand, parseNode, nodeList, annotation, action, target)
 				end
 				if not ok then
+					-- Prefix the pet ability name with the name of the pet if it does not already begin with "pet".
+					local petAbilityName = strmatch(petOperand, "^[%w_]+%.([^.]+)")
+					petAbilityName = strlower(Disambiguate(petAbilityName, annotation.class, annotation.specialization))
+					if strsub(petAbilityName, 1, 4) ~= "pet_" then
+						petOperand = gsub(petOperand, "^([%w_]+)%.", "%1." .. name .. "_")
+					end
 					if property == "buff" then
 						ok, node = EmitOperandBuff(petOperand, parseNode, nodeList, annotation, action, target)
-					elseif token == "debuff" then
+					elseif property == "cooldown" then
+						ok, node = EmitOperandCooldown(petOperand, parseNode, nodeList, annotation, action)
+					elseif property == "debuff" then
 						ok, node = EmitOperandBuff(petOperand, parseNode, nodeList, annotation, action, target)
 					else
 						ok = false
@@ -2484,9 +3177,36 @@ EmitOperandPet = function(operand, parseNode, nodeList, annotation, action)
 		if ok and code then
 			annotation.astAnnotation = annotation.astAnnotation or {}
 			node = OvaleAST:ParseCode("expression", code, nodeList, annotation.astAnnotation)
-			if totemType then
-				AddSymbol(annotation, name)
-			end
+			AddSymbol(annotation, name)
+		end
+	else
+		ok = false
+	end
+
+	return ok, node
+end
+
+EmitOperandPreviousSpell = function(operand, parseNode, nodeList, annotation, action)
+	local ok = true
+	local node
+
+	local tokenIterator = gmatch(operand, OPERAND_TOKEN_PATTERN)
+	local token = tokenIterator()
+	if token == "prev" or token == "prev_gcd" or token == "prev_off_gcd" then
+		local name = tokenIterator()
+		name = strlower(Disambiguate(name, annotation.class, annotation.specialization))
+		local code
+		if token == "prev" then
+			code = format("PreviousSpell(%s)", name)
+		elseif token == "prev_gcd" then
+			code = format("PreviousGCDSpell(%s)", name)
+		else -- if token == "prev_off_gcd" then
+			code = format("PreviousOffGCDSpell(%s)", name)
+		end
+		if ok and code then
+			annotation.astAnnotation = annotation.astAnnotation or {}
+			node = OvaleAST:ParseCode("expression", code, nodeList, annotation.astAnnotation)
+			AddSymbol(annotation, name)
 		end
 	else
 		ok = false
@@ -2544,6 +3264,9 @@ EmitOperandRaidEvent = function(operand, parseNode, nodeList, annotation, action
 			code = "0"
 		elseif property == "exists" then
 			code = "False(raid_event_adds_exists)"
+		elseif property == "in" then
+			-- Pretend the next "adds" raid event is ten minutes from now.
+			code = "600"
 		else
 			ok = false
 		end
@@ -2564,10 +3287,17 @@ EmitOperandRune = function(operand, parseNode, nodeList, annotation, action)
 
 	local code
 	if parseNode.rune then
-		if parseNode.asType == "boolean" then
-			code = format("Rune(%s) >= 1", parseNode.rune)
+		local runeParameters
+		if parseNode.includeDeath then
+			runeParameters = parseNode.rune .. " death=1"
 		else
-			code = format("RuneCount(%s)", parseNode.rune)
+			runeParameters = parseNode.rune
+		end
+		if parseNode.asType == "boolean" then
+			local runeFunction = (strsub(parseNode.name, -6) == ".death") and "DeathRune" or "Rune"
+			code = format("%s(%s) >= 1", runeFunction, runeParameters)
+		else
+			code = format("RuneCount(%s)", runeParameters)
 		end
 	else
 		ok = false
@@ -2630,7 +3360,7 @@ EmitOperandSeal = function(operand, parseNode, nodeList, annotation, action)
 	local tokenIterator = gmatch(operand, OPERAND_TOKEN_PATTERN)
 	local token = tokenIterator()
 	if token == "seal" then
-		local name = tokenIterator()
+		local name = strlower(tokenIterator())
 		local code
 		if name then
 			code = format("Stance(paladin_seal_of_%s)", name)
@@ -2656,6 +3386,7 @@ EmitOperandSpecial = function(operand, parseNode, nodeList, annotation, action, 
 	local specialization = annotation.specialization
 
 	target = target and (target .. ".") or ""
+	operand = strlower(operand)
 	local code
 	if class == "DEATHKNIGHT" and operand == "dot.breath_of_sindragosa.ticking" then
 		-- Breath of Sindragosa is the player buff from channeling the spell.
@@ -2668,47 +3399,106 @@ EmitOperandSpecial = function(operand, parseNode, nodeList, annotation, action, 
 		spellName = Disambiguate(spellName, class, specialization)
 		code = format("TimeToSpell(%s)", spellName)
 		AddSymbol(annotation, spellName)
+	elseif class == "DEATHKNIGHT" and strsub(operand, 1, 24) == "pet.dancing_rune_weapon." then
+		local petOperand = strsub(operand, 25)
+		local tokenIterator = gmatch(petOperand, OPERAND_TOKEN_PATTERN)
+		local token = tokenIterator()
+		if token == "active" then
+			local buffName = "dancing_rune_weapon_buff"
+			code = format("BuffPresent(%s)", buffName)
+			AddSymbol(annotation, buffName)
+		elseif token == "dot" then
+			if target == "" then
+				target = "target"
+			else
+				target = strsub(target, 1, -2)
+			end
+			ok, node = EmitOperandDot(petOperand, parseNode, nodeList, annotation, action, target)
+		end
 	elseif class == "DRUID" and operand == "buff.wild_charge_movement.down" then
 		-- "wild_charge_movement" is a fake SimulationCraft buff that lasts for the
 		-- duration of the movement during Wild Charge.
 		code = "True(wild_charge_movement_down)"
+	elseif class == "DRUID" and operand == "eclipse_dir.lunar" then
+		code = "EclipseDir() < 0"
+	elseif class == "DRUID" and operand == "eclipse_dir.solar" then
+		code = "EclipseDir() > 0"
 	elseif class == "DRUID" and operand == "max_fb_energy" then
 		-- SimulationCraft's max_fb_energy is the maximum cost of Ferocious Bite if used.
 		local spellName = "ferocious_bite"
 		code = format("EnergyCost(%s max=1)", spellName)
 		AddSymbol(annotation, spellName)
-	elseif class == "HUNTER" and operand == "buff.beast_cleave.down" then
-		-- Beast Cleave is a buff on the hunter's pet.
-		local buffName = "pet_beast_cleave_buff"
-		code = format("pet.BuffExpires(%s any=1)", buffName)
-		AddSymbol(annotation, buffName)
 	elseif class == "HUNTER" and operand == "buff.careful_aim.up" then
 		-- The "careful_aim" buff is a fake SimulationCraft buff.
-		code = format("%sHealthPercent() > 80 or BuffPresent(rapid_fire_buff)", target)
+		code = "target.HealthPercent() > 80 or BuffPresent(rapid_fire_buff)"
 		AddSymbol(annotation, "rapid_fire_buff")
+	elseif class == "HUNTER" and operand == "buff.stampede.remains" then
+		--[[
+			There is no "Stampede" buff visible on the client-side, so just check how long since
+			Stampede was previously cast.  The duration of the effect is 40 seconds.
+		--]]
+		local spellName = "stampede"
+		code = format("TimeSincePreviousSpell(%s) < 40", spellName)
+		AddSymbol(annotation, spellName)
 	elseif class == "MAGE" and operand == "buff.rune_of_power.remains" then
-		code = "RuneOfPowerRemaining()"
+		code = "TotemRemaining(rune_of_power)"
+	elseif class == "MAGE" and operand == "buff.shatterlance.up" then
+		--[[
+			Shatterlance is a hidden buff applied by the T18 mage class trinket after a Frostbolt
+			is cast.  Implement as a check for the T18 class trinket and whether the previous spell
+			was Frostbolt.
+		--]]
+		code = "HasTrinket(t18_class_trinket) and PreviousGCDSpell(frostbolt)"
+		AddSymbol(annotation, "frostbolt")
+		AddSymbol(annotation, "t18_class_trinket")
+	elseif class == "MAGE" and (operand == "burn_phase" or operand == "pyro_chain") then
+		if parseNode.asType == "boolean" then
+			code = format("GetState(%s) > 0", operand)
+		else
+			code = format("GetState(%s)", operand)
+		end
+	elseif class == "MAGE" and (operand == "burn_phase_duration" or operand == "pyro_chain_duration") then
+		local variable = strsub(operand, 1, -10)
+		if parseNode.asType == "boolean" then
+			code = format("GetStateDuration(%s) > 0", variable)
+		else
+			code = format("GetStateDuration(%s)", variable)
+		end
 	elseif class == "MAGE" and operand == "dot.frozen_orb.ticking" then
 		-- The Frozen Orb is ticking if fewer than 10s have elapsed since it was cast.
 		local name = "frozen_orb"
 		code = format("SpellCooldown(%s) > SpellCooldownDuration(%s) - 10", name, name)
 		AddSymbol(annotation, name)
-	elseif class == "MAGE" and operand == "pyro_chain" then
-		if parseNode.asType == "boolean" then
-			code = "GetState(pyro_chain) > 0"
+	elseif class == "MONK" and strsub(operand, 1, 35) == "debuff.storm_earth_and_fire_target." then
+		local property = strsub(operand, 36)
+		if target == "" then
+			target = "target."
+		end
+		local debuffName = "storm_earth_and_fire_target_debuff"
+		AddSymbol(annotation, debuffName)
+		if property == "down" then
+			code = format("%sDebuffExpires(%s)", target, debuffName)
+		elseif property == "up" then
+			code = format("%sDebuffPresent(%s)", target, debuffName)
 		else
-			code = "GetState(pyro_chain)"
+			ok = false
 		end
 	elseif class == "MONK" and operand == "dot.zen_sphere.ticking" then
 		-- Zen Sphere is a helpful DoT.
 		local buffName = "zen_sphere_buff"
 		code = format("BuffPresent(%s)", buffName)
 		AddSymbol(annotation, buffName)
-	elseif class == "MONK" and (operand == "stagger.heavy" or operand == "stagger.light" or operand == "stagger.moderate") then
-		local property = strmatch(operand, "^stagger%.(%w+)")
-		local buffName = format("%s_stagger_debuff", property)
-		code = format("DebuffPresent(%s)", buffName)
-		AddSymbol(annotation, buffName)
+	elseif class == "MONK" and strsub(operand, 1, 8) == "stagger." then
+		local property = strsub(operand, 9)
+		if property == "heavy" or property == "light" or property == "moderate" then
+			local buffName = format("%s_stagger_debuff", property)
+			code = format("DebuffPresent(%s)", buffName)
+			AddSymbol(annotation, buffName)
+		elseif property == "pct" then
+			code = format("%sStaggerRemaining() / %sMaxHealth() * 100", target, target)
+		else
+			ok = false
+		end
 	elseif class == "PALADIN" and operand == "dot.sacred_shield.remains" then
 		--[[
 			Sacred Shield is handled specially because SimulationCraft treats it like
@@ -2716,27 +3506,119 @@ EmitOperandSpecial = function(operand, parseNode, nodeList, annotation, action, 
 			buff on the player.
 		--]]
 		local buffName = "sacred_shield_buff"
-		code = format("BuffPresent(%s)", buffName)
-		AddSymbol(annotation, buffName)
-	elseif class == "PRIEST" and operand == "mind_harvest" then
-		-- TODO: "mind_harvest" on the current target is 0 if no Mind Blast has been cast on the target yet.
-		code = "0"
-	elseif class == "PRIEST" and operand == "primary_target" then
-		-- TODO: "primary_target" is 1 if the current target is the "main/boss" target.
-		code = "0"
-	elseif class == "ROGUE" and specialization == "subtlety" and operand == "cooldown.honor_among_thieves.remains" then
-		-- The cooldown of Honor Among Thieves is implemented as a hidden buff.
-		local buffName = "honor_among_thieves_cooldown_buff"
 		code = format("BuffRemaining(%s)", buffName)
 		AddSymbol(annotation, buffName)
+	elseif class == "PRIEST" and operand == "mind_harvest" then
+		code = "target.MindHarvest()"
+	elseif class == "PRIEST" and operand == "natural_shadow_word_death_range" then
+		code = "target.HealthPercent() < 20"
+	elseif class == "PRIEST" and operand == "primary_target" then
+		-- Ovale has no concept of the "primary", "main" or "boss" target, so "primary_target" should always return 1.
+		code = "1"
+	elseif class == "ROGUE" and specialization == "subtlety" and strsub(operand, 1, 29) == "cooldown.honor_among_thieves." then
+		-- The cooldown of Honor Among Thieves is implemented as a hidden buff.
+		local property = strsub(operand, 30)
+		local buffName = "honor_among_thieves_cooldown_buff"
+		AddSymbol(annotation, buffName)
+		annotation.honor_among_thieves = class
+		if property == "down" then
+			code = format("BuffPresent(%s)", buffName)
+		elseif property == "remains" then
+			code = format("BuffRemaining(%s)", buffName)
+		elseif property == "up" then
+			code = format("BuffExpires(%s)", buffName)
+		else
+			ok = false
+		end
+	elseif class == "WARLOCK" and strmatch(operand, "pet%.service_[a-z_]+%..+") then
+		local spellName, property = strmatch(operand, "pet%.(service_[a-z_]+)%.(.+)")
+		if property == "active" then
+			--[[
+				It's not possible to track guardian pets, so assume the pet is active
+				if the spell was recently placed on cooldown.  The "service_pet" spells
+				have a shared cooldown of 120s and the guardian pet lasts for 20s.
+			--]]
+			code = format("SpellCooldown(%s) > 100", spellName)
+			AddSymbol(annotation, spellName)
+		else
+			ok = false
+		end
+	elseif class == "WARRIOR" and strsub(operand, 1, 23) == "buff.colossus_smash_up." then
+		local property = strsub(operand, 24)
+		local debuffName = "colossus_smash_debuff"
+		AddSymbol(annotation, debuffName)
+		if property == "down" then
+			code = format("DebuffCountOnAny(%s) == 0", debuffName)
+		elseif property == "up" then
+			code = format("DebuffCountOnAny(%s) > 0", debuffName)
+		else
+			ok = false
+		end
+	elseif operand == "buff.enrage.down" then
+		code = "not " .. target .. "IsEnraged()"
+	elseif operand == "buff.enrage.remains" then
+		code = target .. "EnrageRemaining()"
+	elseif operand == "buff.enrage.up" then
+		code = target .. "IsEnraged()"
 	elseif operand == "debuff.casting.react" then
 		code = target .. "IsInterruptible()"
 	elseif operand == "debuff.flying.down" then
 		code = target .. "True(debuff_flying_down)"
 	elseif operand == "distance" then
 		code = target .. "Distance()"
+	elseif strsub(operand, 1, 9) == "equipped." then
+		local name = strsub(operand, 10)
+		code = format("HasEquippedItem(%s)", name)
+		AddSymbol(annotation, name)
 	elseif operand == "gcd.max" then
 		code = "GCD()"
+	elseif operand == "gcd.remains" then
+		code = "GCDRemaining()"
+	elseif strsub(operand, 1, 15) == "legendary_ring." then
+		local name = Disambiguate("legendary_ring", class, specialization)
+		local buffName = name .. "_buff"
+		local properties = strsub(operand, 16)
+		local tokenIterator = gmatch(properties, OPERAND_TOKEN_PATTERN)
+		local token = tokenIterator()
+		if token == "cooldown" then
+			token = tokenIterator()
+			if token == "down" then
+				code = format("ItemCooldown(%s) > 0", name)
+				AddSymbol(annotation, name)
+			elseif token == "remains" then
+				code = format("ItemCooldown(%s)", name)
+				AddSymbol(annotation, name)
+			elseif token == "up" then
+				code = format("not ItemCooldown(%s) > 0", name)
+				AddSymbol(annotation, name)
+			end
+		elseif token == "has_cooldown" then
+			code = format("ItemCooldown(%s) > 0", name)
+			AddSymbol(annotation, name)
+		elseif token == "up" then
+			code = format("BuffPresent(%s)", buffName)
+			AddSymbol(annotation, buffName)
+		elseif token == "remains" then
+			code = format("BuffRemaining(%s)", buffName)
+			AddSymbol(annotation, buffName)
+		end
+	elseif operand == "ptr" then
+		code = "PTR()"
+	elseif operand == "time_to_die" then
+		--[[
+			"time_to_die" is both a character property and a time event in SimulationCraft.
+			Silently translate all "time_to_die" to the equivalent of "target.time_to_die".
+		--]]
+		if target ~= "" then
+			code = target .."TimeToDie()"
+		else
+			code = "target.TimeToDie()"
+		end
+	elseif strsub(operand, 1, 10) == "using_apl." then
+		local aplName = strmatch(operand, "^using_apl%.([%w_]+)")
+		code = format("List(opt_using_apl %s)", aplName)
+		annotation.using_apl = annotation.using_apl or {}
+		annotation.using_apl[aplName] = true
 	else
 		ok = false
 	end
@@ -2755,7 +3637,7 @@ EmitOperandTalent = function(operand, parseNode, nodeList, annotation, action)
 	local tokenIterator = gmatch(operand, OPERAND_TOKEN_PATTERN)
 	local token = tokenIterator()
 	if token == "talent" then
-		local name = tokenIterator()
+		local name = strlower(tokenIterator())
 		local property = tokenIterator()
 		-- Talent names need no disambiguation as they are the same across all specializations.
 		--name = Disambiguate(name, annotation.class, annotation.specialization)
@@ -2766,7 +3648,11 @@ EmitOperandTalent = function(operand, parseNode, nodeList, annotation, action)
 		if property == "disabled" then
 			code = format("not Talent(%s)", talentName)
 		elseif property == "enabled" then
-			code = format("Talent(%s)", talentName)
+			if parseNode.asType == "boolean" then
+				code = format("Talent(%s)", talentName)
+			else
+				code = format("TalentPoints(%s)", talentName)
+			end
 		else
 			ok = false
 		end
@@ -2789,7 +3675,7 @@ EmitOperandTotem = function(operand, parseNode, nodeList, annotation, action)
 	local tokenIterator = gmatch(operand, OPERAND_TOKEN_PATTERN)
 	local token = tokenIterator()
 	if token == "totem" then
-		local name = tokenIterator()
+		local name = strlower(tokenIterator())
 		local property = tokenIterator()
 
 		local code
@@ -2831,7 +3717,9 @@ EmitOperandTrinket = function(operand, parseNode, nodeList, annotation, action)
 			local buffName = format("trinket_%s_%s_buff", procType, statName)
 			buffName = Disambiguate(buffName, annotation.class, annotation.specialization)
 
-			if property == "cooldown_remains" then
+			if property == "cooldown" then
+				code = format("BuffCooldownDuration(%s)", buffName)
+			elseif property == "cooldown_remains" then
 				code = format("BuffCooldown(%s)", buffName)
 			elseif property == "down" then
 				code = format("BuffExpires(%s)", buffName)
@@ -2878,14 +3766,154 @@ do
 	}
 end
 
+-- Mark all functions that are used in the AST tree below the given node using pre-order traversal.
+local function PreOrderTraversalMark(node)
+	if node.type == "custom_function" then
+		self_functionUsed[node.name] = true
+	else
+		if node.type == "add_function" then
+			self_functionDefined[node.name] = true
+		end
+		if node.child then
+			for _, childNode in ipairs(node.child) do
+				PreOrderTraversalMark(childNode)
+			end
+		end
+	end
+end
+
+local function Mark(node)
+	wipe(self_functionDefined)
+	wipe(self_functionUsed)
+	PreOrderTraversalMark(node)
+end
+
+-- Sweep (remove) the block of comments above the given line index in the childNodes array.
+local function SweepComments(childNodes, index)
+	local count = 0
+	for k = index - 1, 1, -1 do
+		if childNodes[k].type == "comment" then
+			tremove(childNodes, k)
+			count = count + 1
+		else
+			break
+		end
+	end
+	return count
+end
+
+-- Sweep (remove) all usages of functions that are empty or unused.
+local function Sweep(node)
+	local isChanged, isSwept = false, false
+	if node.type == "add_function" then
+		if self_functionUsed[node.name] then
+			isChanged, isSwept = Sweep(node.child[1])
+		else
+			isChanged, isSwept = true, true
+		end
+	elseif node.type == "custom_function" and not self_functionDefined[node.name] then
+		isChanged, isSwept = true, true
+	elseif node.type == "group" or node.type == "script" then
+		local child = node.child
+		local index = #child
+		while index > 0 do
+			local childNode = child[index]
+			local changed, swept = Sweep(childNode)
+			if type(swept) == "table" then
+				if swept.type == "group" then
+					-- Directly insert a replacement group's statements in place of the replaced node.
+					tremove(child, index)
+					for k = #swept.child, 1, -1 do
+						tinsert(child, index, swept.child[k])
+					end
+					if node.type == "group" then
+						local count = SweepComments(child, index)
+						index = index - count
+					end
+				else
+					-- Use the replacement node.
+					child[index] = swept
+				end
+			elseif swept then
+				tremove(child, index)
+				if node.type == "group" then
+					local count = SweepComments(child, index)
+					index = index - count
+				end
+			end
+			isChanged = isChanged or changed or not not swept
+			index = index - 1
+		end
+		-- Remove blank lines at the top of groups and scripts.
+		if node.type == "group" or node.type == "script" then
+			local childNode = child[1]
+			while childNode and childNode.type == "comment" and (not childNode.comment or childNode.comment == "") do
+				isChanged = true
+				tremove(child, 1)
+				childNode = child[1]
+			end
+		end
+		isSwept = isSwept or (#child == 0)
+		isChanged = isChanged or not not isSwept
+	elseif node.type == "icon" then
+		isChanged, isSwept = Sweep(node.child[1])
+	elseif node.type == "if" then
+		isChanged, isSwept = Sweep(node.child[2])
+	elseif node.type == "logical" then
+		if node.expressionType == "binary" then
+			local lhsNode, rhsNode = node.child[1], node.child[2]
+			for index, childNode in ipairs(node.child) do
+				local changed, swept = Sweep(childNode)
+				if type(swept) == "table" then
+					node.child[index] = swept
+				elseif swept then
+					if node.operator == "or" then
+						isSwept = (childNode == lhsNode) and rhsNode or lhsNode
+					else
+						isSwept = isSwept or swept
+					end
+					break
+				end
+				if changed then
+					isChanged = isChanged or changed
+					break
+				end
+			end
+			isChanged = isChanged or not not isSwept
+		end
+	elseif node.type == "unless" then
+		local changed, swept = Sweep(node.child[2])
+		if type(swept) == "table" then
+			node.child[2] = swept
+			isSwept = false
+		elseif swept then
+			isSwept = swept
+		else
+			changed, swept = Sweep(node.child[1])
+			if type(swept) == "table" then
+				node.child[1] = swept
+				isSwept = false
+			elseif swept then
+				isSwept = node.child[2]
+			end
+		end
+		isChanged = isChanged or changed or not not isSwept
+	elseif node.type == "wait" then
+		isChanged, isSwept = Sweep(node.child[1])
+	end
+	return isChanged, isSwept
+end
+
 local function InsertSupportingFunctions(child, annotation)
 	local count = 0
 	local nodeList = annotation.astAnnotation.nodeList
+	local camelSpecialization = CamelSpecialization(annotation)
+
 	if annotation.mind_freeze == "DEATHKNIGHT" then
-		local code = [[
-			AddFunction InterruptActions
+		local fmt = [[
+			AddFunction %sInterruptActions
 			{
-				if not target.IsFriend() and target.IsInterruptible()
+				if CheckBoxOn(opt_interrupt) and not target.IsFriend() and target.IsInterruptible()
 				{
 					if target.InRange(mind_freeze) Spell(mind_freeze)
 					if not target.Classification(worldboss)
@@ -2899,8 +3927,10 @@ local function InsertSupportingFunctions(child, annotation)
 				}
 			}
 		]]
+		local code = format(fmt, camelSpecialization)
 		local node = OvaleAST:ParseCode("add_function", code, nodeList, annotation.astAnnotation)
 		tinsert(child, 1, node)
+		annotation.functionTag[node.name] = "cd"
 		AddSymbol(annotation, "arcane_torrent_runicpower")
 		AddSymbol(annotation, "asphyxiate")
 		AddSymbol(annotation, "mind_freeze")
@@ -2909,11 +3939,25 @@ local function InsertSupportingFunctions(child, annotation)
 		AddSymbol(annotation, "war_stomp")
 		count = count + 1
 	end
-	if annotation.skull_bash == "DRUID" then
-		local code = [[
-			AddFunction InterruptActions
+	if annotation.melee == "DEATHKNIGHT" then
+		local fmt = [[
+			AddFunction %sGetInMeleeRange
 			{
-				if not target.IsFriend() and target.IsInterruptible()
+				if CheckBoxOn(opt_melee_range) and not target.InRange(plague_strike) Texture(misc_arrowlup help=L(not_in_melee_range))
+			}
+		]]
+		local code = format(fmt, camelSpecialization)
+		local node = OvaleAST:ParseCode("add_function", code, nodeList, annotation.astAnnotation)
+		tinsert(child, 1, node)
+		annotation.functionTag[node.name] = "shortcd"
+		AddSymbol(annotation, "plague_strike")
+		count = count + 1
+	end
+	if annotation.skull_bash == "DRUID" then
+		local fmt = [[
+			AddFunction %sInterruptActions
+			{
+				if CheckBoxOn(opt_interrupt) and not target.IsFriend() and target.IsInterruptible()
 				{
 					if target.InRange(skull_bash) Spell(skull_bash)
 					if not target.Classification(worldboss)
@@ -2926,8 +3970,10 @@ local function InsertSupportingFunctions(child, annotation)
 				}
 			}
 		]]
+		local code = format(fmt, camelSpecialization)
 		local node = OvaleAST:ParseCode("add_function", code, nodeList, annotation.astAnnotation)
 		tinsert(child, 1, node)
+		annotation.functionTag[node.name] = "cd"
 		AddSymbol(annotation, "maim")
 		AddSymbol(annotation, "mighty_bash")
 		AddSymbol(annotation, "skull_bash")
@@ -2936,42 +3982,70 @@ local function InsertSupportingFunctions(child, annotation)
 		count = count + 1
 	end
 	if annotation.melee == "DRUID" then
-		local code = [[
-			AddFunction GetInMeleeRange
+		local fmt = [[
+			AddFunction %sGetInMeleeRange
 			{
-				if Stance(druid_bear_form) and not target.InRange(mangle) or { Stance(druid_cat_form) or Stance(druid_claws_of_shirvallah) } and not target.InRange(shred)
+				if CheckBoxOn(opt_melee_range) and Stance(druid_bear_form) and not target.InRange(mangle) or { Stance(druid_cat_form) or Stance(druid_claws_of_shirvallah) } and not target.InRange(shred)
 				{
 					if target.InRange(wild_charge) Spell(wild_charge)
 					Texture(misc_arrowlup help=L(not_in_melee_range))
 				}
 			}
 		]]
+		local code = format(fmt, camelSpecialization)
 		local node = OvaleAST:ParseCode("add_function", code, nodeList, annotation.astAnnotation)
 		tinsert(child, 1, node)
+		annotation.functionTag[node.name] = "shortcd"
 		AddSymbol(annotation, "mangle")
 		AddSymbol(annotation, "shred")
+		AddSymbol(annotation, "wild_charge")
 		AddSymbol(annotation, "wild_charge_bear")
 		AddSymbol(annotation, "wild_charge_cat")
 		count = count + 1
 	end
 	if annotation.summon_pet == "HUNTER" then
-		local code = [[
-			AddFunction SummonPet
-			{
-				if not pet.Present() Texture(ability_hunter_beastcall help=L(summon_pet))
-				if pet.IsDead() Spell(revive_pet)
-			}
-		]]
+		local fmt
+		if annotation.specialization == "beast_mastery" then
+			fmt = [[
+				AddFunction %sSummonPet
+				{
+					if pet.IsDead()
+					{
+						if not DebuffPresent(heart_of_the_phoenix_debuff) Spell(heart_of_the_phoenix)
+						Spell(revive_pet)
+					}
+					if not pet.Present() and not pet.IsDead() and not PreviousSpell(revive_pet) Texture(ability_hunter_beastcall help=L(summon_pet))
+				}
+			]]
+		else
+			fmt = [[
+				AddFunction %sSummonPet
+				{
+					if not Talent(lone_wolf_talent)
+					{
+						if pet.IsDead()
+						{
+							if not DebuffPresent(heart_of_the_phoenix_debuff) Spell(heart_of_the_phoenix)
+							Spell(revive_pet)
+						}
+						if not pet.Present() and not pet.IsDead() and not PreviousSpell(revive_pet) Texture(ability_hunter_beastcall help=L(summon_pet))
+					}
+				}
+			]]
+			AddSymbol(annotation, "lone_wolf_talent")
+		end
+		local code = format(fmt, camelSpecialization)
 		local node = OvaleAST:ParseCode("add_function", code, nodeList, annotation.astAnnotation)
 		tinsert(child, 1, node)
+		annotation.functionTag[node.name] = "shortcd"
 		AddSymbol(annotation, "revive_pet")
 		count = count + 1
 	end
 	if annotation.counter_shot == "HUNTER" then
-		local code = [[
-			AddFunction InterruptActions
+		local fmt = [[
+			AddFunction %sInterruptActions
 			{
-				if not target.IsFriend() and target.IsInterruptible()
+				if CheckBoxOn(opt_interrupt) and not target.IsFriend() and target.IsInterruptible()
 				{
 					Spell(counter_shot)
 					if not target.Classification(worldboss)
@@ -2983,8 +4057,10 @@ local function InsertSupportingFunctions(child, annotation)
 				}
 			}
 		]]
+		local code = format(fmt, camelSpecialization)
 		local node = OvaleAST:ParseCode("add_function", code, nodeList, annotation.astAnnotation)
 		tinsert(child, 1, node)
+		annotation.functionTag[node.name] = "cd"
 		AddSymbol(annotation, "arcane_torrent_focus")
 		AddSymbol(annotation, "counter_shot")
 		AddSymbol(annotation, "quaking_palm")
@@ -2992,10 +4068,10 @@ local function InsertSupportingFunctions(child, annotation)
 		count = count + 1
 	end
 	if annotation.counterspell == "MAGE" then
-		local code = [[
-			AddFunction InterruptActions
+		local fmt = [[
+			AddFunction %sInterruptActions
 			{
-				if not target.IsFriend() and target.IsInterruptible()
+				if CheckBoxOn(opt_interrupt) and not target.IsFriend() and target.IsInterruptible()
 				{
 					Spell(counterspell)
 					if not target.Classification(worldboss)
@@ -3006,18 +4082,20 @@ local function InsertSupportingFunctions(child, annotation)
 				}
 			}
 		]]
+		local code = format(fmt, camelSpecialization)
 		local node = OvaleAST:ParseCode("add_function", code, nodeList, annotation.astAnnotation)
 		tinsert(child, 1, node)
+		annotation.functionTag[node.name] = "cd"
 		AddSymbol(annotation, "arcane_torrent_mana")
 		AddSymbol(annotation, "counterspell")
 		AddSymbol(annotation, "quaking_palm")
 		count = count + 1
 	end
 	if annotation.spear_hand_strike == "MONK" then
-		local code = [[
-			AddFunction InterruptActions
+		local fmt = [[
+			AddFunction %sInterruptActions
 			{
-				if not target.IsFriend() and target.IsInterruptible()
+				if CheckBoxOn(opt_interrupt) and not target.IsFriend() and target.IsInterruptible()
 				{
 					if target.InRange(spear_hand_strike) Spell(spear_hand_strike)
 					if not target.Classification(worldboss)
@@ -3030,13 +4108,43 @@ local function InsertSupportingFunctions(child, annotation)
 				}
 			}
 		]]
+		local code = format(fmt, camelSpecialization)
 		local node = OvaleAST:ParseCode("add_function", code, nodeList, annotation.astAnnotation)
 		tinsert(child, 1, node)
+		annotation.functionTag[node.name] = "cd"
 		AddSymbol(annotation, "arcane_torrent_chi")
 		AddSymbol(annotation, "paralysis")
 		AddSymbol(annotation, "quaking_palm")
 		AddSymbol(annotation, "spear_hand_strike")
 		AddSymbol(annotation, "war_stomp")
+		count = count + 1
+	end
+	if annotation.melee == "MONK" then
+		local fmt = [[
+			AddFunction %sGetInMeleeRange
+			{
+				if CheckBoxOn(opt_melee_range) and not target.InRange(tiger_palm) Texture(misc_arrowlup help=L(not_in_melee_range))
+			}
+		]]
+		local code = format(fmt, camelSpecialization)
+		local node = OvaleAST:ParseCode("add_function", code, nodeList, annotation.astAnnotation)
+		tinsert(child, 1, node)
+		annotation.functionTag[node.name] = "shortcd"
+		AddSymbol(annotation, "tiger_palm")
+		count = count + 1
+	end
+	if annotation.time_to_hpg_heal == "PALADIN" then
+		local code = [[
+			AddFunction HolyTimeToHPG
+			{
+				SpellCooldown(crusader_strike holy_shock judgment)
+			}
+		]]
+		local node = OvaleAST:ParseCode("add_function", code, nodeList, annotation.astAnnotation)
+		tinsert(child, 1, node)
+		AddSymbol(annotation, "crusader_strike")
+		AddSymbol(annotation, "holy_shock")
+		AddSymbol(annotation, "judgment")
 		count = count + 1
 	end
 	if annotation.time_to_hpg_melee == "PALADIN" then
@@ -3071,47 +4179,11 @@ local function InsertSupportingFunctions(child, annotation)
 		AddSymbol(annotation, "sanctified_wrath_talent")
 		count = count + 1
 	end
-	if annotation.class == "PALADIN" then
-		local code
-		if annotation.specialization == "protection" then
-			code = [[
-				AddFunction ProtectionRighteousFury
-				{
-					if CheckBoxOn(opt_righteous_fury_check) and BuffExpires(righteous_fury) Spell(righteous_fury)
-				}
-			]]
-		else
-			code = [[
-				AddFunction RighteousFuryOff
-				{
-					if CheckBoxOn(opt_righteous_fury_check) and BuffPresent(righteous_fury) Texture(spell_holy_sealoffury text=cancel)
-				}
-			]]
-		end
-		local node = OvaleAST:ParseCode("add_function", code, nodeList, annotation.astAnnotation)
-		tinsert(child, 1, node)
-		AddSymbol(annotation, "righteous_fury")
-		count = count + 1
-	end
-	if annotation.time_to_hpg_heal == "PALADIN" then
-		local code = [[
-			AddFunction HolyTimeToHPG
-			{
-				SpellCooldown(crusader_strike holy_shock judgment)
-			}
-		]]
-		local node = OvaleAST:ParseCode("add_function", code, nodeList, annotation.astAnnotation)
-		tinsert(child, 1, node)
-		AddSymbol(annotation, "crusader_strike")
-		AddSymbol(annotation, "holy_shock")
-		AddSymbol(annotation, "judgment")
-		count = count + 1
-	end
 	if annotation.rebuke == "PALADIN" then
-		local code = [[
-			AddFunction InterruptActions
+		local fmt = [[
+			AddFunction %sInterruptActions
 			{
-				if not target.IsFriend() and target.IsInterruptible()
+				if CheckBoxOn(opt_interrupt) and not target.IsFriend() and target.IsInterruptible()
 				{
 					if target.InRange(rebuke) Spell(rebuke)
 					if not target.Classification(worldboss)
@@ -3126,8 +4198,10 @@ local function InsertSupportingFunctions(child, annotation)
 				}
 			}
 		]]
+		local code = format(fmt, camelSpecialization)
 		local node = OvaleAST:ParseCode("add_function", code, nodeList, annotation.astAnnotation)
 		tinsert(child, 1, node)
+		annotation.functionTag[node.name] = "cd"
 		AddSymbol(annotation, "arcane_torrent_holy")
 		AddSymbol(annotation, "blinding_light")
 		AddSymbol(annotation, "fist_of_justice")
@@ -3138,22 +4212,24 @@ local function InsertSupportingFunctions(child, annotation)
 		count = count + 1
 	end
 	if annotation.melee == "PALADIN" then
-		local code = [[
-			AddFunction GetInMeleeRange
+		local fmt = [[
+			AddFunction %sGetInMeleeRange
 			{
-				if not target.InRange(rebuke) Texture(misc_arrowlup help=L(not_in_melee_range))
+				if CheckBoxOn(opt_melee_range) and not target.InRange(rebuke) Texture(misc_arrowlup help=L(not_in_melee_range))
 			}
 		]]
+		local code = format(fmt, camelSpecialization)
 		local node = OvaleAST:ParseCode("add_function", code, nodeList, annotation.astAnnotation)
 		tinsert(child, 1, node)
+		annotation.functionTag[node.name] = "shortcd"
 		AddSymbol(annotation, "rebuke")
 		count = count + 1
 	end
 	if annotation.silence == "PRIEST" then
-		local code = [[
-			AddFunction InterruptActions
+		local fmt = [[
+			AddFunction %sInterruptActions
 			{
-				if not target.IsFriend() and target.IsInterruptible()
+				if CheckBoxOn(opt_interrupt) and not target.IsFriend() and target.IsInterruptible()
 				{
 					Spell(silence)
 					if not target.Classification(worldboss)
@@ -3165,8 +4241,10 @@ local function InsertSupportingFunctions(child, annotation)
 				}
 			}
 		]]
+		local code = format(fmt, camelSpecialization)
 		local node = OvaleAST:ParseCode("add_function", code, nodeList, annotation.astAnnotation)
 		tinsert(child, 1, node)
+		annotation.functionTag[node.name] = "cd"
 		AddSymbol(annotation, "arcane_torrent_mana")
 		AddSymbol(annotation, "quaking_palm")
 		AddSymbol(annotation, "silence")
@@ -3174,10 +4252,10 @@ local function InsertSupportingFunctions(child, annotation)
 		count = count + 1
 	end
 	if annotation.kick == "ROGUE" then
-		local code = [[
-			AddFunction InterruptActions
+		local fmt = [[
+			AddFunction %sInterruptActions
 			{
-				if not target.IsFriend() and target.IsInterruptible()
+				if CheckBoxOn(opt_interrupt) and not target.IsFriend() and target.IsInterruptible()
 				{
 					if target.InRange(kick) Spell(kick)
 					if not target.Classification(worldboss)
@@ -3191,8 +4269,10 @@ local function InsertSupportingFunctions(child, annotation)
 				}
 			}
 		]]
+		local code = format(fmt, camelSpecialization)
 		local node = OvaleAST:ParseCode("add_function", code, nodeList, annotation.astAnnotation)
 		tinsert(child, 1, node)
+		annotation.functionTag[node.name] = "cd"
 		AddSymbol(annotation, "arcane_torrent_energy")
 		AddSymbol(annotation, "cheap_shot")
 		AddSymbol(annotation, "deadly_throw")
@@ -3202,27 +4282,29 @@ local function InsertSupportingFunctions(child, annotation)
 		count = count + 1
 	end
 	if annotation.melee == "ROGUE" then
-		local code = [[
-			AddFunction GetInMeleeRange
+		local fmt = [[
+			AddFunction %sGetInMeleeRange
 			{
-				if not target.InRange(kick)
+				if CheckBoxOn(opt_melee_range) and not target.InRange(kick)
 				{
 					Spell(shadowstep)
 					Texture(misc_arrowlup help=L(not_in_melee_range))
 				}
 			}
 		]]
+		local code = format(fmt, camelSpecialization)
 		local node = OvaleAST:ParseCode("add_function", code, nodeList, annotation.astAnnotation)
 		tinsert(child, 1, node)
+		annotation.functionTag[node.name] = "shortcd"
 		AddSymbol(annotation, "kick")
 		AddSymbol(annotation, "shadowstep")
 		count = count + 1
 	end
 	if annotation.wind_shear == "SHAMAN" then
-		local code = [[
-			AddFunction InterruptActions
+		local fmt = [[
+			AddFunction %sInterruptActions
 			{
-				if not target.IsFriend() and target.IsInterruptible()
+				if CheckBoxOn(opt_interrupt) and not target.IsFriend() and target.IsInterruptible()
 				{
 					Spell(wind_shear)
 					if not target.Classification(worldboss)
@@ -3234,17 +4316,33 @@ local function InsertSupportingFunctions(child, annotation)
 				}
 			}
 		]]
+		local code = format(fmt, camelSpecialization)
 		local node = OvaleAST:ParseCode("add_function", code, nodeList, annotation.astAnnotation)
 		tinsert(child, 1, node)
+		annotation.functionTag[node.name] = "cd"
 		AddSymbol(annotation, "arcane_torrent_mana")
 		AddSymbol(annotation, "quaking_palm")
 		AddSymbol(annotation, "wind_shear")
 		AddSymbol(annotation, "war_stomp")
 		count = count + 1
 	end
+	if annotation.melee == "SHAMAN" then
+		local fmt = [[
+			AddFunction %sGetInMeleeRange
+			{
+				if CheckBoxOn(opt_melee_range) and not target.InRange(primal_strike) Texture(misc_arrowlup help=L(not_in_melee_range))
+			}
+		]]
+		local code = format(fmt, camelSpecialization)
+		local node = OvaleAST:ParseCode("add_function", code, nodeList, annotation.astAnnotation)
+		tinsert(child, 1, node)
+		annotation.functionTag[node.name] = "shortcd"
+		AddSymbol(annotation, "primal_strike")
+		count = count + 1
+	end
 	if annotation.bloodlust == "SHAMAN" then
-		local code = [[
-			AddFunction Bloodlust
+		local fmt = [[
+			AddFunction %sBloodlust
 			{
 				if CheckBoxOn(opt_bloodlust) and DebuffExpires(burst_haste_debuff any=1)
 				{
@@ -3253,17 +4351,19 @@ local function InsertSupportingFunctions(child, annotation)
 				}
 			}
 		]]
+		local code = format(fmt, camelSpecialization)
 		local node = OvaleAST:ParseCode("add_function", code, nodeList, annotation.astAnnotation)
 		tinsert(child, 1, node)
+		annotation.functionTag[node.name] = "cd"
 		AddSymbol(annotation, "bloodlust")
 		AddSymbol(annotation, "heroism")
 		count = count + 1
 	end
 	if annotation.pummel == "WARRIOR" then
-		local code = [[
-			AddFunction InterruptActions
+		local fmt = [[
+			AddFunction %sInterruptActions
 			{
-				if not target.IsFriend() and target.IsInterruptible()
+				if CheckBoxOn(opt_interrupt) and not target.IsFriend() and target.IsInterruptible()
 				{
 					if target.InRange(pummel) Spell(pummel)
 					if Glyph(glyph_of_gag_order) and target.InRange(heroic_throw) Spell(heroic_throw)
@@ -3276,8 +4376,10 @@ local function InsertSupportingFunctions(child, annotation)
 				}
 			}
 		]]
+		local code = format(fmt, camelSpecialization)
 		local node = OvaleAST:ParseCode("add_function", code, nodeList, annotation.astAnnotation)
 		tinsert(child, 1, node)
+		annotation.functionTag[node.name] = "cd"
 		AddSymbol(annotation, "arcane_torrent_rage")
 		AddSymbol(annotation, "glyph_of_gag_order")
 		AddSymbol(annotation, "heroic_throw")
@@ -3287,87 +4389,107 @@ local function InsertSupportingFunctions(child, annotation)
 		count = count + 1
 	end
 	if annotation.melee == "WARRIOR" then
-		local code = [[
-			AddFunction GetInMeleeRange
+		local fmt = [[
+			AddFunction %sGetInMeleeRange
 			{
-				if not target.InRange(pummel) Texture(misc_arrowlup help=L(not_in_melee_range))
+				if CheckBoxOn(opt_melee_range)
+				{
+					if target.InRange(charge) Spell(charge)
+					if target.InRange(charge) Spell(heroic_leap)
+					if not target.InRange(pummel) Texture(misc_arrowlup help=L(not_in_melee_range))
+				}
 			}
 		]]
+		local code = format(fmt, camelSpecialization)
 		local node = OvaleAST:ParseCode("add_function", code, nodeList, annotation.astAnnotation)
 		tinsert(child, 1, node)
+		annotation.functionTag[node.name] = "shortcd"
+		AddSymbol(annotation, "charge")
+		AddSymbol(annotation, "heroic_leap")
 		AddSymbol(annotation, "pummel")
 		count = count + 1
 	end
 	if annotation.use_item then
-		local code = [[
-			AddFunction UseItemActions
+		local fmt = [[
+			AddFunction %sUseItemActions
 			{
-				Item(HandSlot usable=1)
 				Item(Trinket0Slot usable=1)
 				Item(Trinket1Slot usable=1)
 			}
 		]]
+		local code = format(fmt, camelSpecialization)
 		local node = OvaleAST:ParseCode("add_function", code, nodeList, annotation.astAnnotation)
 		tinsert(child, 1, node)
+		annotation.functionTag[node.name] = "cd"
 		count = count + 1
 	end
 	if annotation.use_potion_strength then
-		local code = [[
-			AddFunction UsePotionStrength
+		local fmt = [[
+			AddFunction %sUsePotionStrength
 			{
 				if CheckBoxOn(opt_potion_strength) and target.Classification(worldboss) Item(draenic_strength_potion usable=1)
 			}
 		]]
+		local code = format(fmt, camelSpecialization)
 		local node = OvaleAST:ParseCode("add_function", code, nodeList, annotation.astAnnotation)
 		tinsert(child, 1, node)
+		annotation.functionTag[node.name] = "cd"
 		AddSymbol(annotation, "draenic_strength_potion")
 		count = count + 1
 	end
 	if annotation.use_potion_mana then
-		local code = [[
-			AddFunction UsePotionMana
+		local fmt = [[
+			AddFunction %sUsePotionMana
 			{
 				if CheckBoxOn(opt_potion_mana) Item(draenic_mana_potion usable=1)
 			}
 		]]
+		local code = format(fmt, camelSpecialization)
 		local node = OvaleAST:ParseCode("add_function", code, nodeList, annotation.astAnnotation)
 		tinsert(child, 1, node)
+		annotation.functionTag[node.name] = "cd"
 		AddSymbol(annotation, "draenic_mana_potion")
 		count = count + 1
 	end
 	if annotation.use_potion_intellect then
-		local code = [[
-			AddFunction UsePotionIntellect
+		local fmt = [[
+			AddFunction %sUsePotionIntellect
 			{
 				if CheckBoxOn(opt_potion_intellect) and target.Classification(worldboss) Item(draenic_intellect_potion usable=1)
 			}
 		]]
+		local code = format(fmt, camelSpecialization)
 		local node = OvaleAST:ParseCode("add_function", code, nodeList, annotation.astAnnotation)
 		tinsert(child, 1, node)
+		annotation.functionTag[node.name] = "cd"
 		AddSymbol(annotation, "draenic_intellect_potion")
 		count = count + 1
 	end
 	if annotation.use_potion_armor then
-		local code = [[
-			AddFunction UsePotionArmor
+		local fmt = [[
+			AddFunction %sUsePotionArmor
 			{
 				if CheckBoxOn(opt_potion_armor) and target.Classification(worldboss) Item(draenic_armor_potion usable=1)
 			}
 		]]
+		local code = format(fmt, camelSpecialization)
 		local node = OvaleAST:ParseCode("add_function", code, nodeList, annotation.astAnnotation)
 		tinsert(child, 1, node)
+		annotation.functionTag[node.name] = "cd"
 		AddSymbol(annotation, "draenic_armor_potion")
 		count = count + 1
 	end
 	if annotation.use_potion_agility then
-		local code = [[
-			AddFunction UsePotionAgility
+		local fmt = [[
+			AddFunction %sUsePotionAgility
 			{
 				if CheckBoxOn(opt_potion_agility) and target.Classification(worldboss) Item(draenic_agility_potion usable=1)
 			}
 		]]
+		local code = format(fmt, camelSpecialization)
 		local node = OvaleAST:ParseCode("add_function", code, nodeList, annotation.astAnnotation)
 		tinsert(child, 1, node)
+		annotation.functionTag[node.name] = "cd"
 		AddSymbol(annotation, "draenic_agility_potion")
 		count = count + 1
 	end
@@ -3377,97 +4499,266 @@ end
 local function InsertSupportingControls(child, annotation)
 	local count = 0
 	local nodeList = annotation.astAnnotation.nodeList
+
+	local ifSpecialization = "specialization=" .. annotation.specialization
+	if annotation.class == "WARRIOR" and annotation.specialization == "protection" then
+		if strfind(annotation.name, "_[gG]ladiator_") then
+			ifSpecialization = ifSpecialization .. " if_stance=warrior_gladiator_stance"
+		else
+			ifSpecialization = ifSpecialization .. " if_stance=!warrior_gladiator_stance"
+		end
+	end
+
+	if annotation.using_apl and next(annotation.using_apl) then
+		-- Add non-default list items.
+		for name in pairs(annotation.using_apl) do
+			if name ~= "normal" then
+				local fmt = [[
+					AddListItem(opt_using_apl %s "%s APL")
+				]]
+				local code = format(fmt, name, name)
+				local node = OvaleAST:ParseCode("list_item", code, nodeList, annotation.astAnnotation)
+				tinsert(child, 1, node)
+			end
+		end
+		-- Add default list item.
+		do
+			local code = [[
+				AddListItem(opt_using_apl normal L(normal_apl) default)
+			]]
+			local node = OvaleAST:ParseCode("list_item", code, nodeList, annotation.astAnnotation)
+			tinsert(child, 1, node)
+		end
+	end
 	if annotation.trap_launcher == "HUNTER" then
-		local code = [[
-			AddCheckBox(opt_trap_launcher SpellName(trap_launcher) default)
+		local fmt = [[
+			AddCheckBox(opt_trap_launcher SpellName(trap_launcher) default %s)
 		]]
+		local code = format(fmt, ifSpecialization)
 		local node = OvaleAST:ParseCode("checkbox", code, nodeList, annotation.astAnnotation)
 		tinsert(child, 1, node)
 		AddSymbol(annotation, "trap_launcher")
 		count = count + 1
 	end
 	if annotation.time_warp == "MAGE" then
-		local code = [[
-			AddCheckBox(opt_time_warp SpellName(time_warp) default)
+		local fmt = [[
+			AddCheckBox(opt_time_warp SpellName(time_warp) %s)
 		]]
+		local code = format(fmt, ifSpecialization)
 		local node = OvaleAST:ParseCode("checkbox", code, nodeList, annotation.astAnnotation)
 		tinsert(child, 1, node)
 		AddSymbol(annotation, "time_warp")
 		count = count + 1
 	end
-	if annotation.chi_burst == "MONK" then
-		local code = [[
-			AddCheckBox(opt_chi_burst SpellName(chi_burst) default)
+	if annotation.opt_arcane_mage_burn_phase == "MAGE" then
+		local fmt = [[
+			AddCheckBox(opt_arcane_mage_burn_phase L(arcane_mage_burn_phase) default %s)
 		]]
+		local code = format(fmt, ifSpecialization)
+		local node = OvaleAST:ParseCode("checkbox", code, nodeList, annotation.astAnnotation)
+		tinsert(child, 1, node)
+		count = count + 1
+	end
+	if annotation.storm_earth_and_fire == "MONK" then
+		local fmt = [[
+			AddCheckBox(opt_storm_earth_and_fire SpellName(storm_earth_and_fire) %s)
+		]]
+		local code = format(fmt, ifSpecialization)
+		local node = OvaleAST:ParseCode("checkbox", code, nodeList, annotation.astAnnotation)
+		tinsert(child, 1, node)
+		AddSymbol(annotation, "storm_earth_and_fire")
+		count = count + 1
+	end
+	if annotation.chi_burst == "MONK" then
+		local fmt = [[
+			AddCheckBox(opt_chi_burst SpellName(chi_burst) default %s)
+		]]
+		local code = format(fmt, ifSpecialization)
 		local node = OvaleAST:ParseCode("checkbox", code, nodeList, annotation.astAnnotation)
 		tinsert(child, 1, node)
 		AddSymbol(annotation, "chi_burst")
 		count = count + 1
 	end
-	if annotation.bloodlust == "SHAMAN" then
-		local code = [[
-			AddCheckBox(opt_bloodlust SpellName(bloodlust) default)
+	if annotation.vanish == "ROGUE" then
+		local fmt = [[
+			AddCheckBox(opt_vanish SpellName(vanish) default %s)
 		]]
+		local code = format(fmt, ifSpecialization)
+		local node = OvaleAST:ParseCode("checkbox", code, nodeList, annotation.astAnnotation)
+		tinsert(child, 1, node)
+		AddSymbol(annotation, "vanish")
+		count = count + 1
+	end
+	if annotation.blade_flurry == "ROGUE" then
+		local fmt = [[
+			AddCheckBox(opt_blade_flurry SpellName(blade_flurry) default %s)
+		]]
+		local code = format(fmt, ifSpecialization)
+		local node = OvaleAST:ParseCode("checkbox", code, nodeList, annotation.astAnnotation)
+		tinsert(child, 1, node)
+		AddSymbol(annotation, "blade_flurry")
+		count = count + 1
+	end
+	if annotation.bloodlust == "SHAMAN" then
+		local fmt = [[
+			AddCheckBox(opt_bloodlust SpellName(bloodlust) %s)
+		]]
+		local code = format(fmt, ifSpecialization)
 		local node = OvaleAST:ParseCode("checkbox", code, nodeList, annotation.astAnnotation)
 		tinsert(child, 1, node)
 		AddSymbol(annotation, "bloodlust")
 		count = count + 1
 	end
-	if annotation.class == "PALADIN" then
-		local code = [[
-			AddCheckBox(opt_righteous_fury_check SpellName(righteous_fury) default)
+	if annotation.righteous_fury == "PALADIN" then
+		local fmt = [[
+			AddCheckBox(opt_righteous_fury_check SpellName(righteous_fury) default %s)
 		]]
+		local code = format(fmt, ifSpecialization)
 		local node = OvaleAST:ParseCode("checkbox", code, nodeList, annotation.astAnnotation)
 		tinsert(child, 1, node)
 		AddSymbol(annotation, "righteous_fury")
 		count = count + 1
 	end
-	if annotation.use_potion_strength then
-		local code = [[
-			AddCheckBox(opt_potion_strength ItemName(draenic_strength_potion) default)
+	if annotation.use_legendary_ring then
+		local legendaryRing = annotation.use_legendary_ring
+		local fmt = [[
+			AddCheckBox(opt_%s ItemName(%s) default %s)
 		]]
+		local code = format(fmt, legendaryRing, legendaryRing, ifSpecialization)
+		local node = OvaleAST:ParseCode("checkbox", code, nodeList, annotation.astAnnotation)
+		tinsert(child, 1, node)
+		AddSymbol(annotation, legendaryRing)
+		count = count + 1
+	end
+	if annotation.use_potion_strength then
+		local fmt = [[
+			AddCheckBox(opt_potion_strength ItemName(draenic_strength_potion) default %s)
+		]]
+		local code = format(fmt, ifSpecialization)
 		local node = OvaleAST:ParseCode("checkbox", code, nodeList, annotation.astAnnotation)
 		tinsert(child, 1, node)
 		AddSymbol(annotation, "draenic_strength_potion")
 		count = count + 1
 	end
 	if annotation.use_potion_mana then
-		local code = [[
-			AddCheckBox(opt_potion_mana ItemName(draenic_mana_potion) default)
+		local fmt = [[
+			AddCheckBox(opt_potion_mana ItemName(draenic_mana_potion) default %s)
 		]]
+		local code = format(fmt, ifSpecialization)
 		local node = OvaleAST:ParseCode("checkbox", code, nodeList, annotation.astAnnotation)
 		tinsert(child, 1, node)
 		AddSymbol(annotation, "draenic_mana_potion")
 		count = count + 1
 	end
 	if annotation.use_potion_intellect then
-		local code = [[
-			AddCheckBox(opt_potion_intellect ItemName(draenic_intellect_potion) default)
+		local fmt = [[
+			AddCheckBox(opt_potion_intellect ItemName(draenic_intellect_potion) default %s)
 		]]
+		local code = format(fmt, ifSpecialization)
 		local node = OvaleAST:ParseCode("checkbox", code, nodeList, annotation.astAnnotation)
 		tinsert(child, 1, node)
 		AddSymbol(annotation, "draenic_intellect_potion")
 		count = count + 1
 	end
 	if annotation.use_potion_armor then
-		local code = [[
-			AddCheckBox(opt_potion_armor ItemName(draenic_armor_potion) default)
+		local fmt = [[
+			AddCheckBox(opt_potion_armor ItemName(draenic_armor_potion) default %s)
 		]]
+		local code = format(fmt, ifSpecialization)
 		local node = OvaleAST:ParseCode("checkbox", code, nodeList, annotation.astAnnotation)
 		tinsert(child, 1, node)
 		AddSymbol(annotation, "draenic_armor_potion")
 		count = count + 1
 	end
 	if annotation.use_potion_agility then
-		local code = [[
-			AddCheckBox(opt_potion_agility ItemName(draenic_agility_potion) default)
+		local fmt = [[
+			AddCheckBox(opt_potion_agility ItemName(draenic_agility_potion) default %s)
 		]]
+		local code = format(fmt, ifSpecialization)
 		local node = OvaleAST:ParseCode("checkbox", code, nodeList, annotation.astAnnotation)
 		tinsert(child, 1, node)
 		AddSymbol(annotation, "draenic_agility_potion")
 		count = count + 1
 	end
+	if annotation.melee then
+		local fmt = [[
+			AddCheckBox(opt_melee_range L(not_in_melee_range) %s)
+		]]
+		local code = format(fmt, ifSpecialization)
+		local node = OvaleAST:ParseCode("checkbox", code, nodeList, annotation.astAnnotation)
+		tinsert(child, 1, node)
+		count = count + 1
+	end
+	if annotation.interrupt then
+		local fmt = [[
+			AddCheckBox(opt_interrupt L(interrupt) default %s)
+		]]
+		local code = format(fmt, ifSpecialization)
+		local node = OvaleAST:ParseCode("checkbox", code, nodeList, annotation.astAnnotation)
+		tinsert(child, 1, node)
+		count = count + 1
+	end
 	return count
+end
+
+local function InsertSupportingDefines(child, annotation)
+	local count = 0
+	local nodeList = annotation.astAnnotation.nodeList
+	if annotation.honor_among_thieves == "ROGUE" then
+		local buffName = "honor_among_thieves_cooldown_buff"
+		do
+			local code = format("SpellInfo(%s duration=%f)", buffName, annotation[buffName])
+			local node = OvaleAST:ParseCode("spell_info", code, nodeList, annotation.astAnnotation)
+			tinsert(child, 1, node)
+			count = count + 1
+		end
+		do
+			local code = format("Define(%s %d)", buffName, OvaleHonorAmongThieves.spellId)
+			local node = OvaleAST:ParseCode("define", code, nodeList, annotation.astAnnotation)
+			tinsert(child, 1, node)
+			count = count + 1
+		end
+		AddSymbol(annotation, buffName)
+	end
+	return count
+end
+
+local function GenerateIconBody(tag, profile)
+	local annotation = profile.annotation
+	local precombatName = OvaleFunctionName("precombat", annotation)
+	local defaultName = OvaleFunctionName("_default", annotation)
+	local precombatBodyName, precombatConditionName = OvaleTaggedFunctionName(precombatName, tag)
+	local defaultBodyName, defaultConditionName = OvaleTaggedFunctionName(defaultName, tag)
+
+	local mainBodyCode
+	if annotation.using_apl and next(annotation.using_apl) then
+		local output = self_outputPool:Get()
+		output[#output + 1] = format("if List(opt_using_apl normal) %s()", defaultBodyName)
+		for name in pairs(annotation.using_apl) do
+			local aplName = OvaleFunctionName(name, annotation)
+			local aplBodyName, aplConditionName = OvaleTaggedFunctionName(aplName, tag)
+			output[#output + 1] = format("if List(opt_using_apl %s) %s()", name, aplBodyName)
+		end
+		mainBodyCode = tconcat(output, "\n")
+		self_outputPool:Release(output)
+	else
+		mainBodyCode = defaultBodyName .. "()"
+	end
+
+	local code
+	if profile["actions.precombat"] then
+		local fmt = [[
+			if not InCombat() %s()
+			unless not InCombat() and %s()
+			{
+				%s
+			}
+		]]
+		code = format(fmt, precombatBodyName, precombatConditionName, mainBodyCode)
+	else
+		code = mainBodyCode
+	end
+	return code
 end
 --</private-static-methods>
 
@@ -3475,9 +4766,12 @@ end
 function OvaleSimulationCraft:OnInitialize()
 	-- Resolve module dependencies.
 	OvaleAST = Ovale.OvaleAST
+	OvaleCompile = Ovale.OvaleCompile
 	OvaleData = Ovale.OvaleData
+	OvaleHonorAmongThieves = Ovale.OvaleHonorAmongThieves
 	OvaleLexer = Ovale.OvaleLexer
 	OvalePower = Ovale.OvalePower
+	OvaleScripts = Ovale.OvaleScripts
 
 	InitializeDisambiguation()
 	self:CreateOptions()
@@ -3516,90 +4810,6 @@ function OvaleSimulationCraft:Release(profile)
 	profile.actionList = nil
 end
 
--- Filter out invalid profile names from the given array of profile names.
-function OvaleSimulationCraft:GetValidProfiles(array)
-	-- Add any names to be filtered out into the filter table.
-	local filter = {}
-	for _, name in ipairs(array) do
-		local ok = true
-		local lowername = strlower(name)
-
-		-- Lexer for the profile filename.
-		local tokenIterator = gmatch(lowername, "[^_.]+")
-
-		-- Profile names always end in ".simc".
-		ok = ok and strsub(lowername, -5, -1) == ".simc"
-
-		local baseProfileName
-		-- Profile names always start with a class name.
-		if ok then
-			-- The first token should be the class.
-			local class = tokenIterator()
-			-- SimulationCraft uses "death_knight" while WoW uses "deathknight".
-			local wowClass = class
-			if class == "death" then
-				local token = tokenIterator()
-				class = class .. "_" .. token
-				wowClass = wowClass .. token
-			end
-			baseProfileName = class
-			wowClass = strupper(wowClass)
-			if not RAID_CLASS_COLORS[wowClass] then
-				ok = false
-			end
-			-- Skip class driver profile that just forces other profiles to be run.
-			if ok and strmatch(lowername, class .. "_t%d+[a-z].simc") then
-				ok = false
-			end
-		end
-
-		-- The next token should be the required specialization.
-		if ok then
-			local specialization = tokenIterator()
-			baseProfileName = baseProfileName .. "_" .. specialization
-		end
-
-		-- Filter out any profiles that are modifications of an existing base profile.
-		if ok then
-			-- Valid modifiers that can come before the tier designation that are part
-			-- of the base profile name.
-			local VALID_PRE_TIER_MODIFIER = {
-				["1h"] = true,
-				["2h"] = true,
-			}
-			local modifier = tokenIterator()
-			while ok and modifier do
-				if strmatch(modifier, "t%d+[a-z]") then
-					baseProfileName = baseProfileName .. "_" .. modifier
-					break
-				elseif VALID_PRE_TIER_MODIFIER[modifier] then
-					baseProfileName = baseProfileName .. "_" .. modifier
-				end
-				modifier = tokenIterator()
-			end
-			baseProfileName = baseProfileName .. ".simc"
-			if lowername ~= baseProfileName then
-				for _, fileName in ipairs(array) do
-					if baseProfileName == strlower(fileName) then
-						ok = false
-						break
-					end
-				end
-			end
-		end
-		if not ok then
-			filter[name] = true
-		end
-	end
-	for k = #array, 1, -1 do
-		if filter[array[k]] then
-			tremove(array, k)
-		end
-	end
-	tsort(array)
-	return array
-end
-
 function OvaleSimulationCraft:ParseProfile(simc)
 	local profile = {}
 	for line in gmatch(simc, "[^\r\n]+") do
@@ -3626,6 +4836,13 @@ function OvaleSimulationCraft:ParseProfile(simc)
 			profile[k] = tconcat(v)
 		end
 	end
+	-- Create list of text templates: $(variable)=content
+	profile.templates = {}
+	for k, v in pairs(profile) do
+		if strsub(k, 1, 2) == "$(" and strsub(k, -1) == ")" then
+			tinsert(profile.templates, k)
+		end
+	end
 	-- Parse the action lists.
 	local ok = true
 	local annotation = {}
@@ -3635,6 +4852,14 @@ function OvaleSimulationCraft:ParseProfile(simc)
 		if ok and strmatch(k, "^actions") then
 			-- Name the default action list "_default" so it's first alphabetically.
 			local name = strmatch(k, "^actions%.([%w_]+)") or "_default"
+			-- Substitute for any text templates found in the action list.
+			-- Assumes that a text template will only use previously defined text templates.
+			for index = #profile.templates, 1, -1 do
+				local template = profile.templates[index]
+				local variable = strsub(template, 3, -2)
+				local pattern = "%$%(" .. variable .. "%)"
+				v = gsub(v, pattern, profile[template])
+			end
 			local node
 			ok, node = ParseActionList(name, v, nodeList, annotation)
 			if ok then
@@ -3658,20 +4883,36 @@ function OvaleSimulationCraft:ParseProfile(simc)
 	annotation.level = profile.level
 	ok = ok and (annotation.class and annotation.specialization and annotation.level)
 	annotation.pet = profile.default_pet
-	annotation.role = profile.role
 
 	-- Set the attack range of the class and role.
 	if profile.role == "tank" then
+		annotation.role = profile.role
 		annotation.melee = annotation.class
 	elseif profile.role == "spell" then
+		annotation.role = profile.role
 		annotation.ranged = annotation.class
 	elseif profile.role == "attack" or profile.role == "dps" then
+		annotation.role = "attack"
 		if profile.position == "ranged_back" then
 			annotation.ranged = annotation.class
 		else
 			annotation.melee = annotation.class
 		end
 	end
+
+	-- Create table of tagged Ovale function names.
+	local taggedFunctionName = {}
+	for _, node in ipairs(actionList) do
+		local fname = OvaleFunctionName(node.name, annotation)
+		taggedFunctionName[fname] = true
+		for _, tag in pairs(OVALE_TAGS) do
+			local bodyName, conditionName = OvaleTaggedFunctionName(fname, tag)
+			taggedFunctionName[bodyName] = true
+			taggedFunctionName[conditionName] = true
+		end
+	end
+	annotation.taggedFunctionName = taggedFunctionName
+	annotation.functionTag = {}
 
 	profile.actionList = actionList
 	profile.annotation = annotation
@@ -3696,42 +4937,193 @@ function OvaleSimulationCraft:Unparse(profile)
 	return s
 end
 
-function OvaleSimulationCraft:Emit(profile)
+function OvaleSimulationCraft:EmitAST(profile)
 	local nodeList = {}
 	local ast = OvaleAST:NewNode(nodeList, true)
+	local child = ast.child
 	ast.type = "script"
 
 	local annotation = profile.annotation
+	local annotation = profile.annotation
+	local ok = true
 	if profile.actionList then
-		local child = ast.child
 		annotation.astAnnotation = annotation.astAnnotation or {}
 		annotation.astAnnotation.nodeList = nodeList
-		for _, node in ipairs(profile.actionList) do
-			local declarationNode = EmitActionList(node, nodeList, annotation)
-			if declarationNode then
-				child[#child + 1] = declarationNode
+		-- Load the dictionary of defined symbols from evaluating the script headers.
+		local dictionaryAST
+		do
+			OvaleDebug:ResetTrace()
+			local dictionaryAnnotation = { nodeList = {} }
+			local dictionaryFormat = [[
+				Include(ovale_common)
+				Include(ovale_trinkets_mop)
+				Include(ovale_trinkets_wod)
+				Include(ovale_%s_spells)
+				%s
+			]]
+			local dictionaryCode = format(dictionaryFormat, strlower(annotation.class), Ovale.db.profile.overrideCode)
+			dictionaryAST = OvaleAST:ParseCode("script", dictionaryCode, dictionaryAnnotation.nodeList, dictionaryAnnotation)
+			if dictionaryAST then
+				dictionaryAST.annotation = dictionaryAnnotation
+				annotation.dictionary = dictionaryAnnotation.definition
+				OvaleAST:PropagateConstants(dictionaryAST)
+				OvaleAST:PropagateStrings(dictionaryAST)
+				OvaleAST:FlattenParameters(dictionaryAST)
+				Ovale:ResetControls()
+				OvaleCompile:EvaluateScript(dictionaryAST, true)
 			end
 		end
-		-- Fixups.
-		do
-			-- Some profiles don't include any interrupt actions.
-			local class = annotation.class
-			annotation.mind_freeze = class			-- deathknight
-			annotation.counter_shot = class			-- hunter
-			annotation.spear_hand_strike = class	-- monk
-			annotation.silence = class				-- priest
-			annotation.pummel = class				-- warrior
+		-- Generate the AST "add_function" nodes from the action lists.
+		for _, node in ipairs(profile.actionList) do
+			local addFunctionNode = EmitActionList(node, nodeList, annotation)
+			if addFunctionNode then
+				local actionListName = gsub(node.name, "^_+", "")
+				local commentNode = OvaleAST:NewNode(nodeList)
+				commentNode.type = "comment"
+				commentNode.comment = "## actions." .. actionListName
+				child[#child + 1] = commentNode
+				--child[#child + 1] = addFunctionNode
+				-- Split this action list function by each tag.
+				for _, tag in pairs(OVALE_TAGS) do
+					local bodyNode, conditionNode = SplitByTag(tag, addFunctionNode, nodeList, annotation)
+					child[#child + 1] = bodyNode
+					child[#child + 1] = conditionNode
+				end
+			else
+				ok = false
+				break
+			end
 		end
+		-- Clean up the dictionary that was only needed to generate the AST.
+		if dictionaryAST then
+			OvaleAST:Release(dictionaryAST)
+			annotation.dictionary = nil
+		end
+	end
+	if ok then
+		-- Insert header nodes.
 		annotation.supportingFunctionCount = InsertSupportingFunctions(child, annotation)
 		annotation.supportingControlCount = InsertSupportingControls(child, annotation)
+		annotation.supportingDefineCount = InsertSupportingDefines(child, annotation)
+
+		-- Output a standard four-icon layout for the rotation: [shortcd] [main] [aoe] [cd]
+		local class, specialization = annotation.class, annotation.specialization
+		local lowerclass = strlower(class)
+		local aoeToggle = "opt_" .. lowerclass .. "_" .. specialization .. "_aoe"
+
+		-- Icon headers.
+		do
+			local commentNode = OvaleAST:NewNode(nodeList)
+			commentNode.type = "comment"
+			commentNode.comment = "## " .. CamelCase(specialization) .. " icons."
+			tinsert(child, commentNode)
+			local code = format("AddCheckBox(%s L(AOE) default specialization=%s)", aoeToggle, specialization)
+			local node = OvaleAST:ParseCode("checkbox", code, nodeList, annotation.astAnnotation)
+			tinsert(child, node)
+		end
+		-- Short CD rotation.
+		do
+			local fmt = [[
+				AddIcon checkbox=!%s enemies=1 help=shortcd specialization=%s
+				{
+					%s
+				}
+			]]
+			local code = format(fmt, aoeToggle, specialization, GenerateIconBody("shortcd", profile))
+			local node = OvaleAST:ParseCode("icon", code, nodeList, annotation.astAnnotation)
+			tinsert(child, node)
+		end
+		do
+			local fmt = [[
+				AddIcon checkbox=%s help=shortcd specialization=%s
+				{
+					%s
+				}
+			]]
+			local code = format(fmt, aoeToggle, specialization, GenerateIconBody("shortcd", profile))
+			local node = OvaleAST:ParseCode("icon", code, nodeList, annotation.astAnnotation)
+			tinsert(child, node)
+		end
+		-- Single-target rotation.
+		do
+			local fmt = [[
+				AddIcon enemies=1 help=main specialization=%s
+				{
+					%s
+				}
+			]]
+			local code = format(fmt, specialization, GenerateIconBody("main", profile))
+			local node = OvaleAST:ParseCode("icon", code, nodeList, annotation.astAnnotation)
+			tinsert(child, node)
+		end
+		-- AoE rotation.
+		do
+			local fmt = [[
+				AddIcon checkbox=%s help=aoe specialization=%s
+				{
+					%s
+				}
+			]]
+			local code = format(fmt, aoeToggle, specialization, GenerateIconBody("main", profile))
+			local node = OvaleAST:ParseCode("icon", code, nodeList, annotation.astAnnotation)
+			tinsert(child, node)
+		end
+		-- CD rotation.
+		do
+			local fmt = [[
+				AddIcon checkbox=!%s enemies=1 help=cd specialization=%s
+				{
+					%s
+				}
+			]]
+			local code = format(fmt, aoeToggle, specialization, GenerateIconBody("cd", profile))
+			local node = OvaleAST:ParseCode("icon", code, nodeList, annotation.astAnnotation)
+			tinsert(child, node)
+		end
+		do
+			local fmt = [[
+				AddIcon checkbox=%s help=cd specialization=%s
+				{
+					%s
+				}
+			]]
+			local code = format(fmt, aoeToggle, specialization, GenerateIconBody("cd", profile))
+			local node = OvaleAST:ParseCode("icon", code, nodeList, annotation.astAnnotation)
+			tinsert(child, node)
+		end
+
+		-- Walk the AST and remove empty and unused functions.
+		Mark(ast)
+		local changed = Sweep(ast)
+		while changed do
+			Mark(ast)
+			changed = Sweep(ast)
+		end
+		-- XXX Shouldn't need the extra Mark/Sweep here.
+		Mark(ast)
+		Sweep(ast)
 	end
+	if not ok then
+		OvaleAST:Release(ast)
+		ast = nil
+	end
+	return ast
+end
+
+function OvaleSimulationCraft:Emit(profile, noFinalNewLine)
+	local nodeList = {}
+	local ast = self:EmitAST(profile)
+	local annotation = profile.annotation
+	local class = annotation.class
+	local lowerclass = strlower(class)
+	local specialization = annotation.specialization
 
 	local output = self_outputPool:Get()
 	-- Prepend a comment block header for the script.
 	do
 		output[#output + 1] = "# Based on SimulationCraft profile " .. annotation.name .. "."
-		output[#output + 1] = "#	class=" .. strlower(annotation.class)
-		output[#output + 1] = "#	spec=" .. annotation.specialization
+		output[#output + 1] = "#	class=" .. lowerclass
+		output[#output + 1] = "#	spec=" .. specialization
 		if profile.talents then
 			output[#output + 1] = "#	talents=" .. profile.talents
 		end
@@ -3746,35 +5138,23 @@ function OvaleSimulationCraft:Emit(profile)
 	do
 		output[#output + 1] = ""
 		output[#output + 1] = "Include(ovale_common)"
-		output[#output + 1] = format("Include(ovale_%s_spells)", strlower(annotation.class))
+		output[#output + 1] = "Include(ovale_trinkets_mop)"
+		output[#output + 1] = "Include(ovale_trinkets_wod)"
+		output[#output + 1] = format("Include(ovale_%s_spells)", lowerclass)
+		-- Insert local class override code if it exists.
+		local overrideCode = Ovale.db.profile.overrideCode
+		if overrideCode ~= "" then
+			output[#output + 1] = ""
+			output[#output + 1] = "# Overrides."
+			output[#output + 1] = overrideCode
+		end
 		-- Insert an extra blank line to separate section for controls from the includes.
-		if annotation.supportingControlCount > 0 then
+		if annotation.supportingDefineCount + annotation.supportingControlCount > 0 then
 			output[#output + 1] = ""
 		end
 	end
 	-- Output the script itself.
 	output[#output + 1] = OvaleAST:Unparse(ast)
-	-- Output a simplistic two-icon layout for the rotation.
-	do
-		-- Single-target rotation.
-		output[#output + 1] = ""
-		output[#output + 1] = format("AddIcon specialization=%s help=main enemies=1", annotation.specialization)
-		output[#output + 1] = "{"
-		if profile["actions.precombat"] then
-			output[#output + 1] = format("	if not InCombat() %s()", OvaleFunctionName("precombat", annotation))
-		end
-		output[#output + 1] = format("	%s()", OvaleFunctionName("_default", annotation))
-		output[#output + 1] = "}"
-		-- AoE rotation.
-		output[#output + 1] = ""
-		output[#output + 1] = format("AddIcon specialization=%s help=aoe", annotation.specialization)
-		output[#output + 1] = "{"
-		if profile["actions.precombat"] then
-			output[#output + 1] = format("	if not InCombat() %s()", OvaleFunctionName("precombat", annotation))
-		end
-		output[#output + 1] = format("	%s()", OvaleFunctionName("_default", annotation))
-		output[#output + 1] = "}"
-	end
 	-- Append the required symbols for the script.
 	if profile.annotation.symbolTable then
 		output[#output + 1] = ""
@@ -3784,8 +5164,13 @@ function OvaleSimulationCraft:Emit(profile)
 			output[#output + 1] = "# " .. symbol
 		end
 	end
+	-- Ensure that the script always ends in a blank line.
+	if not noFinalNewLine and output[#output] ~= "" then
+		output[#output + 1] = ""
+	end
 	local s = tconcat(output, "\n")
 	self_outputPool:Release(output)
+	OvaleAST:Release(ast)
 	return s
 end
 
@@ -3795,12 +5180,18 @@ function OvaleSimulationCraft:CreateOptions()
 		type = "group",
 		args = {
 			input = {
+				order = 10,
 				name = L["Input"],
 				type = "group",
 				args = {
+					description = {
+						order = 10,
+						name = L["The contents of a SimulationCraft profile."] .. "\nhttps://code.google.com/p/simulationcraft/source/browse/profiles",
+						type = "description",
+					},
 					input = {
+						order = 20,
 						name = L["SimulationCraft Profile"],
-						desc = L["The contents of a SimulationCraft profile (*.simc)."],
 						type = "input",
 						multiline = 25,
 						width = "full",
@@ -3810,7 +5201,7 @@ function OvaleSimulationCraft:CreateOptions()
 							local profile = self:ParseProfile(self_lastSimC)
 							local code = ""
 							if profile then
-								code = self:Emit(profile) .. "\n"
+								code = self:Emit(profile)
 							end
 							-- Substitute spaces for tabs.
 							self_lastScript = gsub(code, "\t", "    ")
@@ -3818,13 +5209,55 @@ function OvaleSimulationCraft:CreateOptions()
 					},
 				},
 			},
+			overrides = {
+				order = 20,
+				name = L["Overrides"],
+				type = "group",
+				args = {
+					description = {
+						order = 10,
+						name = L["SIMULATIONCRAFT_OVERRIDES_DESCRIPTION"],
+						type = "description",
+					},
+					overrides = {
+						order = 20,
+						name = L["Overrides"],
+						type = "input",
+						multiline = 25,
+						width = "full",
+						get = function(info)
+							local code = Ovale.db.profile.overrideCode
+							-- Substitute spaces for tabs.
+							return gsub(code, "\t", "    ")
+						end,
+						set = function(info, value)
+							Ovale.db.profile.overrideCode = value
+							if self_lastSimC then
+								local profile = self:ParseProfile(self_lastSimC)
+								local code = ""
+								if profile then
+									code = self:Emit(profile)
+								end
+								-- Substitute spaces for tabs.
+								self_lastScript = gsub(code, "\t", "    ")
+							end
+						end,
+					},
+				},
+			},
 			output = {
+				order = 30,
 				name = L["Output"],
 				type = "group",
 				args = {
+					description = {
+						order = 10,
+						name = L["The script translated from the SimulationCraft profile."],
+						type = "description",
+					},
 					output = {
+						order = 20,
 						name = L["Script"],
-						desc = L["The script translated from the SimulationCraft profile."],
 						type = "input",
 						multiline = 25,
 						width = "full",

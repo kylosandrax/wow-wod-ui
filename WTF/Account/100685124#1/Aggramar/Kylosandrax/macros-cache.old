@@ -1,0 +1,86 @@
+VER 3 0100000000000010 "Afterburner" "INV_Misc_QuestionMark"
+#showtooltip Last Stand
+/party --- LAST STAND ACTIVE ---
+/cast Last Stand
+/in 15 /party --- LAST STAND ENDING ---
+/dbm broadcast timer 00:15 Kylo's Last Stand
+END
+VER 3 0100000000000014 "Bloodthirst" "Spell_Nature_BloodLust"
+#showtooltip Bloodthirst
+/startattack
+/use 13
+/use 14
+/cast Blood Fury
+/cast Bloodthirst
+/cast Berserker Rage
+END
+VER 3 0100000000000023 "Bloodwall" "INV_Misc_QuestionMark"
+#showtooltip Enraged Regeneration
+/use 13
+/use 14
+/cast Berserker Rage
+/cast Enraged Regeneration
+/use Healthstone
+/script UIErrorsFrame:Clear()
+END
+VER 3 0100000000000018 "Devestate" "INV_Misc_QuestionMark"
+#showtooltip Devastate
+/startattack
+/cast [target=mouseover, harm][harm] devastate
+/script UIErrorsFrame:Clear()
+END
+VER 3 0100000000000021 "Interrupt" "Ability_Warrior_ShieldBash"
+#showtooltip
+/cast Pummel
+END
+VER 3 0100000000000022 "Intervene" "INV_Misc_QuestionMark"
+#showtooltip Intervene
+/cast [nostance:2] Defensive Stance; [help] Intervene; [target=targettarget, help] Intervene
+END
+VER 3 0100000000000017 "MO-Sunder" "INV_Misc_QuestionMark"
+#showtooltip Sunder Armor
+/startattack
+/cast [target=mouseover, harm, nodead][harm, nodead][target=targettarget, harm, nodead][] Sunder Armor
+/cast !Heroic Strike
+END
+VER 3 0100000000000027 "MS" "INV_MISC_QUESTIONMARK"
+#showtooltip Mortal Strike
+/startattack
+/use 13
+/use 14
+/cast Mortal Strike
+END
+VER 3 0100000000000026 "Rally" "INV_MISC_QUESTIONMARK"
+#showtooltip Rallying Cry
+/party --- RALLYING CRY ACTIVE ---
+/cast Rallying Cry
+/in 9 /party --- RALLYING CRY ENDING ---
+/dbm broadcast timer 00:10 Kylo's Rallying Cry
+END
+VER 3 0100000000000025 "ReckStorm" "INV_Misc_QuestionMark"
+#showtooltip Recklessness
+/use 13
+/use 14
+/cast !Blood Fury
+/cast !Recklessness
+/cast Bladestorm
+END
+VER 3 0100000000000019 "Shield-Slam" "INV_Misc_QuestionMark"
+#showtooltip Shield Slam
+/startattack
+/cast !Berserker Rage
+/cast !Blood Fury
+/cast Shield Slam
+/script UIErrorsFrame:Clear()
+END
+VER 3 0100000000000013 "Thunder-Cleave" "INV_Misc_QuestionMark"
+#showtooltip Thunder Clap
+/startattack
+/cast [stance:1] Defensive Stance; [stance:2] Thunder Clap; [stance:3] Defensive Stance
+END
+VER 3 0100000000000028 "VuhDoDCShieldData" "Ability_Repair"
+P[x][x][x][x][x][x][x][x][x][x][x][x][x][x][x][x][x][x][x][x][x][x][x][x][x][x][x][x][x][x][x][x][x][x][x][x][x][x][x][x]1WT[x][x][x][x][x][x][x][x][x][x][x][x][x][x][x][x][x][x][x][x][x][x][x][x][x][x][x][x][x][x][x][x][x][x][x][x][x][x][x][x][x]
+END
+VER 3 0100000000000029 "VuhDoDCShieldNames" "Ability_Repair"
+N[x][x][x][x][x][x][x][x][x][x][x][x][x][x][x][x][x][x][x][x][x][x][x][x][x][x][x][x][x][x][x][x][x][x][x][x][x][x][x][x]Kyl[x][x][x][x][x][x][x][x][x][x][x][x][x][x][x][x][x][x][x][x][x][x][x][x][x][x][x][x][x][x][x][x][x][x][x][x][x][x][x][x][x]
+END

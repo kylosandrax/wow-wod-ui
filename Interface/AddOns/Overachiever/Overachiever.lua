@@ -181,23 +181,28 @@ do
     local id, ret, anyFound
     for i=1,GetCategoryNumAchievements(category) do
       id, ret = get_arg1_argN(argnum, GetAchievementInfo(category, i))
-      if (anyCase) then
-        if (not ret) then
-			chatprint("getAchievementID_cat: ret is nil.", "["..THIS_TITLE.." DEBUG]")
-			print("category:",category, "index:",i, "argnum:",argnum)
-			ret = ''
-		else
-			ret = strlower(ret)
-		end
-      end
-      if ( strfind(ret, pattern, 1, true) ) then
-        if (getAll) then
-          found[#(found) + 1] = id;
-          anyFound = true
-        else
-          return id;
+	  if (not id) then
+        -- Absurdly, GetCategoryNumAchievements now seems to be giving the WRONG NUMBER for at least some categories. (Confirmed in WoW 6.2.2. Might have started earlier.)
+		-- Consequently, we need to watch for nil IDs and skip them.
+      else
+        if (anyCase) then
+          if (not ret) then
+            chatprint("getAchievementID_cat: ret is nil.", "["..THIS_TITLE.." DEBUG]")
+            print("category:",category, "index:",i, "argnum:",argnum)
+            ret = ''
+          else
+		  	ret = strlower(ret)
+          end
         end
-      end
+        if ( strfind(ret, pattern, 1, true) ) then
+          if (getAll) then
+            found[#(found) + 1] = id;
+            anyFound = true
+          else
+            return id;
+          end
+        end
+	  end
     end
     if (anyFound) then
       return found;
@@ -332,7 +337,7 @@ do
 end
 
 local function checkGuildMembersTooltip(frame)
-  if (not isGuildAchievement(frame.id)) then  return;  end
+  if (frame.id and not isGuildAchievement(frame.id)) then  return;  end
   local gv = isUIInGuildView()
   if (not gv) then  AchievementFrame_ToggleView();  end  -- Toggle so we're in guild mode so AchievementFrameAchievements_CheckGuildMembersTooltip will work as desired.
   AchievementFrameAchievements_CheckGuildMembersTooltip(frame)
@@ -665,7 +670,7 @@ local function AutoTrackCheck_Explore(noClearing)
              getAchievementID(CATEGORIES_EXPLOREZONES, ACHINFO_NAME, zone, true)
       end
     end
-    if (id) then
+    if (id and id > 0) then
       local tracked
       if (GetNumTrackedAchievements() > 0) then
         tracked = AutoTrackedAch_explore and IsTrackedAchievement(AutoTrackedAch_explore) and AutoTrackedAch_explore or
@@ -978,19 +983,21 @@ function Overachiever.OnEvent(self, event, arg1, ...)
     AutoTrackCheck_Explore()
 
   elseif (event == "TRACKED_ACHIEVEMENT_UPDATE") then
-    local criteriaID, elapsed, duration = ...
-    if (duration and elapsed < duration) then
-      Overachiever.RecentReminders[arg1] = time()
-      if (Overachiever_Settings.Tracker_AutoTimer and
-          not setTracking(arg1) and AutoTrackedAch_explore and IsTrackedAchievement(AutoTrackedAch_explore)) then
-        -- If failed to track this, remove an exploration achievement that was auto-tracked and try again:
-        RemoveTrackedAchievement(AutoTrackedAch_explore)
-        if (not setTracking(arg1)) then
-          -- If still didn't successfully track new achievement, track previous achievement again:
-          AddTrackedAchievement(AutoTrackedAch_explore)
+    if (arg1 and arg1 > 0) then  -- Attempt to work around an apparent WoW bug. May prevent errors but if the given ID is 0, we have no way of knowing what the achievement really was so we can't track it (unless there's another call with the correct data).
+      local criteriaID, elapsed, duration = ...
+      if (duration and elapsed < duration) then
+        Overachiever.RecentReminders[arg1] = time()
+        if (Overachiever_Settings.Tracker_AutoTimer and
+            not setTracking(arg1) and AutoTrackedAch_explore and IsTrackedAchievement(AutoTrackedAch_explore)) then
+          -- If failed to track this, remove an exploration achievement that was auto-tracked and try again:
+          RemoveTrackedAchievement(AutoTrackedAch_explore)
+          if (not setTracking(arg1)) then
+            -- If still didn't successfully track new achievement, track previous achievement again:
+            AddTrackedAchievement(AutoTrackedAch_explore)
+          end
         end
       end
-    end
+	end
 
   elseif (event == "ADDON_LOADED" and arg1 == "Blizzard_AchievementUI") then
     Overachiever.MainFrame:UnregisterEvent("ADDON_LOADED")
@@ -1197,6 +1204,8 @@ end
 
 local function openOptions()
   InterfaceOptionsFrame_OpenToCategory(OptionsPanel)
+  -- Working around a Blizzard bug by calling this twice:
+  InterfaceOptionsFrame_OpenToCategory(OptionsPanel)
 end
 
 SLASH_Overachiever1 = "/oa";
@@ -1319,16 +1328,18 @@ if (Overachiever_Debug) then
       tab[catname] = {}
       for i=1,GetCategoryNumAchievements(category) do
         id, name = GetAchievementInfo(category, i)
-        if (testAchMatch) then
-          trimname = strsub(name,9) -- Cut off "Explore " - meant for use with English client only
-          if (trimname and ZoneID[trimname]) then
-            name = trimname
-          else
-            chatprint("Achievement name doesn't match a zone: "..name)
-            name = "!! "..name
+        if (id) then
+          if (testAchMatch) then
+            trimname = strsub(name,9) -- Cut off "Explore " - meant for use with English client only
+            if (trimname and ZoneID[trimname]) then
+              name = trimname
+            else
+              chatprint("Achievement name doesn't match a zone: "..name)
+              name = "!! "..name
+            end
           end
+          tab[catname][name] = id;
         end
-        tab[catname][name] = id;
       end
     end
     Overachiever_Settings.Debug_ExplorationData = tab

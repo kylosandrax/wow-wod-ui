@@ -7,39 +7,31 @@ local function LoadSkin()
 		"HelpFrameLeftInset",
 		"HelpFrameMainInset",
 		"HelpFrameKnowledgebase",
-		"HelpFrameHeader",
 		"HelpFrameKnowledgebaseErrorFrame",
 	}
-	
+
 	local buttons = {
-		"HelpFrameOpenTicketHelpItemRestoration",
 		"HelpFrameAccountSecurityOpenTicket",
-		"HelpFrameOpenTicketHelpTopIssues",
 		"HelpFrameOpenTicketHelpOpenTicket",
 		"HelpFrameKnowledgebaseSearchButton",
 		"HelpFrameKnowledgebaseNavBarHomeButton",
 		"HelpFrameCharacterStuckStuck",
-		"GMChatOpenLog",
-		"HelpFrameTicketSubmit",
-		"HelpFrameTicketCancel",
+		"HelpFrameButton16",
+		"HelpFrameSubmitSuggestionSubmit",
+		"HelpFrameReportBugSubmit",
 	}
-	
-	-- 4.3.4 patch
-	if E.wowbuild >= 15595 then
-		tinsert(buttons, "HelpFrameButton16")
-		tinsert(buttons, "HelpFrameSubmitSuggestionSubmit")
-		tinsert(buttons, "HelpFrameReportBugSubmit")
-	end
-	
+
 	-- skin main frames
 	for i = 1, #frames do
 		_G[frames[i]]:StripTextures(true)
 		_G[frames[i]]:CreateBackdrop("Transparent")
 	end
-	
+
+	HelpFrameHeader:StripTextures(true)
+	HelpFrameHeader:CreateBackdrop("Default", true)
 	HelpFrameHeader:SetFrameLevel(HelpFrameHeader:GetFrameLevel() + 2)
 	HelpFrameKnowledgebaseErrorFrame:SetFrameLevel(HelpFrameKnowledgebaseErrorFrame:GetFrameLevel() + 2)
-	
+
 	HelpFrameReportBugScrollFrame:StripTextures()
 	HelpFrameReportBugScrollFrame:CreateBackdrop("Transparent")
 	HelpFrameReportBugScrollFrame.backdrop:Point("TOPLEFT", -4, 4)
@@ -50,9 +42,9 @@ local function LoadSkin()
 			child:StripTextures()
 		end
 	end
-	
+
 	S:HandleScrollBar(HelpFrameReportBugScrollFrameScrollBar)
-	
+
 	HelpFrameSubmitSuggestionScrollFrame:StripTextures()
 	HelpFrameSubmitSuggestionScrollFrame:CreateBackdrop("Transparent")
 	HelpFrameSubmitSuggestionScrollFrame.backdrop:Point("TOPLEFT", -4, 4)
@@ -63,34 +55,22 @@ local function LoadSkin()
 			child:StripTextures()
 		end
 	end
-	
-	S:HandleScrollBar(HelpFrameSubmitSuggestionScrollFrameScrollBar)
 
-	HelpFrameTicketScrollFrame:StripTextures()
-	HelpFrameTicketScrollFrame:CreateBackdrop("Transparent")
-	HelpFrameTicketScrollFrame.backdrop:Point("TOPLEFT", -4, 4)
-	HelpFrameTicketScrollFrame.backdrop:Point("BOTTOMRIGHT", 6, -4)
-	for i=1, HelpFrameTicket:GetNumChildren() do
-		local child = select(i, HelpFrameTicket:GetChildren())
-		if not child:GetName() then
-			child:StripTextures()
-		end
-	end	
-	
+	S:HandleScrollBar(HelpFrameSubmitSuggestionScrollFrameScrollBar)
 	S:HandleScrollBar(HelpFrameKnowledgebaseScrollFrame2ScrollBar)
-	
+
 	-- skin sub buttons
 	for i = 1, #buttons do
 		_G[buttons[i]]:StripTextures(true)
 		S:HandleButton(_G[buttons[i]], true)
-		
+
 		if _G[buttons[i]].text then
 			_G[buttons[i]].text:ClearAllPoints()
 			_G[buttons[i]].text:SetPoint("CENTER")
-			_G[buttons[i]].text:SetJustifyH("CENTER")				
+			_G[buttons[i]].text:SetJustifyH("CENTER")
 		end
 	end
-	
+
 	-- skin main buttons
 	for i = 1, 6 do
 		local b = _G["HelpFrameButton"..i]
@@ -98,63 +78,34 @@ local function LoadSkin()
 		b.text:ClearAllPoints()
 		b.text:SetPoint("CENTER")
 		b.text:SetJustifyH("CENTER")
-	end	
-	
+	end
+
 	-- skin table options
 	for i = 1, HelpFrameKnowledgebaseScrollFrameScrollChild:GetNumChildren() do
 		local b = _G["HelpFrameKnowledgebaseScrollFrameButton"..i]
 		b:StripTextures(true)
 		S:HandleButton(b, true)
 	end
-	
+
 	-- skin misc items
 	HelpFrameKnowledgebaseSearchBox:ClearAllPoints()
 	HelpFrameKnowledgebaseSearchBox:Point("TOPLEFT", HelpFrameMainInset, "TOPLEFT", 13, -10)
 	HelpFrameKnowledgebaseNavBarOverlay:Kill()
 	HelpFrameKnowledgebaseNavBar:StripTextures()
-	
+
 	HelpFrame:StripTextures(true)
 	HelpFrame:CreateBackdrop("Transparent")
 	S:HandleEditBox(HelpFrameKnowledgebaseSearchBox)
 	S:HandleScrollBar(HelpFrameKnowledgebaseScrollFrameScrollBar, 5)
-	S:HandleScrollBar(HelpFrameTicketScrollFrameScrollBar, 4)
-	S:HandleCloseButton(HelpFrameCloseButton, HelpFrame.backdrop)	
+	S:HandleCloseButton(HelpFrameCloseButton, HelpFrame.backdrop)
 	S:HandleCloseButton(HelpFrameKnowledgebaseErrorFrameCloseButton, HelpFrameKnowledgebaseErrorFrame.backdrop)
-	
+
 	--Hearth Stone Button
 	HelpFrameCharacterStuckHearthstone:StyleButton()
 	HelpFrameCharacterStuckHearthstone:SetTemplate("Default", true)
 	HelpFrameCharacterStuckHearthstone.IconTexture:SetInside()
 	HelpFrameCharacterStuckHearthstone.IconTexture:SetTexCoord(unpack(E.TexCoords))
-	
-	local function navButtonFrameLevel(self)
-		for i=1, #self.navList do
-			local navButton = self.navList[i]
-			local lastNav = self.navList[i-1]
-			if navButton and lastNav then
-				if lastNav:GetFrameLevel() > 2 then
-					navButton:SetFrameLevel(lastNav:GetFrameLevel() - 2)
-				else
-					navButton:SetFrameLevel(0)
-				end
-			end
-		end			
-	end
-	
-	hooksecurefunc("NavBar_AddButton", function(self, buttonData)
-		local navButton = self.navList[#self.navList]
-		
-		
-		if not navButton.skinned then
-			S:HandleButton(navButton, true)
 
-			if(navButton.MenuArrowButton) then
-				S:HandleNextPrevButton(navButton.MenuArrowButton, true)
-			end
-			navButton.skinned = true
-		end
-	end)
-	
 	S:HandleButton(HelpFrameGM_ResponseNeedMoreHelp)
 	S:HandleButton(HelpFrameGM_ResponseCancel)
 	for i=1, HelpFrameGM_Response:GetNumChildren() do

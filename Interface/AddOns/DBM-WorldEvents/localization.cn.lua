@@ -1,5 +1,8 @@
-﻿-- Simplified Chinese by Diablohu(diablohudream@gmail.com) & yleaf(yaroot@gmail.com)
--- Last update: 10/20/2012
+﻿-- Diablohu(diablohudream@gmail.com)
+-- yleaf(yaroot@gmail.com)
+-- Mini_Dragon(projecteurs@gmail.com)
+-- Yike Xia
+-- Last update: Sep 23 2015, 06:10 UTC@14543
 
 if GetLocale() ~= "zhCN" then return end
 
@@ -14,9 +17,9 @@ L:SetGeneralLocalization({
 	name = "年兽"
 })
 
------------------------
---  Apothecary Trio  --
------------------------
+------------------------------
+--  The Crown Chemical Co.  --
+------------------------------
 L = DBM:GetModLocalization("d288")
 
 L:SetTimerLocalization({
@@ -33,9 +36,9 @@ L:SetMiscLocalization({
 	SayCombatStart		= "他们顾得上告诉你我是谁或者我在做些什么吗？"
 })
 
--------------
---  Ahune  --
--------------
+----------------------------
+--  The Frost Lord Ahune  --
+----------------------------
 L = DBM:GetModLocalization("d286")
 
 L:SetWarningLocalization({
@@ -81,6 +84,19 @@ L:SetOptionLocalization({
 
 L:SetMiscLocalization({
 	YellBarrel		= "我中了空桶！"
+})
+
+----------------
+--  Brewfest  --
+----------------
+L = DBM:GetModLocalization("Brew")
+
+L:SetGeneralLocalization({
+	name = "美酒节"
+})
+
+L:SetOptionLocalization({
+	NormalizeVolume			= "在美酒节任务区域内，自动将对话声道的音量调节成音乐声道的音量。(如果音乐没有开启，对话声道会变静音。)"
 })
 
 -------------------------

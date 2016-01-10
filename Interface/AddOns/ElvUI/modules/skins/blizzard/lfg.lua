@@ -1,5 +1,6 @@
 local E, L, V, P, G = unpack(select(2, ...)); --Inport: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
 local S = E:GetModule('Skins')
+local LBG = LibStub("LibButtonGlow-1.0", true)
 
 local lower = string.lower
 
@@ -22,11 +23,11 @@ local function LoadSkin()
 	S:HandleButton(LFDQueueFrameRandomScrollFrameChildFrameBonusRepFrame.ChooseButton)
 	S:HandleButton(ScenarioQueueFrameRandomScrollFrameChildFrameBonusRepFrame.ChooseButton)
 	S:HandleScrollBar(ScenarioQueueFrameRandomScrollFrameScrollBar);
-	
+
 	GroupFinderFrameGroupButton1.icon:SetTexture("Interface\\Icons\\INV_Helmet_08")
 	GroupFinderFrameGroupButton2.icon:SetTexture("Interface\\Icons\\inv_helmet_06")
 	GroupFinderFrameGroupButton3.icon:SetTexture("Interface\\Icons\\Icon_Scenarios")
-	
+
 	LFGDungeonReadyDialogBackground:Kill()
 	S:HandleButton(LFGDungeonReadyDialogEnterDungeonButton)
 	S:HandleButton(LFGDungeonReadyDialogLeaveQueueButton)
@@ -61,24 +62,24 @@ local function LoadSkin()
 	LFDQueueFrameRoleButtonDPSIncentiveIcon:SetAlpha(0)
 
 	local function OnShow(self)
-		ActionButton_ShowOverlayGlow(self:GetParent().checkButton)
+		LBG.ShowOverlayGlow(self:GetParent().checkButton)
 	end
 	local function OnHide(self)
-		ActionButton_HideOverlayGlow(self:GetParent().checkButton)
-	end	
+		LBG.HideOverlayGlow(self:GetParent().checkButton)
+	end
 	LFDQueueFrameRoleButtonTankIncentiveIcon:HookScript("OnShow", OnShow)
 	LFDQueueFrameRoleButtonHealerIncentiveIcon:HookScript("OnShow", OnShow)
 	LFDQueueFrameRoleButtonDPSIncentiveIcon:HookScript("OnShow", OnShow)
 	LFDQueueFrameRoleButtonTankIncentiveIcon:HookScript("OnHide", OnHide)
 	LFDQueueFrameRoleButtonHealerIncentiveIcon:HookScript("OnHide", OnHide)
-	LFDQueueFrameRoleButtonDPSIncentiveIcon:HookScript("OnHide", OnHide)	
+	LFDQueueFrameRoleButtonDPSIncentiveIcon:HookScript("OnHide", OnHide)
 	LFDQueueFrameRoleButtonTank.shortageBorder:Kill()
 	LFDQueueFrameRoleButtonDPS.shortageBorder:Kill()
 	LFDQueueFrameRoleButtonHealer.shortageBorder:Kill()
 	LFGDungeonReadyDialog.filigree:SetAlpha(0)
-	LFGDungeonReadyDialog.bottomArt:SetAlpha(0)	
+	LFGDungeonReadyDialog.bottomArt:SetAlpha(0)
 	S:HandleCloseButton(LFGDungeonReadyStatusCloseButton)
-	
+
 	local roleButtons = {
 		LFDQueueFrameRoleButtonHealer,
 		LFDQueueFrameRoleButtonDPS,
@@ -93,7 +94,7 @@ local function LoadSkin()
 		LFGInvitePopupRoleButtonDPS,
 		LFGListApplicationDialog.TankButton,
 		LFGListApplicationDialog.HealerButton,
-		LFGListApplicationDialog.DamagerButton,		
+		LFGListApplicationDialog.DamagerButton,
 	}
 
 	for _, roleButton in pairs(roleButtons) do
@@ -120,13 +121,13 @@ local function LoadSkin()
 	LFDQueueFrameRoleButtonLeader.leadIcon:SetTexture([[Interface\GroupFrame\UI-Group-LeaderIcon]])
 	LFDQueueFrameRoleButtonLeader.leadIcon:SetPoint(LFDQueueFrameRoleButtonLeader:GetNormalTexture():GetPoint())
 	LFDQueueFrameRoleButtonLeader.leadIcon:Size(50)
-	LFDQueueFrameRoleButtonLeader.leadIcon:SetAlpha(0.4)		
+	LFDQueueFrameRoleButtonLeader.leadIcon:SetAlpha(0.4)
 
 	RaidFinderQueueFrameRoleButtonLeader.leadIcon = RaidFinderQueueFrameRoleButtonLeader:CreateTexture(nil, 'BACKGROUND')
 	RaidFinderQueueFrameRoleButtonLeader.leadIcon:SetTexture([[Interface\GroupFrame\UI-Group-LeaderIcon]])
 	RaidFinderQueueFrameRoleButtonLeader.leadIcon:SetPoint(RaidFinderQueueFrameRoleButtonLeader:GetNormalTexture():GetPoint())
 	RaidFinderQueueFrameRoleButtonLeader.leadIcon:Size(50)
-	RaidFinderQueueFrameRoleButtonLeader.leadIcon:SetAlpha(0.4)	
+	RaidFinderQueueFrameRoleButtonLeader.leadIcon:SetAlpha(0.4)
 
 	hooksecurefunc('LFG_DisableRoleButton', function(button)
 		if button.checkButton:GetChecked() then
@@ -143,7 +144,7 @@ local function LoadSkin()
 	hooksecurefunc('LFG_EnableRoleButton', function(button)
 		button.checkButton:SetAlpha(1)
 	end)
-		
+
 
 	hooksecurefunc("LFG_PermanentlyDisableRoleButton", function(self)
 		if self.background then
@@ -151,7 +152,7 @@ local function LoadSkin()
 			self.background:SetDesaturated(true)
 		end
 	end)
-	
+
 	for i = 1, 4 do
 		local bu = GroupFinderFrame["groupButton"..i]
 
@@ -161,7 +162,7 @@ local function LoadSkin()
 
 		bu:SetTemplate()
 		bu:StyleButton()
-		
+
 		bu.icon:SetTexCoord(unpack(E.TexCoords))
 		bu.icon:SetPoint("LEFT", bu, "LEFT")
 		bu.icon:SetDrawLayer("OVERLAY")
@@ -179,15 +180,15 @@ local function LoadSkin()
 		S:HandleTab(_G['PVEFrameTab'..i])
 	end
 	PVEFrameTab1:SetPoint('BOTTOMLEFT', PVEFrame, 'BOTTOMLEFT', 19, E.PixelMode and -31 or -32)
-	
+
 	S:HandleCloseButton(PVEFrameCloseButton)
 
 	-- raid finder
 	S:HandleButton(LFDQueueFrameFindGroupButton, true)
-	
+
 	LFDParentFrame:StripTextures()
 	LFDParentFrameInset:StripTextures()
-	
+
 
 
 	local function ReskinRewards()
@@ -230,7 +231,7 @@ local function LoadSkin()
 
 	hooksecurefunc("LFDQueueFrameRandom_UpdateFrame", ReskinRewards)
 
-	function HandleGoldIcon(button)
+	local function HandleGoldIcon(button)
 		_G[button.."IconTexture"]:SetTexCoord(unpack(E.TexCoords))
 		_G[button.."IconTexture"]:SetDrawLayer("OVERLAY")
 		_G[button.."Count"]:SetDrawLayer("OVERLAY")
@@ -250,12 +251,12 @@ local function LoadSkin()
 	for i = 1, NUM_LFD_CHOICE_BUTTONS do
 		S:HandleCheckBox(_G["LFDQueueFrameSpecificListButton"..i].enableButton)
 	end
-	
+
 	hooksecurefunc("ScenarioQueueFrameSpecific_Update", function()
-		
+
 		for i = 1, NUM_SCENARIO_CHOICE_BUTTONS do
 			local button = _G["ScenarioQueueFrameSpecificButton"..i]
-			
+
 			if button and not button.skinned then
 				S:HandleCheckBox(button.enableButton)
 				button.skinned = true;
@@ -296,7 +297,7 @@ local function LoadSkin()
 				local count = _G["RaidFinderQueueFrameScrollFrameChildFrameItem"..i.."Count"]
 				local na = _G["RaidFinderQueueFrameScrollFrameChildFrameItem"..i.."NameFrame"]
 				button:StripTextures()
-				
+
 				icon:SetTexCoord(unpack(E.TexCoords))
 				icon:SetDrawLayer("OVERLAY")
 				count:SetDrawLayer("OVERLAY")
@@ -353,12 +354,12 @@ local function LoadSkin()
 		end
 	end
 
-	hooksecurefunc("ScenarioQueueFrameRandom_UpdateFrame", ReskinRewards)	
-	
+	hooksecurefunc("ScenarioQueueFrameRandom_UpdateFrame", ReskinRewards)
+
 	ScenarioQueueFrameFindGroupButton:StripTextures()
 	S:HandleButton(ScenarioQueueFrameFindGroupButton)
 
-	
+
 	S:HandleDropDownBox(ScenarioQueueFrameTypeDropDown)
 
 	-- Looking for raid
@@ -389,56 +390,56 @@ local function LoadSkin()
 	S:HandleCloseButton(RaidBrowserFrameCloseButton)
 	S:HandleButton(LFRQueueFrameFindGroupButton)
 	S:HandleButton(LFRQueueFrameAcceptCommentButton)
-	
+
 	S:HandleScrollBar(LFRQueueFrameCommentScrollFrameScrollBar)
 	S:HandleScrollBar(LFDQueueFrameSpecificListScrollFrameScrollBar)
 	LFDQueueFrameSpecificListScrollFrame:StripTextures()
 	RaidBrowserFrame:HookScript('OnShow', function()
 		if not LFRQueueFrameSpecificListScrollFrameScrollBar.skinned then
 			S:HandleScrollBar(LFRQueueFrameSpecificListScrollFrameScrollBar)
-			
+
 			local roleButtons = {
 				LFRQueueFrameRoleButtonHealer,
 				LFRQueueFrameRoleButtonDPS,
 				LFRQueueFrameRoleButtonTank,
 			}
-			
-			LFRBrowseFrame:StripTextures()			
+
+			LFRBrowseFrame:StripTextures()
 			for _, roleButton in pairs(roleButtons) do
 				roleButton:SetNormalTexture("")
 				S:HandleCheckBox(roleButton.checkButton)
 				roleButton:GetChildren():SetFrameLevel(roleButton:GetChildren():GetFrameLevel() + 1)
 			end
-	
+
 			for i=1, 2 do
-				local tab = _G['LFRParentFrameSideTab'..i]		
+				local tab = _G['LFRParentFrameSideTab'..i]
 				tab:DisableDrawLayer('BACKGROUND')
-				
+
 				tab:GetNormalTexture():SetTexCoord(unpack(E.TexCoords))
 				tab:GetNormalTexture():SetInside()
-				
+
 				tab.pushed = true;
 				tab:CreateBackdrop("Default")
 				tab.backdrop:SetAllPoints()
-				tab:StyleButton(true)	
+				tab:StyleButton(true)
 				hooksecurefunc(tab:GetHighlightTexture(), "SetTexture", function(self, texPath)
 					if texPath ~= nil then
 						self:SetTexture(nil);
 					end
 				end)
-				
+
 				hooksecurefunc(tab:GetCheckedTexture(), "SetTexture", function(self, texPath)
 					if texPath ~= nil then
 						self:SetTexture(nil);
 					end
-				end	)		
-			end		
-			
+				end	)
+			end
+
 			for i=1, 7 do
 				local tab = _G['LFRBrowseFrameColumnHeader'..i]
 				tab:DisableDrawLayer('BACKGROUND')
 			end
-			
+
 			S:HandleDropDownBox(LFRBrowseFrameRaidDropDown)
 			S:HandleButton(LFRBrowseFrameRefreshButton)
 			S:HandleButton(LFRBrowseFrameInviteButton)
@@ -446,14 +447,14 @@ local function LoadSkin()
 			LFRQueueFrameSpecificListScrollFrameScrollBar.skinned = true
 		end
 	end)
-	
+
 	--[[LFGInvitePopup_Update("Elvz", true, true, true)
 	StaticPopupSpecial_Show(LFGInvitePopup);]]
 	LFGInvitePopup:StripTextures()
 	LFGInvitePopup:SetTemplate("Transparent")
 	S:HandleButton(LFGInvitePopupAcceptButton)
 	S:HandleButton(LFGInvitePopupDeclineButton)
-	
+
 	S:HandleButton(_G[LFDQueueFrame.PartyBackfill:GetName().."BackfillButton"])
 	S:HandleButton(_G[LFDQueueFrame.PartyBackfill:GetName().."NoBackfillButton"])
 	S:HandleButton(_G[RaidFinderQueueFrame.PartyBackfill:GetName().."BackfillButton"])
@@ -470,6 +471,15 @@ local function LoadSkin()
 	LFGListFrame.CategorySelection.Inset:StripTextures()
 	S:HandleButton(LFGListFrame.CategorySelection.StartGroupButton, true)
 	S:HandleButton(LFGListFrame.CategorySelection.FindGroupButton, true)
+	
+	--Fix issue with labels not following changes to GameFontNormal as they should
+	local function SetLabelFontObject(self, btnIndex)
+		local button = self.CategoryButtons[btnIndex]
+		if button then
+			button.Label:SetFontObject(GameFontNormal)
+		end
+	end
+	hooksecurefunc("LFGListCategorySelection_AddButton", SetLabelFontObject)
 
 	LFGListFrame.EntryCreation.Inset:StripTextures()
 	S:HandleButton(LFGListFrame.EntryCreation.CancelButton, true)
@@ -496,18 +506,23 @@ local function LoadSkin()
 	S:HandleScrollBar(LFGListEntryCreationSearchScrollFrameScrollBar)
 	S:HandleButton(LFGListFrame.EntryCreation.ActivityFinder.Dialog.SelectButton)
 	S:HandleButton(LFGListFrame.EntryCreation.ActivityFinder.Dialog.CancelButton)
-	
+
 	LFGListApplicationDialog:StripTextures()
 	LFGListApplicationDialog:SetTemplate("Transparent")
 	S:HandleButton(LFGListApplicationDialog.SignUpButton)
 	S:HandleButton(LFGListApplicationDialog.CancelButton)
 	S:HandleEditBox(LFGListApplicationDialogDescription)
-	
-	-- LFGListInviteDialog:StripTextures() -- Removes role icon, need to find a way to skin role icon the way it's done everywhere else
+
 	LFGListInviteDialog:SetTemplate("Transparent")
+	S:HandleButton(LFGListInviteDialog.AcknowledgeButton)
 	S:HandleButton(LFGListInviteDialog.AcceptButton)
 	S:HandleButton(LFGListInviteDialog.DeclineButton)
-	
+	LFGListInviteDialog.RoleIcon:SetTexture("Interface\\LFGFrame\\UI-LFG-ICONS-ROLEBACKGROUNDS")
+	local function SetRoleIcon(self, resultID)
+		local _,_,_,_, role = C_LFGList.GetApplicationInfo(resultID)
+		self.RoleIcon:SetTexCoord(GetBackgroundTexCoordsForRole(role))
+	end
+	hooksecurefunc("LFGListInviteDialog_Show", SetRoleIcon)
 
 	S:HandleEditBox(LFGListFrame.SearchPanel.SearchBox)
 
@@ -532,8 +547,44 @@ local function LoadSkin()
 	LFGListFrame.SearchPanel.AutoCompleteFrame:StripTextures()
 	LFGListFrame.SearchPanel.AutoCompleteFrame:SetTemplate("Transparent")
 
+	S:HandleButton(LFGListFrame.SearchPanel.FilterButton)
 	S:HandleButton(LFGListFrame.SearchPanel.RefreshButton)
 	LFGListFrame.SearchPanel.RefreshButton:Size(26)
+
+
+	--ApplicationViewer (Custom Groups)
+	LFGListFrame.ApplicationViewer.InfoBackground:SetTexCoord(unpack(E.TexCoords))
+	S:HandleCheckBox(LFGListFrame.ApplicationViewer.AutoAcceptButton)
+
+	LFGListFrame.ApplicationViewer.Inset:StripTextures()
+	LFGListFrame.ApplicationViewer.Inset:SetTemplate("Transparent")
+
+	S:HandleButton(LFGListFrame.ApplicationViewer.NameColumnHeader, true)
+	S:HandleButton(LFGListFrame.ApplicationViewer.RoleColumnHeader, true)
+	S:HandleButton(LFGListFrame.ApplicationViewer.ItemLevelColumnHeader, true)
+	LFGListFrame.ApplicationViewer.NameColumnHeader:ClearAllPoints()
+	LFGListFrame.ApplicationViewer.NameColumnHeader:SetPoint("BOTTOMLEFT", LFGListFrame.ApplicationViewer.Inset, "TOPLEFT", 0, 1)
+	LFGListFrame.ApplicationViewer.RoleColumnHeader:ClearAllPoints()
+	LFGListFrame.ApplicationViewer.RoleColumnHeader:SetPoint("LEFT", LFGListFrame.ApplicationViewer.NameColumnHeader, "RIGHT", 1, 0)
+	LFGListFrame.ApplicationViewer.ItemLevelColumnHeader:ClearAllPoints()
+	LFGListFrame.ApplicationViewer.ItemLevelColumnHeader:SetPoint("LEFT", LFGListFrame.ApplicationViewer.RoleColumnHeader, "RIGHT", 1, 0)
+
+	S:HandleButton(LFGListFrame.ApplicationViewer.RefreshButton)
+	LFGListFrame.ApplicationViewer.RefreshButton:SetSize(24,24)
+	LFGListFrame.ApplicationViewer.RefreshButton:ClearAllPoints()
+	LFGListFrame.ApplicationViewer.RefreshButton:SetPoint("BOTTOMRIGHT", LFGListFrame.ApplicationViewer.Inset, "TOPRIGHT", 16, 4)
+
+	S:HandleButton(LFGListFrame.ApplicationViewer.RemoveEntryButton, true)
+	S:HandleButton(LFGListFrame.ApplicationViewer.EditButton, true)
+	LFGListFrame.ApplicationViewer.RemoveEntryButton:ClearAllPoints()
+	LFGListFrame.ApplicationViewer.RemoveEntryButton:SetPoint("BOTTOMLEFT", -1, 3)
+	LFGListFrame.ApplicationViewer.EditButton:ClearAllPoints()
+	LFGListFrame.ApplicationViewer.EditButton:SetPoint("BOTTOMRIGHT", -6, 3)
+
+	S:HandleScrollBar(LFGListApplicationViewerScrollFrameScrollBar)
+	LFGListApplicationViewerScrollFrameScrollBar:ClearAllPoints()
+	LFGListApplicationViewerScrollFrameScrollBar:SetPoint("TOPLEFT", LFGListFrame.ApplicationViewer.Inset, "TOPRIGHT", 0, -14)
+	LFGListApplicationViewerScrollFrameScrollBar:SetPoint("BOTTOMLEFT", LFGListFrame.ApplicationViewer.Inset, "BOTTOMRIGHT", 0, 14)
 end
 
 S:RegisterSkin("ElvUI", LoadSkin)

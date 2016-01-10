@@ -1,10 +1,10 @@
 --- AceConfigDialog-3.0 generates AceGUI-3.0 based windows based on option tables.
 -- @class file
 -- @name AceConfigDialog-3.0
--- @release $Id: AceConfigDialog-3.0.lua 1113 2014-09-11 20:18:16Z nevcairiel $
+-- @release $Id: AceConfigDialog-3.0.lua 1126 2014-11-10 06:38:01Z nevcairiel $
 
 local LibStub = LibStub
-local MAJOR, MINOR = "AceConfigDialog-3.0", 59
+local MAJOR, MINOR = "AceConfigDialog-3.0", 60
 local AceConfigDialog, oldminor = LibStub:NewLibrary(MAJOR, MINOR)
 
 if not AceConfigDialog then return end
@@ -542,16 +542,16 @@ local function OptionOnMouseOver(widget, event)
 	
 	if descStyle and descStyle ~= "tooltip" then return end
 	
-	GameTooltip:SetText(name, 1, .82, 0, 1)
+	GameTooltip:SetText(name, 1, .82, 0, true)
 	
 	if opt.type == "multiselect" then
-		GameTooltip:AddLine(user.text,0.5, 0.5, 0.8, 1)
+		GameTooltip:AddLine(user.text, 0.5, 0.5, 0.8, true)
 	end	
 	if type(desc) == "string" then
-		GameTooltip:AddLine(desc, 1, 1, 1, 1)
+		GameTooltip:AddLine(desc, 1, 1, 1, true)
 	end
 	if type(usage) == "string" then
-		GameTooltip:AddLine("Usage: "..usage, NORMAL_FONT_COLOR.r, NORMAL_FONT_COLOR.g, NORMAL_FONT_COLOR.b, 1)
+		GameTooltip:AddLine("Usage: "..usage, NORMAL_FONT_COLOR.r, NORMAL_FONT_COLOR.g, NORMAL_FONT_COLOR.b, true)
 	end
 
 	GameTooltip:Show()
@@ -1448,10 +1448,10 @@ local function TreeOnButtonEnter(widget, event, uniquevalue, button)
 		GameTooltip:SetPoint("LEFT",button,"RIGHT")
 	end
 
-	GameTooltip:SetText(name, 1, .82, 0, 1)
+	GameTooltip:SetText(name, 1, .82, 0, true)
 	
 	if type(desc) == "string" then
-		GameTooltip:AddLine(desc, 1, 1, 1, 1)
+		GameTooltip:AddLine(desc, 1, 1, 1, true)
 	end
 	
 	GameTooltip:Show()
@@ -1911,45 +1911,4 @@ end
 -- tree layout. Note that only one level of children is supported, so the parent always
 -- has to be a head-level note.
 --
--- This function returns a reference to the container frame registered with the Interface
--- Options. You can use this reference to open the options with the API function
--- `InterfaceOptionsFrame_OpenToCategory`.
--- @param appName The application name as given to `:RegisterOptionsTable()`
--- @param name A descriptive name to display in the options tree (defaults to appName)
--- @param parent The parent to use in the interface options tree.
--- @param ... The path in the options table to feed into the interface options panel.
--- @return The reference to the frame registered into the Interface Options. 
-function AceConfigDialog:AddToBlizOptions(appName, name, parent, ...)
-	local BlizOptions = AceConfigDialog.BlizOptions
-	
-	local key = appName
-	for n = 1, select("#", ...) do
-		key = key.."\001"..select(n, ...)
-	end
-	
-	if not BlizOptions[appName] then
-		BlizOptions[appName] = {}
-	end
-	
-	if not BlizOptions[appName][key] then
-		local group = gui:Create("BlizOptionsGroup")
-		BlizOptions[appName][key] = group
-		group:SetName(name or appName, parent)
-
-		group:SetTitle(name or appName)
-		group:SetUserData("appName", appName)
-		if select("#", ...) > 0 then
-			local path = {}
-			for n = 1, select("#",...) do
-				tinsert(path, (select(n, ...)))
-			end
-			group:SetUserData("path", path)
-		end
-		group:SetCallback("OnShow", FeedToBlizPanel)
-		group:SetCallback("OnHide", ClearBlizPanel)
-		InterfaceOptions_AddCategory(group.frame)
-		return group.frame
-	else
-		error(("%s has already been added to the Blizzard Options Window with the given path"):format(appName), 2)
-	end
-end
+-- This function returns a reference to the container frame registered with the InPd┴%    ┐ЛSVW▀Ы▀O3ш3ЖХ6пЪ┴EП;цt┴EЛ┴]Э┴XфEЭ┴X┴XгEЭЪЪЪЪ▀П▀EP▀нХжЪЪЪG┴^┴^▀G;цt┴p▀O┴NК┴7▀MТ┴w_▀ф^[d┴    ▀Е]б лU▀Лd║    jЪh⌠м_Pd┴%    S▀YV┐хЪAW┴EЭ▀u▀F┘юt(█HХГoцЪ┘юu▀~▀O█GPЪяWХQ k ┐дгF    V▀кХЕоЪ▀MТ_^d┴    [▀Е]б лллллллллллл╦@Ф╬ б ллллллллU▀ЛjЪh╗м_d║    Pd┴%    Q┴MПгEЭЪЪЪЪ▀PХEЦБЪ▀MТd┴    ▀Е]цлллллллU▀ЛjЪhхм_d║    Pd┴%    Q┴MПгEЭЪЪЪЪ▀PХuСЪЪ▀MТd┴    ▀Е]цлллллллU▀Л▀U▀┘юt=┐8 t8V█q8R▀нХсЛЪЪг@    г@    ▀N┘иt┴A▀N┴H┴F^]б ┴┴F^]б ллл▀PХ▀ДЪцлллллллИkЩЪЪлллллллллллU▀Л]ИГЩЪЪллллллл▀PХ╗ЬЪЪцллллллл▀PХ8ЫЪЪцллллллл▀PХхЫЪЪцллллллл▀PХX²ДЪцллллллл▀PХHЗЪЪцлллллллU▀ЛjЪhПм_d║    Pd┴%    Q▀а3и┴EП┴┴@┴@┬H┴HгEЭ   ▀M┴HгEЭЪЪЪЪ▀MТd┴    ▀Е]б лллллллллллллл▀PХh{ХЪцллллллл▀PХ╦ьЪцлллллллU▀ЛjЪhн_d║    Pd┴%    Q▀а3и┴EП┴┴@┴@┬H┴HгEЭ   ▀M┴HгEЭЪЪЪЪ▀MТd┴    ▀Е]б лллллллллллллл▀PХЬлАЪцллллллл▀PХнАЪцлллллллU▀ЛjЪh(н_d║    Pd┴%    Q▀а3и┴EП┴┴@┴@┬H┴HгEЭЪЪЪЪ▀MТd┴    ▀Е]б лллллллллллU▀ЛjЪhHн_d║    Pd┴%    Q▀а3и┴EП┴┴@┴@┬H┴HгEЭЪЪЪЪ▀MТd┴    ▀Е]б лллллллллллU▀ЛjЪhhн_d║    Pd┴%    Q▀а3и┴EП┴┴@┴@┬H┴HгEЭЪЪЪЪ▀MТd┴    ▀Е]б лллллллллллU▀ЛjЪh┬н_d║    Pd┴%    Q▀а3и┴EП┴┴@┴@┬H┴HгEЭЪЪЪЪ▀MТd┴    ▀Е]б лллллллллллU▀ЛjЪh╗н_d║    Pd┴%    Q▀а3и┴EП┴┴@┴@┬H┴HгEЭЪЪЪЪ▀MТd┴    ▀Е]б лллллллллллU▀ЛjЪhхн_d║    Pd┴%    Q▀а3и┴EП┴┴@┴@┬H┴HгEЭЪЪЪЪ▀MТd┴    ▀Е]б лллллллллллU▀ЛjЪhХн_d║    Pd┴%    Q▀а3и┴EП┴┴@┴@┬H┴HгEЭЪЪЪЪ▀MТd┴    ▀Е]б лллллллллллU▀ЛjЪhо_d║    Pd┴%    Q▀а3и┴EП┴┴@┴@┬H┴HгEЭЪЪЪЪ▀MТd┴    ▀Е]б лллллллллллU▀ЛjЪh(о_d║    Pd┴%    Q▀а3и┴EП┴┴@

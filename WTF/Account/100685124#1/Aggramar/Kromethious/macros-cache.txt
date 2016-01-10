@@ -1,0 +1,4 @@
+VER 3 0100000000000001 "Interrupt" "INV_MISC_QUESTIONMARK"
+#showtooltip
+/castsequence reset=15 Mind Freeze, strangulate, mind freeze
+END

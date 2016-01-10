@@ -1,7 +1,7 @@
 local mod	= DBM:NewMod("Sulfuron", "DBM-MC", 1)
 local L		= mod:GetLocalizedStrings()
 
-mod:SetRevision(("$Revision: 549 $"):sub(12, -3))
+mod:SetRevision(("$Revision: 576 $"):sub(12, -3))
 mod:SetCreatureID(12098)--, 11662
 --mod:SetEncounterID(669)
 mod:SetModelID(13030)
@@ -12,16 +12,16 @@ mod:RegisterEvents(
 	"SPELL_CAST_START 19775"
 )
 
-local warnInspire		= mod:NewTargetAnnounce(19779, 2, nil, mod:IsTank() or mod:IsHealer())
-local warnHandRagnaros	= mod:NewTargetAnnounce("OptionVersion2", 19780, 2, nil, false)
-local warnShadowPain	= mod:NewTargetAnnounce("OptionVersion2", 19776, 2, nil, false)
+local warnInspire		= mod:NewTargetAnnounce(19779, 2, nil, "Tank|Healer")
+local warnHandRagnaros	= mod:NewTargetAnnounce(19780, 2, nil, false, 2)
+local warnShadowPain	= mod:NewTargetAnnounce(19776, 2, nil, false, 2)
 local warnHeal			= mod:NewCastAnnounce(19775, 3, nil, nil, false)--this may be spammy now that spellid is fixed
-local warnImmolate		= mod:NewTargetAnnounce("OptionVersion2", 20294, 2, nil, false)
+local warnImmolate		= mod:NewTargetAnnounce(20294, 2, nil, false, 2)
 
 local specWarnHeal		= mod:NewSpecialWarningInterrupt(19775)
 
-local timerInspireCD	= mod:NewCDTimer(16, 19779, nil, mod:IsTank() or mod:IsHealer())--16-20
-local timerInspire		= mod:NewTargetTimer(10, 19779, nil, mod:IsTank() or mod:IsHealer())
+local timerInspireCD	= mod:NewCDTimer(16, 19779, nil, "Tank|Healer")--16-20
+local timerInspire		= mod:NewTargetTimer(10, 19779, nil, "Tank|Healer")
 local timerHeal			= mod:NewCastTimer(2, 19775, nil, false)--this may be spammy now that spellid is fixed
 
 function mod:OnCombatStart(delay)

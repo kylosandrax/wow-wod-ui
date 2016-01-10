@@ -1,0 +1,36 @@
+v1.6 (25/02/2015)
+--------------
+- Updated .toc for 6.1
+
+v1.5 (18/01/2015)
+--------------
+- Option to change bar texture is now in the code (just forgot to add it in 1.4...)
+- Added option to show or hide damage taken in the last 10 seconds
+- Changed suggested font for custom font selection (now "Adventure.ttf")
+- Deleted two well hidden debug lines (dem ninjas)
+
+v1.4 (13/12/2014)
+--------------
+- Added option to change bar texture (currently only with provided textures)
+- Font selection is now done from a dropdown menu
+- Custom fonts are now working properly
+- Modified some texts in the option panel
+- Modified behavior so the bar is "click-through" while in fight
+
+v1.3 (11/11/2014)
+--------------
+- As promised, configuration is now done from the Interface menu
+- It is now possible to customize width, height, font size, and font (more to come !)
+
+v1.2 (09/11/2014)
+--------------
+- Comment error slipped into the code causing the addon to crash, sorry guys
+
+v1.1 (08/11/2014)
+--------------
+- Solved position reseting when disabling the addon
+- Added option to show only in instances/raids
+
+v1.0 (26/10/2014)
+--------------
+- Initial ResolveStatus release

@@ -1,6 +1,10 @@
 local E, L, DF = unpack(select(2, ...))
 local B = E:GetModule('Blizzard');
 
+--No point caching anything here, but list them here for mikk's FindGlobals script
+-- GLOBALS: HelpOpenTicketButtonTutorial, TalentMicroButtonAlert, HelpPlate
+-- GLOBALS: HelpPlateTooltip, EJMicroButtonAlert
+
 --[[local removeMenuOptions = {
 	["SET_FOCUS"] = true,
 	["CLEAR_FOCUS"] = true,
@@ -17,7 +21,7 @@ local function DisableStupidFuckingButtons(self)
 		local button = _G[self:GetName()..'Button'..i]
 		if removeMenuOptions[button.value] then
 			button:Hide()
-			
+
 			for z = i + 1, self.numButtons do
 				local point, attachTo, anchorPoint, x, y = _G[self:GetName()..'Button'..z]:GetPoint()
 				_G[self:GetName()..'Button'..z]:Point(point, attachTo, anchorPoint, x, y + UIDROPDOWNMENU_BUTTON_HEIGHT);
@@ -36,6 +40,7 @@ function B:KillBlizzard()
 	TalentMicroButtonAlert:Kill()
 	HelpPlate:Kill()
 	HelpPlateTooltip:Kill()
-	CompanionsMicroButtonAlert:Kill()
+	EJMicroButtonAlert:Kill()
+	--CompanionsMicroButtonAlert:Kill()
 	--DropDownList1:HookScript('OnShow', DisableStupidFuckingButtons)
 end

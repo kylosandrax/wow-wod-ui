@@ -1,6 +1,6 @@
 --[[
 Name: LibBabble-Inventory-3.0
-Revision: $Rev: 181 $
+Revision: $Rev: 191 $
 Maintainers: ckknight, nevcairiel, Ackis
 Website: http://www.wowace.com/projects/libbabble-inventory-3-0/
 Dependencies: None
@@ -8,7 +8,7 @@ License: MIT
 ]]
 
 local MAJOR_VERSION = "LibBabble-Inventory-3.0"
-local MINOR_VERSION = 90000 + tonumber(("$Rev: 181 $"):match("%d+"))
+local MINOR_VERSION = 90000 + tonumber(("$Rev: 191 $"):match("%d+"))
 
 if not LibStub then error(MAJOR_VERSION .. " requires LibStub.") end
 local lib = LibStub("LibBabble-3.0"):New(MAJOR_VERSION, MINOR_VERSION)
@@ -283,7 +283,7 @@ elseif GAME_LOCALE == "deDE" then
 	["Inscription Bag"] = "Schreibertasche",
 	["Item Enchantment"] = "Gegenstandsverzauberung",
 	["Item Enhancement"] = "Gegenstandsverbesserung",
-	Jewelcrafting = "Juwelenschleifen",
+	Jewelcrafting = "Juwelierskunst",
 	Junk = "Plunder",
 	Key = "Schlüssel",
 	Leather = "Leder",
@@ -557,7 +557,7 @@ elseif GAME_LOCALE == "koKR" then
 	lib:SetCurrentTranslations {
 	Alchemy = "연금술",
 	["Ammo Pouch"] = "탄환 주머니",
-	-- Aquatic = "",
+	Aquatic = "물", -- Needs review
 	Archaeology = "고고학",
 	Armor = "방어구",
 	["Armor Enchantment"] = "방어구 마법부여",
@@ -566,7 +566,7 @@ elseif GAME_LOCALE == "koKR" then
 	Back = "등",
 	Bag = "가방",
 	Bandage = "붕대",
-	-- Beast = "",
+	Beast = "야수", -- Needs review
 	Blacksmithing = "대장기술",
 	Blue = "푸른색",
 	Book = "책",
@@ -577,21 +577,21 @@ elseif GAME_LOCALE == "koKR" then
 	Cloth = "천",
 	Cogwheel = "맞물림 톱니", -- Needs review
 	Companion = "친구",
-	-- ["Companion Pets"] = "",
+	["Companion Pets"] = "애완동물", -- Needs review
 	Companions = "친구",
 	Consumable = "소비용품",
 	Container = "가방",
 	Cooking = "요리",
-	-- ["Cooking Bag"] = "",
-	-- Cosmetic = "",
-	-- Critter = "",
+	["Cooking Bag"] = "요리 가방", -- Needs review
+	Cosmetic = "장식", -- Needs review
+	Critter = "동물", -- Needs review
 	Crossbow = "석궁",
 	Crossbows = "석궁류",
 	Dagger = "단검",
 	Daggers = "단검류",
 	["Death Knight"] = "죽음의 기사",
 	Devices = "기계 장치",
-	-- Dragonkin = "",
+	Dragonkin = "용족", -- Needs review
 	Drink = "음료",
 	Druid = "드루이드",
 	Elemental = "원소",
@@ -612,7 +612,7 @@ elseif GAME_LOCALE == "koKR" then
 	["Fist Weapon"] = "장착 무기",
 	["Fist Weapons"] = "장착 무기류",
 	Flask = "영약",
-	-- Flying = "",
+	Flying = "비행", -- Needs review
 	["Flying Mount"] = "나는 탈것",
 	Food = "음식",
 	["Food & Drink"] = "음식과 음료",
@@ -630,7 +630,7 @@ elseif GAME_LOCALE == "koKR" then
 	Herbalism = "약초채집",
 	["Herb Bag"] = "약초 가방",
 	Holiday = "축제용품",
-	-- Humanoid = "",
+	Humanoid = "인간형", -- Needs review
 	Hunter = "사냥꾼",
 	Hydraulic = "Hydraulic", -- Needs review
 	Idol = "우상",
@@ -650,19 +650,19 @@ elseif GAME_LOCALE == "koKR" then
 	Librams = "성서",
 	Mace = "둔기",
 	Mage = "마법사",
-	-- Magic = "",
+	Magic = "마법", -- Needs review
 	Mail = "사슬",
 	["Main Hand"] = "주장비",
 	Materials = "재료",
 	Meat = "고기",
-	-- Mechanical = "",
+	Mechanical = "기계", -- Needs review
 	Meta = "얼개",
 	["Metal & Stone"] = "광물",
 	Mining = "채광",
 	["Mining Bag"] = "채광 가방",
 	Miscellaneous = "기타",
-	-- Money = "",
-	-- Monk = "",
+	Money = "돈", -- Needs review
+	Monk = "수도사", -- Needs review
 	Mount = "탈것",
 	Mounts = "탈것",
 	Neck = "목",
@@ -720,7 +720,7 @@ elseif GAME_LOCALE == "koKR" then
 	["Two-Handed Axes"] = "양손 도끼류",
 	["Two-Handed Maces"] = "양손 둔기류",
 	["Two-Handed Swords"] = "양손 도검류",
-	-- Undead = "",
+	Undead = "언데드", -- Needs review
 	Waist = "허리",
 	Wand = "마법봉",
 	Wands = "마법봉류",
@@ -760,8 +760,8 @@ elseif GAME_LOCALE == "esES" then
 	Consumable = "Consumible",
 	Container = "Contenedor",
 	Cooking = "Cocina",
-	-- ["Cooking Bag"] = "",
-	-- Cosmetic = "",
+	["Cooking Bag"] = "Bolsa de cocina", -- Needs review
+	Cosmetic = "Cosmetico", -- Needs review
 	Critter = "Alimaña",
 	Crossbow = "Ballesta",
 	Crossbows = "Ballestas",
@@ -1490,7 +1490,7 @@ elseif GAME_LOCALE == "ruRU" then
 	Enchant = "Чары",
 	Enchanting = "Наложение чар",
 	["Enchanting Bag"] = "Сумка зачаровывателя",
-	Engineering = "Механика",
+	Engineering = "Инженерное дело",
 	["Engineering Bag"] = "Сумка инженера",
 	Explosives = "Взрывчатка",
 	Feet = "Ступни",

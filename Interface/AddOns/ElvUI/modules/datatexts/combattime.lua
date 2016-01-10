@@ -1,18 +1,24 @@
 local E, L, V, P, G = unpack(select(2, ...)); --Inport: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
 local DT = E:GetModule('DataTexts')
 
+--Cache global variables
+--Lua functions
+local floor = math.floor
+local format, join = string.format, string.join
+--WoW API / Variables
+local GetTime = GetTime
+local IsInInstance = IsInInstance
+
 local displayNumberString = ''
 local lastPanel;
-local join = string.join
 local timer = 0
 local startTime = 0
 local timerText = L["Combat"]
 
-local floor = math.floor
 local function OnUpdate(self)
 	timer = GetTime() - startTime
 
-	self.text:SetFormattedText(displayNumberString, timerText, format("%02d:%02d:%02d", floor(timer/60), timer % 60, (timer - floor(timer)) * 100))
+	self.text:SetFormattedText(displayNumberString, timerText, format("%02d:%02d.%02d", floor(timer/60), timer % 60, (timer - floor(timer)) * 100))
 end
 
 local function DelayOnUpdate(self, elapsed)
@@ -49,7 +55,7 @@ end
 
 local function ValueColorUpdate(hex, r, g, b)
 	displayNumberString = join("", "%s: ", hex, "%s|r")
-	
+
 	if lastPanel ~= nil then
 		OnEvent(lastPanel)
 	end
@@ -58,9 +64,9 @@ E['valueColorUpdateFuncs'][ValueColorUpdate] = true
 
 --[[
 	DT:RegisterDatatext(name, events, eventFunc, updateFunc, clickFunc, onEnterFunc, onLeaveFunc)
-	
+
 	name - name of the datatext (required)
-	events - must be a table with string values of event names to register 
+	events - must be a table with string values of event names to register
 	eventFunc - function that gets fired when an event gets triggered
 	updateFunc - onUpdate script target function
 	click - function to fire when clicking the datatext

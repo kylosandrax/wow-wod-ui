@@ -1,6 +1,6 @@
 --[[--------------------------------------------------------------------
     Copyright (C) 2009, 2010, 2011, 2012 Sidoine De Wispelaere.
-    Copyright (C) 2012, 2013, 2014 Johnny C. Lam.
+    Copyright (C) 2012, 2013, 2014, 2015 Johnny C. Lam.
     See the file LICENSE.txt for copying permission.
 --]]--------------------------------------------------------------------
 
@@ -15,6 +15,7 @@ do
 	local OvaleCompile = Ovale.OvaleCompile
 	local OvaleCooldown = Ovale.OvaleCooldown
 	local OvaleDebug = Ovale.OvaleDebug
+	local OvaleFuture = Ovale.OvaleFuture
 	local OvaleGUID = Ovale.OvaleGUID
 	local OvaleSpellFlash = Ovale.OvaleSpellFlash
 	local OvaleState = Ovale.OvaleState
@@ -32,6 +33,11 @@ do
 	local API_GetTime = GetTime
 	local API_RegisterStateDriver = RegisterStateDriver
 	local NextTime = OvaleTimeSpan.NextTime
+	local INFINITY = math.huge
+	-- GLOBALS: UIParent
+
+	-- Mininum time in seconds for refreshing the best action.
+	local MIN_REFRESH_TIME = 0.05
 --</private-static-properties>
 
 --<public-methods>
@@ -79,8 +85,8 @@ do
 
 	end
 	
-	local function frameOnUpdate(self)
-		self.obj:OnUpdate()
+	local function frameOnUpdate(self, elapsed)
+		self.obj:OnUpdate(elapsed)
 	end
 	
 	local function Hide(self)
@@ -156,60 +162,74 @@ do
 		return 0
 	end
 	
-	local function OnUpdate(self)
-		-- Update current time.
-		local now = API_GetTime()
+	local function OnUpdate(self, elapsed)
+		--[[
+			Refresh the best action if we've exceeded the minimum update interval since the last refresh,
+			or if one of the units the script is tracking needs a refresh.
 
-		local profile = Ovale.db.profile
-		-- Force a refresh if we've exceeded the minimum update interval since the last refresh.
-		local forceRefresh = not self.lastUpdate or (now > self.lastUpdate + profile.apparence.updateInterval)
-		-- Refresh the icons if we're forcing a refresh or if one of the units the script is tracking needs a refresh.
-		local refresh = forceRefresh or next(Ovale.refreshNeeded)
-		if not refresh then return end
-
-		self.lastUpdate = now
-
-		local state = OvaleState.state
-		state:Initialize()
-
-		if OvaleCompile:EvaluateScript() then
-			Ovale:UpdateFrame()
+			If the target or focus exists, then the unit needs a refresh, even if out of combat.
+		--]]
+		local guid = OvaleGUID:UnitGUID("target") or OvaleGUID:UnitGUID("focus")
+		if guid then
+			Ovale.refreshNeeded[guid] = true
 		end
+		self.timeSinceLastUpdate = self.timeSinceLastUpdate + elapsed
+		local refresh = OvaleDebug.trace or self.timeSinceLastUpdate > MIN_REFRESH_TIME and next(Ovale.refreshNeeded)
+		if refresh then
+			-- Accumulate refresh interval statistics.
+			Ovale:AddRefreshInterval(self.timeSinceLastUpdate * 1000)
 
-		local iconNodes = OvaleCompile:GetIconNodes()
-		for k, node in ipairs(iconNodes) do
-			-- Set the true target of "target" references in the icon's body.
-			if node.params and node.params.target then
-				state.defaultTarget = node.params.target
-			else
-				state.defaultTarget = "target"
+			local state = OvaleState.state
+			state:Initialize()
+
+			if OvaleCompile:EvaluateScript() then
+				Ovale:UpdateFrame()
 			end
-			-- Set the number of enemies on the battlefield, if given via "enemies=N".
-			if node.params and node.params.enemies then
-				state.enemies = node.params.enemies
-			else
-				state.enemies = nil
-			end
-			-- Refresh the action button for the node.
-			if refresh then
+
+			local profile = Ovale.db.profile
+			local iconNodes = OvaleCompile:GetIconNodes()
+			for k, node in ipairs(iconNodes) do
+				-- Set the true target of "target" references in the icon's body.
+				if node.namedParams and node.namedParams.target then
+					state.defaultTarget = node.namedParams.target
+				else
+					state.defaultTarget = "target"
+				end
+				-- Set the number of enemies on the battlefield, if given via "enemies=N".
+				if node.namedParams and node.namedParams.enemies then
+					state.enemies = node.namedParams.enemies
+				else
+					state.enemies = nil
+				end
+				-- Get the best action for this icon node.
 				state:Log("+++ Icon %d", k)
 				OvaleBestAction:StartNewAction(state)
-				local timeSpan, _, element = OvaleBestAction:GetAction(node, state)
-				local start = NextTime(timeSpan, state.currentTime)
-				local action = self.actions[k]
-				local profile = Ovale.db.profile
+				local atTime = state.nextCast
+				if state.lastSpellId ~= state.lastGCDSpellId then
+					-- The previous spell cast did not trigger the GCD, so compute the next action at the current time.
+					atTime = state.currentTime
+				end
+				local timeSpan, element = OvaleBestAction:GetAction(node, state, atTime)
+				local start
+				if element and element.offgcd then
+					start = NextTime(timeSpan, state.currentTime)
+				else
+					start = NextTime(timeSpan, atTime)
+				end
+				-- Refresh the action button for the node.
 				if profile.apparence.enableIcons then
-					self:UpdateActionIcon(state, node, action, element, start, now)
+					self:UpdateActionIcon(state, node, self.actions[k], element, start)
 				end
 				if profile.apparence.spellFlash.enabled then
-					OvaleSpellFlash:Flash(state, node, element, start, now)
+					OvaleSpellFlash:Flash(state, node, element, start)
 				end
 			end
-		end
 
-		wipe(Ovale.refreshNeeded)
-		OvaleDebug:UpdateTrace()
-		Ovale:PrintOneTimeMessages()
+			wipe(Ovale.refreshNeeded)
+			OvaleDebug:UpdateTrace()
+			Ovale:PrintOneTimeMessages()
+			self.timeSinceLastUpdate = 0
+		end
 	end
 
 	local function UpdateActionIcon(self, state, node, action, element, start, now)
@@ -224,8 +244,8 @@ do
 			end
 			state:Log("GetAction: start=%s, value=%f", start, value)
 			local actionTexture
-			if node.params and node.params.texture then
-				actionTexture = node.params.texture
+			if node.namedParams and node.namedParams.texture then
+				actionTexture = node.namedParams.texture
 			end
 			icons[1]:SetValue(value, actionTexture)
 			if #icons > 1 then
@@ -241,18 +261,18 @@ do
 				If "nored=1" is given as an action parameter, then just use the actual start time of
 				the element itself.
 			--]]
-			if element and element.params and element.params.nored == 1 then
+			if element and element.namedParams and element.namedParams.nored == 1 then
 				start = actionCooldownStart + actionCooldownDuration
 				if start < state.currentTime then
 					start = state.currentTime
 				end
 				state:Log("Adjusting for 'nored': start=%s", start)
 			end
-			-- Dans le cas de canStopChannelling, on risque de demander d'interrompre le channelling courant, ce qui est stupide
-			if start and state.currentSpellId and state.nextCast and actionType == "spell" and actionId == state.currentSpellId and start < state.nextCast then
+			-- If this action is the same as the spell currently casting in the simulator, then start after the previous cast has finished.
+			if actionType == "spell" and actionId == state.currentSpellId and start and state.nextCast and start < state.nextCast then
 				start = state.nextCast
 			end
-			if start and node.params.nocd and now < start - node.params.nocd then
+			if start and node.namedParams.nocd and now < start - node.namedParams.nocd then
 				icons[1]:Update(element, nil)
 			else
 				icons[1]:Update(element, start, actionTexture, actionInRange, actionCooldownStart, actionCooldownDuration,
@@ -284,19 +304,22 @@ do
 				end
 			end
 
-			if (node.params.size ~= "small" and not node.params.nocd and profile.apparence.predictif) then
+			if (node.namedParams.size ~= "small" and not node.namedParams.nocd and profile.apparence.predictif) then
 				if start then
 					state:Log("****Second icon %s", start)
-					local spellTarget
-					if element then
-						spellTarget = element.params.target
+					state:ApplySpell(actionId, OvaleGUID:UnitGUID(actionTarget), start)
+					local atTime = state.nextCast
+					if actionId ~= state.lastGCDSpellId then
+						-- The previous spell cast did not trigger the GCD, so compute the next action at the current time.
+						atTime = state.currentTime
 					end
-					if not spellTarget or spellTarget == "target" then
-						spellTarget = state.defaultTarget
+					local timeSpan, nextElement = OvaleBestAction:GetAction(node, state, atTime)
+					local start
+					if nextElement and nextElement.offgcd then
+						start = NextTime(timeSpan, state.currentTime)
+					else
+						start = NextTime(timeSpan, atTime)
 					end
-					state:ApplySpell(actionId, OvaleGUID:GetGUID(spellTarget))
-					local timeSpan, _, nextElement = OvaleBestAction:GetAction(node, state)
-					start = NextTime(timeSpan, state.currentTime)
 					icons[2]:Update(nextElement, start, OvaleBestAction:GetActionInfo(nextElement, state))
 				else
 					icons[2]:Update(element, nil)
@@ -339,7 +362,7 @@ do
 
 			local width, height, newScale
 			local nbIcons
-			if (node.params.size == "small") then
+			if (node.namedParams.size == "small") then
 				newScale = profile.apparence.smallIconScale
 				width = newScale * 36 + margin
 				height = newScale * 36 + margin
@@ -348,7 +371,7 @@ do
 				newScale = profile.apparence.iconScale
 				width =newScale * 36 + margin
 				height = newScale * 36 + margin
-				if profile.apparence.predictif and node.params.type ~= "value" then
+				if profile.apparence.predictif and node.namedParams.type ~= "value" then
 					nbIcons = 2
 				else
 					nbIcons = 1
@@ -393,8 +416,8 @@ do
 				icon:SetPoint("TOPLEFT",self.frame,"TOPLEFT",(action.left + (l-1)*action.dx)/scale,(action.top - (l-1)*action.dy)/scale)
 				icon:SetScale(scale)
 				icon:SetFontScale(profile.apparence.fontScale)
-				icon:SetParams(node.params)
-				icon:SetHelp(node.params.help)
+				icon:SetParams(node.positionalParams, node.namedParams)
+				icon:SetHelp(node.namedParams.help)
 				icon:SetRangeIndicator(profile.apparence.targetText)
 				icon:EnableMouse(not profile.apparence.clickThru)
 				icon.cdShown = (l == 1)
@@ -458,13 +481,13 @@ do
 		self.actions = {}
 		self.frame = frame
 		self.hider = hider
-		self.updateFrame = API_CreateFrame("Frame")
+		self.updateFrame = API_CreateFrame("Frame", OVALE .. "UpdateFrame")
 		self.barre = self.frame:CreateTexture();
 		self.content = API_CreateFrame("Frame", nil, self.updateFrame)
 		if Masque then
 			self.skinGroup = Masque:Group(OVALE)
 		end
-		self.lastUpdate = nil
+		self.timeSinceLastUpdate = INFINITY
 		--Cheating with frame object which has an obj property
 		--TODO: Frame Class
 		self.obj = nil
@@ -507,4 +530,3 @@ do
 	
 	AceGUI:RegisterWidgetType(Type,Constructor,Version)
 end
-

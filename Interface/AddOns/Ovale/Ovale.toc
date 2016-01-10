@@ -1,18 +1,11 @@
-## Interface: 60000
-## X-Min-Interface: 60000
+## Interface: 60200
 ## Title: Ovale Spell Priority
 ## Notes: Show the icon of the next spell to cast
 ## Notes-frFR: Affiche l'icône du prochain sort à lancer
 ## Author: Sidoine, Johnny C. Lam
-## Version: 6.0.28
-## OptionalDeps: Ace3, LibBabble-CreatureType-3.0, LibDataBroker-1.1, LibDBIcon-1.0, LibDispellable-1.0, LibDualSpec-1.0, LibRangeCheck-2.0, LibTextDump-1.0, Masque, Recount, Skada, SpellFlashCore
+## Version: 6.2.16
+## OptionalDeps: Ace3, LibBabble-CreatureType-3.0, LibDataBroker-1.1, LibDBIcon-1.0, LibDualSpec-1.0, LibRangeCheck-2.0, LibTextDump-1.0, Masque, Recount, Skada, SpellFlashCore
 ## SavedVariables: OvaleDB
-## X-Category: Combat
-## X-Embeds: Ace3
-## X-Curse-Packaged-Version: 6.0.28
-## X-Curse-Project-Name: Ovale Spell Priority
-## X-Curse-Project-ID: ovale
-## X-Curse-Repository-ID: wow/ovale/mainline
 
 # Libraries.
 libs\libs.xml
@@ -28,7 +21,6 @@ Profiler.lua
 # Utility modules.
 Pool.lua
 PoolGC.lua
-PoolRefCount.lua
 Queue.lua
 TimeSpan.lua
 
@@ -45,10 +37,11 @@ Data.lua
 Equipment.lua
 Future.lua
 GUID.lua
-Latency.lua
+Health.lua
 Lexer.lua
 PaperDoll.lua
 Power.lua
+Runes.lua
 Score.lua
 Scripts.lua
 SimulationCraft.lua
@@ -56,6 +49,7 @@ SpellBook.lua
 SpellFlash.lua
 Stance.lua
 State.lua
+Version.lua
 
 # Core modules with dependencies.
 Icon.lua
@@ -69,13 +63,15 @@ DataBroker.lua
 Eclipse.lua
 Enemies.lua
 HonorAmongThieves.lua
+MindHarvest.lua
 PassiveAura.lua
 Recount.lua
-Runes.lua
 ShadowWordDeath.lua
 Skada.lua
 SpellDamage.lua
 SteadyFocus.lua
+Totem.lua
+WarriorCharge.lua
 
 conditions.lua
 scripts\files.xml

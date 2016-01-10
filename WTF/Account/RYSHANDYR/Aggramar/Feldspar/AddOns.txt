@@ -1,5 +1,5 @@
 BloodShieldTracker: disabled
-TidyPlates: enabled
+TidyPlates: disabled
 AskMrRobot: disabled
 TidyPlates_Neon: disabled
 TidyPlates_Graphite: disabled
@@ -12,3 +12,6 @@ TipTacItemRef: disabled
 TipTacOptions: disabled
 TipTacTalents: disabled
 ogear: enabled
+VuhDo: disabled
+VuhDoOptions: disabled
+ElvUI: enabled

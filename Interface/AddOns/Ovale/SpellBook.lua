@@ -1,6 +1,6 @@
 --[[--------------------------------------------------------------------
     Copyright (C) 2012 Sidoine De Wispelaere.
-    Copyright (C) 2012, 2013, 2014 Johnny C. Lam.
+    Copyright (C) 2012, 2013, 2014, 2015 Johnny C. Lam.
     See the file LICENSE.txt for copying permission.
 --]]--------------------------------------------------------------------
 
@@ -16,8 +16,10 @@ local OvaleDebug = Ovale.OvaleDebug
 local OvaleProfiler = Ovale.OvaleProfiler
 
 -- Forward declarations for module dependencies.
+local OvaleCooldown = nil
 local OvaleData = nil
 local OvalePower = nil
+local OvaleRunes = nil
 local OvaleState = nil
 
 local ipairs = ipairs
@@ -28,6 +30,7 @@ local tinsert = table.insert
 local tonumber = tonumber
 local tostring = tostring
 local tsort = table.sort
+local type = type
 local wipe = wipe
 local API_GetActiveSpecGroup = GetActiveSpecGroup
 local API_GetFlyoutInfo = GetFlyoutInfo
@@ -38,6 +41,7 @@ local API_GetSpellBookItemInfo = GetSpellBookItemInfo
 local API_GetSpellInfo = GetSpellInfo
 local API_GetSpellLink = GetSpellLink
 local API_GetSpellTabInfo = GetSpellTabInfo
+local API_GetSpellTexture = GetSpellTexture
 local API_GetTalentInfo = GetTalentInfo
 local API_HasPetSpells = HasPetSpells
 local API_IsHarmfulSpell = IsHarmfulSpell
@@ -118,6 +122,8 @@ OvaleSpellBook.spellbookId = {
 OvaleSpellBook.isHarmful = {}
 -- self.isHelpful[spellId] = true/false
 OvaleSpellBook.isHelpful = {}
+-- self.texture[spellId] = path to texture
+OvaleSpellBook.texture = {}
 -- self.talent[talentId] = talentName
 OvaleSpellBook.talent = {}
 -- self.talentPoints[talentId] = 0 or 1
@@ -147,8 +153,10 @@ end
 --<public-static-methods>
 function OvaleSpellBook:OnInitialize()
 	-- Resolve module dependencies.
+	OvaleCooldown = Ovale.OvaleCooldown
 	OvaleData = Ovale.OvaleData
 	OvalePower = Ovale.OvalePower
+	OvaleRunes = Ovale.OvaleRunes
 	OvaleState = Ovale.OvaleState
 end
 
@@ -221,6 +229,7 @@ function OvaleSpellBook:UpdateTalents()
 			end
 		end
 	end
+	Ovale.refreshNeeded[Ovale.playerGUID] = true
 	self:SendMessage("Ovale_TalentsChanged")
 end
 
@@ -239,6 +248,7 @@ function OvaleSpellBook:UpdateGlyphs()
 			self:Debug("    Glyph socket %d is empty.", i)
 		end
 	end
+	Ovale.refreshNeeded[Ovale.playerGUID] = true
 	self:SendMessage("Ovale_GlyphsChanged")
 end
 
@@ -248,6 +258,7 @@ function OvaleSpellBook:UpdateSpells()
 	wipe(self.spellbookId[BOOKTYPE_SPELL])
 	wipe(self.isHarmful)
 	wipe(self.isHelpful)
+	wipe(self.texture)
 
 	-- Scan the first two tabs of the player's spellbook.
 	for tab = 1, 2 do
@@ -263,6 +274,7 @@ function OvaleSpellBook:UpdateSpells()
 		self:ScanSpellBook(BOOKTYPE_PET, numPetSpells)
 	end
 
+	Ovale.refreshNeeded[Ovale.playerGUID] = true
 	self:SendMessage("Ovale_SpellsChanged")
 end
 
@@ -283,12 +295,14 @@ function OvaleSpellBook:ScanSpellBook(bookType, numSpells, offset)
 				self.spell[id] = spellName
 				self.isHarmful[id] = API_IsHarmfulSpell(index, bookType)
 				self.isHelpful[id] = API_IsHelpfulSpell(index, bookType)
+				self.texture[id] = API_GetSpellTexture(index, bookType)
 				self.spellbookId[bookType][id] = index
 				if spellId and id ~= spellId then
 					self:Debug("    %s (%d) is at offset %d.", spellName, spellId, index)
 					self.spell[spellId] = spellName
 					self.isHarmful[spellId] = self.isHarmful[id]
 					self.isHelpful[spellId] = self.isHelpful[id]
+					self.texture[spellId] = self.texture[id]
 					self.spellbookId[bookType][spellId] = index
 				end
 			end
@@ -303,6 +317,7 @@ function OvaleSpellBook:ScanSpellBook(bookType, numSpells, offset)
 						self.spell[id] = spellName
 						self.isHarmful[id] = API_IsHarmfulSpell(spellName)
 						self.isHelpful[id] = API_IsHelpfulSpell(spellName)
+						self.texture[id] = API_GetSpellTexture(index, bookType)
 						-- Flyout spells have no spellbook index.
 						self.spellbookId[bookType][id] = nil
 						if id ~= overrideId then
@@ -310,6 +325,7 @@ function OvaleSpellBook:ScanSpellBook(bookType, numSpells, offset)
 							self.spell[overrideId] = spellName
 							self.isHarmful[overrideId] = self.isHarmful[id]
 							self.isHelpful[overrideId] = self.isHelpful[id]
+							self.texture[overrideId] = self.texture[id]
 							-- Flyout spells have no spellbook index.
 							self.spellbookId[bookType][overrideId] = nil
 						end
@@ -358,6 +374,10 @@ function OvaleSpellBook:GetSpellName(spellId)
 		end
 		return spellName
 	end
+end
+
+function OvaleSpellBook:GetSpellTexture(spellId)
+	return self.texture[spellId]
 end
 
 function OvaleSpellBook:GetTalentPoints(talentId)
@@ -429,6 +449,7 @@ function OvaleSpellBook:IsSpellInRange(spellId, unitId)
 		local name = self:GetSpellName(spellId)
 		return API_IsSpellInRange(name, unitId)
 	end
+	return nil
 end
 
 -- Returns true if the given spell ID is usable.  A spell is *not* usable if:
@@ -488,17 +509,22 @@ local statePrototype = OvaleSpellBook.statePrototype
 --</private-static-properties>
 
 --<state-methods>
-statePrototype.IsUsableSpell = function(state, spellId, target)
+statePrototype.IsUsableSpell = function(state, spellId, atTime, targetGUID)
 	OvaleSpellBook:StartProfiling("OvaleSpellBook_state_IsUsableSpell")
+	if type(atTime) == "string" and not targetGUID then
+		atTime, targetGUID = nil, atTime
+	end
+	atTime = atTime or state.currentTime
+
 	local isUsable = OvaleSpellBook:IsKnownSpell(spellId)
 	local noMana = false
 	-- Verify that the spell may be cast given restrictions specified in SpellInfo().
 	local si = OvaleData.spellInfo[spellId]
 	if si then
 		-- Flagged as not usable in the spell information.
-		if isUsable and si.unusable then
-			local unusable = state:GetSpellInfoProperty(spellId, "unusable", target)
-			if unusable == 1 then
+		if isUsable then
+			local unusable = state:GetSpellInfoProperty(spellId, atTime, "unusable", targetGUID)
+			if unusable and unusable > 0 then
 				state:Log("Spell ID '%s' is flagged as unusable.", spellId)
 				isUsable = false
 			end
@@ -506,19 +532,62 @@ statePrototype.IsUsableSpell = function(state, spellId, target)
 		-- Verify all requirements with registered handlers.
 		if isUsable then
 			local requirement
-			isUsable, requirement = state:CheckSpellInfo(spellId, target)
+			isUsable, requirement = state:CheckSpellInfo(spellId, atTime, targetGUID)
 			if not isUsable then
 				-- Set noMana if the failed requirement is for a primary (poolable) power type.
 				if OvalePower.PRIMARY_POWER[requirement] then
 					noMana = true
 				end
-				state:Log("Spell ID '%s' failed requirements.", spellId)
+				if noMana then
+					state:Log("Spell ID '%s' does not have enough %s.", spellId, requirement)
+				else
+					state:Log("Spell ID '%s' failed '%s' requirements.", spellId, requirement)
+				end
 			end
 		end
 	else
-		isUsable, noMana = OvaleSpellBook:IsUsableSpell(spellId, target)
+		isUsable, noMana = OvaleSpellBook:IsUsableSpell(spellId)
 	end
 	OvaleSpellBook:StopProfiling("OvaleSpellBook_state_IsUsableSpell")
 	return isUsable, noMana
+end
+
+-- Get the number of seconds before the spell is ready to be cast, either due to cooldown or resources.
+statePrototype.GetTimeToSpell = function(state, spellId, atTime, targetGUID)
+	if type(atTime) == "string" and not targetGUID then
+		atTime, targetGUID = nil, atTime
+	end
+	atTime = atTime or state.currentTime
+
+	local timeToSpell = 0
+	-- Cooldown.
+	do
+		local start, duration = state:GetSpellCooldown(spellId)
+		local seconds = (duration > 0) and (start + duration - atTime) or 0
+		if timeToSpell < seconds then
+			timeToSpell = seconds
+		end
+	end
+	-- Pooled resource.
+	do
+		local seconds = state:TimeToPower(spellId, atTime, targetGUID)
+		if timeToSpell < seconds then
+			timeToSpell = seconds
+		end
+	end
+	-- Death knight runes.
+	do
+		local blood = state:GetSpellInfoProperty(spellId, atTime, "blood", targetGUID)
+		local unholy = state:GetSpellInfoProperty(spellId, atTime, "unholy", targetGUID)
+		local frost = state:GetSpellInfoProperty(spellId, atTime, "frost", targetGUID)
+		local death = state:GetSpellInfoProperty(spellId, atTime, "death", targetGUID)
+		if blood or unholy or frost or death then
+			local seconds = state:GetRunesCooldown(blood, unholy, frost, death, atTime)
+			if timeToSpell < seconds then
+				timeToSpell = seconds
+			end
+		end
+	end
+	return timeToSpell
 end
 --</state-methods>

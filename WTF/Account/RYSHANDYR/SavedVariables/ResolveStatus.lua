@@ -1,5 +1,5 @@
 
 ResolveHistoryDB = {
-	["Banjax - Aggramar"] = {
+	["Kylosandrix - Aggramar"] = {
 	},
 }

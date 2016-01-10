@@ -1,0 +1,18 @@
+VER 3 0100000000000005 "Enveloping Mist" "INV_MISC_QUESTIONMARK"
+/stopcasting
+/cast [@mouseover,help,nodead][] Enveloping Mist
+END
+VER 3 0100000000000003 "Soothing Mist" "INV_MISC_QUESTIONMARK"
+/stopcasting
+/cast [@mouseover,help,nodead][] Soothing Mist
+END
+VER 3 0100000000000004 "Uplift" "INV_MISC_QUESTIONMARK"
+/stopcasting
+/cast [@mouseover,help,nodead][] Uplift
+END
+VER 3 0100000000000006 "VuhDoDCShieldData" "Ability_Repair"
+P[x][x][x][x][x][x][x][x][x][x][x][x][x][x][x][x][x][x][x][x][x][x][x][x][x][x][x][x][x][x][x][x][x][x][x][x][x][x][x][x]1O_[x][x][x][x][x][x][x][x][x][x][x][x][x][x][x][x][x][x][x][x][x][x][x][x][x][x][x][x][x][x][x][x][x][x][x][x][x][x][x][x][x]
+END
+VER 3 0100000000000007 "VuhDoDCShieldNames" "Ability_Repair"
+N[x][x][x][x][x][x][x][x][x][x][x][x][x][x][x][x][x][x][x][x][x][x][x][x][x][x][x][x][x][x][x][x][x][x][x][x][x][x][x][x]Ban[x][x][x][x][x][x][x][x][x][x][x][x][x][x][x][x][x][x][x][x][x][x][x][x][x][x][x][x][x][x][x][x][x][x][x][x][x][x][x][x][x]
+END

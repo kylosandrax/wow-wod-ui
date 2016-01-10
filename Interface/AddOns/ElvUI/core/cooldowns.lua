@@ -1,15 +1,21 @@
 local E, L, V, P, G = unpack(select(2, ...)); --Inport: Engine, Locales, PrivateDB, ProfileDB, GlobalDB
 
+--Cache global variables
+--Lua functions
+local floor, min = math.floor, math.min
+local GetTime = GetTime
+--WoW API / Variables
+local CreateFrame = CreateFrame
+local hooksecurefunc = hooksecurefunc
+
+--Global variables that we don't cache, list them here for the mikk's Find Globals script
+-- GLOBALS: UIParent
+
 local MIN_SCALE = 0.5
 local ICON_SIZE = 36 --the normal size for an icon (don't change this)
 local FONT_SIZE = 20 --the base font size to use at a scale of 1
 local MIN_SCALE = 0.5 --the minimum scale we want to show cooldown counts at, anything below this will be hidden
 local MIN_DURATION = 1.5 --the minimum duration to show cooldown text for
-
-local floor = math.floor
-local min = math.min
-local GetTime = GetTime
-
 local threshold
 
 local TimeColors = {
@@ -34,7 +40,7 @@ local function Cooldown_OnUpdate(cd, elapsed)
 			cd.nextUpdate = 500
 		else
 			local timervalue, formatid
-			timervalue, formatid, cd.nextUpdate = E:GetTimeInfo(remain, threshold)		
+			timervalue, formatid, cd.nextUpdate = E:GetTimeInfo(remain, threshold)
 			cd.text:SetFormattedText(("%s%s|r"):format(TimeColors[formatid], E.TimeFormats[formatid][2]), timervalue)
 		end
 	else
@@ -45,10 +51,10 @@ end
 function E:Cooldown_OnSizeChanged(cd, width, height)
 	local fontScale = floor(width +.5) / ICON_SIZE
 	local override = cd:GetParent():GetParent().SizeOverride
-	if override then 
+	if override then
 		fontScale = override / FONT_SIZE
 	end
-	
+
 	if fontScale == cd.fontScale then
 		return
 	end
@@ -95,10 +101,10 @@ function E:CreateCooldownTimer(parent)
 	return timer
 end
 
-function E:OnSetCooldown(start, duration, charges, maxCharges)
+function E:OnSetCooldown(start, duration)
 	if(self.noOCC) then return end
 	local button = self:GetParent()
-	
+
 	if start > 0 and duration > MIN_DURATION then
 		local timer = self.timer or E:CreateCooldownTimer(self)
 		timer.start = start
@@ -113,14 +119,6 @@ function E:OnSetCooldown(start, duration, charges, maxCharges)
 			return
 		end
 	end
-	
-	if self.timer then
-		if charges and charges > 0 then
-			self.timer:SetAlpha(0)
-		else
-			self.timer:SetAlpha(1)	
-		end
-	end
 end
 
 function E:RegisterCooldown(cooldown)
@@ -128,23 +126,28 @@ function E:RegisterCooldown(cooldown)
 	hooksecurefunc(cooldown, "SetCooldown", E.OnSetCooldown)
 	cooldown.isHooked = true
 	cooldown:SetHideCountdownNumbers(true)
+	cooldown.SetHideCountdownNumbers = E.noop
+	if E.private.actionbar.hideCooldownBling then
+		cooldown:SetDrawBling(false)
+		cooldown.SetDrawBling = E.noop
+	end
 end
 
 function E:UpdateCooldownSettings()
 	threshold = self.db.cooldown.threshold
-	
+
 	local color = self.db.cooldown.expiringColor
 	TimeColors[4] = E:RGBToHex(color.r, color.g, color.b) -- color for timers that are soon to expire
-	
+
 	color = self.db.cooldown.secondsColor
 	TimeColors[3] = E:RGBToHex(color.r, color.g, color.b) -- color for timers that have seconds remaining
-	
+
 	color = self.db.cooldown.minutesColor
 	TimeColors[2] = E:RGBToHex(color.r, color.g, color.b) -- color for timers that have minutes remaining
-	
+
 	color = self.db.cooldown.hoursColor
 	TimeColors[1] = E:RGBToHex(color.r, color.g, color.b) -- color for timers that have hours remaining
-	
+
 	color = self.db.cooldown.daysColor
-	TimeColors[0] = E:RGBToHex(color.r, color.g, color.b) -- color for timers that have days remaining	
+	TimeColors[0] = E:RGBToHex(color.r, color.g, color.b) -- color for timers that have days remaining
 end

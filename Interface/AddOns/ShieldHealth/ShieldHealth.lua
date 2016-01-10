@@ -2,7 +2,7 @@
 local DEBUG_COMBAT_LOG = false		--|
 local VERSION = 2.35				--|
 --------------------------------------
-local getnB = 14
+local getnB = 15
 local timer,temp,timer2 = 0,true,0
 local O,Ot,Oo = {},{},{}
 local TESTMODE = false
@@ -271,12 +271,16 @@ function Sh_options()
 		["12:b"] = 0,
 		
 		["13:r"] = 1,
-		["13:v"] = 1,
+		["13:v"] = 0.7,
 		["13:b"] = 0,
 		
-		["14:r"] = 0.7,
-		["14:v"] = 0,
-		["14:b"] = 0.7,
+		["14:r"] = 1,
+		["14:v"] = 1,
+		["14:b"] = 0,
+		
+		["15:r"] = 0.7,
+		["15:v"] = 0,
+		["15:b"] = 0.7,
 	}
 	
 	Ot = {
@@ -372,12 +376,16 @@ function Sh_options()
 		["12:b"] = 0,
 		
 		["13:r"] = 1,
-		["13:v"] = 1,
+		["13:v"] = 0.7,
 		["13:b"] = 0,
 		
-		["14:r"] = 0.7,
-		["14:v"] = 0,
-		["14:b"] = 0.7,
+		["14:r"] = 1,
+		["14:v"] = 1,
+		["14:b"] = 0,
+		
+		["15:r"] = 0.7,
+		["15:v"] = 0,
+		["15:b"] = 0.7,
 	}
 	
 	
@@ -549,19 +557,22 @@ Btex[10] = "ability_shaman_astralshift"
 -- Divine Aegis
 Bid[11]  = 47753
 Btex[11] = "spell_holy_devineaegis"
+-- Clarity of Will
+Bid[12]  = 152118
+Btex[12] = "ability_priest_clarityofwill"
 
 ---- PALADIN
 -- Illuminated Healing
-Bid[12]  = 86273
-Btex[12] = "spell_holy_absolution"
+Bid[13]  = 86273
+Btex[13] = "spell_holy_absolution"
 -- Sacred Shield
-Bid[13]  = 65148
-Btex[13] = "ability_paladin_blessedmending"
+Bid[14]  = 65148
+Btex[14] = "ability_paladin_blessedmending"
 
 ---- DEMONISTE
 -- Twilight Ward
-Bid[14]  = 6229
-Btex[14] = "spell_fire_twilightfireward"
+Bid[15]  = 159693
+Btex[15] = "spell_fire_twilightfireward"
 
 
 

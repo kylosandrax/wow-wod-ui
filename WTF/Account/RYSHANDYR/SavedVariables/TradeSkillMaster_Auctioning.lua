@@ -1,33 +1,5 @@
 
 TradeSkillMaster_AuctioningDB = {
-	["profiles"] = {
-		["Default"] = {
-		},
-	},
-	["global"] = {
-		["optionsTreeStatus"] = {
-			["groups"] = {
-				["1"] = true,
-			},
-			["scrollvalue"] = 0,
-			["selected"] = 1,
-			["treesizable"] = true,
-			["treewidth"] = 175,
-			["fullwidth"] = 782.999816894531,
-		},
-	},
-	["profileKeys"] = {
-		["Zapunzel - Aggramar"] = "Default",
-		["Greenthorn - Aggramar"] = "Default",
-		["Ryjax - Aggramar"] = "Default",
-		["Kylosandrax - Aggramar"] = "Default",
-		["Feldspar - Aggramar"] = "Default",
-		["Kylozandrax - Earthen Ring"] = "Default",
-		["Banjax - Aggramar"] = "Default",
-		["Stormslinger - Aggramar"] = "Default",
-		["Ryvok - Aggramar"] = "Default",
-		["Bronin - Aggramar"] = "Default",
-	},
 	["factionrealm"] = {
 		["Horde - Aggramar"] = {
 			["player"] = {
@@ -36,16 +8,59 @@ TradeSkillMaster_AuctioningDB = {
 				["Zapunzel"] = true,
 				["Kylosandrax"] = true,
 				["Greenthorn"] = true,
-				["Stormslinger"] = true,
+				["Kylosandrix"] = true,
+				["Feldspar"] = true,
 				["Banjax"] = true,
 				["Ryvok"] = true,
-				["Feldspar"] = true,
+				["Stormslinger"] = true,
+				["Kyloc"] = true,
+			},
+		},
+		["Horde - Terokkar"] = {
+			["player"] = {
+				["Ryvok"] = true,
 			},
 		},
 		["Horde - Earthen Ring"] = {
 			["player"] = {
 				["Kylozandrax"] = true,
 			},
+		},
+	},
+	["profileKeys"] = {
+		["Zapunzel - Aggramar"] = "Default",
+		["Greenthorn - Aggramar"] = "Default",
+		["Ryjax - Aggramar"] = "Default",
+		["Kylosandrax - Aggramar"] = "Default",
+		["Stormslinger - Aggramar"] = "Default",
+		["Feldspar - Aggramar"] = "Default",
+		["Kylozandrax - Earthen Ring"] = "Default",
+		["Ryvok - Terokkar"] = "Default",
+		["Kyloc - Aggramar"] = "Default",
+		["Banjax - Aggramar"] = "Default",
+		["Kylosandrix - Aggramar"] = "Default",
+		["Ryvok - Aggramar"] = "Default",
+		["Bronin - Aggramar"] = "Default",
+	},
+	["global"] = {
+		["optionsTreeStatus"] = {
+			["groups"] = {
+				["1"] = true,
+				["3"] = true,
+				[3] = true,
+				["3Sell BoE Greens"] = true,
+				["3Sell BoE Blues"] = true,
+				["3Sell Enchanting"] = true,
+			},
+			["scrollvalue"] = 0,
+			["fullwidth"] = 782.999877929688,
+			["treesizable"] = true,
+			["treewidth"] = 175,
+			["selected"] = "3Sell BoE Greens",
+		},
+	},
+	["profiles"] = {
+		["Default"] = {
 		},
 	},
 }

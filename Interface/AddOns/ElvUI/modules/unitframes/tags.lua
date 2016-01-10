@@ -2,18 +2,90 @@ local E, L, V, P, G = unpack(select(2, ...)); --Inport: Engine, Locales, Private
 local _, ns = ...
 local ElvUF = ns.oUF
 assert(ElvUF, "ElvUI was unable to locate oUF.")
+
+--Cache global variables
+--Lua functions
+local _G = _G
+local unpack, pairs = unpack, pairs
 local twipe = table.wipe
-local ceil, sqrt = math.ceil, math.sqrt
+local ceil, sqrt, floor = math.ceil, math.sqrt, math.floor
+local format = string.format
+--WoW API / Variables
+local GetTime = GetTime
+local UnitGUID = UnitGUID
+local UnitIsUnit = UnitIsUnit
+local UnitPower = UnitPower
+local UnitPowerMax = UnitPowerMax
+local UnitAlternatePowerTextureInfo = UnitAlternatePowerTextureInfo
+local UnitIsAFK = UnitIsAFK
+local UnitIsDeadOrGhost = UnitIsDeadOrGhost
+local UnitIsConnected = UnitIsConnected
+local UnitHealth = UnitHealth
+local UnitHealthMax = UnitHealthMax
+local UnitIsDead = UnitIsDead
+local UnitIsGhost = UnitIsGhost
+local UnitPowerType = UnitPowerType
+local UnitIsWildBattlePet = UnitIsWildBattlePet
+local UnitIsBattlePetCompanion = UnitIsBattlePetCompanion
+local UnitBattlePetLevel = UnitBattlePetLevel
+local GetRelativeDifficultyColor = GetRelativeDifficultyColor
+local QuestDifficultyColors = QuestDifficultyColors
+local UnitLevel = UnitLevel
+local GetQuestGreenRange = GetQuestGreenRange
+local UnitReaction = UnitReaction
+local UnitClass = UnitClass
+local UnitIsPlayer = UnitIsPlayer
+local UnitDetailedThreatSituation = UnitDetailedThreatSituation
+local IsInGroup = IsInGroup
+local UnitExists = UnitExists
+local GetThreatStatusColor = GetThreatStatusColor
+local UnitIsDND = UnitIsDND
+local UnitIsPVPFreeForAll = UnitIsPVPFreeForAll
+local UnitIsPVP = UnitIsPVP
+local GetPVPTimer = GetPVPTimer
+local GetSpecialization = GetSpecialization
+local GetShapeshiftFormID = GetShapeshiftFormID
+local GetEclipseDirection = GetEclipseDirection
+local UnitGetTotalAbsorbs = UnitGetTotalAbsorbs
+local UnitGetIncomingHeals = UnitGetIncomingHeals
+local IsInRaid = IsInRaid
+local GetNumGroupMembers = GetNumGroupMembers
+local UnitClassification = UnitClassification
+local GetUnitSpeed = GetUnitSpeed
+local C_PetJournalGetPetTeamAverageLevel = C_PetJournal.GetPetTeamAverageLevel
+local DEFAULT_AFK_MESSAGE = DEFAULT_AFK_MESSAGE
+local UNKNOWN = UNKNOWN
+local UNITNAME_SUMMON_TITLE17 = UNITNAME_SUMMON_TITLE17
+local ALTERNATE_POWER_INDEX = ALTERNATE_POWER_INDEX
+local SPELL_POWER_HOLY_POWER = SPELL_POWER_HOLY_POWER
+local SPELL_POWER_CHI = SPELL_POWER_CHI
+local SPELL_POWER_ECLIPSE = SPELL_POWER_ECLIPSE
+local SPELL_POWER_SHADOW_ORBS = SPELL_POWER_SHADOW_ORBS
+local SPELL_POWER_BURNING_EMBERS = SPELL_POWER_BURNING_EMBERS
+local SPELL_POWER_SOUL_SHARDS = SPELL_POWER_SOUL_SHARDS
+local SPELL_POWER_DEMONIC_FURY = SPELL_POWER_DEMONIC_FURY
+local SPEC_PRIEST_SHADOW = SPEC_PRIEST_SHADOW
+local SPEC_WARLOCK_DESTRUCTION = SPEC_WARLOCK_DESTRUCTION
+local SPEC_WARLOCK_AFFLICTION = SPEC_WARLOCK_AFFLICTION
+local SPEC_WARLOCK_DEMONOLOGY = SPEC_WARLOCK_DEMONOLOGY
+local SHADOW_ORBS_SHOW_LEVEL = SHADOW_ORBS_SHOW_LEVEL
+local MOONKIN_FORM = MOONKIN_FORM
+local DEAD = DEAD
+local PVP = PVP
+
+--Global variables that we don't cache, list them here for mikk's FindGlobals script
+-- GLOBALS: Hex
+
 ------------------------------------------------------------------------
 --	Tags
 ------------------------------------------------------------------------
 
 local function UnitName(unit)
-	local name = _G.UnitName(unit);
+	local name, realm = _G.UnitName(unit);
 	if name == UNKNOWN and E.myclass == "MONK" and UnitIsUnit(unit, "pet") then
 		name = UNITNAME_SUMMON_TITLE17:format(_G.UnitName("player"))
 	else
-		return name
+		return name, realm
 	end
 end
 
@@ -125,7 +197,7 @@ end
 
 ElvUF.Tags.Events['health:current'] = 'UNIT_HEALTH_FREQUENT UNIT_MAXHEALTH UNIT_CONNECTION PLAYER_FLAGS_CHANGED'
 ElvUF.Tags.Methods['health:current'] = function(unit)
-	local status = UnitIsDead(unit) and DEAD or UnitIsGhost(unit) and L['Ghost'] or not UnitIsConnected(unit) and L['Offline']
+	local status = UnitIsDead(unit) and DEAD or UnitIsGhost(unit) and L["Ghost"] or not UnitIsConnected(unit) and L["Offline"]
 	if (status) then
 		return status
 	else
@@ -135,7 +207,7 @@ end
 
 ElvUF.Tags.Events['health:deficit'] = 'UNIT_HEALTH_FREQUENT UNIT_MAXHEALTH UNIT_CONNECTION PLAYER_FLAGS_CHANGED'
 ElvUF.Tags.Methods['health:deficit'] = function(unit)
-	local status = UnitIsDead(unit) and DEAD or UnitIsGhost(unit) and L['Ghost'] or not UnitIsConnected(unit) and L['Offline']
+	local status = UnitIsDead(unit) and DEAD or UnitIsGhost(unit) and L["Ghost"] or not UnitIsConnected(unit) and L["Offline"]
 
 	if (status) then
 		return status
@@ -146,7 +218,7 @@ end
 
 ElvUF.Tags.Events['health:current-percent'] = 'UNIT_HEALTH_FREQUENT UNIT_MAXHEALTH UNIT_CONNECTION PLAYER_FLAGS_CHANGED'
 ElvUF.Tags.Methods['health:current-percent'] = function(unit)
-	local status = UnitIsDead(unit) and DEAD or UnitIsGhost(unit) and L['Ghost'] or not UnitIsConnected(unit) and L['Offline']
+	local status = UnitIsDead(unit) and DEAD or UnitIsGhost(unit) and L["Ghost"] or not UnitIsConnected(unit) and L["Offline"]
 
 	if (status) then
 		return status
@@ -157,7 +229,7 @@ end
 
 ElvUF.Tags.Events['health:current-max'] = 'UNIT_HEALTH_FREQUENT UNIT_MAXHEALTH UNIT_CONNECTION PLAYER_FLAGS_CHANGED'
 ElvUF.Tags.Methods['health:current-max'] = function(unit)
-	local status = UnitIsDead(unit) and DEAD or UnitIsGhost(unit) and L['Ghost'] or not UnitIsConnected(unit) and L['Offline']
+	local status = UnitIsDead(unit) and DEAD or UnitIsGhost(unit) and L["Ghost"] or not UnitIsConnected(unit) and L["Offline"]
 
 	if (status) then
 		return status
@@ -168,7 +240,7 @@ end
 
 ElvUF.Tags.Events['health:current-max-percent'] = 'UNIT_HEALTH_FREQUENT UNIT_MAXHEALTH UNIT_CONNECTION PLAYER_FLAGS_CHANGED'
 ElvUF.Tags.Methods['health:current-max-percent'] = function(unit)
-	local status = UnitIsDead(unit) and DEAD or UnitIsGhost(unit) and L['Ghost'] or not UnitIsConnected(unit) and L['Offline']
+	local status = UnitIsDead(unit) and DEAD or UnitIsGhost(unit) and L["Ghost"] or not UnitIsConnected(unit) and L["Offline"]
 
 	if (status) then
 		return status
@@ -186,7 +258,7 @@ end
 
 ElvUF.Tags.Events['health:percent'] = 'UNIT_HEALTH_FREQUENT UNIT_MAXHEALTH UNIT_CONNECTION PLAYER_FLAGS_CHANGED'
 ElvUF.Tags.Methods['health:percent'] = function(unit)
-	local status = UnitIsDead(unit) and DEAD or UnitIsGhost(unit) and L['Ghost'] or not UnitIsConnected(unit) and L['Offline']
+	local status = UnitIsDead(unit) and DEAD or UnitIsGhost(unit) and L["Ghost"] or not UnitIsConnected(unit) and L["Offline"]
 
 	if (status) then
 		return status
@@ -227,7 +299,7 @@ end
 
 ElvUF.Tags.Events['powercolor'] = 'UNIT_DISPLAYPOWER UNIT_POWER_FREQUENT UNIT_MAXPOWER'
 ElvUF.Tags.Methods['powercolor'] = function(unit)
-	local pType, pToken, altR, altG, altB = UnitPowerType(unit)	
+	local pType, pToken, altR, altG, altB = UnitPowerType(unit)
 	local color = ElvUF['colors'].power[pToken]
 	if color then
 		return Hex(color[1], color[2], color[3])
@@ -240,7 +312,7 @@ ElvUF.Tags.Events['power:current'] = 'UNIT_DISPLAYPOWER UNIT_POWER_FREQUENT UNIT
 ElvUF.Tags.Methods['power:current'] = function(unit)
 	local pType = UnitPowerType(unit)
 	local min = UnitPower(unit, pType)
-	
+
 	return min == 0 and ' ' or	E:GetFormattedText('CURRENT', min, UnitPowerMax(unit, pType))
 end
 
@@ -279,14 +351,14 @@ end
 ElvUF.Tags.Events['power:deficit'] = 'UNIT_DISPLAYPOWER UNIT_POWER_FREQUENT UNIT_MAXPOWER'
 ElvUF.Tags.Methods['power:deficit'] = function(unit)
 	local pType = UnitPowerType(unit)
-		
-	return E:GetFormattedText('DEFICIT', UnitPower(unit, pType), UnitPowerMax(unit, pType), r, g, b)
+
+	return E:GetFormattedText('DEFICIT', UnitPower(unit, pType), UnitPowerMax(unit, pType))
 end
 
 ElvUF.Tags.Events['power:max'] = 'UNIT_DISPLAYPOWER UNIT_MAXPOWER'
 ElvUF.Tags.Methods['power:max'] = function(unit)
 	local max = UnitPowerMax(unit, UnitPowerType(unit))
-			
+
 	return E:GetFormattedText('CURRENT', max, max)
 end
 
@@ -349,7 +421,7 @@ ElvUF.Tags.Events['mana:deficit'] = 'UNIT_DISPLAYPOWER UNIT_POWER_FREQUENT UNIT_
 ElvUF.Tags.Methods['mana:deficit'] = function(unit)
 	local pType = UnitPowerType(unit)
 	if pType == 0 then
-		return E:GetFormattedText('DEFICIT', UnitPower(unit, pType), UnitPowerMax(unit, pType), r, g, b)
+		return E:GetFormattedText('DEFICIT', UnitPower(unit, pType), UnitPowerMax(unit, pType))
 	else
 		return ''
 	end
@@ -359,7 +431,7 @@ ElvUF.Tags.Events['mana:max'] = 'UNIT_DISPLAYPOWER UNIT_MAXPOWER'
 ElvUF.Tags.Methods['mana:max'] = function(unit)
 	local pType = UnitPowerType(unit)
 	if pType == 0 then
-		local max = UnitPowerMax(unit, UnitPowerType(unit))		
+		local max = UnitPowerMax(unit, UnitPowerType(unit))
 		return E:GetFormattedText('CURRENT', max, max)
 	else
 		return ''
@@ -370,9 +442,9 @@ ElvUF.Tags.Events['difficultycolor'] = 'UNIT_LEVEL PLAYER_LEVEL_UP'
 ElvUF.Tags.Methods['difficultycolor'] = function(unit)
 	local r, g, b = 0.55, 0.57, 0.61
 	if ( UnitIsWildBattlePet(unit) or UnitIsBattlePetCompanion(unit) ) then
-		level = UnitBattlePetLevel(unit)
+		local level = UnitBattlePetLevel(unit)
 
-		local teamLevel = C_PetJournal.GetPetTeamAverageLevel();
+		local teamLevel = C_PetJournalGetPetTeamAverageLevel();
 		if teamLevel < level or teamLevel > level then
 			local c = GetRelativeDifficultyColor(teamLevel, level)
 			r, g, b = c.r, c.g, c.b
@@ -394,7 +466,7 @@ ElvUF.Tags.Methods['difficultycolor'] = function(unit)
 			r, g, b = 0.55, 0.57, 0.61
 		end
 	end
-	
+
 	return Hex(r, g, b)
 end
 
@@ -452,12 +524,30 @@ ElvUF.Tags.Methods['name:long'] = function(unit)
 	return name ~= nil and E:ShortenString(name, 20) or ''
 end
 
+ElvUF.Tags.Events['realm'] = 'UNIT_NAME_UPDATE'
+ElvUF.Tags.Methods['realm'] = function(unit)
+	local _, realm = UnitName(unit)
+	return realm or ""
+end
+
+ElvUF.Tags.Events['realm:dash'] = 'UNIT_NAME_UPDATE'
+ElvUF.Tags.Methods['realm:dash'] = function(unit)
+	local _, realm = UnitName(unit)
+	local realmString
+	if realm then
+		realmString = format("-%s", realm)
+	else
+		realmString = ""
+	end
+	return realmString
+end
+
 ElvUF.Tags.Events['threat:percent'] = 'UNIT_THREAT_LIST_UPDATE GROUP_ROSTER_UPDATE'
 ElvUF.Tags.Methods['threat:percent'] = function(unit)
 	local _, _, percent = UnitDetailedThreatSituation('player', unit)
 	if(percent and percent > 0) and (IsInGroup() or UnitExists('pet')) then
 		return format('%.0f%%', percent)
-	else 
+	else
 		return ''
 	end
 end
@@ -467,7 +557,7 @@ ElvUF.Tags.Methods['threat:current'] = function(unit)
 	local _, _, percent, _, threatvalue = UnitDetailedThreatSituation('player', unit)
 	if(percent and percent > 0) and (IsInGroup() or UnitExists('pet')) then
 		return E:ShortValue(threatvalue)
-	else 
+	else
 		return ''
 	end
 end
@@ -477,7 +567,7 @@ ElvUF.Tags.Methods['threatcolor'] = function(unit)
 	local _, status = UnitDetailedThreatSituation('player', unit)
 	if (status) and (IsInGroup() or UnitExists('pet')) then
 		return Hex(GetThreatStatusColor(status))
-	else 
+	else
 		return ''
 	end
 end
@@ -488,20 +578,20 @@ ElvUF.Tags.Methods['statustimer'] = function(unit)
 	if not UnitIsPlayer(unit) then return; end
 	local guid = UnitGUID(unit)
 	if (UnitIsAFK(unit)) then
-		if not unitStatus[guid] or unitStatus[guid] and unitStatus[guid][1] ~= 'AFK' then 
-			unitStatus[guid] = {'AFK', GetTime()} 
+		if not unitStatus[guid] or unitStatus[guid] and unitStatus[guid][1] ~= 'AFK' then
+			unitStatus[guid] = {'AFK', GetTime()}
 		end
 	elseif(UnitIsDND(unit)) then
-		if not unitStatus[guid] or unitStatus[guid] and unitStatus[guid][1] ~= 'DND' then 
-			unitStatus[guid] = {'DND', GetTime()} 
+		if not unitStatus[guid] or unitStatus[guid] and unitStatus[guid][1] ~= 'DND' then
+			unitStatus[guid] = {'DND', GetTime()}
 		end
 	elseif(UnitIsDead(unit)) or (UnitIsGhost(unit))then
-		if not unitStatus[guid] or unitStatus[guid] and unitStatus[guid][1] ~= 'Dead' then 
-			unitStatus[guid] = {'Dead', GetTime()} 
+		if not unitStatus[guid] or unitStatus[guid] and unitStatus[guid][1] ~= 'Dead' then
+			unitStatus[guid] = {'Dead', GetTime()}
 		end
 	elseif(not UnitIsConnected(unit)) then
-		if not unitStatus[guid] or unitStatus[guid] and unitStatus[guid][1] ~= 'Offline' then 
-			unitStatus[guid] = {'Offline', GetTime()} 
+		if not unitStatus[guid] or unitStatus[guid] and unitStatus[guid][1] ~= 'Offline' then
+			unitStatus[guid] = {'Offline', GetTime()}
 		end
 	else
 		unitStatus[guid] = nil
@@ -513,17 +603,17 @@ ElvUF.Tags.Methods['statustimer'] = function(unit)
 		local mins = floor(timer / 60)
 		local secs = floor(timer - (mins * 60))
 		return ("%s (%01.f:%02.f)"):format(status, mins, secs)
-	else 
+	else
 		return ''
 	end
 end
 
 ElvUF.Tags.OnUpdateThrottle['pvptimer'] = 1
-ElvUF.Tags.Methods['pvptimer'] = function(unit)	
+ElvUF.Tags.Methods['pvptimer'] = function(unit)
 	if (UnitIsPVPFreeForAll(unit) or UnitIsPVP(unit)) then
 		local timer = GetPVPTimer()
 
-		if timer ~= 301000 and timer ~= -1 then	
+		if timer ~= 301000 and timer ~= -1 then
 			local mins = floor((timer / 1000) / 60)
 			local secs = floor((timer / 1000) - (mins * 60))
 			return ("%s (%01.f:%02.f)"):format(PVP, mins, secs)
@@ -535,7 +625,7 @@ ElvUF.Tags.Methods['pvptimer'] = function(unit)
 	end
 end
 
-local Harmony = { 
+local Harmony = {
 	[0] = {1, 1, 1},
 	[1] = {.57, .63, .35, 1},
 	[2] = {.47, .63, .35, 1},
@@ -550,7 +640,7 @@ local function GetClassPower(class)
 	local spec = GetSpecialization()
 	if class == 'PALADIN' then
 		min = UnitPower('player', SPELL_POWER_HOLY_POWER);
-		max = UnitPowerMax('player', SPELL_POWER_HOLY_POWER);	
+		max = UnitPowerMax('player', SPELL_POWER_HOLY_POWER);
 		r, g, b = 228/255, 225/255, 16/255
 	elseif class == 'MONK' then
 		min = UnitPower("player", SPELL_POWER_CHI)
@@ -569,11 +659,11 @@ local function GetClassPower(class)
 		max = UnitPowerMax("player", SPELL_POWER_SHADOW_ORBS)
 		r, g, b = 1, 1, 1
 	elseif class == 'WARLOCK' then
-		if (spec == SPEC_WARLOCK_DESTRUCTION) then	
+		if (spec == SPEC_WARLOCK_DESTRUCTION) then
 			min = UnitPower("player", SPELL_POWER_BURNING_EMBERS, true)
 			max = UnitPowerMax("player", SPELL_POWER_BURNING_EMBERS, true)
-			min = math.floor(min / 10)
-			max = math.floor(max / 10)
+			min = floor(min / 10)
+			max = floor(max / 10)
 			r, g, b = 230/255, 95/255,  95/255
 		elseif ( spec == SPEC_WARLOCK_AFFLICTION ) then
 			min = UnitPower("player", SPELL_POWER_SOUL_SHARDS)
@@ -585,7 +675,7 @@ local function GetClassPower(class)
 			r, g, b = 148/255, 130/255, 201/255
 		end
 	end
-	
+
 	return min, max, r, g, b
 end
 
@@ -602,7 +692,7 @@ ElvUF.Tags.Methods['classpower:current'] = function()
 		return ' '
 	else
 		return E:GetFormattedText('CURRENT', min, max)
-	end	
+	end
 end
 
 ElvUF.Tags.Events['classpower:deficit'] = 'UNIT_POWER_FREQUENT PLAYER_TALENT_UPDATE UPDATE_SHAPESHIFT_FORM'
@@ -731,14 +821,14 @@ ElvUF.Tags.Methods['nearbyplayers:8'] = function(unit)
 	if UnitIsConnected(unit) then
 		for groupUnit, _ in pairs(GroupUnits) do
 			if not UnitIsUnit(unit, groupUnit) and UnitIsConnected(groupUnit) then
-				d = E:GetDistance(unit, groupUnit, true)
+				d = E:GetDistance(unit, groupUnit)
 				if d and d <= 8 then
 					unitsInRange = unitsInRange + 1
 				end
 			end
 		end
 	end
-	
+
 	return unitsInRange
 end
 
@@ -748,14 +838,14 @@ ElvUF.Tags.Methods['nearbyplayers:10'] = function(unit)
 	if UnitIsConnected(unit) then
 		for groupUnit, _ in pairs(GroupUnits) do
 			if not UnitIsUnit(unit, groupUnit) and UnitIsConnected(groupUnit) then
-				d = E:GetDistance(unit, groupUnit, true)
+				d = E:GetDistance(unit, groupUnit)
 				if d and d <= 10 then
 					unitsInRange = unitsInRange + 1
 				end
 			end
 		end
 	end
-	
+
 	return unitsInRange
 end
 
@@ -765,14 +855,14 @@ ElvUF.Tags.Methods['nearbyplayers:30'] = function(unit)
 	if UnitIsConnected(unit) then
 		for groupUnit, _ in pairs(GroupUnits) do
 			if not UnitIsUnit(unit, groupUnit) and UnitIsConnected(groupUnit) then
-				d = E:GetDistance(unit, groupUnit, true)
+				d = E:GetDistance(unit, groupUnit)
 				if d and d <= 30 then
 					unitsInRange = unitsInRange + 1
 				end
 			end
 		end
 	end
-	
+
 	return unitsInRange
 end
 
@@ -780,12 +870,91 @@ ElvUF.Tags.OnUpdateThrottle['distance'] = 0.1
 ElvUF.Tags.Methods['distance'] = function(unit)
 	local d
 	if UnitIsConnected(unit) and not UnitIsUnit(unit, 'player') then
-		d = E:GetDistance('player', unit, true)
+		d = E:GetDistance('player', unit)
 
 		if d then
 			d = format("%.1f", d)
 		end
 	end
-	
+
 	return d or ''
+end
+
+local baseSpeed = BASE_MOVEMENT_SPEED
+local speedText = SPEED
+ElvUF.Tags.OnUpdateThrottle['speed:percent'] = 0.1
+ElvUF.Tags.Methods['speed:percent'] = function(unit)
+	local currentSpeedInYards = GetUnitSpeed(unit)
+	local currentSpeedInPercent = (currentSpeedInYards / baseSpeed) * 100
+
+	return format("%s: %d%%", speedText, currentSpeedInPercent)
+end
+
+ElvUF.Tags.OnUpdateThrottle['speed:percent-moving'] = 0.1
+ElvUF.Tags.Methods['speed:percent-moving'] = function(unit)
+	local currentSpeedInYards = GetUnitSpeed(unit)
+	local currentSpeedInPercent = currentSpeedInYards > 0 and ((currentSpeedInYards / baseSpeed) * 100)
+	
+	if currentSpeedInPercent then
+		currentSpeedInPercent = format("%s: %d%%", speedText, currentSpeedInPercent)
+	end
+
+	return currentSpeedInPercent or ''
+end
+
+ElvUF.Tags.OnUpdateThrottle['speed:percent-raw'] = 0.1
+ElvUF.Tags.Methods['speed:percent-raw'] = function(unit)
+	local currentSpeedInYards = GetUnitSpeed(unit)
+	local currentSpeedInPercent = (currentSpeedInYards / baseSpeed) * 100
+
+	return format("%d%%", currentSpeedInPercent)
+end
+
+ElvUF.Tags.OnUpdateThrottle['speed:percent-moving-raw'] = 0.1
+ElvUF.Tags.Methods['speed:percent-moving-raw'] = function(unit)
+	local currentSpeedInYards = GetUnitSpeed(unit)
+	local currentSpeedInPercent = currentSpeedInYards > 0 and ((currentSpeedInYards / baseSpeed) * 100)
+	
+	if currentSpeedInPercent then
+		currentSpeedInPercent = format("%d%%", currentSpeedInPercent)
+	end
+
+	return currentSpeedInPercent or ''
+end
+
+ElvUF.Tags.OnUpdateThrottle['speed:yardspersec'] = 0.1
+ElvUF.Tags.Methods['speed:yardspersec'] = function(unit)
+	local currentSpeedInYards = GetUnitSpeed(unit)
+
+	return format("%s: %.1f", speedText, currentSpeedInYards)
+end
+
+ElvUF.Tags.OnUpdateThrottle['speed:yardspersec-moving'] = 0.1
+ElvUF.Tags.Methods['speed:yardspersec-moving'] = function(unit)
+	local currentSpeedInYards = GetUnitSpeed(unit)
+
+	return currentSpeedInYards > 0 and format("%s: %.1f", speedText, currentSpeedInYards) or ''
+end
+
+ElvUF.Tags.OnUpdateThrottle['speed:yardspersec-raw'] = 0.1
+ElvUF.Tags.Methods['speed:yardspersec-raw'] = function(unit)
+	local currentSpeedInYards = GetUnitSpeed(unit)
+	return format("%.1f", currentSpeedInYards)
+end
+
+ElvUF.Tags.OnUpdateThrottle['speed:yardspersec-moving-raw'] = 0.1
+ElvUF.Tags.Methods['speed:yardspersec-moving-raw'] = function(unit)
+	local currentSpeedInYards = GetUnitSpeed(unit)
+	
+	return currentSpeedInYards > 0 and format("%.1f", currentSpeedInYards) or ''
+end
+
+ElvUF.Tags.Events['classificationcolor'] = 'UNIT_CLASSIFICATION_CHANGED'
+ElvUF.Tags.Methods['classificationcolor'] = function(unit)
+	local c = UnitClassification(unit)
+	if(c == 'rare' or c == 'elite') then
+		return Hex(1, 0.5, 0.25) --Orange
+	elseif(c == 'rareelite' or c == 'worldboss') then
+		return Hex(1, 0, 0) --Red
+	end
 end

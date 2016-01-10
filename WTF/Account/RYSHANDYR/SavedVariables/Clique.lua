@@ -5,13 +5,16 @@ CliqueDB3 = {
 		["Stormslinger - Aggramar"] = {
 			["alerthidden"] = true,
 		},
+		["Ryvok - Aggramar"] = {
+			["alerthidden"] = true,
+		},
 		["Banjax - Aggramar"] = {
 			["alerthidden"] = true,
 		},
-		["Kylosandrax - Aggramar"] = {
+		["Ryjax - Aggramar"] = {
 			["alerthidden"] = true,
 		},
-		["Ryvok - Aggramar"] = {
+		["Kylosandrax - Aggramar"] = {
 			["alerthidden"] = true,
 		},
 		["Bronin - Aggramar"] = {
@@ -23,10 +26,13 @@ CliqueDB3 = {
 		["Greenthorn - Aggramar"] = "Greenthorn - Aggramar",
 		["Ryjax - Aggramar"] = "Ryjax - Aggramar",
 		["Kylosandrax - Aggramar"] = "Kylosandrax - Aggramar",
+		["Stormslinger - Aggramar"] = "Stormslinger - Aggramar",
 		["Feldspar - Aggramar"] = "Feldspar - Aggramar",
 		["Kylozandrax - Earthen Ring"] = "Kylozandrax - Earthen Ring",
+		["Ryvok - Terokkar"] = "Ryvok - Terokkar",
+		["Kyloc - Aggramar"] = "Kyloc - Aggramar",
 		["Banjax - Aggramar"] = "Banjax - Aggramar",
-		["Stormslinger - Aggramar"] = "Stormslinger - Aggramar",
+		["Kylosandrix - Aggramar"] = "Kylosandrix - Aggramar",
 		["Ryvok - Aggramar"] = "Ryvok - Aggramar",
 		["Bronin - Aggramar"] = "Bronin - Aggramar",
 	},
@@ -34,10 +40,10 @@ CliqueDB3 = {
 		["Zapunzel - Aggramar"] = {
 			["bindings"] = {
 				{
+					["type"] = "target",
 					["sets"] = {
 						["default"] = true,
 					},
-					["type"] = "target",
 					["key"] = "BUTTON1",
 					["unit"] = "mouseover",
 				}, -- [1]
@@ -53,10 +59,10 @@ CliqueDB3 = {
 		["Greenthorn - Aggramar"] = {
 			["bindings"] = {
 				{
-					["type"] = "target",
 					["sets"] = {
 						["default"] = true,
 					},
+					["type"] = "target",
 					["key"] = "BUTTON1",
 					["unit"] = "mouseover",
 				}, -- [1]
@@ -72,10 +78,10 @@ CliqueDB3 = {
 		["Ryjax - Aggramar"] = {
 			["bindings"] = {
 				{
+					["type"] = "target",
 					["sets"] = {
 						["default"] = true,
 					},
-					["type"] = "target",
 					["key"] = "BUTTON1",
 					["unit"] = "mouseover",
 				}, -- [1]
@@ -86,15 +92,51 @@ CliqueDB3 = {
 						["default"] = true,
 					},
 				}, -- [2]
+				{
+					["spell"] = "Healing Touch",
+					["key"] = "SHIFT-BUTTON1",
+					["sets"] = {
+						["default"] = true,
+					},
+					["icon"] = "Interface\\Icons\\Spell_Nature_HealingTouch",
+					["type"] = "spell",
+				}, -- [3]
+				{
+					["spell"] = "Rejuvenation",
+					["key"] = "SHIFT-BUTTON2",
+					["sets"] = {
+						["default"] = true,
+					},
+					["icon"] = "Interface\\Icons\\Spell_Nature_Rejuvenation",
+					["type"] = "spell",
+				}, -- [4]
+				{
+					["spell"] = "Remove Corruption",
+					["key"] = "SHIFT-BUTTON3",
+					["sets"] = {
+						["default"] = true,
+					},
+					["icon"] = "Interface\\Icons\\Spell_Holy_RemoveCurse",
+					["type"] = "spell",
+				}, -- [5]
+				{
+					["spell"] = "Rebirth",
+					["key"] = "SHIFT-BUTTON4",
+					["sets"] = {
+						["default"] = true,
+					},
+					["icon"] = "Interface\\Icons\\Spell_Nature_Reincarnation",
+					["type"] = "spell",
+				}, -- [6]
 			},
 		},
 		["Kylosandrax - Aggramar"] = {
 			["bindings"] = {
 				{
+					["type"] = "target",
 					["sets"] = {
 						["default"] = true,
 					},
-					["type"] = "target",
 					["key"] = "BUTTON1",
 					["unit"] = "mouseover",
 				}, -- [1]
@@ -106,125 +148,23 @@ CliqueDB3 = {
 					},
 				}, -- [2]
 				{
-					["spell"] = "Intervene",
-					["key"] = "SHIFT-BUTTON1",
-					["sets"] = {
-						["default"] = true,
-					},
-					["icon"] = "Interface\\Icons\\Ability_Warrior_VictoryRush",
-					["type"] = "spell",
-				}, -- [3]
-				{
-					["spell"] = "Vigilance",
+					["spell"] = "Safeguard",
 					["key"] = "SHIFT-BUTTON2",
 					["sets"] = {
 						["default"] = true,
 					},
-					["icon"] = "Interface\\Icons\\Ability_Warrior_Vigilance",
-					["type"] = "spell",
-				}, -- [4]
-			},
-		},
-		["Feldspar - Aggramar"] = {
-			["bindings"] = {
-				{
-					["sets"] = {
-						["default"] = true,
-					},
-					["type"] = "target",
-					["key"] = "BUTTON1",
-					["unit"] = "mouseover",
-				}, -- [1]
-				{
-					["type"] = "menu",
-					["key"] = "BUTTON2",
-					["sets"] = {
-						["default"] = true,
-					},
-				}, -- [2]
-				{
-					["spell"] = "Renew",
-					["key"] = "SHIFT-BUTTON2",
-					["sets"] = {
-						["default"] = true,
-					},
-					["icon"] = "Interface\\Icons\\Spell_Holy_Renew",
+					["icon"] = "Interface\\Icons\\Ability_Warrior_Safeguard",
 					["type"] = "spell",
 				}, -- [3]
-				{
-					["spell"] = "Power Word: Shield",
-					["key"] = "SHIFT-BUTTON4",
-					["sets"] = {
-						["default"] = true,
-					},
-					["icon"] = "Interface\\Icons\\Spell_Holy_PowerWordShield",
-					["type"] = "spell",
-				}, -- [4]
-				{
-					["spell"] = "Flash Heal",
-					["key"] = "SHIFT-BUTTON1",
-					["sets"] = {
-						["default"] = true,
-					},
-					["icon"] = "Interface\\Icons\\Spell_Holy_FlashHeal",
-					["type"] = "spell",
-				}, -- [5]
-				{
-					["spell"] = "Heal",
-					["key"] = "CTRL-BUTTON1",
-					["sets"] = {
-						["default"] = true,
-					},
-					["icon"] = "Interface\\Icons\\Spell_Holy_GreaterHeal",
-					["type"] = "spell",
-				}, -- [6]
-			},
-		},
-		["Kylozandrax - Earthen Ring"] = {
-			["bindings"] = {
-				{
-					["type"] = "target",
-					["sets"] = {
-						["default"] = true,
-					},
-					["key"] = "BUTTON1",
-					["unit"] = "mouseover",
-				}, -- [1]
-				{
-					["type"] = "menu",
-					["key"] = "BUTTON2",
-					["sets"] = {
-						["default"] = true,
-					},
-				}, -- [2]
-			},
-		},
-		["Banjax - Aggramar"] = {
-			["bindings"] = {
-				{
-					["sets"] = {
-						["default"] = true,
-					},
-					["type"] = "target",
-					["key"] = "BUTTON1",
-					["unit"] = "mouseover",
-				}, -- [1]
-				{
-					["type"] = "menu",
-					["key"] = "BUTTON2",
-					["sets"] = {
-						["default"] = true,
-					},
-				}, -- [2]
 			},
 		},
 		["Stormslinger - Aggramar"] = {
 			["bindings"] = {
 				{
-					["type"] = "target",
 					["sets"] = {
 						["default"] = true,
 					},
+					["type"] = "target",
 					["key"] = "BUTTON1",
 					["unit"] = "mouseover",
 				}, -- [1]
@@ -255,7 +195,7 @@ CliqueDB3 = {
 				}, -- [4]
 			},
 		},
-		["Ryvok - Aggramar"] = {
+		["Feldspar - Aggramar"] = {
 			["bindings"] = {
 				{
 					["type"] = "target",
@@ -266,12 +206,12 @@ CliqueDB3 = {
 					["unit"] = "mouseover",
 				}, -- [1]
 				{
-					["spell"] = "Word of Glory",
-					["key"] = "SHIFT-F",
+					["spell"] = "Renew",
+					["key"] = "SHIFT-BUTTON2",
 					["sets"] = {
 						["default"] = true,
 					},
-					["icon"] = "INTERFACE\\ICONS\\inv_helmet_96",
+					["icon"] = "Interface\\Icons\\Spell_Holy_Renew",
 					["type"] = "spell",
 				}, -- [2]
 				{
@@ -282,14 +222,194 @@ CliqueDB3 = {
 					},
 				}, -- [3]
 				{
-					["spell"] = "Sacred Shield",
+					["spell"] = "Flash Heal",
+					["key"] = "SHIFT-BUTTON1",
+					["sets"] = {
+						["default"] = true,
+					},
+					["icon"] = "Interface\\Icons\\Spell_Holy_FlashHeal",
+					["type"] = "spell",
+				}, -- [4]
+				{
+					["spell"] = "Power Word: Shield",
 					["key"] = "SHIFT-BUTTON4",
 					["sets"] = {
 						["default"] = true,
 					},
-					["icon"] = "Interface\\Icons\\Ability_Paladin_BlessedMending",
+					["icon"] = "Interface\\Icons\\Spell_Holy_PowerWordShield",
+					["type"] = "spell",
+				}, -- [5]
+				{
+					["spell"] = "Heal",
+					["key"] = "CTRL-BUTTON1",
+					["sets"] = {
+						["default"] = true,
+					},
+					["icon"] = "Interface\\Icons\\Spell_Holy_GreaterHeal",
+					["type"] = "spell",
+				}, -- [6]
+			},
+		},
+		["Kylozandrax - Earthen Ring"] = {
+			["bindings"] = {
+				{
+					["sets"] = {
+						["default"] = true,
+					},
+					["type"] = "target",
+					["key"] = "BUTTON1",
+					["unit"] = "mouseover",
+				}, -- [1]
+				{
+					["type"] = "menu",
+					["key"] = "BUTTON2",
+					["sets"] = {
+						["default"] = true,
+					},
+				}, -- [2]
+			},
+		},
+		["Ryvok - Terokkar"] = {
+			["bindings"] = {
+				{
+					["type"] = "target",
+					["sets"] = {
+						["default"] = true,
+					},
+					["key"] = "BUTTON1",
+					["unit"] = "mouseover",
+				}, -- [1]
+				{
+					["type"] = "menu",
+					["key"] = "BUTTON2",
+					["sets"] = {
+						["default"] = true,
+					},
+				}, -- [2]
+			},
+		},
+		["Kyloc - Aggramar"] = {
+			["bindings"] = {
+				{
+					["type"] = "target",
+					["sets"] = {
+						["default"] = true,
+					},
+					["key"] = "BUTTON1",
+					["unit"] = "mouseover",
+				}, -- [1]
+				{
+					["type"] = "menu",
+					["key"] = "BUTTON2",
+					["sets"] = {
+						["default"] = true,
+					},
+				}, -- [2]
+			},
+		},
+		["Banjax - Aggramar"] = {
+			["bindings"] = {
+				{
+					["type"] = "target",
+					["sets"] = {
+						["default"] = true,
+					},
+					["key"] = "BUTTON1",
+					["unit"] = "mouseover",
+				}, -- [1]
+				{
+					["spell"] = "Detox",
+					["key"] = "SHIFT-BUTTON3",
+					["sets"] = {
+						["default"] = true,
+					},
+					["icon"] = "Interface\\Icons\\ability_rogue_imrovedrecuperate",
+					["type"] = "spell",
+				}, -- [2]
+				{
+					["type"] = "menu",
+					["key"] = "BUTTON2",
+					["sets"] = {
+						["default"] = true,
+					},
+				}, -- [3]
+				{
+					["spell"] = "Renewing Mist",
+					["key"] = "SHIFT-BUTTON2",
+					["sets"] = {
+						["default"] = true,
+					},
+					["icon"] = "Interface\\Icons\\ability_monk_renewingmists",
 					["type"] = "spell",
 				}, -- [4]
+				{
+					["spell"] = "Soothing Mist",
+					["key"] = "SPACE",
+					["sets"] = {
+						["default"] = true,
+					},
+					["icon"] = "Interface\\Icons\\ability_monk_soothingmists",
+					["type"] = "spell",
+				}, -- [5]
+				{
+					["spell"] = "Surging Mist",
+					["key"] = "SHIFT-BUTTON1",
+					["sets"] = {
+						["default"] = true,
+					},
+					["icon"] = "Interface\\Icons\\ability_monk_surgingmist",
+					["type"] = "spell",
+				}, -- [6]
+				{
+					["spell"] = "Uplift",
+					["key"] = "SHIFT-W",
+					["sets"] = {
+						["default"] = true,
+					},
+					["icon"] = "Interface\\Icons\\ability_monk_uplift",
+					["type"] = "spell",
+				}, -- [7]
+				{
+					["spell"] = "Life Cocoon",
+					["key"] = "SHIFT-BUTTON4",
+					["sets"] = {
+						["default"] = true,
+					},
+					["icon"] = "Interface\\Icons\\ability_monk_chicocoon",
+					["type"] = "spell",
+				}, -- [8]
+				{
+					["spell"] = "Enveloping Mist",
+					["key"] = "SHIFT-SPACE",
+					["sets"] = {
+						["default"] = true,
+					},
+					["icon"] = "Interface\\Icons\\spell_monk_envelopingmist",
+					["type"] = "spell",
+				}, -- [9]
+			},
+		},
+		["Kylosandrix - Aggramar"] = {
+			["bindings"] = {
+				{
+					["sets"] = {
+						["default"] = true,
+					},
+					["type"] = "target",
+					["key"] = "BUTTON1",
+					["unit"] = "mouseover",
+				}, -- [1]
+				{
+					["type"] = "menu",
+					["key"] = "BUTTON2",
+					["sets"] = {
+						["default"] = true,
+					},
+				}, -- [2]
+			},
+		},
+		["Ryvok - Aggramar"] = {
+			["bindings"] = {
 				{
 					["spell"] = "Flash of Light",
 					["key"] = "SHIFT-BUTTON1",
@@ -298,106 +418,52 @@ CliqueDB3 = {
 					},
 					["icon"] = "Interface\\Icons\\Spell_Holy_FlashHeal",
 					["type"] = "spell",
-				}, -- [5]
+				}, -- [1]
 				{
-					["spell"] = "Execution Sentence",
-					["key"] = "SHIFT-3",
+					["spell"] = "Hand of Protection",
+					["key"] = "SHIFT-BUTTON4",
 					["sets"] = {
 						["default"] = true,
-						["sectalent"] = true,
 					},
-					["icon"] = "Interface\\Icons\\spell_paladin_executionsentence",
+					["icon"] = "Interface\\Icons\\Spell_Holy_SealOfProtection",
 					["type"] = "spell",
-				}, -- [6]
+				}, -- [2]
 				{
-					["spell"] = "Beacon of Light",
-					["key"] = "SHIFT-A",
-					["sets"] = {
-						["default"] = true,
-						["sectalent"] = true,
-					},
-					["icon"] = "Interface\\Icons\\Ability_Paladin_BeaconofLight",
-					["type"] = "spell",
-				}, -- [7]
-				{
-					["spell"] = "Holy Radiance",
-					["key"] = "SHIFT-W",
-					["sets"] = {
-						["default"] = true,
-						["sectalent"] = true,
-					},
-					["icon"] = "INTERFACE\\ICONS\\spell_paladin_divinecircle",
-					["type"] = "spell",
-				}, -- [8]
-				{
-					["spell"] = "Holy Shock",
-					["key"] = "SPACE",
-					["sets"] = {
-						["default"] = true,
-						["sectalent"] = true,
-					},
-					["icon"] = "Interface\\Icons\\Spell_Holy_SearingLight",
-					["type"] = "spell",
-				}, -- [9]
-				{
-					["spell"] = "Holy Light",
+					["spell"] = "Hand of Sacrifice",
 					["key"] = "SHIFT-BUTTON2",
 					["sets"] = {
 						["default"] = true,
-						["sectalent"] = true,
 					},
-					["icon"] = "Interface\\Icons\\Spell_Holy_SurgeOfLight",
+					["icon"] = "Interface\\Icons\\Spell_Holy_SealOfSacrifice",
 					["type"] = "spell",
-				}, -- [10]
+				}, -- [3]
 				{
 					["spell"] = "Cleanse",
 					["key"] = "SHIFT-BUTTON3",
 					["sets"] = {
 						["default"] = true,
-						["sectalent"] = true,
 					},
 					["icon"] = "Interface\\Icons\\Spell_Holy_Purify",
 					["type"] = "spell",
-				}, -- [11]
+				}, -- [4]
 				{
-					["spell"] = "Hand of Protection",
-					["key"] = "SHIFT-2",
+					["spell"] = "Word of Glory",
+					["key"] = "SHIFT-F",
 					["sets"] = {
 						["default"] = true,
-						["sectalent"] = true,
 					},
-					["icon"] = "Interface\\Icons\\Spell_Holy_SealOfProtection",
+					["icon"] = "INTERFACE\\ICONS\\inv_helmet_96",
 					["type"] = "spell",
-				}, -- [12]
-				{
-					["spell"] = "Hand of Freedom",
-					["key"] = "SHIFT-3",
-					["sets"] = {
-						["default"] = true,
-						["sectalent"] = true,
-					},
-					["icon"] = "Interface\\Icons\\Spell_Holy_SealOfValor",
-					["type"] = "spell",
-				}, -- [13]
-				{
-					["spell"] = "Hand of Sacrifice",
-					["key"] = "SHIFT-1",
-					["sets"] = {
-						["default"] = true,
-						["sectalent"] = true,
-					},
-					["icon"] = "Interface\\Icons\\Spell_Holy_SealOfSacrifice",
-					["type"] = "spell",
-				}, -- [14]
+				}, -- [5]
 			},
 		},
 		["Bronin - Aggramar"] = {
 			["bindings"] = {
 				{
+					["type"] = "target",
 					["sets"] = {
 						["default"] = true,
 					},
-					["type"] = "target",
 					["key"] = "BUTTON1",
 					["unit"] = "mouseover",
 				}, -- [1]

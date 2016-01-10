@@ -16,14 +16,17 @@ TidyPlatesHubDefaults = {
 
 	StyleFriendlyBarsOnActive = true,
 	StyleFriendlyBarsOnElite = false,
+	StyleFriendlyBarsInstanceMode = false,
 	StyleFriendlyBarsOnPlayers = true,
 	StyleFriendlyBarsOnNPC = false,
 
 	StyleEnemyBarsOnActive = true,
 	StyleEnemyBarsOnElite = true,
+	StyleEnemyBarsInstanceMode = false,
 	StyleEnemyBarsOnPlayers = true,
 	StyleEnemyBarsOnNPC = true,
 
+	StyleForceBarsOnTargets = false,
 
 	ColorEnemyBarMode =  1,
 	ColorEnemyNameMode = 1,
@@ -118,7 +121,7 @@ TidyPlatesHubDefaults = {
 	ColorDangerGlowMode = 2,
 	TextNameColorMode = 1,
 	ClassColorPartyMembers = false,
-	ColorEnableOffTank = false,
+	EnableOffTankHighlight = false,
 
 	-- Threat
 	---------------------------------------

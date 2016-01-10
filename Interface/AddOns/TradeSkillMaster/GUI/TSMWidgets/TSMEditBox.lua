@@ -9,6 +9,7 @@
 -- Much of this code is copied from .../AceGUI-3.0/widgets/AceGUIWidget-EditBox.lua
 -- This EditBox widget is modified to fit TSM's theme / needs
 local TSM = select(2, ...)
+local L = LibStub("AceLocale-3.0"):GetLocale("TradeSkillMaster") -- loads the localization table
 local Type, Version = "TSMEditBox", 2
 local AceGUI = LibStub and LibStub("AceGUI-3.0", true)
 if not AceGUI or (AceGUI:GetWidgetVersion(Type) or 0) >= Version then return end
@@ -29,10 +30,10 @@ Support functions
 
 if not TSMEditBoxInsertLink then
 	-- upgradeable hook
-	hooksecurefunc("ChatEdit_InsertLink", function(...) return _G.TSMEditBoxInsertLink(...) end)
+	hooksecurefunc("ChatEdit_InsertLink", function(...) return TSMEditBoxInsertLink(...) end)
 end
 
-function _G.TSMEditBoxInsertLink(text)
+function TSMEditBoxInsertLink(text)
 	for i = 1, AceGUI:GetWidgetCount(Type) do
 		local editbox = _G["TSMEditBox"..i]
 		if editbox and editbox:IsVisible() and editbox:HasFocus() then
@@ -60,11 +61,26 @@ Scripts
 -------------------------------------------------------------------------------]]
 
 local function Control_OnEnter(frame)
-	frame.obj:Fire("OnEnter")
+	if frame.obj.disabled then
+		local value = frame.obj.editbox:GetText()
+		if #value > 0 then
+			GameTooltip:SetOwner(frame, "ANCHOR_NONE")
+			GameTooltip:SetPoint("BOTTOM", frame, "TOP")
+			GameTooltip:SetText(L["This EditBox is Disabled"], 1, 0, 0)
+			GameTooltip:AddLine(L["|cff99ffffValue:|r "]..value, 1, 1, 1)
+			GameTooltip:Show()
+		end
+	else
+		frame.obj:Fire("OnEnter")
+	end
 end
 
 local function Control_OnLeave(frame)
-	frame.obj:Fire("OnLeave")
+	if frame.obj.disabled then
+		GameTooltip:Hide()
+	else
+		frame.obj:Fire("OnLeave")
+	end
 end
 
 local function Frame_OnShowFocus(frame)
@@ -78,6 +94,7 @@ end
 
 local function EditBox_OnEnterPressed(frame)
 	local self = frame.obj
+	if self.disabled then return end
 	local value = frame:GetText()
 	self:ClearFocus()
 	local cancel = self:Fire("OnEnterPressed", value)
@@ -89,6 +106,7 @@ end
 
 local function EditBox_OnReceiveDrag(frame)
 	local self = frame.obj
+	if self.disabled then return end
 	local type, id, info = GetCursorInfo()
 	if type == "item" then
 		self:SetText(info)
@@ -106,6 +124,7 @@ end
 
 local function EditBox_OnTextChanged(frame)
 	local self = frame.obj
+	if self.disabled then return end
 	local value = frame:GetText()
 	if tostring(value) ~= tostring(self.lasttext) then
 		self:Fire("OnTextChanged", value)
@@ -116,7 +135,11 @@ end
 
 local function EditBox_OnFocusGained(frame)
 	AceGUI:SetFocus(frame.obj)
-	frame.obj:Fire("OnEditFocusGained")
+	if frame.obj.disabled then
+		frame.obj.editbox:ClearFocus()
+	else
+		frame.obj:Fire("OnEditFocusGained")
+	end
 end
 
 local function EditBox_OnFocusLost(frame)
@@ -143,7 +166,7 @@ local methods = {
 		self:SetText()
 		self:DisableButton()
 		self:SetMaxLetters(0)
-		TSMAPI.GUI:SetAutoComplete(self.editbox, nil)
+		TSM.GUI:SetAutoComplete(self.editbox, nil)
 	end,
 
 	["OnRelease"] = function(self)
@@ -153,7 +176,7 @@ local methods = {
 	["SetDisabled"] = function(self, disabled)
 		self.disabled = disabled
 		TSMAPI.Design:SetWidgetTextColor(self.editbox, disabled)
-		self.editbox:EnableMouse(not disabled)
+		-- self.editbox:EnableMouse(not disabled)
 		TSMAPI.Design:SetWidgetLabelColor(self.label, disabled)
 		if disabled then
 			self.editbox:ClearFocus()
@@ -215,7 +238,7 @@ local methods = {
 	end,
 	
 	["SetAutoComplete"] = function(self, params)
-		TSMAPI.GUI:SetAutoComplete(self.editbox, params)
+		TSM.GUI:SetAutoComplete(self.editbox, params)
 	end,
 }
 

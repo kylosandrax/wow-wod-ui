@@ -1,3 +1,6 @@
+local addonName, addon = ...
+local hbd = addon.hbd
+
 local enableClicks = true       -- True if waypoint-clicking is enabled to set points
 local enableClosest = true      -- True if 'Automatic' quest waypoints are enabled
 local modifier                  -- A string representing click-modifiers "CAS", etc.
@@ -9,7 +12,6 @@ local modTbl = {
 }
 
 local L = TomTomLocals
-local astrolabe = DongleStub("Astrolabe-1.0")
 
 -- This function and the related events/hooks are used to automatically
 -- update the crazy arrow to the closest quest waypoint.
@@ -35,7 +37,7 @@ local function ObjectivesChanged()
     end
 
     local map, floor = GetCurrentMapAreaID()
-    local floors = astrolabe:GetNumFloors(map)
+    local floors = hbd:GetNumFloors(map)
     floor = (floors == 0 and 0 or 1)
 
     local px, py = GetPlayerMapPosition("player")
@@ -70,7 +72,7 @@ local function ObjectivesChanged()
         local completed, x, y, objective = QuestPOIGetIconInfo(qid)
 
         if x and y then
-            local dist, xd, yd = astrolabe:ComputeDistance(map, floor, px, py, map, floor, x, y)
+            local dist = hbd:GetZoneDistance(map, floor, px, py, map, floor, x, y)
             if dist < closestdist then
                 closest = watchIndex
                 closestdist = dist

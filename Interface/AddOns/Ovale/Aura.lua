@@ -1,5 +1,5 @@
 --[[--------------------------------------------------------------------
-    Copyright (C) 2013, 2014 Johnny C. Lam.
+    Copyright (C) 2013, 2014, 2015 Johnny C. Lam.
     See the file LICENSE.txt for copying permission.
 --]]--------------------------------------------------------------------
 
@@ -18,7 +18,6 @@ local OvalePool = Ovale.OvalePool
 local OvaleProfiler = Ovale.OvaleProfiler
 
 -- Forward declarations for module dependencies.
-local LibDispellable = LibStub("LibDispellable-1.0", true)
 local OvaleData = nil
 local OvaleFuture = nil
 local OvaleGUID = nil
@@ -29,23 +28,20 @@ local OvaleState = nil
 local bit_band = bit.band
 local bit_bor = bit.bor
 local floor = math.floor
-local gmatch = string.gmatch
 local ipairs = ipairs
 local next = next
 local pairs = pairs
 local strfind = string.find
-local strmatch = string.match
+local strlower = string.lower
 local strsub = string.sub
 local tconcat = table.concat
 local tinsert = table.insert
 local tonumber = tonumber
 local tsort = table.sort
+local type = type
 local wipe = wipe
 local API_GetTime = GetTime
 local API_UnitAura = UnitAura
-local API_UnitGUID = UnitGUID
-local API_UnitHealth = UnitHealth
-local API_UnitHealthMax = UnitHealthMax
 local INFINITY = math.huge
 local SCHOOL_MASK_ARCANE = SCHOOL_MASK_ARCANE
 local SCHOOL_MASK_FIRE = SCHOOL_MASK_FIRE
@@ -60,17 +56,11 @@ OvaleDebug:RegisterDebugging(OvaleAura)
 OvaleProfiler:RegisterProfiling(OvaleAura)
 
 -- Player's GUID.
-local self_guid = nil
+local self_playerGUID = nil
+-- Player's pet's GUID.
+local self_petGUID = nil
 -- Table pool.
 local self_pool = OvalePool("OvaleAura_pool")
-do
-	self_pool.Clean = function(self, aura)
-		-- Release reference-counted snapshot before wiping.
-		if aura.snapshot then
-			OvalePaperDoll:ReleaseSnapshot(aura.snapshot)
-		end
-	end
-end
 
 -- Some auras have a nil caster, so treat those as having a GUID of zero for indexing purposes.
 local UNKNOWN_GUID = 0
@@ -139,12 +129,20 @@ do
 end
 
 -- Aura debuff types.
-local DEBUFF_TYPES = {
+local DEBUFF_TYPE = {
 	Curse = true,
 	Disease = true,
+	Enrage = true,
 	Magic = true,
 	Poison = true,
 }
+local SPELLINFO_DEBUFF_TYPE = {}
+do
+	for debuffType in pairs(DEBUFF_TYPE) do
+		local siDebuffType = strlower(debuffType)
+		SPELLINFO_DEBUFF_TYPE[siDebuffType] = debuffType
+	end
+end
 
 -- CLEU events triggered by auras being applied, removed, refreshed, or changed in stack size.
 local CLEU_AURA_EVENTS = {
@@ -175,6 +173,8 @@ local CLEU_SCHOOL_MASK_MAGIC = bit_bor(SCHOOL_MASK_ARCANE, SCHOOL_MASK_FIRE, SCH
 OvaleAura.aura = {}
 -- Current age of auras per unit: serial[guid] = age.
 OvaleAura.serial = {}
+-- Unused public property to suppress lint warnings.
+--OvaleAura.defaultTarget = nil
 --</public-static-properties>
 
 --<private-static-methods>
@@ -251,15 +251,35 @@ end
 
 local function GetAuraOnGUID(auraDB, guid, auraId, filter, mine)
 	local auraFound
-	if DEBUFF_TYPES[auraId] then
+	if DEBUFF_TYPE[auraId] then
 		if mine then
-			auraFound = GetDebuffType(auraDB, guid, auraId, filter, self_guid)
+			-- Check for aura applied by player, then player's pet if it exists.
+			auraFound = GetDebuffType(auraDB, guid, auraId, filter, self_playerGUID)
+			if not auraFound then
+				for petGUID in pairs(self_petGUID) do
+					local aura = GetDebuffType(auraDB, guid, auraId, filter, petGUID)
+					-- Find the aura with the latest expiration time.
+					if aura and (not auraFound or auraFound.ending < aura.ending) then
+						auraFound = aura
+					end
+				end
+			end
 		else
 			auraFound = GetDebuffTypeAnyCaster(auraDB, guid, auraId, filter)
 		end
 	else
 		if mine then
-			auraFound = GetAura(auraDB, guid, auraId, self_guid)
+			-- Check for aura applied by player, then player's pet if it exists.
+			auraFound = GetAura(auraDB, guid, auraId, self_playerGUID)
+			if not auraFound then
+				for petGUID in pairs(self_petGUID) do
+					local aura = GetAura(auraDB, guid, auraId, petGUID)
+					-- Find the aura with the latest expiration time.
+					if aura and (not auraFound or auraFound.ending < aura.ending) then
+						auraFound = aura
+					end
+				end
+			end
 		else
 			auraFound = GetAuraAnyCaster(auraDB, guid, auraId)
 		end
@@ -283,14 +303,6 @@ local function RemoveAurasOnGUID(auraDB, guid)
 	end
 end
 
-local function IsEnrageEffect(auraId)
-	local boolean = OvaleData.buffSpellList.enrage[auraId]
-	if LibDispellable then
-		boolean = LibDispellable:IsEnrageEffect(auraId)
-	end
-	return boolean or nil
-end
-
 local function IsWithinAuraLag(time1, time2, factor)
 	factor = factor or 1
 	local auraLag = Ovale.db.profile.apparence.auraLag
@@ -311,39 +323,50 @@ function OvaleAura:OnInitialize()
 end
 
 function OvaleAura:OnEnable()
-	self_guid = API_UnitGUID("player")
+	self_playerGUID = Ovale.playerGUID
+	self_petGUID = OvaleGUID.petGUID
 	self:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
-	self:RegisterEvent("PLAYER_ENTERING_WORLD", "ScanAllUnitAuras")
+	self:RegisterEvent("PLAYER_ENTERING_WORLD")
 	self:RegisterEvent("PLAYER_REGEN_ENABLED")
-	self:RegisterEvent("PLAYER_TARGET_CHANGED")
 	self:RegisterEvent("UNIT_AURA")
 	self:RegisterMessage("Ovale_GroupChanged", "ScanAllUnitAuras")
+	self:RegisterMessage("Ovale_UnitChanged")
 	OvaleData:RegisterRequirement("buff", "RequireBuffHandler", self)
+	OvaleData:RegisterRequirement("buff_any", "RequireBuffHandler", self)
 	OvaleData:RegisterRequirement("debuff", "RequireBuffHandler", self)
+	OvaleData:RegisterRequirement("debuff_any", "RequireBuffHandler", self)
+	OvaleData:RegisterRequirement("pet_buff", "RequireBuffHandler", self)
+	OvaleData:RegisterRequirement("pet_debuff", "RequireBuffHandler", self)
 	OvaleData:RegisterRequirement("stealth", "RequireStealthHandler", self)
 	OvaleData:RegisterRequirement("stealthed", "RequireStealthHandler", self)
 	OvaleData:RegisterRequirement("target_buff", "RequireBuffHandler", self)
+	OvaleData:RegisterRequirement("target_buff_any", "RequireBuffHandler", self)
 	OvaleData:RegisterRequirement("target_debuff", "RequireBuffHandler", self)
-	OvaleData:RegisterRequirement("target_health_pct", "RequireTargetHealthPercentHandler", self)
+	OvaleData:RegisterRequirement("target_debuff_any", "RequireBuffHandler", self)
 	OvaleState:RegisterState(self, self.statePrototype)
 end
 
 function OvaleAura:OnDisable()
 	OvaleState:UnregisterState(self)
 	OvaleData:UnregisterRequirement("buff")
+	OvaleData:UnregisterRequirement("buff_any")
 	OvaleData:UnregisterRequirement("debuff")
+	OvaleData:UnregisterRequirement("debuff_any")
+	OvaleData:UnregisterRequirement("pet_buff")
+	OvaleData:UnregisterRequirement("pet_debuff")
 	OvaleData:UnregisterRequirement("stealth")
 	OvaleData:UnregisterRequirement("stealthed")
 	OvaleData:UnregisterRequirement("target_buff")
+	OvaleData:UnregisterRequirement("target_buff_any")
 	OvaleData:UnregisterRequirement("target_debuff")
-	OvaleData:UnregisterRequirement("target_health_pct")
+	OvaleData:UnregisterRequirement("target_debuff_any")
 	self:UnregisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
 	self:UnregisterEvent("PLAYER_ENTERING_WORLD")
 	self:UnregisterEvent("PLAYER_REGEN_ENABLED")
-	self:UnregisterEvent("PLAYER_TARGET_CHANGED")
 	self:UnregisterEvent("PLAYER_UNGHOST")
 	self:UnregisterEvent("UNIT_AURA")
 	self:UnregisterMessage("Ovale_GroupChanged")
+	self:UnregisterMessage("Ovale_UnitChanged")
 	for guid in pairs(self.aura) do
 		RemoveAurasOnGUID(self.aura, guid)
 	end
@@ -353,19 +376,19 @@ end
 function OvaleAura:COMBAT_LOG_EVENT_UNFILTERED(event, timestamp, cleuEvent, hideCaster, sourceGUID, sourceName, sourceFlags, sourceRaidFlags, destGUID, destName, destFlags, destRaidFlags, ...)
 	local arg12, arg13, arg14, arg15, arg16, arg17, arg18, arg19, arg20, arg21, arg22, arg23, arg24, arg25 = ...
 
-	local mine = (sourceGUID == self_guid)
+	local mine = (sourceGUID == self_playerGUID or OvaleGUID:IsPlayerPet(sourceGUID))
 	if CLEU_AURA_EVENTS[cleuEvent] then
-		local unitId = OvaleGUID:GetUnitId(destGUID)
+		local unitId = OvaleGUID:GUIDUnit(destGUID)
 		if unitId then
 			-- Only update auras on the unit if it is not a unit type that receives UNIT_AURA events.
 			if not OvaleGUID.UNIT_AURA_UNIT[unitId] then
-				self:Debug(true, "%s: %s (%s)", cleuEvent, destGUID, unitId)
+				self:DebugTimestamp("%s: %s (%s)", cleuEvent, destGUID, unitId)
 				self:ScanAuras(unitId, destGUID)
 			end
 		elseif mine then
 			-- There is no unit ID, but the action was caused by the player, so update this aura on destGUID.
 			local spellId, spellName, spellSchool = arg12, arg13, arg14
-			self:Debug(true, "%s: %s (%d) on %s", cleuEvent, spellName, spellId, destGUID)
+			self:DebugTimestamp("%s: %s (%d) on %s", cleuEvent, spellName, spellId, destGUID)
 			local now = API_GetTime()
 			if cleuEvent == "SPELL_AURA_REMOVED" or cleuEvent == "SPELL_AURA_BROKEN" or cleuEvent == "SPELL_AURA_BROKEN_SPELL" then
 				self:LostAuraOnGUID(destGUID, now, spellId, sourceGUID)
@@ -381,7 +404,7 @@ function OvaleAura:COMBAT_LOG_EVENT_UNFILTERED(event, timestamp, cleuEvent, hide
 					duration = aura.duration
 				elseif si and si.duration then
 					-- Look up the duration from the SpellInfo.
-					duration = OvaleData:GetSpellInfoProperty(spellId, "duration", unitId)
+					duration = OvaleData:GetSpellInfoProperty(spellId, now, "duration", destGUID)
 					if si.addduration then
 						duration = duration + si.addduration
 					end
@@ -413,14 +436,10 @@ function OvaleAura:COMBAT_LOG_EVENT_UNFILTERED(event, timestamp, cleuEvent, hide
 			multistrike = arg19
 		end
 		if not multistrike then
-			local unitId = OvaleGUID:GetUnitId(destGUID)
-			if unitId then
-				self:Debug(true, "%s: %s (%s)", cleuEvent, destGUID, unitId)
-			else
-				self:Debug(true, "%s: %s", cleuEvent, destGUID)
-			end
-			local aura = GetAura(self.aura, destGUID, spellId, self_guid)
-			if self:IsActiveAura(aura) then
+			self:DebugTimestamp("%s: %s", cleuEvent, destGUID)
+			local aura = GetAura(self.aura, destGUID, spellId, self_playerGUID)
+			local now = API_GetTime()
+			if self:IsActiveAura(aura, now) then
 				local name = aura.name or "Unknown spell"
 				local baseTick, lastTickTime = aura.baseTick, aura.lastTickTime
 				local tick = baseTick
@@ -438,9 +457,15 @@ function OvaleAura:COMBAT_LOG_EVENT_UNFILTERED(event, timestamp, cleuEvent, hide
 				aura.lastTickTime = timestamp
 				aura.tick = tick
 				self:Debug("    Updating %s (%s) on %s, tick=%s, lastTickTime=%s", name, spellId, destGUID, tick, lastTickTime)
+				Ovale.refreshNeeded[destGUID] = true
 			end
 		end
 	end
+end
+
+function OvaleAura:PLAYER_ENTERING_WORLD(event)
+	-- Initialize aura databases by scanning all unit auras.
+	self:ScanAllUnitAuras()
 end
 
 function OvaleAura:PLAYER_REGEN_ENABLED(event)
@@ -448,19 +473,16 @@ function OvaleAura:PLAYER_REGEN_ENABLED(event)
 	self_pool:Drain()
 end
 
-function OvaleAura:PLAYER_TARGET_CHANGED(event, cause)
-	if cause == "NIL" or cause == "down" then
-		-- Target was cleared.
-	else
-		-- Target has changed.
-		self:Debug(event)
-		self:ScanAuras("target")
-	end
-end
-
 function OvaleAura:UNIT_AURA(event, unitId)
 	self:Debug("%s: %s", event, unitId)
 	self:ScanAuras(unitId)
+end
+
+function OvaleAura:Ovale_UnitChanged(event, unitId, guid)
+	if (unitId == "pet" or unitId == "target") and guid then
+		self:Debug(event, unitId, guid)
+		self:ScanAuras(unitId, guid)
+	end
 end
 
 function OvaleAura:ScanAllUnitAuras()
@@ -474,7 +496,7 @@ function OvaleAura:RemoveAurasOnInactiveUnits()
 	-- Remove all auras from GUIDs that can no longer be referenced by a unit ID,
 	-- i.e., not in the group or not targeted by anyone in the group or focus.
 	for guid in pairs(self.aura) do
-		local unitId = OvaleGUID:GetUnitId(guid)
+		local unitId = OvaleGUID:GUIDUnit(guid)
 		if not unitId then
 			self:Debug("Removing auras from GUID %s", guid)
 			RemoveAurasOnGUID(self.aura, guid)
@@ -483,13 +505,13 @@ function OvaleAura:RemoveAurasOnInactiveUnits()
 	end
 end
 
-function OvaleAura:IsActiveAura(aura, now)
+function OvaleAura:IsActiveAura(aura, atTime)
 	local boolean = false
 	if aura then
-		now = now or API_GetTime()
-		if aura.serial == self.serial[aura.guid] and aura.stacks > 0 and aura.gain <= now and now <= aura.ending then
+		atTime = atTime or API_GetTime()
+		if aura.serial == self.serial[aura.guid] and aura.stacks > 0 and aura.gain <= atTime and atTime <= aura.ending then
 			boolean = true
-		elseif aura.consumed and IsWithinAuraLag(aura.ending, now) then
+		elseif aura.consumed and IsWithinAuraLag(aura.ending, atTime) then
 			boolean = true
 		end
 	end
@@ -500,7 +522,6 @@ function OvaleAura:GainedAuraOnGUID(guid, atTime, auraId, casterGUID, filter, vi
 	self:StartProfiling("OvaleAura_GainedAuraOnGUID")
 	-- Whose aura is it?
 	casterGUID = casterGUID or UNKNOWN_GUID
-	local mine = (casterGUID == self_guid)
 
 	-- UnitAura() can return zero count for auras that are present.
 	count = (count and count > 0) and count or 1
@@ -560,14 +581,12 @@ function OvaleAura:GainedAuraOnGUID(guid, atTime, auraId, casterGUID, filter, vi
 		aura.visible = visible
 		aura.icon = icon
 		aura.debuffType = debuffType
-		aura.enrage = IsEnrageEffect(auraId)
+		aura.enrage = (debuffType == "Enrage") or nil
 		aura.stealable = isStealable
 		aura.value1, aura.value2, aura.value3 = value1, value2, value3
 
-		-- Map the GUID to a unit ID.
-		local unitId = OvaleGUID:GetUnitId(guid)
-
-		-- Snapshot stats for auras applied by the player.
+		-- Snapshot stats for auras applied by the player or player's pet.
+		local mine = (casterGUID == self_playerGUID or OvaleGUID:IsPlayerPet(casterGUID))
 		if mine then
 			-- Determine whether to snapshot player stats for the aura or to keep the existing stats.
 			local spellcast = OvaleFuture:LastInFlightSpell()
@@ -583,30 +602,26 @@ function OvaleAura:GainedAuraOnGUID(guid, atTime, auraId, casterGUID, filter, vi
 				-- Parse the spell data for this aura to see if this is a "refresh_keep_snapshot" aura.
 				local keepSnapshot = false
 				local si = OvaleData.spellInfo[spellId]
-				if si and si.aura and si.aura.target and si.aura.target[filter] then
-					local spellData = si.aura.target[filter][auraId]
-					if spellData and strsub(spellData, 1, 21) == "refresh_keep_snapshot" then
-						local tokenIterator
-						if strfind(spellData, ",") then
-							tokenIterator = gmatch(spellData, "[^,]+")
-							-- Advance past "refresh_keep_snapshot".
-							tokenIterator()
-						end
-						if tokenIterator then
-							keepSnapshot = OvaleData:CheckRequirements(spellId, tokenIterator, unitId)
-						else
+				if si and si.aura then
+					local auraTable = OvaleGUID:IsPlayerPet(guid) and si.aura.pet or si.aura.target
+					if auraTable and auraTable[filter] then
+						local spellData = auraTable[filter][auraId]
+						if spellData == "refresh_keep_snapshot" then
 							keepSnapshot = true
+						elseif type(spellData) == "table" and spellData[1] == "refresh_keep_snapshot" then
+							-- Comma-separated value.
+							keepSnapshot = OvaleData:CheckRequirements(spellId, atTime, spellData, 2, guid)
 						end
 					end
 				end
 				if keepSnapshot then
 					self:Debug("    Keeping snapshot stats for %s %s (%d) on %s refreshed by %s (%d) from %f, now=%f, aura.serial=%d",
-						filter, name, auraId, guid, spellName, spellId, spellcast.snapshot.snapshotTime, atTime, aura.serial)
+						filter, name, auraId, guid, spellName, spellId, aura.snapshotTime, atTime, aura.serial)
 				else
 					self:Debug("    Snapshot stats for %s %s (%d) on %s applied by %s (%d) from %f, now=%f, aura.serial=%d",
-						filter, name, auraId, guid, spellName, spellId, spellcast.snapshot.snapshotTime, atTime, aura.serial)
+						filter, name, auraId, guid, spellName, spellId, spellcast.snapshotTime, atTime, aura.serial)
 					-- TODO: damageMultiplier isn't correct if spellId spreads the DoT.
-					OvaleFuture:UpdateFromSpellcast(aura, spellcast)
+					OvaleFuture:CopySpellcastInfo(spellcast, aura)
 				end
 			end
 
@@ -619,14 +634,14 @@ function OvaleAura:GainedAuraOnGUID(guid, atTime, auraId, casterGUID, filter, vi
 					if not auraIsActive then
 						aura.baseTick = si.tick
 						if spellcast and spellcast.target == guid then
-							aura.tick = OvaleData:GetTickLength(auraId, spellcast.snapshot)
+							aura.tick = OvaleData:GetTickLength(auraId, spellcast)
 						else
 							aura.tick = OvaleData:GetTickLength(auraId)
 						end
 					end
 				end
 				-- Set the cooldown expiration time for player buffs applied by items with a cooldown.
-				if si.buff_cd and guid == self_guid then
+				if si.buff_cd and guid == self_playerGUID then
 					self:Debug("    %s (%s) is applied by an item with a cooldown of %ds.", name, auraId, si.buff_cd)
 					if not auraIsActive then
 						-- cooldownEnding is the earliest time at which we expect to gain this buff again.
@@ -640,9 +655,7 @@ function OvaleAura:GainedAuraOnGUID(guid, atTime, auraId, casterGUID, filter, vi
 		elseif not auraIsUnchanged then
 			self:SendMessage("Ovale_AuraChanged", atTime, guid, auraId, aura.source)
 		end
-		if unitId then
-			Ovale.refreshNeeded[unitId] = true
-		end
+		Ovale.refreshNeeded[guid] = true
 	end
 	self:StopProfiling("OvaleAura_GainedAuraOnGUID")
 end
@@ -657,7 +670,8 @@ function OvaleAura:LostAuraOnGUID(guid, atTime, auraId, casterGUID)
 			aura.ending = atTime
 		end
 
-		local mine = (casterGUID == self_guid)
+		-- Snapshot stats for auras applied by the player or player's pet.
+		local mine = (casterGUID == self_playerGUID or OvaleGUID:IsPlayerPet(casterGUID))
 		if mine then
 			-- Clear old tick information for player-applied periodic auras.
 			aura.baseTick = nil
@@ -668,7 +682,7 @@ function OvaleAura:LostAuraOnGUID(guid, atTime, auraId, casterGUID)
 			-- The aura must have ended early, i.e., start + duration > ending.
 			if aura.start + aura.duration > aura.ending then
 				local spellcast
-				if guid == self_guid then
+				if guid == self_playerGUID then
 					-- Player aura, so it was possibly consumed by an in-flight spell.
 					spellcast = OvaleFuture:LastInFlightSpell()
 				else
@@ -685,10 +699,7 @@ function OvaleAura:LostAuraOnGUID(guid, atTime, auraId, casterGUID)
 		aura.lastUpdated = atTime
 
 		self:SendMessage("Ovale_AuraRemoved", atTime, guid, auraId, aura.source)
-		local unitId = OvaleGUID:GetUnitId(guid)
-		if unitId then
-			Ovale.refreshNeeded[unitId] = true
-		end
+		Ovale.refreshNeeded[guid] = true
 	end
 	self:StopProfiling("OvaleAura_LostAuraOnGUID")
 end
@@ -696,9 +707,9 @@ end
 -- Scan auras on the given GUID and update the aura database.
 function OvaleAura:ScanAuras(unitId, guid)
 	self:StartProfiling("OvaleAura_ScanAuras")
-	guid = guid or OvaleGUID:GetGUID(unitId)
+	guid = guid or OvaleGUID:UnitGUID(unitId)
 	if guid then
-		self:Debug(true, "Scanning auras on %s (%s)", guid, unitId)
+		self:DebugTimestamp("Scanning auras on %s (%s)", guid, unitId)
 
 		-- Advance the age of the unit's auras.
 		local serial = self.serial[guid] or 0
@@ -721,7 +732,11 @@ function OvaleAura:ScanAuras(unitId, guid)
 					break
 				end
 			else
-				local casterGUID = OvaleGUID:GetGUID(unitCaster)
+				local casterGUID = OvaleGUID:UnitGUID(unitCaster)
+				if debuffType == "" then
+					-- Empty string for the debuff type means this is an Enrage effect.
+					debuffType = "Enrage"
+				end
 				self:GainedAuraOnGUID(guid, now, spellId, casterGUID, filter, true, icon, count, debuffType, duration, expirationTime, isStealable, name, value1, value2, value3)
 				i = i + 1
 			end
@@ -739,11 +754,13 @@ function OvaleAura:ScanAuras(unitId, guid)
 						else
 							-- Age any hidden auras that are managed by outside modules.
 							aura.serial = serial
+							self:Debug("    Preserving aura %s (%d), start=%s, ending=%s, aura.serial=%d", aura.name, aura.spellId, aura.start, aura.ending, aura.serial)
 						end
 					end
 				end
 			end
 		end
+		self:Debug("End scanning of auras on %s (%s).", guid, unitId)
 	end
 	self:StopProfiling("OvaleAura_ScanAuras")
 end
@@ -751,7 +768,7 @@ end
 function OvaleAura:GetAuraByGUID(guid, auraId, filter, mine)
 	-- If this GUID has no auras in the database, then do an aura scan.
 	if not self.serial[guid] then
-		local unitId = OvaleGUID:GetUnitId(guid)
+		local unitId = OvaleGUID:GUIDUnit(guid)
 		self:ScanAuras(unitId, guid)
 	end
 
@@ -770,15 +787,27 @@ function OvaleAura:GetAuraByGUID(guid, auraId, filter, mine)
 end
 
 function OvaleAura:GetAura(unitId, auraId, filter, mine)
-	local guid = OvaleGUID:GetGUID(unitId)
+	local guid = OvaleGUID:UnitGUID(unitId)
 	return self:GetAuraByGUID(guid, auraId, filter, mine)
 end
 
 -- Run-time check for an aura on the player or the target.
 -- NOTE: Mirrored in statePrototype below.
-function OvaleAura:RequireBuffHandler(spellId, requirement, tokenIterator, target)
+function OvaleAura:RequireBuffHandler(spellId, atTime, requirement, tokens, index, targetGUID)
 	local verified = false
-	local buffName = tokenIterator()
+	-- If index isn't given, then tokens holds the actual token value.
+	local buffName = tokens
+	local stacks = 1
+	if index then
+		buffName = tokens[index]
+		index = index + 1
+		-- Peek at the next token to see if it is an optional minimum stack count.
+		local count = tonumber(tokens[index])
+		if count then
+			stacks = count
+			index = index + 1
+		end
+	end
 	if buffName then
 		local isBang = false
 		if strsub(buffName, 1, 1) == "!" then
@@ -786,86 +815,70 @@ function OvaleAura:RequireBuffHandler(spellId, requirement, tokenIterator, targe
 			buffName = strsub(buffName, 2)
 		end
 		local buffName = tonumber(buffName) or buffName
-		local unitId, filter, mine
+		local guid, unitId, filter, mine
 		if strsub(requirement, 1, 7) == "target_" then
-			unitId = target
-			filter = (strsub(requirement, 8) == "buff") and "HELPFUL" or "HARMFUL"
-			mine = true
+			if targetGUID then
+				guid = targetGUID
+				unitId = OvaleGUID:GUIDUnit(guid)
+			else
+				unitId = self.defaultTarget or "target"
+			end
+			filter = (strsub(requirement, 8, 11) == "buff") and "HELPFUL" or "HARMFUL"
+			mine = not (strsub(requirement, -4) == "_any")
+		elseif strsub(requirement, 1, 4) == "pet_" then
+			unitId = "pet"
+			filter = (strsub(requirement, 5, 11) == "buff") and "HELPFUL" or "HARMFUL"
+			mine = false
 		else
 			unitId = "player"
-			filter = (requirement == "buff") and "HELPFUL" or "HARMFUL"
-			mine = true
+			filter = (strsub(requirement, 1, 4) == "buff") and "HELPFUL" or "HARMFUL"
+			mine = not (strsub(requirement, -4) == "_any")
 		end
-		local aura = self:GetAura(unitId, buffName, filter, mine)
-		local isActiveAura = self:IsActiveAura(aura)
+		guid = guid or OvaleGUID:UnitGUID(unitId)
+		local aura = self:GetAuraByGUID(guid, buffName, filter, mine)
+		local isActiveAura = self:IsActiveAura(aura, atTime) and aura.stacks >= stacks
 		if not isBang and isActiveAura or isBang and not isActiveAura then
 			verified = true
 		end
 		local result = verified and "passed" or "FAILED"
 		if isBang then
-			self:Log("    Require aura %s NOT on %s: %s", buffName, unitId, result)
+			self:Log("    Require aura %s with at least %d stack(s) NOT on %s at time=%f: %s", buffName, stacks, unitId, atTime, result)
 		else
-			self:Log("    Require aura %s on %s: %s", buffName, unitId, result)
+			self:Log("    Require aura %s with at least %d stack(s) on %s at time=%f: %s", buffName, stacks, unitId, atTime, result)
 		end
 	else
 		Ovale:OneTimeMessage("Warning: requirement '%s' is missing a buff argument.", requirement)
 	end
-	return verified, requirement
+	return verified, requirement, index
 end
 
 -- Run-time check for the player being stealthed.
 -- NOTE: Mirrored in statePrototype below.
-function OvaleAura:RequireStealthHandler(spellId, requirement, tokenIterator, target)
+function OvaleAura:RequireStealthHandler(spellId, atTime, requirement, tokens, index, targetGUID)
 	local verified = false
-	local stealthed = tokenIterator()
+	-- If index isn't given, then tokens holds the actual token value.
+	local stealthed = tokens
+	if index then
+		stealthed = tokens[index]
+		index = index + 1
+	end
 	if stealthed then
 		stealthed = tonumber(stealthed)
 		local aura = self:GetAura("player", "stealthed_buff", "HELPFUL", true)
-		local isActiveAura = self:IsActiveAura(aura)
+		local isActiveAura = self:IsActiveAura(aura, atTime)
 		if stealthed == 1 and isActiveAura or stealthed ~= 1 and not isActiveAura then
 			verified = true
 		end
 		local result = verified and "passed" or "FAILED"
 		if stealthed == 1 then
-			self:Log("    Require stealth: %s", result)
+			self:Log("    Require stealth at time=%f: %s", atTime, result)
 		else
-			self:Log("    Require NOT stealth: %s", result)
+			self:Log("    Require NOT stealth at time=%f: %s", atTime, result)
 		end
 	else
 		Ovale:OneTimeMessage("Warning: requirement '%s' is missing an argument.", requirement)
 	end
-	return verified, requirement
-end
-
--- Run-time check that the target is below a health percent threshold.
--- NOTE: Mirrored in statePrototype below.
--- TODO: This function should really be moved to a Health module.
-function OvaleAura:RequireTargetHealthPercentHandler(spellId, requirement, tokenIterator, target)
-	local verified = false
-	local threshold = tokenIterator()
-	if threshold then
-		local isBang = false
-		if strsub(threshold, 1, 1) == "!" then
-			isBang = true
-			threshold = strsub(threshold, 2)
-		end
-		threshold = tonumber(threshold) or 0
-		local healthMax = API_UnitHealthMax(target)
-		healthMax = healthMax > 0 and healthMax or 1
-		local healthPercent = API_UnitHealth(target) / healthMax * 100
-		if not isBang and healthPercent <= threshold or isBang and healthPercent > threshold then
-			verified = true
-		end
-		local result = verified and "passed" or "FAILED"
-		if isBang then
-			self:Log("    Require target health > %f%%: %s", threshold, result)
-		else
-			self:Log("    Require target health <= %f%%: %s", threshold, result)
-		end
-	else
-		Ovale:OneTimeMessage("Warning: requirement '%s' is missing a threshold argument.", requirement)
-	end
-	return verified, requirement
+	return verified, requirement, index
 end
 --</public-static-methods>
 
@@ -913,7 +926,7 @@ function OvaleAura:ResetState(state)
 			for casterGUID, aura in pairs(whoseTable) do
 				self_pool:Release(aura)
 				whoseTable[casterGUID] = nil
-				state:Log("    Aura %d on %s removed, now=%f.", auraId, guid, state.currentTime)
+				state:Log("    Aura %d on %s removed.", auraId, guid)
 			end
 			if not next(whoseTable) then
 				self_pool:Release(whoseTable)
@@ -935,24 +948,75 @@ function OvaleAura:CleanState(state)
 	end
 end
 
--- Apply the effects of the spell on the player's state, assuming the spellcast completes.
-function OvaleAura:ApplySpellAfterCast(state, spellId, targetGUID, startCast, endCast, nextCast, isChanneled, spellcast)
+-- Apply the effects of the spell at the start of the spellcast.
+function OvaleAura:ApplySpellStartCast(state, spellId, targetGUID, startCast, endCast, isChanneled, spellcast)
+	self:StartProfiling("OvaleAura_ApplySpellStartCast")
+	-- Channeled spells apply their auras when the player starts channeling.
+	if isChanneled then
+		local si = OvaleData.spellInfo[spellId]
+		if si and si.aura then
+			-- Apply the auras on the player.
+			if si.aura.player then
+				state:ApplySpellAuras(spellId, self_playerGUID, startCast, si.aura.player, spellcast)
+			end
+			-- Apply the auras on the target.
+			if si.aura.target then
+				state:ApplySpellAuras(spellId, targetGUID, startCast, si.aura.target, spellcast)
+			end
+			-- Apply the auras on the pet.
+			if si.aura.pet then
+				local petGUID = OvaleGUID:UnitGUID("pet")
+				if petGUID then
+					state:ApplySpellAuras(spellId, petGUID, startCast, si.aura.pet, spellcast)
+				end
+			end
+		end
+	end
+	self:StopProfiling("OvaleAura_ApplySpellStartCast")
+end
+
+-- Apply the effects of the spell when the spellcast completes.
+function OvaleAura:ApplySpellAfterCast(state, spellId, targetGUID, startCast, endCast, isChanneled, spellcast)
 	self:StartProfiling("OvaleAura_ApplySpellAfterCast")
-	local si = OvaleData.spellInfo[spellId]
-	-- Apply the auras on the player.
-	if si and si.aura and si.aura.player then
-		state:ApplySpellAuras(spellId, self_guid, startCast, endCast, isChanneled, si.aura.player, spellcast)
+	-- Cast-time spells apply their auras on the player and any pets when the player completes the cast.
+	if not isChanneled then
+		local si = OvaleData.spellInfo[spellId]
+		if si and si.aura then
+			-- Apply the auras on the player.
+			if si.aura.player then
+				state:ApplySpellAuras(spellId, self_playerGUID, endCast, si.aura.player, spellcast)
+			end
+			-- Apply the auras on the pet.
+			if si.aura.pet then
+				local petGUID = OvaleGUID:UnitGUID("pet")
+				if petGUID then
+					state:ApplySpellAuras(spellId, petGUID, startCast, si.aura.pet, spellcast)
+				end
+			end
+		end
 	end
 	self:StopProfiling("OvaleAura_ApplySpellAfterCast")
 end
 
--- Apply the effects of the spell on the target's state after it lands on the target.
-function OvaleAura:ApplySpellAfterHit(state, spellId, targetGUID, startCast, endCast, nextCast, isChanneled, spellcast)
+-- Apply the effects of the spell when it lands on the target.
+function OvaleAura:ApplySpellOnHit(state, spellId, targetGUID, startCast, endCast, isChanneled, spellcast)
 	self:StartProfiling("OvaleAura_ApplySpellAfterHit")
-	local si = OvaleData.spellInfo[spellId]
-	-- Apply the auras on the target.
-	if si and si.aura and si.aura.target then
-		state:ApplySpellAuras(spellId, targetGUID, startCast, endCast, isChanneled, si.aura.target, spellcast)
+	-- Cast-time spells apply their auras on the target when they hit the target.
+	if not isChanneled then
+		local si = OvaleData.spellInfo[spellId]
+		if si and si.aura and si.aura.target then
+			-- Get the travel time of the spell to the target, defaulting to no travel time.
+			local travelTime = si.travel_time or 0
+			if travelTime > 0 then
+				-- XXX Estimate the travel time to the target.
+				local estimatedTravelTime = 1
+				if travelTime < estimatedTravelTime then
+					travelTime = estimatedTravelTime
+				end
+			end
+			local atTime = endCast + travelTime
+			state:ApplySpellAuras(spellId, targetGUID, atTime, si.aura.target, spellcast)
+		end
 	end
 	self:StopProfiling("OvaleAura_ApplySpellAfterHit")
 end
@@ -977,7 +1041,7 @@ local function GetStateAuraAnyCaster(state, guid, auraId)
 		for casterGUID in pairs(OvaleAura.aura[guid][auraId]) do
 			local aura = GetStateAura(state, guid, auraId, casterGUID)
 			-- Skip over auras found in the state machine for now.
-			if not aura.state and OvaleAura:IsActiveAura(aura, state.currentTime) then
+			if aura and not aura.state and OvaleAura:IsActiveAura(aura, state.currentTime) then
 				if not auraFound or auraFound.ending < aura.ending then
 					auraFound = aura
 				end
@@ -1068,17 +1132,36 @@ end
 
 local function GetStateAuraOnGUID(state, guid, auraId, filter, mine)
 	local auraFound
-	if DEBUFF_TYPES[auraId] then
+	if DEBUFF_TYPE[auraId] then
 		if mine then
-			auraFound = GetStateDebuffType(state, guid, auraId, filter, self_guid)
+			-- Check for aura applied by player, then player's pet if it exists.
+			auraFound = GetStateDebuffType(state, guid, auraId, filter, self_playerGUID)
+			if not auraFound then
+				for petGUID in pairs(self_petGUID) do
+					local aura = GetStateDebuffType(state, guid, auraId, filter, petGUID)
+					-- Find the aura with the latest expiration time.
+					if aura and (not auraFound or auraFound.ending < aura.ending) then
+						auraFound = aura
+					end
+				end
+			end
 		else
 			auraFound = GetStateDebuffTypeAnyCaster(state, guid, auraId, filter)
 		end
 	else
 		if mine then
-			local aura = GetStateAura(state, guid, auraId, self_guid)
+			-- Check for aura applied by player, then player's pet if it exists.
+			local aura = GetStateAura(state, guid, auraId, self_playerGUID)
 			if aura and aura.stacks > 0 then
 				auraFound = aura
+			else
+				for petGUID in pairs(self_petGUID) do
+					aura = GetStateAura(state, guid, auraId, petGUID)
+					if aura and aura.stacks > 0 then
+						auraFound = aura
+						break
+					end
+				end
 			end
 		else
 			auraFound = GetStateAuraAnyCaster(state, guid, auraId)
@@ -1093,7 +1176,7 @@ do
 
 	statePrototype.DebugUnitAuras = function(state, unitId, filter)
 		wipe(array)
-		local guid = OvaleGUID:GetGUID(unitId)
+		local guid = OvaleGUID:UnitGUID(unitId)
 		if OvaleAura.aura[guid] then
 			for auraId, whoseTable in pairs(OvaleAura.aura[guid]) do
 				for casterGUID in pairs(whoseTable) do
@@ -1123,15 +1206,7 @@ do
 end
 
 statePrototype.IsActiveAura = function(state, aura, atTime)
-	-- Default to checking if an aura is active at the end of the current spellcast
-	-- in the simulator, or at the current time if no spell is being cast.
-	if not atTime then
-		if state.endCast and state.endCast > state.currentTime then
-			atTime = state.endCast
-		else
-			atTime = state.currentTime
-		end
-	end
+	atTime = atTime or state.currentTime
 	local boolean = false
 	if aura then
 		if aura.state then
@@ -1147,76 +1222,37 @@ statePrototype.IsActiveAura = function(state, aura, atTime)
 	return boolean
 end
 
-statePrototype.ApplySpellAuras = function(state, spellId, guid, startCast, endCast, isChanneled, auraList, spellcast)
+statePrototype.ApplySpellAuras = function(state, spellId, guid, atTime, auraList, spellcast)
 	OvaleAura:StartProfiling("OvaleAura_state_ApplySpellAuras")
-	local unitId = OvaleGUID:GetUnitId(guid)
 	for filter, filterInfo in pairs(auraList) do
 		for auraId, spellData in pairs(filterInfo) do
-			--[[
-				For lists described by SpellAddBuff(), etc., use the following interpretation:
-					auraId=extend,N		aura is extended by N seconds, no change to stacks
-					auraId=refresh		aura is refreshed, no change to stacks
-					auraId=refresh_keep_snapshot
-										aura is refreshed and the snapshot is carried over from the previous aura.
-					auraId=N, N > 0		N is duration if aura has no duration SpellInfo() [deprecated].
-					auraId=N, N > 0		N is number of stacks added
-					auraId=0			aura is removed
-					auraId=N, N < 0		N is number of stacks of aura removed
-			--]]
-			local si = OvaleData.spellInfo[auraId]
 			local duration = OvaleData:GetBaseDuration(auraId, spellcast)
+
 			local stacks = 1
+			local count = nil
+			local extend = 0
+			local toggle = nil
 			local refresh = false
 			local keepSnapshot = false
-			local extend = 0
 
-			local tokenIterator, value
-			if strfind(spellData, ",") then
-				-- Lexer for spellData as comma-separated values.
-				tokenIterator = gmatch(spellData, "[^,]+")
-				value = tokenIterator()
-			else
-				value = spellData
-			end
-
-			-- Set stacks and refresh based on spellData.
+			local verified, value, data = state:CheckSpellAuraData(auraId, spellData, atTime, guid)
 			if value == "refresh" then
 				refresh = true
 			elseif value == "refresh_keep_snapshot" then
 				refresh = true
 				keepSnapshot = true
+			elseif value == "toggle" then
+				toggle = true
+			elseif value == "count" then
+				count = data
 			elseif value == "extend" then
-				local seconds = tokenIterator and tokenIterator() or nil
-				if seconds then
-					extend = tonumber(seconds)
-				else
-					Ovale:OneTimeMessage("Warning: '%d=%s' has '%s' missing duration.", auraId, spellData, value)
-				end
+				extend = data
 			else
-				value = tonumber(value)
-				if value then
-					stacks = value
-					-- Deprecated after transition.
-					if not (si and si.duration) and value > 0 then
-						-- Aura doesn't have duration SpellInfo(), so treat spell data as duration.
-						Ovale:OneTimeMessage("Warning: '%s=%d' is deprecated for spell ID %d; aura ID %s should have duration information.", auraId, value, spellId, auraId)
-						duration = value
-						stacks = 1
-					end
-				end
-			end
-
-			-- Verify any run-time requirements for this aura.
-			local verified
-			if tokenIterator then
-				verified = state:CheckRequirements(spellId, tokenIterator, unitId)
-			else
-				verified = true
+				stacks = value
 			end
 			if verified then
+				local si = OvaleData.spellInfo[auraId]
 				local auraFound = state:GetAuraByGUID(guid, auraId, filter, true)
-				local atTime = isChanneled and startCast or endCast
-
 				if state:IsActiveAura(auraFound, atTime) then
 					local aura
 					if auraFound.state then
@@ -1224,17 +1260,23 @@ statePrototype.ApplySpellAuras = function(state, spellId, guid, startCast, endCa
 						aura = auraFound
 					else
 						-- Add an aura in the simulator and copy the existing aura information over.
-						aura = state:AddAuraToGUID(guid, auraId, auraFound.source, filter, 0, INFINITY)
+						aura = state:AddAuraToGUID(guid, auraId, auraFound.source, filter, nil, 0, INFINITY)
 						for k, v in pairs(auraFound) do
 							aura[k] = v
-						end
-						if auraFound.snapshot then
-							aura.snapshot = OvalePaperDoll:GetSnapshot(auraFound.snapshot)
 						end
 						-- Reset the aura age relative to the state of the simulator.
 						aura.serial = state.serial
 						state:Log("Aura %d is copied into simulator.", auraId)
 						-- Information that needs to be set below: stacks, start, ending, duration, gain.
+					end
+					-- If the aura is already present, then toggle the aura away.
+					if toggle then
+						state:Log("Aura %d is toggled off by spell %d.", auraId, spellId)
+						stacks = 0
+					end
+					-- Adjust stacks to add/remove if count is present.
+					if count and count > 0 then
+						stacks = count - aura.stacks
 					end
 					-- Spell starts channeling before the aura expires, or spellcast ends before the aura expires.
 					if refresh or extend > 0 or stacks > 0 then
@@ -1281,7 +1323,7 @@ statePrototype.ApplySpellAuras = function(state, spellId, guid, startCast, endCa
 						if keepSnapshot then
 							state:Log("Aura %d keeping previous snapshot.", auraId)
 						elseif spellcast then
-							OvaleFuture:UpdateFromSpellcast(aura, spellcast)
+							OvaleFuture:CopySpellcastInfo(spellcast, aura)
 						end
 					elseif stacks == 0 or stacks < 0 then
 						if stacks == 0 then
@@ -1303,11 +1345,24 @@ statePrototype.ApplySpellAuras = function(state, spellId, guid, startCast, endCa
 					end
 				else
 					-- Aura is not on the target.
+					if toggle then
+						state:Log("Aura %d is toggled on by spell %d.", auraId, spellId)
+						stacks = 1
+					end
 					if not refresh and stacks > 0 then
 						-- Spellcast causes a new aura.
 						state:Log("New aura %d at %f on %s", auraId, atTime, guid)
 						-- Add an aura in the simulator and copy the existing aura information over.
-						local aura = state:AddAuraToGUID(guid, auraId, self_guid, filter, 0, INFINITY)
+						local debuffType
+						if si then
+							for k, v in pairs(SPELLINFO_DEBUFF_TYPE) do
+								if si[k] == 1 then
+									debuffType = v
+									break
+								end
+							end
+						end
+						local aura = state:AddAuraToGUID(guid, auraId, self_playerGUID, filter, debuffType, 0, INFINITY)
 						-- Information that needs to be set below: stacks, start, ending, duration, gain.
 						aura.stacks = stacks
 						-- Set start and duration for aura.
@@ -1316,13 +1371,12 @@ statePrototype.ApplySpellAuras = function(state, spellId, guid, startCast, endCa
 						-- If "tick" is set explicitly in SpellInfo, then this is a known periodic aura.
 						if si and si.tick then
 							aura.baseTick = si.tick
-							local snapshot = spellcast and spellcast.snapshot
-							aura.tick = OvaleData:GetTickLength(auraId, snapshot)
+							aura.tick = OvaleData:GetTickLength(auraId, spellcast)
 						end
 						aura.ending = aura.start + aura.duration
 						aura.gain = aura.start
 						if spellcast then
-							OvaleFuture:UpdateFromSpellcast(aura, spellcast)
+							OvaleFuture:CopySpellcastInfo(spellcast, aura)
 						end
 					end
 				end
@@ -1343,7 +1397,7 @@ statePrototype.GetAuraByGUID = function(state, guid, auraId, filter, mine)
 				state:Log("Aura %s matching '%s' found on %s with (%s, %s)", id, auraId, guid, aura.start, aura.ending)
 				auraFound = aura
 			else
-				state:Log("Aura %s matching '%s' is missing on %s.", id, auraId, guid)
+				--state:Log("Aura %s matching '%s' is missing on %s.", id, auraId, guid)
 			end
 		end
 		if not auraFound then
@@ -1361,26 +1415,25 @@ statePrototype.GetAuraByGUID = function(state, guid, auraId, filter, mine)
 end
 
 statePrototype.GetAura = function(state, unitId, auraId, filter, mine)
-	local guid = OvaleGUID:GetGUID(unitId)
+	local guid = OvaleGUID:UnitGUID(unitId)
 	return state:GetAuraByGUID(guid, auraId, filter, mine)
 end
 
 -- Add a new aura to the unit specified by GUID.
-statePrototype.AddAuraToGUID = function(state, guid, auraId, casterGUID, filter, start, ending, snapshot)
+statePrototype.AddAuraToGUID = function(state, guid, auraId, casterGUID, filter, debuffType, start, ending, snapshot)
 	local aura = self_pool:Get()
 	aura.state = true
 	aura.serial = state.serial
 	aura.lastUpdated = state.currentTime
 	aura.filter = filter
-	aura.mine = (casterGUID == self_guid)
 	aura.start = start or 0
 	aura.ending = ending or INFINITY
-	aura.duration = ending - start
+	aura.duration = aura.ending - aura.start
 	aura.gain = aura.start
 	aura.stacks = 1
-	if snapshot then
-		aura.snapshot = OvalePaperDoll:GetSnapshot(snapshot)
-	end
+	aura.debuffType = debuffType
+	aura.enrage = (debuffType == "Enrage") or nil
+	state:UpdateSnapshot(aura, snapshot)
 	PutAura(state.aura, guid, auraId, casterGUID, aura)
 	return aura
 end
@@ -1395,12 +1448,9 @@ statePrototype.RemoveAuraOnGUID = function(state, guid, auraId, filter, mine, at
 			aura = auraFound
 		else
 			-- Add an aura in the simulator and copy the existing aura information over.
-			aura = state:AddAuraToGUID(guid, auraId, auraFound.source, filter, 0, INFINITY)
+			aura = state:AddAuraToGUID(guid, auraId, auraFound.source, filter, nil, 0, INFINITY)
 			for k, v in pairs(auraFound) do
 				aura[k] = v
-			end
-			if auraFound.snapshot then
-				aura.snapshot = OvalePaperDoll:GetSnapshot(auraFound.snapshot)
 			end
 			-- Reset the aura age relative to the state of the simulator.
 			aura.serial = state.serial
@@ -1413,17 +1463,18 @@ statePrototype.RemoveAuraOnGUID = function(state, guid, auraId, filter, mine, at
 	end
 end
 
-statePrototype.GetAuraWithProperty = function(state, unitId, propertyName, filter)
+statePrototype.GetAuraWithProperty = function(state, unitId, propertyName, filter, atTime)
+	atTime = atTime or state.currentTime
 	local count = 0
-	local guid = OvaleGUID:GetGUID(unitId)
+	local guid = OvaleGUID:UnitGUID(unitId)
 	local start, ending = INFINITY, 0
 
 	-- Loop through auras not kept in the simulator that match the criteria.
 	if OvaleAura.aura[guid] then
 		for auraId, whoseTable in pairs(OvaleAura.aura[guid]) do
 			for casterGUID in pairs(whoseTable) do
-				local aura = GetStateAura(state, guid, auraId, self_guid)
-				if state:IsActiveAura(aura) and not aura.state then
+				local aura = GetStateAura(state, guid, auraId, self_playerGUID)
+				if state:IsActiveAura(aura, atTime) and not aura.state then
 					if aura[propertyName] and aura.filter == filter then
 						count = count + 1
 						start = (aura.gain < start) and aura.gain or start
@@ -1437,7 +1488,7 @@ statePrototype.GetAuraWithProperty = function(state, unitId, propertyName, filte
 	if state.aura[guid] then
 		for auraId, whoseTable in pairs(state.aura[guid]) do
 			for casterGUID, aura in pairs(whoseTable) do
-				if state:IsActiveAura(aura) then
+				if state:IsActiveAura(aura, atTime) then
 					if aura[propertyName] and aura.filter == filter then
 						count = count + 1
 						start = (aura.gain < start) and aura.gain or start
@@ -1487,7 +1538,7 @@ do
 		the first aura to expire that will change the total count, and the time interval over which
 		the count is more than 0.  If excludeUnitId is given, then that unit is excluded from the count.
 	--]]
-	statePrototype.AuraCount = function(state, auraId, filter, mine, minStacks, excludeUnitId)
+	statePrototype.AuraCount = function(state, auraId, filter, mine, minStacks, atTime, excludeUnitId)
 		OvaleAura:StartProfiling("OvaleAura_state_AuraCount")
 		-- Initialize.
 		minStacks = minStacks or 1
@@ -1495,20 +1546,28 @@ do
 		stacks = 0
 		startChangeCount, endingChangeCount = INFINITY, INFINITY
 		startFirst, endingLast = INFINITY, 0
-		local excludeGUID = excludeUnitId and OvaleGUID:GetGUID(excludeUnitId) or nil
+		local excludeGUID = excludeUnitId and OvaleGUID:UnitGUID(excludeUnitId) or nil
 
 		-- Loop through auras not kept in the simulator that match the criteria.
 		for guid, auraTable in pairs(OvaleAura.aura) do
 			if guid ~= excludeGUID and auraTable[auraId] then
 				if mine then
-					local aura = GetStateAura(state, guid, auraId, self_guid)
-					if state:IsActiveAura(aura) and aura.filter == filter and aura.stacks >= minStacks and not aura.state then
+					-- Count aura applied by player.
+					local aura = GetStateAura(state, guid, auraId, self_playerGUID)
+					if state:IsActiveAura(aura, atTime) and aura.filter == filter and aura.stacks >= minStacks and not aura.state then
 						CountMatchingActiveAura(state, aura)
+					end
+					-- Count aura applied by player's pet if it exists.
+					for petGUID in pairs(self_petGUID) do
+						aura = GetStateAura(state, guid, auraId, petGUID)
+						if state:IsActiveAura(aura, atTime) and aura.filter == filter and aura.stacks >= minStacks and not aura.state then
+							CountMatchingActiveAura(state, aura)
+						end
 					end
 				else
 					for casterGUID in pairs(auraTable[auraId]) do
 						local aura = GetStateAura(state, guid, auraId, casterGUID)
-						if state:IsActiveAura(aura) and aura.filter == filter and aura.stacks >= minStacks and not aura.state then
+						if state:IsActiveAura(aura, atTime) and aura.filter == filter and aura.stacks >= minStacks and not aura.state then
 							CountMatchingActiveAura(state, aura)
 						end
 					end
@@ -1519,15 +1578,23 @@ do
 		for guid, auraTable in pairs(state.aura) do
 			if guid ~= excludeGUID and auraTable[auraId] then
 				if mine then
-					local aura = auraTable[auraId][self_guid]
+					-- Count aura applied by player.
+					local aura = auraTable[auraId][self_playerGUID]
 					if aura then
-						if state:IsActiveAura(aura) and aura.filter == filter and aura.stacks >= minStacks then
+						if state:IsActiveAura(aura, atTime) and aura.filter == filter and aura.stacks >= minStacks then
+							CountMatchingActiveAura(state, aura)
+						end
+					end
+					-- Count aura applied by player's pet if it exists.
+					for petGUID in pairs(self_petGUID) do
+						aura = auraTable[auraId][petGUID]
+						if state:IsActiveAura(aura, atTime) and aura.filter == filter and aura.stacks >= minStacks and not aura.state then
 							CountMatchingActiveAura(state, aura)
 						end
 					end
 				else
 					for casterGUID, aura in pairs(auraTable[auraId]) do
-						if state:IsActiveAura(aura) and aura.filter == filter and aura.stacks >= minStacks then
+						if state:IsActiveAura(aura, atTime) and aura.filter == filter and aura.stacks >= minStacks then
 							CountMatchingActiveAura(state, aura)
 						end
 					end
@@ -1544,5 +1611,4 @@ end
 -- Mirrored methods.
 statePrototype.RequireBuffHandler = OvaleAura.RequireBuffHandler
 statePrototype.RequireStealthHandler = OvaleAura.RequireStealthHandler
-statePrototype.RequireTargetHealthPercentHandler = OvaleAura.RequireTargetHealthPercentHandler
 --</state-methods>

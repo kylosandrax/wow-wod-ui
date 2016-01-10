@@ -1,3 +1,129 @@
+v3.1.8
+*Fixed issue with filtering battlepets by type.
+*Added caching of battlepet species in guild vault.
+
+v3.1.7
+*Fixed issue with settings not properly saving in some cases for TSM_AuctionDB and TSM_Accounting.
+*Updated the list of tracked bonusIds.
+
+v3.1.6
+*Remove debug from last fix.
+
+v3.1.5
+*Fixed bug where some items in guild vault were seen as Soulbound for gathering / warehousing.
+*Added Ore nuggets to transformations.
+
+v3.1.4
+*Fixed bug affecting some Pre-WOD crafted items.
+
+v3.1.3
+*Fixed bug affecting some group+operation imports.
+
+v3.1.2
+*Fixed bug with upgrading from TSM2.
+
+v3.1.1
+*Fixed some issues with handling of battlepets.
+
+v3.1
+*Operations can now be exported with groups.
+*Filtering out unimportant bonusIds to make it easier to deal with different versions of crafted items.
+*No longer considering the health, power, or speed of battlepets in groups or elsewhere.
+*Empty dropdowns in the profile settings will now be disabled.
+*Fixed lag in items tab of groups.
+*Fixed lua error caused by entering an invalid filter in the items tab of a group.
+*Improved initial lag upon logging into the game.
+
+v3.0.3
+*Now properly displaying errors from unofficial TSM modules.
+
+v3.0.2
+*Fixed missing TSM tooltips in default profession UI due to bug in LibExtraTip.
+
+v3.0.1
+*Showing different text in the error window for errors from unofficial modules.
+
+v3.0
+*Initial 3.0 version!
+\\
+
+v2.10.26
+*One more try to fix version number.
+
+v2.10.25
+*No Changes, fixing version number.
+
+v2.10.24
+*No Changes, fixing curse upload issue.
+
+v2.10.23
+*Updated Interface version for patch 6.2.
+
+v2.10.22
+*Fixed min ilvl for disenchanting uncommon armor / weapons
+
+v2.10.21
+*Fixed greater / lesser magic essence transform rates.
+
+v2.10.20
+*Fixed bug caused by Blizzard AH loading before TSM does
+
+v2.10.19
+*Fix toc
+
+v2.10.18
+*No Change
+
+v2.10.17
+*Update Bagnon / Add LiteBag support
+*Updated for patch 6.1
+
+v2.10.16
+*Display prospect value in tooltips as per ore rather than per prospect.
+
+v2.10.15
+*Fix ILvl range for draenic dust.
+
+v2.10.14
+*Items which are bind on account (or bnet account) will now properly be treated as BoP.
+
+v2.10.13
+*Made some changes to how data for the app is stored.
+
+v2.10.12
+*Fixed bug with app data not loading properly and wiping previous data.
+*Added DE values for Temporal Crystals
+
+v2.10.11
+*Adjust DE levels for Draenic Dust for blue items.
+
+v2.10.10
+*Add Temporal Crystal to conversions.
+*Tweak DE levels for Draenic Dust / Luminous Shards.
+
+v2.10.9
+*Fixed bug in custom price code.
+
+v2.10.8
+*Fixed memory leak in custom price code.
+*Updated disenchanting rates.
+
+v2.10.7
+*Add TheUndermineJournal as optional dependency.
+
+v2.10.6
+*Fixed bug with search filter generation.
+
+v2.10.5
+*Reverted previous change.
+
+v2.10.4
+*Fixed bug regarding the option to open bags with AH.
+
+v2.10.3
+*Tweak some of the conversion rates.
+*Add missing vendor trade conversion for IOD.
+
 v2.10.2
 *Fixed Lua error caused by some changes in v2.10.
 

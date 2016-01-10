@@ -23,15 +23,15 @@ local warningPWS			= mod:NewTargetAnnounce(33147, 3, nil, false)
 local warningPoH			= mod:NewCastAnnounce(33152, 4)
 local warningHeal			= mod:NewCastAnnounce(33144, 4)
 
-local specWarnWhirlwind		= mod:NewSpecialWarningSpell(33238, mod:IsMelee())
+local specWarnWhirlwind		= mod:NewSpecialWarningSpell(33238, "Melee")
 local specWarnPoH			= mod:NewSpecialWarningInterrupt(33152)
 local specWarnHeal			= mod:NewSpecialWarningInterrupt(33144)
 
-local timerWhirlwindCD		= mod:NewCDTimer(55, 33238)
+local timerWhirlwindCD		= mod:NewCDTimer(55, 33238, nil, nil, nil, 2)
 local timerWhirlwind		= mod:NewBuffActiveTimer(15, 33238)
 local timerFelhunter		= mod:NewBuffActiveTimer(48.5, 33131)--Buff Active or Cd timer?
-local timerPoH				= mod:NewCastTimer(4, 33152)
-local timerHeal				= mod:NewCastTimer(2, 33144)
+local timerPoH				= mod:NewCastTimer(4, 33152, nil, nil, nil, 4)
+local timerHeal				= mod:NewCastTimer(2, 33144, nil, nil, nil, 4)
 
 local lastFear = 0
 

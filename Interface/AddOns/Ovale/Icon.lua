@@ -22,10 +22,12 @@ local tostring = tostring
 local API_GetTime = GetTime
 local API_PlaySoundFile = PlaySoundFile
 local INFINITY = math.huge
+-- GLOBALS: _G
+-- GLOBALS: GameTooltip
 
 -- Threshold for resetting the cooldown animation.
 -- This should be more than OvaleFuture's SIMULATOR_LAG.
-local COOLDOWN_THRESHOLD = 0.01
+local COOLDOWN_THRESHOLD = 0.1
 --</private-static-properties>
 
 local function HasScriptControls()
@@ -137,18 +139,18 @@ local function Update(self, element, startTime, actionTexture, actionInRange, ac
 		end
 
 		-- Action help text.
-		self.actionHelp = element.params.help
+		self.actionHelp = element.namedParams.help
 
 		-- Sound file.
 		if not (self.cooldownStart and self.cooldownEnd) then
 			self.lastSound = nil
 		end
-		if element.params.sound and not self.lastSound then
-			local delay = element.params.soundtime or 0.5
+		if element.namedParams.sound and not self.lastSound then
+			local delay = element.namedParams.soundtime or 0.5
 			if now >= startTime - delay then
-				self.lastSound = element.params.sound
+				self.lastSound = element.namedParams.sound
 			--	print("Play" .. self.lastSound)
-				PlaySoundFile(self.lastSound)
+				API_PlaySoundFile(self.lastSound)
 			end
 		end
 
@@ -169,7 +171,7 @@ local function Update(self, element, startTime, actionTexture, actionInRange, ac
 		end
 
 		-- Remaining time.
-		if (profile.apparence.numeric or self.params.text == "always") and startTime > now then
+		if (profile.apparence.numeric or self.namedParams.text == "always") and startTime > now then
 			self.remains:SetFormattedText("%.1f", startTime - now)
 			self.remains:Show()
 		else
@@ -196,8 +198,8 @@ local function Update(self, element, startTime, actionTexture, actionInRange, ac
 		end
 
 		-- Focus text.
-		if element.params.text then
-			self.focusText:SetText(tostring(element.params.text))
+		if element.namedParams.text then
+			self.focusText:SetText(tostring(element.namedParams.text))
 			self.focusText:Show()
 		elseif actionTarget and actionTarget ~= "target" then
 			self.focusText:SetText(actionTarget)
@@ -231,19 +233,19 @@ local function SetHelp(self, help)
 	self.help = help
 end
 
-local function SetParams(self, params, secure)
-	self.params = params
+local function SetParams(self, positionalParams, namedParams, secure)
+	self.positionalParams = positionalParams
+	self.namedParams = namedParams
 
 	self.actionButton = false
 	if secure then
-		for k,v in pairs(params) do
-			local f = strfind(k, "spell")
-			if f then
-				local prefix = strsub(k, 1, f-1)
-				local suffix = strsub(k, f + 5)
-				local param
+		for k, v in pairs(namedParams) do
+			local index = strfind(k, "spell")
+			if index then
+				local prefix = strsub(k, 1, index - 1)
+				local suffix = strsub(k, index + 5)
 				self:SetAttribute(prefix .. "type" .. suffix, "spell")
-				self:SetAttribute("unit", self.params.target or "target")
+				self:SetAttribute("unit", self.namedParams.target or "target")
 				self:SetAttribute(k, OvaleSpellBook:GetSpellName(v))
 				self.actionButton = true
 			end
@@ -262,13 +264,14 @@ local function SetRangeIndicator(self, text)
 end
 --</public-methods>
 
-function OvaleIcon_OnMouseUp(self)
+local function OvaleIcon_OnMouseUp(self)
 	if not self.actionButton then
 		Ovale:ToggleOptions()
 	end
 	self:SetChecked(true)
 end
 
+-- GLOBALS: OvaleIcon_OnEnter
 function OvaleIcon_OnEnter(self)
 	if self.help or self.actionType or HasScriptControls() then
 		GameTooltip:SetOwner(self, "ANCHOR_BOTTOMLEFT")
@@ -295,12 +298,14 @@ function OvaleIcon_OnEnter(self)
 	end
 end
 
+-- GLOBALS: OvaleIcon_OnLeave
 function OvaleIcon_OnLeave(self)
 	if self.help or HasScriptControls() then
 		GameTooltip:Hide()
 	end
 end
 
+-- GLOBALS: OvaleIcon_OnLoad
 function OvaleIcon_OnLoad(self)
 	local name = self:GetName()
 	local profile = Ovale.db.profile
@@ -327,7 +332,8 @@ function OvaleIcon_OnLoad(self)
 	self.cooldownEnd = nil
 	self.cooldownStart = nil
 	self.texture = nil
-	self.params = nil
+	self.positionalParams = nil
+	self.namedParams = nil
 	self.actionButton = false
 	self.actionType = nil
 	self.actionId = nil
@@ -343,7 +349,6 @@ function OvaleIcon_OnLoad(self)
 
 	--self:RegisterForClicks("LeftButtonUp")
 	self:RegisterForClicks("AnyUp")
-	self.SetSkinGroup = SetSkinGroup
 	self.Update = Update
 	self.SetHelp = SetHelp
 	self.SetParams = SetParams

@@ -1,0 +1,41 @@
+VER 3 0100000000000005 "Aspects" "Ability_Hunter_AspectoftheViper"
+#showtooltip
+/castsequence Aspect of the Hawk, Aspect of the Viper
+END
+VER 3 0100000000000001 "Attack" "Ability_DualWield"
+#showtooltip
+/startattack
+END
+VER 3 0100000000000007 "Misdirect" "Ability_Hunter_ImprovedSteadyShot"
+#showtooltip
+/cast [target=focus,help][help][target=pet,exists,nodead] Misdirection 
+END
+VER 3 0100000000000008 "PetSting" "INV_Misc_QuestionMark"
+#showtooltip
+/petattack
+/cast Serpent Sting
+END
+VER 3 0100000000000002 "Raptor-Mongose" "Ability_Hunter_SwiftStrike"
+/cast Raptor Strike
+/cast Mongoose Bite
+END
+VER 3 0100000000000003 "Steady-Shot" "Ability_Hunter_SteadyShot"
+#showtooltip Steady Shot
+/script UIErrorsFrame:Hide()
+/cast Kill Command
+/script UIErrorsFrame:Clear(); UIErrorsFrame:Show()
+/cast Steady Shot
+END
+VER 3 0100000000000006 "Super-Multi" "Ability_Rogue_DeadenedNerves"
+#showtooltip Multi-Shot
+/script UIErrorsFrame:Hide()
+/use 13
+/use 14
+/script UIErrorsFrame:Clear(); UIErrorsFrame:Show()
+/cast Multi-Shot
+END
+VER 3 0100000000000004 "Target-Pet-Atk" "Ability_Hunter_SniperShot"
+#showtooltip Hunter's Mark
+/cast Hunter's Mark
+/petattack
+END

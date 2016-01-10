@@ -1,0 +1,31 @@
+
+DBT_AllPersistentOptions = {
+	["Default"] = {
+		["DBM"] = {
+			["EndColorG"] = 0,
+			["HugeTimerY"] = -127.000076293945,
+			["HugeBarXOffset"] = 0,
+			["Scale"] = 0.899999976158142,
+			["EnlargeBarsPercent"] = 0.125,
+			["StartColorR"] = 1,
+			["HugeWidth"] = 200,
+			["TimerX"] = 401.000396728516,
+			["HugeBarYOffset"] = 0,
+			["HugeScale"] = 1.40000009536743,
+			["TimerPoint"] = "TOPLEFT",
+			["StartColorG"] = 0.701960784313726,
+			["BarYOffset"] = 0,
+			["StartColorB"] = 0,
+			["EndColorR"] = 1,
+			["Width"] = 183,
+			["HugeTimerPoint"] = "CENTER",
+			["FontSize"] = 10,
+			["Height"] = 20,
+			["EnlargeBarsTime"] = 8,
+			["HugeTimerX"] = -579.999328613281,
+			["TimerY"] = -163.000061035156,
+			["BarXOffset"] = 0,
+			["EndColorB"] = 0,
+		},
+	},
+}

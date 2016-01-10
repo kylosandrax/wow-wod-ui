@@ -37,7 +37,18 @@ local IsGuildmate = TidyPlatesUtility.IsGuildmate
 
 local isTanked = TidyPlatesWidgets.IsTankedByAnotherTank
 local function IsTankedByAnotherTank(...)
-	if LocalVars.ColorEnableOffTank and isTanked(...) then return true end
+
+--[[
+	-- Testing
+	if LocalVars.EnableOffTankHighlight then
+		local unit = ...
+		if not unit.isTarget then return true end
+	end
+--]]
+
+
+	--if LocalVars.EnableOffTankHighlight and isTanked(...) then return true end
+	return 
 end
 
 HubData.Functions.IsTankedByAnotherTank = IsTankedByAnotherTank
@@ -68,8 +79,8 @@ HubData.Functions.GetFriendlyClass = GetFriendlyClass
 HubData.Functions.GetEnemyClass = GetEnemyClass
 
 -- Define the Menu for Threat Modes
-TidyPlatesHubDefaults.ThreatMode = "Auto"
-TidyPlatesHubMenus.ThreatModes = {
+TidyPlatesHubDefaults.ThreatWarningMode = "Auto"
+TidyPlatesHubMenus.ThreatWarningModes = {
 					{ text = "Auto (Color Swap)", value = "Auto",} ,
 					{ text = "Tank", value = "Tank",} ,
 					{ text = "DPS/Healer", value = "DPS",} ,
@@ -212,6 +223,7 @@ local function UseVariables(profileName)
 	if suffix then
 
 		local objectName = "HubPanelSettings"..suffix
+		---ocal objectName = "HubProfileSettings"..suffix
 
 		LocalVars = TidyPlatesHubSettings[objectName] or CreateVariableSet(objectName)
 

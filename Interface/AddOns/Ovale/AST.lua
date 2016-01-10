@@ -40,12 +40,12 @@ local pairs = pairs
 local rawset = rawset
 local setmetatable = setmetatable
 local strlower = string.lower
-local strmatch = string.match
 local strsub = string.sub
 local tconcat = table.concat
 local tinsert = table.insert
 local tonumber = tonumber
 local tostring = tostring
+local tsort = table.sort
 local type = type
 local wipe = wipe
 local yield = coroutine.yield
@@ -61,7 +61,6 @@ local KEYWORD = {
 	["not"] = true,
 	["or"] = true,
 	["unless"] = true,
-	["wait"] = true,
 }
 
 local DECLARATION_KEYWORD = {
@@ -82,16 +81,13 @@ local DECLARATION_KEYWORD = {
 
 local PARAMETER_KEYWORD = {
 	["checkbox"] = true,
-	["checkboxoff"] = true,		-- deprecated
-	["checkboxon"] = true,		-- deprecated
 	["glyph"] = true,
 	["help"] = true,
 	["if_spell"] = true,
-	["item"] = true,			-- deprecated
+	["if_stance"] = true,
 	["itemcount"] = true,
 	["itemset"] = true,
 	["level"] = true,
-	["list"] = true,			-- deprecated
 	["listitem"] = true,
 	["specialization"] = true,
 	["talent"] = true,
@@ -102,6 +98,8 @@ local PARAMETER_KEYWORD = {
 local SPELL_AURA_KEYWORD = {
 	["SpellAddBuff"] = true,
 	["SpellAddDebuff"] = true,
+	["SpellAddPetBuff"] = true,
+	["SpellAddPetDebuff"] = true,
 	["SpellAddTargetBuff"] = true,
 	["SpellAddTargetDebuff"] = true,
 	["SpellDamageBuff"] = true,
@@ -118,10 +116,6 @@ do
 	-- SpellAuraList keywords are declaration keywords.
 	for keyword, value in pairs(SPELL_AURA_KEYWORD) do
 		DECLARATION_KEYWORD[keyword] = value
-	end
-	-- All stance keywords are parameter keywords.
-	for keyword, value in pairs(STANCE_KEYWORD) do
-		PARAMETER_KEYWORD[keyword] = value
 	end
 	-- All keywords are Ovale script keywords.
 	for keyword, value in pairs(DECLARATION_KEYWORD) do
@@ -207,12 +201,17 @@ local self_outputPool = OvalePool("OvaleAST_outputPool")
 local self_controlPool = OvalePool("OvaleAST_controlPool")
 local self_parametersPool = OvalePool("OvaleAST_parametersPool")
 local self_childrenPool = OvalePool("OvaleAST_childrenPool")
+local self_postOrderPool = OvalePool("OvaleAST_postOrderPool")
 local self_pool = OvalePool("OvaleAST_pool")
 do
 	self_pool.Clean = function(self, node)
 		if node.child then
 			self_childrenPool:Release(node.child)
 			node.child = nil
+		end
+		if node.postOrder then
+			self_postOrderPool:Release(node.postOrder)
+			node.postOrder = nil
 		end
 	end
 end
@@ -269,6 +268,25 @@ local function GetNumberNode(value, nodeList, annotation)
 		annotation.numberFlyweight[value] = node
 	end
 	return node
+end
+
+--[[
+	Fill an array of nodes in order of post-order traversal.
+	The odd indices hold the nodes in post-order traversal order.
+	The even indices hold the parents of the node in the preceding indices.
+--]]
+local function PostOrderTraversal(node, array, visited)
+	if node.child then
+		for _, childNode in ipairs(node.child) do
+			if not visited[childNode] then
+				PostOrderTraversal(childNode, array, visited)
+				-- Insert the current node as the parent of the preceding child node.
+				array[#array + 1] = node
+			end
+		end
+	end
+	array[#array + 1] = node
+	visited[node] = true
 end
 
 --[[---------------------------------------------
@@ -351,18 +369,18 @@ local function GetTokenIterator(s)
 	return OvaleLexer.scan(s, MATCHES, exclude)
 end
 
--- "Flatten" a parameter value node into a string.
-local function FlattenParameterValue(parameterValue)
+-- "Flatten" a parameter value node into a string, or a table of strings if it is a comma-separated value.
+local function FlattenParameterValue(parameterValue, annotation)
 	local value = parameterValue
 	if type(parameterValue) == "table" then
 		local node = parameterValue
 		if node.type == "comma_separated_values" then
-			local output = self_outputPool:Get()
+			value = self_parametersPool:Get()
 			for k, v in ipairs(node.csv) do
-				output[k] = FlattenParameterValue(v)
+				value[k] = FlattenParameterValue(v, annotation)
 			end
-			value = tconcat(output, ",")
-			self_outputPool:Release(output)
+			annotation.parametersList = annotation.parametersList or {}
+			annotation.parametersList[#annotation.parametersList + 1] = value
 		else
 			local isBang = false
 			if node.type == "bang_value" then
@@ -405,6 +423,10 @@ local function GetPrecedence(node)
 	return precedence
 end
 
+local function HasParameters(node)
+	return node.rawPositionalParams and next(node.rawPositionalParams) or node.rawNamedParams and next(node.rawNamedParams)
+end
+
 -- Forward declarations of functions needed to implement the recursive unparser.
 local UNPARSE_VISITOR = nil
 local Unparse = nil
@@ -432,7 +454,6 @@ local UnparseSpellRequire = nil
 local UnparseString = nil
 local UnparseUnless = nil
 local UnparseVariable = nil
-local UnparseWait = nil
 
 Unparse = function(node)
 	if node.asString then
@@ -455,8 +476,8 @@ end
 
 UnparseAddCheckBox = function(node)
 	local s
-	if node.rawParams and next(node.rawParams) then
-		s = format("AddCheckBox(%s %s %s)", node.name, Unparse(node.description), UnparseParameters(node.rawParams)) 
+	if node.rawPositionalParams and next(node.rawPositionalParams) or node.rawNamedParams and next(node.rawNamedParams) then
+		s = format("AddCheckBox(%s %s %s)", node.name, Unparse(node.description), UnparseParameters(node.rawPositionalParams, node.rawNamedParams))
 	else
 		s = format("AddCheckBox(%s %s)", node.name, Unparse(node.description))
 	end
@@ -465,8 +486,8 @@ end
 
 UnparseAddFunction = function(node)
 	local s
-	if node.rawParams and next(node.rawParams) then
-		s = format("AddFunction %s %s%s", node.name, UnparseParameters(node.rawParams), UnparseGroup(node.child[1]))
+	if HasParameters(node) then
+		s = format("AddFunction %s %s%s", node.name, UnparseParameters(node.rawPositionalParams, node.rawNamedParams), UnparseGroup(node.child[1]))
 	else
 		s = format("AddFunction %s%s", node.name, UnparseGroup(node.child[1]))
 	end
@@ -475,8 +496,8 @@ end
 
 UnparseAddIcon = function(node)
 	local s
-	if node.rawParams and next(node.rawParams) then
-		s = format("AddIcon %s%s", UnparseParameters(node.rawParams), UnparseGroup(node.child[1]))
+	if HasParameters(node) then
+		s = format("AddIcon %s%s", UnparseParameters(node.rawPositionalParams, node.rawNamedParams), UnparseGroup(node.child[1]))
 	else
 		s = format("AddIcon%s", UnparseGroup(node.child[1]))
 	end
@@ -485,8 +506,8 @@ end
 
 UnparseAddListItem = function(node)
 	local s
-	if node.rawParams and next(node.rawParams) then
-		s = format("AddListItem(%s %s %s %s)", node.name, node.item, Unparse(node.description), UnparseParameters(node.rawParams))
+	if HasParameters(node) then
+		s = format("AddListItem(%s %s %s %s)", node.name, node.item, Unparse(node.description), UnparseParameters(node.rawPositionalParams, node.rawNamedParams))
 	else
 		s = format("AddListItem(%s %s %s)", node.name, node.item, Unparse(node.description))
 	end
@@ -498,13 +519,17 @@ UnparseBangValue = function(node)
 end
 
 UnparseComment = function(node)
-	return "#" .. node.comment
+	if not node.comment or node.comment == "" then
+		return ""
+	else
+		return "#" .. node.comment
+	end
 end
 
 UnparseCommaSeparatedValues = function(node)
 	local output = self_outputPool:Get()
 	for k, v in ipairs(node.csv) do
-		output[#output + 1] = Unparse(v)
+		output[k] = Unparse(v)
 	end
 	local outputString = tconcat(output, ",")
 	self_outputPool:Release(output)
@@ -546,7 +571,7 @@ UnparseExpression = function(node)
 		if rhsPrecedence and precedence > rhsPrecedence then
 			rhsExpression = "{ " .. Unparse(rhsNode) .. " }"
 		elseif rhsPrecedence and precedence == rhsPrecedence then
-			if BINARY_OPERATOR[node.operator][3] == "associative" then
+			if BINARY_OPERATOR[node.operator][3] == "associative" and node.operator == rhsNode.operator then
 				rhsExpression = Unparse(rhsNode)
 			else
 				rhsExpression = "{ " .. Unparse(rhsNode) .. " }"
@@ -561,19 +586,19 @@ end
 
 UnparseFunction = function(node)
 	local s
-	if node.rawParams and next(node.rawParams) then
+	if HasParameters(node) then
 		local name
-		local filter = node.rawParams.filter
+		local filter = node.rawNamedParams.filter
 		if filter == "debuff" then
 			name = gsub(node.name, "^Buff", "Debuff")
 		else
 			name = node.name
 		end
-		local target = node.rawParams.target
+		local target = node.rawNamedParams.target
 		if target then
-			s = format("%s.%s(%s)", target, name, UnparseParameters(node.rawParams))
+			s = format("%s.%s(%s)", target, name, UnparseParameters(node.rawPositionalParams, node.rawNamedParams))
 		else
-			s = format("%s(%s)", name, UnparseParameters(node.rawParams))
+			s = format("%s(%s)", name, UnparseParameters(node.rawPositionalParams, node.rawNamedParams))
 		end
 	else
 		s = format("%s()", node.name)
@@ -587,7 +612,12 @@ UnparseGroup = function(node)
 	output[#output + 1] = INDENT[self_indent] .. "{"
 	self_indent = self_indent + 1
 	for _, statementNode in ipairs(node.child) do
-		output[#output + 1] = INDENT[self_indent] .. Unparse(statementNode)
+		local s = Unparse(statementNode)
+		if s == "" then
+			output[#output + 1] = s
+		else
+			output[#output + 1] = INDENT[self_indent] .. s
+		end
 	end
 	self_indent = self_indent - 1
 	output[#output + 1] = INDENT[self_indent] .. "}"
@@ -607,27 +637,21 @@ end
 
 UnparseItemInfo = function(node)
 	local identifier = node.name and node.name or node.itemId
-	return format("ItemInfo(%s %s)", identifier, UnparseParameters(node.rawParams))
+	return format("ItemInfo(%s %s)", identifier, UnparseParameters(node.rawPositionalParams, node.rawNamedParams))
 end
 
 UnparseList = function(node)
-	return format("%s(%s %s)", node.keyword, node.name, UnparseParameters(node.rawParams))
+	return format("%s(%s %s)", node.keyword, node.name, UnparseParameters(node.rawPositionalParams, node.rawNamedParams))
 end
 
 UnparseNumber = function(node)
 	return tostring(node.value)
 end
 
-UnparseParameters = function(parameters)
+UnparseParameters = function(positionalParams, namedParams)
 	local output = self_outputPool:Get()
-	local N = #parameters
-	for k = 1, N do
-		output[#output + 1] = Unparse(parameters[k])
-	end
-	for k, v in pairs(parameters) do
-		if type(k) == "number" and k <= N then
-			-- Already output in previous loop.
-		elseif k == "checkbox" then
+	for k, v in pairs(namedParams) do
+		if k == "checkbox" then
 			for _, name in ipairs(v) do
 				output[#output + 1] = format("checkbox=%s", Unparse(name))
 			end
@@ -643,26 +667,45 @@ UnparseParameters = function(parameters)
 			output[#output + 1] = format("%s=%s", k, v)
 		end
 	end
+	tsort(output)
+	for k = #positionalParams, 1, -1 do
+		tinsert(output, 1, Unparse(positionalParams[k]))
+	end
 	local outputString = tconcat(output, " ")
 	self_outputPool:Release(output)
 	return outputString
 end
 
 UnparseScoreSpells = function(node)
-	return format("ScoreSpells(%s)", UnparseParameters(node.rawParams))
+	return format("ScoreSpells(%s)", UnparseParameters(node.rawPositionalParams, node.rawNamedParams))
 end
 
 UnparseScript = function(node)
 	local output = self_outputPool:Get()
+	local previousDeclarationType
 	for _, declarationNode in ipairs(node.child) do
 		if declarationNode.type == "item_info" or declarationNode.type == "spell_aura_list" or declarationNode.type == "spell_info" or declarationNode.type == "spell_require" then
-			output[#output + 1] = INDENT[self_indent + 1] .. Unparse(declarationNode)
+			local s = Unparse(declarationNode)
+			if s == "" then
+				output[#output + 1] = s
+			else
+				output[#output + 1] = INDENT[self_indent + 1] .. s
+			end
 		else
-			-- Add an extra blank line preceding "AddFunction" or "AddIcon".
+			local insertBlank = false
+			-- Add an extra blank line if the type is different from the previous type.
+			if previousDeclarationType and previousDeclarationType ~= declarationNode.type then
+				insertBlank = true
+			end
+			-- Always an extra blank line preceding "AddFunction" or "AddIcon".
 			if declarationNode.type == "add_function" or declarationNode.type == "icon" then
+				insertBlank = true
+			end
+			if insertBlank then
 				output[#output + 1] = ""
 			end
 			output[#output + 1] = Unparse(declarationNode)
+			previousDeclarationType = declarationNode.type
 		end
 	end
 	local outputString = tconcat(output, "\n")
@@ -672,17 +715,17 @@ end
 
 UnparseSpellAuraList = function(node)
 	local identifier = node.name and node.name or node.spellId
-	return format("%s(%s %s)", node.keyword, identifier, UnparseParameters(node.rawParams))
+	return format("%s(%s %s)", node.keyword, identifier, UnparseParameters(node.rawPositionalParams, node.rawNamedParams))
 end
 
 UnparseSpellInfo = function(node)
 	local identifier = node.name and node.name or node.spellId
-	return format("SpellInfo(%s %s)", identifier, UnparseParameters(node.rawParams))
+	return format("SpellInfo(%s %s)", identifier, UnparseParameters(node.rawPositionalParams, node.rawNamedParams))
 end
 
 UnparseSpellRequire = function(node)
 	local identifier = node.name and node.name or node.spellId
-	return format("SpellRequire(%s %s %s)", identifier, node.property, UnparseParameters(node.rawParams))
+	return format("SpellRequire(%s %s %s)", identifier, node.property, UnparseParameters(node.rawPositionalParams, node.rawNamedParams))
 end
 
 UnparseString = function(node)
@@ -699,14 +742,6 @@ end
 
 UnparseVariable = function(node)
 	return node.name
-end
-
-UnparseWait = function(node)
-	if node.child[1].type == "group" then
-		return format("wait%s", UnparseGroup(node.child[1]))
-	else
-		return format("wait %s", Unparse(node.child[1]))
-	end
 end
 
 do
@@ -739,7 +774,6 @@ do
 		["unless"] = UnparseUnless,
 		["value"] = UnparseNumber,
 		["variable"] = UnparseVariable,
-		["wait"] = UnparseWait,
 	}
 end
 
@@ -761,18 +795,6 @@ local function SyntaxError(tokenStream, ...)
 		end
 	end
 	OvaleAST:Print(tconcat(context, " "))
-end
-
--- Left-rotate tree to preserve precedence.
-local function LeftRotateTree(node)
-	local rhsNode = node.child[2]
-	while node.type == rhsNode.type and node.operator == rhsNode.operator and BINARY_OPERATOR[node.operator][3] == "associative" and rhsNode.expressionType == "binary" do
-		node.child[2] = rhsNode.child[1]
-		rhsNode.child[1] = node
-		node = rhsNode
-		rhsNode = node.child[2]
-	end
-	return node
 end
 
 -- Forward declarations of parser functions needed to implement a recursive descent parser.
@@ -806,7 +828,6 @@ local ParseString = nil
 local ParseStatement = nil
 local ParseUnless = nil
 local ParseVariable = nil
-local ParseWait = nil
 
 Parse = function(nodeType, tokenStream, nodeList, annotation)
 	local visitor = PARSE_VISITOR[nodeType]
@@ -853,8 +874,9 @@ ParseAddCheckBox = function(tokenStream, nodeList, annotation)
 	end
 	-- Consume any parameters.
 	local parameters
+	local positionalParams, namedParams
 	if ok then
-		ok, parameters = ParseParameters(tokenStream, nodeList, annotation)
+		ok, positionalParams, namedParams = ParseParameters(tokenStream, nodeList, annotation)
 	end
 	-- Consume the right parenthesis.
 	if ok then
@@ -871,7 +893,8 @@ ParseAddCheckBox = function(tokenStream, nodeList, annotation)
 		node.type = "checkbox"
 		node.name = name
 		node.description = descriptionNode
-		node.rawParams = parameters
+		node.rawPositionalParams = positionalParams
+		node.rawNamedParams = namedParams
 		annotation.parametersReference = annotation.parametersReference or {}
 		annotation.parametersReference[#annotation.parametersReference + 1] = node
 	end
@@ -898,9 +921,9 @@ ParseAddFunction = function(tokenStream, nodeList, annotation)
 		end
 	end
 	-- Consume any parameters.
-	local parameters
+	local positionalParams, namedParams
 	if ok then
-		ok, parameters = ParseParameters(tokenStream, nodeList, annotation)
+		ok, positionalParams, namedParams = ParseParameters(tokenStream, nodeList, annotation)
 	end
 	-- Consume the body.
 	local bodyNode
@@ -914,9 +937,13 @@ ParseAddFunction = function(tokenStream, nodeList, annotation)
 		node.type = "add_function"
 		node.name = name
 		node.child[1] = bodyNode
-		node.rawParams = parameters
+		node.rawPositionalParams = positionalParams
+		node.rawNamedParams = namedParams
 		annotation.parametersReference = annotation.parametersReference or {}
 		annotation.parametersReference[#annotation.parametersReference + 1] = node
+		-- Add the postOrder list to the body node.
+		annotation.postOrderReference = annotation.postOrderReference or {}
+		annotation.postOrderReference[#annotation.postOrderReference + 1] = bodyNode
 		annotation.customFunction = annotation.customFunction or {}
 		annotation.customFunction[name] = node
 	end
@@ -932,9 +959,9 @@ ParseAddIcon = function(tokenStream, nodeList, annotation)
 		ok = false
 	end
 	-- Consume any parameters.
-	local parameters
+	local positionalParams, namedParams
 	if ok then
-		ok, parameters = ParseParameters(tokenStream, nodeList, annotation)
+		ok, positionalParams, namedParams = ParseParameters(tokenStream, nodeList, annotation)
 	end
 	-- Consume the body.
 	local bodyNode
@@ -947,9 +974,13 @@ ParseAddIcon = function(tokenStream, nodeList, annotation)
 		node = OvaleAST:NewNode(nodeList, true)
 		node.type = "icon"
 		node.child[1] = bodyNode
-		node.rawParams = parameters
+		node.rawPositionalParams = positionalParams
+		node.rawNamedParams = namedParams
 		annotation.parametersReference = annotation.parametersReference or {}
 		annotation.parametersReference[#annotation.parametersReference + 1] = node
+		-- Add the postOrder list to the body node.
+		annotation.postOrderReference = annotation.postOrderReference or {}
+		annotation.postOrderReference[#annotation.postOrderReference + 1] = bodyNode
 	end
 	return ok, node
 end
@@ -1000,9 +1031,9 @@ ParseAddListItem = function(tokenStream, nodeList, annotation)
 		ok, descriptionNode = ParseString(tokenStream, nodeList, annotation)
 	end
 	-- Consume any parameters.
-	local parameters
+	local positionalParams, namedParams
 	if ok then
-		ok, parameters = ParseParameters(tokenStream, nodeList, annotation)
+		ok, positionalParams, namedParams = ParseParameters(tokenStream, nodeList, annotation)
 	end
 	-- Consume the right parenthesis.
 	if ok then
@@ -1020,7 +1051,8 @@ ParseAddListItem = function(tokenStream, nodeList, annotation)
 		node.name = name
 		node.item = item
 		node.description = descriptionNode
-		node.rawParams = parameters
+		node.rawPositionalParams = positionalParams
+		node.rawNamedParams = namedParams
 		annotation.parametersReference = annotation.parametersReference or {}
 		annotation.parametersReference[#annotation.parametersReference + 1] = node
 	end
@@ -1205,7 +1237,21 @@ ParseExpression = function(tokenStream, nodeList, annotation, minPrecedence)
 						node.child[1] = lhsNode
 						node.child[2] = rhsNode
 						-- Left-rotate tree to preserve precedence.
-						node = LeftRotateTree(node)
+						local rotated = false
+						while node.type == rhsNode.type and node.operator == rhsNode.operator and BINARY_OPERATOR[node.operator][3] == "associative" and rhsNode.expressionType == "binary" do
+							node.child[2] = rhsNode.child[1]
+							rhsNode.child[1] = node
+							-- Re-cache the string representation for the new LHS node.
+							node.asString = UnparseExpression(node)
+							-- Re-assign node and RHS node for the following loop.
+							node = rhsNode
+							rhsNode = node.child[2]
+							rotated = true
+						end
+						if rotated then
+							-- Re-cache the string representation for the new top-level expression node.
+							node.asString = UnparseExpression(node)
+						end
 					end
 				end
 			end
@@ -1215,6 +1261,10 @@ ParseExpression = function(tokenStream, nodeList, annotation, minPrecedence)
 		end
 	end
 
+	if ok and node then
+		-- Cache string representation.
+		node.asString = node.asString or Unparse(node)
+	end
 	return ok, node
 end
 
@@ -1257,14 +1307,14 @@ ParseFunction = function(tokenStream, nodeList, annotation)
 		end
 	end
 	-- Consume any function parameters.
-	local parameters
+	local positionalParams, namedParams
 	if ok then
-		ok, parameters = ParseParameters(tokenStream, nodeList, annotation)
+		ok, positionalParams, namedParams = ParseParameters(tokenStream, nodeList, annotation)
 	end
 	-- Verify that an action has the required number of fixed parameters.
 	if ok and ACTION_PARAMETER_COUNT[lowername] then
 		local count = ACTION_PARAMETER_COUNT[lowername]
-		if count > #parameters then
+		if count > #positionalParams then
 			SyntaxError(tokenStream, "Syntax error: action '%s' requires at least %d fixed parameter(s).", name, count)
 			ok = false
 		end
@@ -1279,29 +1329,29 @@ ParseFunction = function(tokenStream, nodeList, annotation)
 	end
 	if ok then
 		-- Parse the function name.
-		if not parameters.target then
+		if not namedParams.target then
 			-- Auto-set the target if the function name starts with "Target".
 			if strsub(lowername, 1, 6) == "target" then
-				parameters.target = "target"
+				namedParams.target = "target"
 				lowername = strsub(lowername, 7)
 				name = strsub(name, 7)
 			end
 		end
-		if not parameters.filter then
+		if not namedParams.filter then
 			-- Auto-set the aura filter if the function name starts with "Debuff" or "Buff".
 			if strsub(lowername, 1, 6) == "debuff" then
-				parameters.filter = "debuff"
+				namedParams.filter = "debuff"
 			elseif strsub(lowername, 1, 4) == "buff" then
-				parameters.filter = "buff"
+				namedParams.filter = "buff"
 			elseif strsub(lowername, 1, 11) == "otherdebuff" then
-				parameters.filter = "debuff"
+				namedParams.filter = "debuff"
 			elseif strsub(lowername, 1, 9) == "otherbuff" then
-				parameters.filter = "buff"
+				namedParams.filter = "buff"
 			end
 		end
 		-- Set the target if given in a prefix.
 		if target then
-			parameters.target = target
+			namedParams.target = target
 		end
 	end
 	-- Create the AST node.
@@ -1333,7 +1383,8 @@ ParseFunction = function(tokenStream, nodeList, annotation)
 			-- Script-defined functions are case-sensitive.
 			node.func = name
 		end
-		node.rawParams = parameters
+		node.rawPositionalParams = positionalParams
+		node.rawNamedParams = namedParams
 		-- Cache string representation.
 		node.asString = UnparseFunction(node)
 		annotation.parametersReference = annotation.parametersReference or {}
@@ -1456,7 +1507,7 @@ ParseInclude = function(tokenStream, nodeList, annotation)
 		end
 	end
 	-- Get the code associated with the script name.
-	local code = OvaleScripts.script[name] and OvaleScripts.script[name].code
+	local code = OvaleScripts:GetScript(name)
 	if not code then
 		OvaleAST:Error("Script '%s' not found when parsing INCLUDE.", name)
 		ok = false
@@ -1504,9 +1555,9 @@ ParseItemInfo = function(tokenStream, nodeList, annotation)
 		end
 	end
 	-- Consume any ItemInfo parameters.
-	local parameters
+	local positionalParams, namedParams
 	if ok then
-		ok, parameters = ParseParameters(tokenStream, nodeList, annotation)
+		ok, positionalParams, namedParams = ParseParameters(tokenStream, nodeList, annotation)
 	end
 	-- Consume the right parenthesis.
 	if ok then
@@ -1523,7 +1574,8 @@ ParseItemInfo = function(tokenStream, nodeList, annotation)
 		node.type = "item_info"
 		node.itemId = itemId
 		node.name = name
-		node.rawParams = parameters
+		node.rawPositionalParams = positionalParams
+		node.rawNamedParams = namedParams
 		annotation.parametersReference = annotation.parametersReference or {}
 		annotation.parametersReference[#annotation.parametersReference + 1] = node
 		if name then
@@ -1567,9 +1619,9 @@ ParseList = function(tokenStream, nodeList, annotation)
 		end
 	end
 	-- Consume the list.
-	local parameters
+	local positionalParams, namedParams
 	if ok then
-		ok, parameters = ParseParameters(tokenStream, nodeList, annotation, true)
+		ok, positionalParams, namedParams = ParseParameters(tokenStream, nodeList, annotation)
 	end
 	-- Consume the right parenthesis.
 	if ok then
@@ -1586,7 +1638,8 @@ ParseList = function(tokenStream, nodeList, annotation)
 		node.type = "list"
 		node.keyword = keyword
 		node.name = name
-		node.rawParams = parameters
+		node.rawPositionalParams = positionalParams
+		node.rawNamedParams = namedParams
 		annotation.parametersReference = annotation.parametersReference or {}
 		annotation.parametersReference[#annotation.parametersReference + 1] = node
 	end
@@ -1646,7 +1699,8 @@ end
 
 ParseParameters = function(tokenStream, nodeList, annotation, isList)
 	local ok = true
-	local parameters = self_parametersPool:Get()
+	local positionalParams = self_parametersPool:Get()
+	local namedParams = self_parametersPool:Get()
 	while ok do
 		local tokenType, token = tokenStream:Peek()
 		if tokenType then
@@ -1695,7 +1749,7 @@ ParseParameters = function(tokenStream, nodeList, annotation, isList)
 					-- Consume the '=' token.
 					tokenStream:Consume()
 					if name == "checkbox" or name == "listitem" then
-						local control = parameters[name] or self_controlPool:Get()
+						local control = namedParams[name] or self_controlPool:Get()
 						if name == "checkbox" then
 							-- Get the checkbox name.
 							ok, node = ParseSimpleParameterValue(tokenStream, nodeList, annotation)
@@ -1742,18 +1796,18 @@ ParseParameters = function(tokenStream, nodeList, annotation, isList)
 								control[list] = node
 							end
 						end
-						if not parameters[name] then
-							parameters[name] = control
+						if not namedParams[name] then
+							namedParams[name] = control
 							annotation.controlList = annotation.controlList or {}
 							annotation.controlList[#annotation.controlList + 1] = control
 						end
 					else
 						-- Get the value.
 						ok, node = ParseParameterValue(tokenStream, nodeList, annotation)
-						parameters[name] = node
+						namedParams[name] = node
 					end
 				else
-					parameters[#parameters + 1] = node
+					positionalParams[#positionalParams + 1] = node
 				end
 			end
 		else
@@ -1762,11 +1816,13 @@ ParseParameters = function(tokenStream, nodeList, annotation, isList)
 	end
 	if ok then
 		annotation.parametersList = annotation.parametersList or {}
-		annotation.parametersList[#annotation.parametersList + 1] = parameters
+		annotation.parametersList[#annotation.parametersList + 1] = positionalParams
+		annotation.parametersList[#annotation.parametersList + 1] = namedParams
 	else
-		parameters = nil
+		positionalParams = nil
+		namedParams = nil
 	end
-	return ok, parameters
+	return ok, positionalParams, namedParams
 end
 
 ParseParentheses = function(tokenStream, nodeList, annotation)
@@ -1824,9 +1880,9 @@ ParseScoreSpells = function(tokenStream, nodeList, annotation)
 		end
 	end
 	-- Consume the list of spells.
-	local parameters
+	local positionalParams, namedParams
 	if ok then
-		ok, parameters = ParseParameters(tokenStream, nodeList, annotation, true)
+		ok, positionalParams, namedParams = ParseParameters(tokenStream, nodeList, annotation)
 	end
 	-- Consume the right parenthesis.
 	if ok then
@@ -1841,7 +1897,8 @@ ParseScoreSpells = function(tokenStream, nodeList, annotation)
 	if ok then
 		node = OvaleAST:NewNode(nodeList)
 		node.type = "score_spells"
-		node.rawParams = parameters
+		node.rawPositionalParams = positionalParams
+		node.rawNamedParams = namedParams
 		annotation.parametersReference = annotation.parametersReference or {}
 		annotation.parametersReference[#annotation.parametersReference + 1] = node
 	end
@@ -1974,9 +2031,9 @@ ParseSpellAuraList = function(tokenStream, nodeList, annotation)
 		end
 	end
 	-- Consume any parameters.
-	local parameters
+	local positionalParams, namedParams
 	if ok then
-		ok, parameters = ParseParameters(tokenStream, nodeList, annotation)
+		ok, positionalParams, namedParams = ParseParameters(tokenStream, nodeList, annotation)
 	end
 	-- Consume the right parenthesis.
 	if ok then
@@ -1994,7 +2051,8 @@ ParseSpellAuraList = function(tokenStream, nodeList, annotation)
 		node.keyword = keyword
 		node.spellId = spellId
 		node.name = name
-		node.rawParams = parameters
+		node.rawPositionalParams = positionalParams
+		node.rawNamedParams = namedParams
 		annotation.parametersReference = annotation.parametersReference or {}
 		annotation.parametersReference[#annotation.parametersReference + 1] = node
 		if name then
@@ -2038,9 +2096,9 @@ ParseSpellInfo = function(tokenStream, nodeList, annotation)
 		end
 	end
 	-- Consume any SpellInfo parameters.
-	local parameters
+	local positionalParams, namedParams
 	if ok then
-		ok, parameters = ParseParameters(tokenStream, nodeList, annotation)
+		ok, positionalParams, namedParams = ParseParameters(tokenStream, nodeList, annotation)
 	end
 	-- Consume the right parenthesis.
 	if ok then
@@ -2057,7 +2115,8 @@ ParseSpellInfo = function(tokenStream, nodeList, annotation)
 		node.type = "spell_info"
 		node.spellId = spellId
 		node.name = name
-		node.rawParams = parameters
+		node.rawPositionalParams = positionalParams
+		node.rawNamedParams = namedParams
 		annotation.parametersReference = annotation.parametersReference or {}
 		annotation.parametersReference[#annotation.parametersReference + 1] = node
 		if name then
@@ -2111,9 +2170,9 @@ ParseSpellRequire = function(tokenStream, nodeList, annotation)
 		end
 	end
 	-- Consume any parameters.
-	local parameters
+	local positionalParams, namedParams
 	if ok then
-		ok, parameters = ParseParameters(tokenStream, nodeList, annotation)
+		ok, positionalParams, namedParams = ParseParameters(tokenStream, nodeList, annotation)
 	end
 	-- Consume the right parenthesis.
 	if ok then
@@ -2131,7 +2190,8 @@ ParseSpellRequire = function(tokenStream, nodeList, annotation)
 		node.spellId = spellId
 		node.name = name
 		node.property = property
-		node.rawParams = parameters
+		node.rawPositionalParams = positionalParams
+		node.rawNamedParams = namedParams
 		annotation.parametersReference = annotation.parametersReference or {}
 		annotation.parametersReference[#annotation.parametersReference + 1] = node
 		if name then
@@ -2177,8 +2237,6 @@ ParseStatement = function(tokenStream, nodeList, annotation)
 			ok, node = ParseIf(tokenStream, nodeList, annotation)
 		elseif token == "unless" then
 			ok, node = ParseUnless(tokenStream, nodeList, annotation)
-		elseif token == "wait" then
-			ok, node = ParseWait(tokenStream, nodeList, annotation)
 		else
 			ok, node = ParseExpression(tokenStream, nodeList, annotation)
 		end
@@ -2273,31 +2331,6 @@ ParseVariable = function(tokenStream, nodeList, annotation)
 	return ok, node
 end
 
-ParseWait = function(tokenStream, nodeList, annotation)
-	local ok = true
-	-- Consume the 'wait' token.
-	do
-		local tokenType, token = tokenStream:Consume()
-		if not (tokenType == "keyword" and token == "wait") then
-			SyntaxError(tokenStream, "Syntax error: unexpected token '%s' when parsing WAIT; 'wait' expected.", token)
-			ok = false
-		end
-	end
-	-- Consume the statement body.
-	local bodyNode
-	if ok then
-		ok, bodyNode = ParseStatement(tokenStream, nodeList, annotation)
-	end
-	-- Create the AST node.
-	local node
-	if ok then
-		node = OvaleAST:NewNode(nodeList, true)
-		node.type = "wait"
-		node.child[1] = bodyNode
-	end
-	return ok, node
-end
-
 do
 	PARSE_VISITOR = {
 		["action"] = ParseFunction,
@@ -2327,7 +2360,6 @@ do
 		["unless"] = ParseUnless,
 		["value"] = ParseNumber,
 		["variable"] = ParseVariable,
-		["wait"] = ParseWait,
 	}
 end
 --</private-static-methods>
@@ -2412,10 +2444,10 @@ end
 
 function OvaleAST:ParseScript(name, options)
 	-- Get the code associated with the script name.
-	local code = OvaleScripts.script[name] and OvaleScripts.script[name].code
+	local code = OvaleScripts:GetScript(name)
 	local ast
 	if code then
-		options = options or { verify = true }
+		options = options or { optimize = true, verify = true }
 		-- Annotation table for the AST.
 		local annotation = {
 			nodeList = {},
@@ -2429,6 +2461,10 @@ function OvaleAST:ParseScript(name, options)
 			self:FlattenParameters(ast)
 			self:VerifyParameterStances(ast)
 			self:VerifyFunctionCalls(ast)
+			if options.optimize then
+				self:Optimize(ast)
+			end
+			self:InsertPostOrderTraversal(ast)
 		else
 			-- Create a dummy node to properly release resources.
 			ast = self:NewNode()
@@ -2505,7 +2541,7 @@ function OvaleAST:PropagateStrings(ast)
 				node.value = value
 			elseif node.type == "function" then
 				-- Get the lookup key for the string database.
-				local key = node.rawParams[1]
+				local key = node.rawPositionalParams[1]
 				if type(key) == "table" then
 					if key.type == "value" then
 						key = key.value
@@ -2547,19 +2583,28 @@ function OvaleAST:FlattenParameters(ast)
 	if annotation and annotation.parametersReference then
 		local dictionary = annotation.definition
 		for _, node in ipairs(annotation.parametersReference) do
-			if node.rawParams then
+			if node.rawPositionalParams then
 				local parameters = self_parametersPool:Get()
-				for key, value in pairs(node.rawParams) do
+				for key, value in ipairs(node.rawPositionalParams) do
+					parameters[key] = FlattenParameterValue(value, annotation)
+				end
+				node.positionalParams = parameters
+				annotation.parametersList = annotation.parametersList or {}
+				annotation.parametersList[#annotation.parametersList + 1] = parameters
+			end
+			if node.rawNamedParams then
+				local parameters = self_parametersPool:Get()
+				for key, value in pairs(node.rawNamedParams) do
 					-- Lookup the key.
 					if key == "checkbox" or key == "listitem" then
 						local control = parameters[key] or self_controlPool:Get()
 						if key == "checkbox" then
 							for i, name in ipairs(value) do
-								control[i] = FlattenParameterValue(name)
+								control[i] = FlattenParameterValue(name, annotation)
 							end
 						else -- if key == "listitem" then
 							for list, item in pairs(value) do
-								control[list] = FlattenParameterValue(item)
+								control[list] = FlattenParameterValue(item, annotation)
 							end
 						end
 						if not parameters[key] then
@@ -2567,83 +2612,45 @@ function OvaleAST:FlattenParameters(ast)
 							annotation.controlList = annotation.controlList or {}
 							annotation.controlList[#annotation.controlList + 1] = control
 						end
-					elseif key == "checkboxon" or key == "checkboxoff" then
-						-- Deprecated: checkboxon
-						-- Deprecated: checkboxoff
-						local control = parameters.checkbox or self_controlPool:Get()
-						local name = FlattenParameterValue(value)
-						if key == "checkboxon" then
-							Ovale:OneTimeMessage("Warning: 'checkboxon=%s' is deprecated; use 'checkbox=%s' instead.", name, name)
-							control[#control + 1] = name
-						elseif key == "checkboxoff" then
-							Ovale:OneTimeMessage("Warning: 'checkboxoff=%s' is deprecated; use 'checkbox=!%s' instead.", name, name)
-							control[#control + 1] = "!" .. name
-						end
-						if not parameters.checkbox then
-							parameters.checkbox = control
-							annotation.controlList = annotation.controlList or {}
-							annotation.controlList[#annotation.controlList + 1] = control
-						end
-					elseif key == "list" or key == "item" then
-						-- Deprecated: list
-						-- Deprecated: item
-						if key == "list" and node.rawParams.item then
-							local control = parameters.listitem or self_controlPool:Get()
-							local list = FlattenParameterValue(value)
-							local item = FlattenParameterValue(node.rawParams.item)
-							Ovale:OneTimeMessage("Warning: 'list=%s item=%s' is deprecated; use 'listitem=%s:%s' instead.", list, item, list, item)
-							control[list] = item
-							if not parameters.listitem then
-								parameters.listitem = control
-								annotation.controlList = annotation.controlList or {}
-								annotation.controlList[#annotation.controlList + 1] = control
-							end
-						end
-					elseif key == "mastery" then
-						-- Deprecated: mastery -> specialization
-						local spec = FlattenParameterValue(value)
-						Ovale:OneTimeMessage("Warning: 'mastery=%s' is deprecated; use 'specialization=%s' instead.", spec, spec)
-						parameters.specialization = spec
 					else
 						if type(key) ~= "number" and dictionary and dictionary[key] then
 							key = dictionary[key]
 						end
-						parameters[key] = FlattenParameterValue(value)
+						parameters[key] = FlattenParameterValue(value, annotation)
 					end
 				end
-				node.params = parameters
+				node.namedParams = parameters
 				annotation.parametersList = annotation.parametersList or {}
 				annotation.parametersList[#annotation.parametersList + 1] = parameters
-
-				-- Save a flattened string representation of the parameters.
-				local output = self_outputPool:Get()
-				local N = #parameters
-				for k = 1, N do
-					output[k] = parameters[k]
-				end
-				for k, v in ipairs(parameters) do
-					if not strmatch(v, ",") then
-						output[k] = v
-					end
-				end
-				for k, v in pairs(parameters) do
-					if type(k) == "number" and k > 0 and k <= N and not strmatch(v, ",") then
-						-- Already output in previous loop.
-					elseif k == "checkbox" then
-						for _, name in ipairs(v) do
-							output[#output + 1] = format("checkbox=%s", name)
-						end
-					elseif k == "listitem" then
-						for list, item in ipairs(v) do
-							output[#output + 1] = format("listitem=%s:%s", list, item)
-						end
-					else
-						output[#output + 1] = format("%s=%s", k, v)
-					end
-				end
-				node.paramsAsString = tconcat(output, " ")
-				self_outputPool:Release(output)
 			end
+			-- Save a flattened string representation of the parameters.
+			local output = self_outputPool:Get()
+			for k, v in pairs(node.namedParams) do
+				if k == "checkbox" then
+					for _, name in ipairs(v) do
+						output[#output + 1] = format("checkbox=%s", name)
+					end
+				elseif k == "listitem" then
+					for list, item in ipairs(v) do
+						output[#output + 1] = format("listitem=%s:%s", list, item)
+					end
+				elseif type(v) == "table" then
+					-- Comma-separated value.
+					output[#output + 1] = format("%s=%s", k, tconcat(v, ","))
+				else
+					output[#output + 1] = format("%s=%s", k, v)
+				end
+			end
+			tsort(output)
+			for k = #node.positionalParams, 1, -1 do
+				tinsert(output, 1, node.positionalParams[k])
+			end
+			if #output > 0 then
+				node.paramsAsString = tconcat(output, " ")
+			else
+				node.paramsAsString = ""
+			end
+			self_outputPool:Release(output)
 		end
 	end
 	self:StopProfiling("OvaleAST_FlattenParameters")
@@ -2679,17 +2686,17 @@ function OvaleAST:VerifyParameterStances(ast)
 	local annotation = ast.annotation
 	if annotation and annotation.verify and annotation.parametersReference then
 		for _, node in ipairs(annotation.parametersReference) do
-			if node.rawParams then
+			if node.rawNamedParams then
 				for stanceKeyword in pairs(STANCE_KEYWORD) do
-					local valueNode = node.rawParams[stanceKeyword]
+					local valueNode = node.rawNamedParams[stanceKeyword]
 					if valueNode then
 						if valueNode.type == "comma_separated_values" then
-							valueNode = valueNode.child[1]
+							valueNode = valueNode.csv[1]
 						end
 						if valueNode.type == "bang_value" then
 							valueNode = valueNode.child[1]
 						end
-						local value = FlattenParameterValue(valueNode)
+						local value = FlattenParameterValue(valueNode, annotation)
 						if OvaleStance.STANCE_NAME[value] then
 							-- The value is a valid stance name.
 						elseif type(value) == "number" then
@@ -2705,8 +2712,39 @@ function OvaleAST:VerifyParameterStances(ast)
 	self:StopProfiling("OvaleAST_VerifyParameterStances")
 end
 
+-- Insert a "postOrder" property into top-level nodes.
+function OvaleAST:InsertPostOrderTraversal(ast)
+	self:StartProfiling("OvaleAST_InsertPostOrderTraversal")
+	local annotation = ast.annotation
+	if annotation and annotation.postOrderReference then
+		for _, node in ipairs(annotation.postOrderReference) do
+			local array = self_postOrderPool:Get()
+			local visited = self_postOrderPool:Get()
+			PostOrderTraversal(node, array, visited)
+			self_postOrderPool:Release(visited)
+			node.postOrder = array
+			--[[
+			local postOrder = node.postOrder
+			local output = self_outputPool:Get()
+			local i = 1
+			while postOrder[i] do
+				local child, parent = postOrder[i], postOrder[i + 1]
+				output[#output + 1] = child.nodeId
+				i = i + 2
+			end
+			local outputHeader = format("Post-order for %d has %d nodes: ", node.nodeId, (i - 1) / 2)
+			local outputString = outputHeader .. tconcat(output, ", ")
+			self_outputPool:Release(output)
+			self:Print(outputString)
+			--]]
+		end
+	end
+	self:StopProfiling("OvaleAST_InsertPostOrderTraversal")
+end
+
 function OvaleAST:Optimize(ast)
 	self:CommonFunctionElimination(ast)
+	self:CommonSubExpressionElimination(ast)
 end
 
 --[[----------------------------------------------------------------------------
@@ -2723,27 +2761,8 @@ function OvaleAST:CommonFunctionElimination(ast)
 		if ast.annotation.functionReference then
 			local functionHash = ast.annotation.functionHash or {}
 			for _, node in ipairs(ast.annotation.functionReference) do
-				if node.params then
-					local parameters = node.params
-					local N = #parameters
-
-					local output = self_outputPool:Get()
-					output[#output + 1] = node.name
-					output[#output + 1] = "("
-					for k, v in ipairs(parameters) do
-						output[#output + 1] = v
-					end
-					for k, v in pairs(parameters) do
-						if type(k) == "number" and k <= N then
-							-- Already output in previous loop.
-						else
-							output[#output + 1] = format("%s=%s", k, v)
-						end
-					end
-					output[#output + 1] = ")"
-					local hash = tconcat(output, " ")
-					self_outputPool:Release(output)
-
+				if node.positionalParams or node.namedParams then
+					local hash = node.name .. "(" .. node.paramsAsString .. ")"
 					node.functionHash = hash
 					functionHash[hash] = functionHash[hash] or node
 				end
@@ -2767,5 +2786,46 @@ function OvaleAST:CommonFunctionElimination(ast)
 		end
 	end
 	self:StopProfiling("OvaleAST_CommonFunctionElimination")
+end
+
+--[[----------------------------------------------------------------------------
+	Common Sub-Expression Elimination
+
+	This is an optimizing transformation of the AST that globally replaces
+	references to nodes with a string representation with the first node found
+	that has the same string representation.
+--]]----------------------------------------------------------------------------
+
+function OvaleAST:CommonSubExpressionElimination(ast)
+	self:StartProfiling("OvaleAST_CommonSubExpressionElimination")
+	if ast and ast.annotation and ast.annotation.nodeList then
+		local expressionHash = {}
+		-- Walk the AST and search for child nodes that have string representations.
+		for _, node in ipairs(ast.annotation.nodeList) do
+			local hash = node.asString
+			-- Hash the node if it has a string representation.
+			if hash then
+				expressionHash[hash] = expressionHash[hash] or node
+			end
+			-- Replace all child nodes with hashed nodes if they exist.
+			if node.child then
+				for i, childNode in ipairs(node.child) do
+					hash = childNode.asString
+					if hash then
+						local hashNode = expressionHash[hash]
+						if hashNode then
+							-- Replace the child node with a previous hashed node if it exists.
+							node.child[i] = hashNode
+						else
+							-- Hash the child node if it has a string representation.
+							expressionHash[hash] = childNode
+						end
+					end
+				end
+			end
+		end
+		ast.annotation.expressionHash = expressionHash
+	end
+	self:StopProfiling("OvaleAST_CommonSubExpressionElimination")
 end
 --</public-static-methods>

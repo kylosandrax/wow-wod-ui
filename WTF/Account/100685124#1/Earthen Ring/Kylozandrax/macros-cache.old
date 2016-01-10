@@ -1,0 +1,117 @@
+MACRO 16777232 "Afterburner" INV_Misc_QuestionMark
+#showtooltip Last Stand
+/party --- LAST STAND ACTIVE ---
+/cast Last Stand
+/in 15 /party --- LAST STAND ENDING ---
+/cast Bloodrage
+/cast Enraged Regeneration
+/dbm broadcast timer 00:15 Kylo's Last Stand
+END
+MACRO 16777244 "Arms-Charge" INV_Misc_QuestionMark
+#showtooltip Shield Block
+#showtooltip
+/cancelaura Bladestorm
+/cast Charge
+END
+MACRO 16777236 "Bloodthirst" Spell_Nature_BloodLust
+#showtooltip Bloodthirst
+/startattack
+/use 13
+/use 14
+/cast Bloodthirst
+END
+MACRO 16777251 "Bloodwall" INV_Misc_QuestionMark
+#showtooltip Enraged Regeneration
+/use 13
+/use 14
+/cast Berserker Rage
+/cast Enraged Regeneration
+/party --- Enraged Regeneration ACTIVE ---
+/in 10 /party --- Enraged Regeneration ENDING ---
+/dbm broadcast timer 00:10 Kylo's Enraged Regeneration
+END
+MACRO 16777234 "CLV-Stance-Skill" INV_Misc_QuestionMark
+#show [stance:1] Overpower; [stance:2] Revenge; [stance:3] Whirlwind
+/console Sound_EnableSFX 0
+/use 13
+/use 14
+/cast [stance:1] Overpower; [stance:2] Revenge; [stance:3] Whirlwind
+/cast Cleave
+/console Sound_EnableSFX 1
+END
+MACRO 16777240 "Devestate" INV_Misc_QuestionMark
+#showtooltip Devastate
+/console Sound_EnableSFX 0
+/cast [target=mouseover, harm][harm] devastate
+/cast Shield Block
+/console Sound_EnableSFX 1
+/script UIErrorsFrame:Clear(
+END
+MACRO 16777246 "HS-StanceSkill" INV_Misc_QuestionMark
+#show [stance:1] Overpower; [stance:2] Revenge; [stance:3] Whirlwind
+/console Sound_EnableSFX 0
+/use 13
+/use 14
+/cast [stance:1] Overpower; [stance:2] Revenge; [stance:3] Whirlwind
+/cast Heroic Strike
+/console Sound_EnableSFX 1
+END
+MACRO 16777249 "Interrupt" INV_Misc_QuestionMark
+#showtooltip
+/castsequence reset=45 Pummel, Throwdown, Pumme, Pummel, Pummel, Pummel, Pummell
+END
+MACRO 16777250 "Intervene" INV_Misc_QuestionMark
+#showtooltip Intervene
+/cast [nostance:2] Defensive Stance; [help] Intervene; [target=targettarget, help] Intervene
+END
+MACRO 16777245 "MO-Bonk" INV_Misc_QuestionMark
+#showtooltip Concussion Blow
+/startattack
+/cast [target=mouseover, harm, nodead][harm, nodead][target=targettarget, harm, nodead][] Concussion Blow
+END
+MACRO 16777247 "MO-Slam" INV_Misc_QuestionMark
+#showtooltip Shield Slam
+/startattack
+/cast Shield Block
+/cast [target=mouseover, harm, nodead][harm, nodead][target=targettarget, harm, nodead][] Shield Slam
+/cast !Heroic Strike
+END
+MACRO 16777248 "MO-Throw" INV_Misc_QuestionMark
+#show
+/cast [target=mouseover,harm,nodead][] Heroic Throw;
+END
+MACRO 16777228 "Rend" INV_Misc_QuestionMark
+#showtooltip Rend
+/startattack
+/cast Rend
+END
+MACRO 16777243 "Shield-Bash" INV_Misc_QuestionMark
+#showtooltip Shield Bash
+/startattack
+/cast Shield Bash
+END
+MACRO 16777241 "Shield-Slam" INV_Misc_QuestionMark
+#showtooltip Shield Slam
+/startattack
+/cast Shield Slam
+/cast Shield Block
+END
+MACRO 16777239 "Sunder" INV_Misc_QuestionMark
+#showtooltip Sunder Armor
+/startattack
+/cast Sunder Armor
+END
+MACRO 16777238 "Super-Charge" INV_Misc_QuestionMark
+#showtooltip [help] Intervene; [nocombat] Charge; [combat] Intercept
+/cast [combat] Intercept
+/cast [nocombat] Battle Stance
+/cast [nocombat] Charge
+/cast [harm] Berserker Stance
+/cast [help] Defensive Stance
+/cast [help] Intervene
+END
+MACRO 16777235 "Thunder-Cleave" INV_Misc_QuestionMark
+#showtooltip Thunder Clap
+/startattack
+/cast [stance:1] Defensive Stance; [stance:2] Thunder Clap; [stance:3] Defensive Stance
+END

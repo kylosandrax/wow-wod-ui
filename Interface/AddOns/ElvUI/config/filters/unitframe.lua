@@ -1,7 +1,15 @@
 local E, L, V, P, G, _ = unpack(select(2, ...)); --Engine
 
+--Cache global variables
+--Lua functions
+local print, unpack, select, pairs = print, unpack, select, pairs
+local lower = string.lower
+--WoW API / Variables
+local GetSpellInfo, IsSpellKnown = GetSpellInfo, IsSpellKnown
+local UnitClass, IsEquippedItem = UnitClass, IsEquippedItem
+
 local function SpellName(id)
-	local name, _, _, _, _, _, _, _, _ = GetSpellInfo(id) 	
+	local name, _, _, _, _, _, _, _, _ = GetSpellInfo(id)
 	if not name then
 		print('|cff1784d1ElvUI:|r SpellID is not valid: '..id..'. Please check for an updated version, if none exists report to ElvUI author.')
 		return 'Impale'
@@ -11,7 +19,7 @@ local function SpellName(id)
 end
 
 local function Defaults(priorityOverride)
-	return {['enable'] = true, ['priority'] = priorityOverride or 0}
+	return {['enable'] = true, ['priority'] = priorityOverride or 0, ['stackThreshold'] = 0}
 end
 
 local function DefaultsID(spellID, priorityOverride)
@@ -415,7 +423,6 @@ G.unitframe.aurafilters['Blacklist'] = {
 		[SpellName(24755)] = Defaults(), --gay homosexual tricked or treated debuff
 		[SpellName(25163)] = Defaults(), --fucking annoying pet debuff oozeling disgusting aura
 		[SpellName(80354)] = Defaults(), --timewarp debuff
-		[SpellName(95809)] = Defaults(), --Insanity debuff (Hunter Pet heroism)
 		[SpellName(95223)] = Defaults(), --group res debuff
 		[SpellName(124275)] = Defaults(), -- Stagger
 		[SpellName(124274)] = Defaults(), -- Stagger
@@ -430,7 +437,7 @@ G.unitframe.aurafilters['Blacklist'] = {
 
 --[[
 	This should be a list of important buffs that we always want to see when they are active
-	bloodlust, paladin hand spells, raid cooldowns, etc.. 
+	bloodlust, paladin hand spells, raid cooldowns, etc..
 ]]
 
 G.unitframe.aurafilters['Whitelist'] = {
@@ -438,24 +445,15 @@ G.unitframe.aurafilters['Whitelist'] = {
 	['spells'] = {
 		[SpellName(31821)] = Defaults(), -- Devotion Aura
 		[SpellName(2825)] = Defaults(), -- Bloodlust
-		[SpellName(32182)] = Defaults(), -- Heroism	
+		[SpellName(32182)] = Defaults(), -- Heroism
 		[SpellName(80353)] = Defaults(), --Time Warp
-		[SpellName(90355)] = Defaults(), --Ancient Hysteria		
+		[SpellName(90355)] = Defaults(), --Ancient Hysteria
 		[SpellName(47788)] = Defaults(), --Guardian Spirit
 		[SpellName(33206)] = Defaults(), --Pain Suppression
 		[SpellName(116849)] = Defaults(), --Life Cocoon
 		[SpellName(22812)] = Defaults(), --Barkskin
 		--[SpellName(1490)] = Defaults(), --Curse of the Elements (5% magic damage taken debuff)
 		--[SpellName(116202)] = Defaults(), --Aura of the Elements (5% magic damage taken debuff)
-		[SpellName(123059)] = Defaults(), --Destabilize (Amber-Shaper Un'sok)
-		[SpellName(136431)] = Defaults(), --Shell Concussion (Tortos)
-		[SpellName(137332)] = Defaults(), --Beast of Nightmares (Twin Consorts)
-		[SpellName(137375)] = Defaults(), --Beast of Nightmares (Twin Consorts)
-		[SpellName(144351)] = Defaults(), --Mark of Arrogance (Norushen)
-		[SpellName(142863)] = Defaults(), --Weak Ancient Barrier (Malkorok)
-		[SpellName(142864)] = Defaults(), --Ancient Barrier (Malkorok)
-		[SpellName(142865)] = Defaults(), --Strong Ancient Barrier (Malkorok)
-		[SpellName(143198)] = Defaults(), --Garrote (Fallen Protectors)
 	},
 }
 
@@ -481,156 +479,277 @@ G.unitframe.aurafilters['Whitelist (Strict)'] = {
 G.unitframe.aurafilters['RaidDebuffs'] = {
 	['type'] = 'Whitelist',
 	['spells'] = {
-	   -- Mogu'shan Vaults
-			-- The Stone Guard
-			[SpellName(116281)] = Defaults(), -- Cobalt Mine Blast
-			-- Feng the Accursed
-			[SpellName(116784)] = Defaults(), -- Wildfire Spark
-			[SpellName(116417)] = Defaults(), -- Arcane Resonance
-			[SpellName(116942)] = Defaults(), -- Flaming Spear
-			-- Gara'jal the Spiritbinder
-			[SpellName(116161)] = Defaults(), -- Crossed Over
-			-- The Spirit Kings
-			[SpellName(117708)] = Defaults(), -- Maddening Shout
-			[SpellName(118303)] = Defaults(), -- Fixate
-			[SpellName(118048)] = Defaults(), -- Pillaged
-			[SpellName(118135)] = Defaults(), -- Pinned Down
-			-- Elegon
-			[SpellName(117878)] = Defaults(), -- Overcharged
-			[SpellName(117949)] = Defaults(), -- Closed Circuit
-			-- Will of the Emperor
-			[SpellName(116835)] = Defaults(), -- Devastating Arc
-			[SpellName(116778)] = Defaults(), -- Focused Defense
-			[SpellName(116525)] = Defaults(), -- Focused Assault    
-		-- Heart of Fear
-			-- Imperial Vizier Zor'lok
-			[SpellName(122761)] = Defaults(), -- Exhale
-			[SpellName(122760)] = Defaults(), -- Exhale
-			[SpellName(122740)] = Defaults(), -- Convert
-			[SpellName(123812)] = Defaults(), -- Pheromones of Zeal
-			-- Blade Lord Ta'yak
-			[SpellName(123180)] = Defaults(), -- Wind Step
-			[SpellName(123474)] = Defaults(), -- Overwhelming Assault
-			-- Garalon
-			[SpellName(122835)] = Defaults(), -- Pheromones
-			[SpellName(123081)] = Defaults(), -- Pungency
-			-- Wind Lord Mel'jarak
-			[SpellName(122125)] = Defaults(), -- Corrosive Resin Pool
-			[SpellName(121885)] = Defaults(), -- Amber Prison
-			-- Wind Lord Mel'jarak
-			[SpellName(121949)] = Defaults(), -- Parasitic Growth
-			-- Grand Empress Shek'zeer
-		-- Terrace of Endless Spring
-			-- Protectors of the Endless
-			[SpellName(117436)] = Defaults(), -- Lightning Prison
-			[SpellName(118091)] = Defaults(), -- Defiled Ground
-			[SpellName(117519)] = Defaults(), -- Touch of Sha
-			-- Tsulong
-			[SpellName(122752)] = Defaults(), -- Shadow Breath
-			[SpellName(123011)] = Defaults(), -- Terrorize
-			[SpellName(116161)] = Defaults(), -- Crossed Over
-			-- Lei Shi
-			[SpellName(123121)] = Defaults(), -- Spray
-			-- Sha of Fear
-			[SpellName(119985)] = Defaults(), -- Dread Spray
-			[SpellName(119086)] = Defaults(), -- Penetrating Bolt
-			[SpellName(119775)] = Defaults(), -- Reaching Attack	
-			
-			
-			[SpellName(122151)] = Defaults(), -- Voodoo Doll
-		-- Throne of Thunder
+		--Highmaul
 			--Trash
-			[SpellName(138349)] = Defaults(), -- Static Wound
-			[SpellName(137371)] = Defaults(), -- Thundering Throw
+				[SpellName(175601)] = Defaults(), --Tainted Claws
+				[SpellName(175599)] = Defaults(), --Devour
+				[SpellName(172069)] = Defaults(), --Radiating Poison
+				[SpellName(172066)] = Defaults(), --Radiating Poison
+				[SpellName(166779)] = Defaults(), --Staggering Blow
+				[SpellName(56037)] = Defaults(), --Rune of Destruction
+				[SpellName(175654)] = Defaults(), --Rune of Disintegration
+				[SpellName(166185)] = Defaults(), --Rending Slash
+				[SpellName(166175)] = Defaults(), --Earth Devastating Slam
+				[SpellName(174404)] = Defaults(), --Frozen Core
+				[SpellName(173763)] = Defaults(), --Wild Flames
+				[SpellName(174500)] = Defaults(), --Rending Throw
+				[SpellName(174939)] = Defaults(), --Time Stop
+				[SpellName(172115)] = Defaults(), --Earthen Thrust
+				[SpellName(166200)] = Defaults(), --Arcane Volatility
+				[SpellName(174473)] = Defaults(), --Corrupted Blood
+
+			--Kargath Bladefist
+				[SpellName(158986)] = Defaults(), --Berserker Rush
+				[SpellName(159113)] = Defaults(), --Impale
+				[SpellName(159178)] = Defaults(), --Open Wounds
+				[SpellName(159213)] = Defaults(), --Monsters Brawl
+				[SpellName(159410)] = Defaults(), --Mauling Brew
+				[SpellName(160521)] = Defaults(), --Vile Breath
+				[SpellName(159386)] = Defaults(), --Iron Bomb
+				[SpellName(159188)] = Defaults(), --Grapple
+				[SpellName(162497)] = Defaults(), --On the hunt
+				[SpellName(159202)] = Defaults(), --Flame jet
+
+			--The Butcher
+				[SpellName(156152)] = Defaults(), --Gushing Wounds
+				[SpellName(156151)] = Defaults(), --The Tenderizer
+				[SpellName(156143)] = Defaults(), --The Cleaver
+				[SpellName(163046)] = Defaults(), --Pale Vitriol
+
+			--Brackenspore
+				[SpellName(159220)] = Defaults(), --Necrotic Breath
+				[SpellName(163242)] = Defaults(), --Infesting Spores
+				[SpellName(163590)] = Defaults(), --Creeping Moss
+				[SpellName(163241)] = Defaults(), --Rot
+				[SpellName(160179)] = Defaults(), --Mind Fungus
+				[SpellName(159972)] = Defaults(), --Flesh Eater
+
+			--Tectus
+				[SpellName(162346)] = Defaults(), --Crystalline Barrage
+				[SpellName(162892)] = Defaults(), --Petrification
+				[SpellName(162475)] = Defaults(), --Tectonic Upheaval
+
+			--Twin Ogrons
+				[SpellName(155569)] = Defaults(), --Injured
+				[SpellName(158241)] = Defaults(), --Blaze
+				[SpellName(158026)] = Defaults(), --Enfeebling Roar
+				[SpellName(167200)] = Defaults(), --Arcane Wound
+				[SpellName(159709)] = Defaults(), --Weakened Defenses
+				[SpellName(167179)] = Defaults(), --Weakened Defenses
+				[SpellName(163374)] = Defaults(), --Arcane Volatility
+				[SpellName(158200)] = Defaults(), --Quake
+
+			--Ko'ragh
+				[SpellName(163472)] = Defaults(), --Dominating Power
+				[SpellName(172895)] = Defaults(), --Expel Magic: Fel
+				[SpellName(162185)] = Defaults(), --Expel Magic: Fire
+				[SpellName(162184)] = Defaults(), --Expel Magic: Shadow
+				[SpellName(161242)] = Defaults(), --Caustic Energy
+				[SpellName(161358)] = Defaults(), --Suppression Field
+				[SpellName(156803)] = Defaults(), --Nullification Barrier
+
+			--Imperator Mar'gok
+				[SpellName(164004)] = Defaults(), --Branded: Displacement
+				[SpellName(164005)] = Defaults(), --Branded: Fortification
+				[SpellName(164006)] = Defaults(), --Branded: Replication
+				[SpellName(158619)] = Defaults(), --Fetter
+				[SpellName(164176)] = Defaults(), --Mark of Chaos: Displacement
+				[SpellName(164178)] = Defaults(), --Mark of Chaos: Fortification
+				[SpellName(164191)] = Defaults(), --Mark of Chaos: Replication
+				[SpellName(157349)] = Defaults(), --Force Nova
+				[SpellName(164232)] = Defaults(), --Force Nova
+				[SpellName(164235)] = Defaults(), --Force Nova
+				[SpellName(164240)] = Defaults(), --Force Nova
+				[SpellName(158553)] = Defaults(), --Crush Armor
+				[SpellName(165102)] = Defaults(), --Infinite Darkness
+				[SpellName(157801)] = Defaults(), --Slow
+
+		--Blackrock Foundry
+			--Trash
+
+			--Blackhand
+				[SpellName(156096)] = Defaults(), --Marked for Death
+				[SpellName(156743)] = Defaults(), --Impaled
+				[SpellName(156047)] = Defaults(), --Slagged
+				[SpellName(156401)] = Defaults(), --Molten Slag
+				[SpellName(156404)] = Defaults(), --Burned
+				[SpellName(158054)] = Defaults(), --Shattering Smash
+				[SpellName(156888)] = Defaults(), --Overheated
+				[SpellName(157000)] = Defaults(), --Attach Slag Bombs
+				[SpellName(156999)] = Defaults(), --Throw Slag Bombs
+
+			--Beastlord Darmac
+				[SpellName(155365)] = Defaults(), --Pinned Down
+				[SpellName(155061)] = Defaults(), --Rend and Tear
+				[SpellName(155030)] = Defaults(), --Seared Flesh
+				[SpellName(155236)] = Defaults(), --Crush Armor
+				[SpellName(159044)] = Defaults(), --Epicentre
+				[SpellName(162276)] = Defaults(), --Unsteady Mythic
+				[SpellName(155657)] = Defaults(), --Flame Infusion
+				[SpellName(155222)] = Defaults(), --Tantrum
+				[SpellName(155399)] = Defaults(), --Conflagration
+				[SpellName(154989)] = Defaults(), --Inferno Breath
+				[SpellName(155499)] = Defaults(), --Superheated Shrapnel
+
+			--Flamebender Ka'graz
+				[SpellName(155318)] = Defaults(), --Lava Slash
+				[SpellName(155277)] = Defaults(), --Blazing Radiance
+				[SpellName(154952)] = Defaults(), --Fixate
+				[SpellName(155074)] = Defaults(), --Charring Breath
+				[SpellName(163284)] = Defaults(), --Rising Flame
+				[SpellName(162293)] = Defaults(), --Empowered Armament
+				[SpellName(155493)] = Defaults(), --Firestorm
+				[SpellName(163633)] = Defaults(), --Magma Monsoon
+
+			--Operator Thogar
+				[SpellName(155921)] = Defaults(), --Enkindle
+				[SpellName(165195)] = Defaults(), --Prototype Pulse Grenade
+				[SpellName(155701)] = Defaults(), --Serrated Slash
+				[SpellName(156310)] = Defaults(), --Lava Shock
+				[SpellName(164380)] = Defaults(), --Burning
+
+			--The Blast Furnace
+				[SpellName(155240)] = Defaults(), --Tempered
+				[SpellName(155242)] = Defaults(), --Heath
+				[SpellName(176133)] = Defaults(), --Bomb
+				[SpellName(156934)] = Defaults(), --Rupture
+				[SpellName(175104)] = Defaults(), --Melt Armor
+				[SpellName(176121)] = Defaults(), --Volatile Fire
+				[SpellName(158702)] = Defaults(), --Fixate
+				[SpellName(155225)] = Defaults(), --Melt
+
+			--Hans'gar and Franzok
+				[SpellName(157139)] = Defaults(), --Shattered Vertebrae
+				[SpellName(161570)] = Defaults(), --Searing Plates
+				[SpellName(157853)] = Defaults(), --Aftershock
+
+			--Gruul
+				[SpellName(155080)] = Defaults(), --Inferno Slice
+				[SpellName(143962)] = Defaults(), --Inferno Strike
+				[SpellName(155078)] = Defaults(), --Overwhelming Blows
+				[SpellName(36240)] = Defaults(), --Cave In
+				[SpellName(155326)] = Defaults(), --Petrifying Slam
+				[SpellName(165300)] = Defaults(), --Flare Mythic
+
+			--Kromog
+				[SpellName(157060)] = Defaults(), --Rune of Grasping Earth
+				[SpellName(156766)] = Defaults(), --Warped Armor
+				[SpellName(161839)] = Defaults(), --Rune of Crushing Earth
+				[SpellName(156844)] = Defaults(), --Stone Breath
+
+			--Oregorger
+				[SpellName(156309)] = Defaults(), --ACid Torrent
+				[SpellName(156203)] = Defaults(), --Retched Blackrock
+				[SpellName(173471)] = Defaults(), --Acidmaw
+
+			--The Iron Maidens
+				[SpellName(164271)] = Defaults(), --Penetrating Shot
+				[SpellName(158315)] = Defaults(), --Dark hunt
+				[SpellName(156601)] = Defaults(), --Sanguine Strikes
+				[SpellName(170395)] = Defaults(), --Sorka Sprey
+				[SpellName(170405)] = Defaults(), --Maraks Blood Calling
+				[SpellName(158692)] = Defaults(), --Deadly Throw
+				[SpellName(158702)] = Defaults(), --Fixate
+				[SpellName(158686)] = Defaults(), --Expose Armor
+				[SpellName(158683)] = Defaults(), --Corrupted Blood
+				[SpellName(159585)] = Defaults(), --Deploy Turret
+				[SpellName(156112)] = Defaults(), --Convulsive Shadows
+
+		-- Hellfire Citadel
+			-- Hellfire Assault
+				[SpellName(184369)] = Defaults(), -- Howling Axe (Target)
+				[SpellName(180079)] = Defaults(), -- Felfire Munitions
 			
-			--Horridon
-			[SpellName(136767)] = Defaults(), --Triple Puncture
+			-- Iron Reaver
+				[SpellName(179897)] = Defaults(), -- Blitz
+				[SpellName(185978)] = Defaults(), -- Firebomb Vulnerability
+				[SpellName(182373)] = Defaults(), -- Flame Vulnerability
+				[SpellName(182280)] = Defaults(), -- Artillery (Target)
+				[SpellName(182074)] = Defaults(), -- Immolation
+				[SpellName(182001)] = Defaults(), -- Unstable Orb
 			
-			--Council of Elders
-			[SpellName(137641)] = Defaults(), --Soul Fragment
-			[SpellName(137359)] = Defaults(), --Shadowed Loa Spirit Fixate
-			[SpellName(137972)] = Defaults(), --Twisted Fate
-			[SpellName(136903)] = Defaults(), --Frigid Assault
+			-- Kormrok
+				[SpellName(187819)] = Defaults(), -- Crush
+				[SpellName(181345)] = Defaults(), -- Foul Crush
 			
-			--Tortos
-			[SpellName(136753)] = Defaults(), --Slashing Talons
-			[SpellName(137633)] = Defaults(), --Crystal Shell
+			-- Hellfire High Council
+				[SpellName(184360)] = Defaults(), -- Fel Rage
+				[SpellName(184449)] = Defaults(), -- Mark of the Necromancer
+				[SpellName(185065)] = Defaults(), -- Mark of the Necromancer
+				[SpellName(184450)] = Defaults(), -- Mark of the Necromancer
+				[SpellName(185066)] = Defaults(), -- Mark of the Necromancer
+				[SpellName(184676)] = Defaults(), -- Mark of the Necromancer
+				[SpellName(184652)] = Defaults(), -- Reap
 			
-			--Megaera
-			[SpellName(137731)] = Defaults(), --Ignite Flesh
+			-- Kilrogg Deadeye
+				[SpellName(181488)] = Defaults(), -- Vision of Death
+				[SpellName(188929)] = Defaults(), -- Heart Seeker (Target)
+				[SpellName(180389)] = Defaults(), -- Heart Seeker (DoT)
 			
+			-- Gorefiend
+				[SpellName(179867)] = Defaults(), -- Gorefiend's Corruption
+				[SpellName(181295)] = Defaults(), -- Digest
+				[SpellName(179977)] = Defaults(), -- Touch of Doom
+				[SpellName(179864)] = Defaults(), -- Shadow of Death
+				[SpellName(179909)] = Defaults(), -- Shared Fate (self root)
+				[SpellName(179908)] = Defaults(), -- Shared Fate (other players root)
 			
-			--Durumu the Forgotten
-			[SpellName(133767)] = Defaults(), --Serious Wound
-			[SpellName(133768)] = Defaults(), --Arterial Cut
+			-- Shadow-Lord Iskar
+				[SpellName(181957)] = Defaults(), -- Phantasmal Winds
+				[SpellName(182200)] = Defaults(), -- Fel Chakram
+				[SpellName(182178)] = Defaults(), -- Fel Chakram
+				[SpellName(182325)] = Defaults(), -- Phantasmal Wounds
+				[SpellName(185239)] = Defaults(), -- Radiance of Anzu
+				[SpellName(185510)] = Defaults(), -- Dark Bindings
+				[SpellName(182600)] = Defaults(), -- Fel Fire
+				[SpellName(179219)] = Defaults(), -- Phantasmal Fel Bomb
+				[SpellName(181753)] = Defaults(), -- Fel Bomb
 			
-			--Primordius
-			[SpellName(136050)] = Defaults(), --Malformed Blood
+			-- Soulbound Construct (Socrethar)
+				[SpellName(182038)] = Defaults(), -- Shattered Defenses
+				[SpellName(188666)] = Defaults(), -- Eternal Hunger (Add fixate, Mythic only)
+				[SpellName(189627)] = Defaults(), -- Volatile Fel Orb (Fixated)
+				[SpellName(180415)] = Defaults(), -- Fel Prison
 			
-			--Dark Animus
-			[SpellName(138569)] = Defaults(), --Explosive Slam
+			-- Tyrant Velhari
+				[SpellName(185237)] = Defaults(), -- Touch of Harm
+				[SpellName(185238)] = Defaults(), -- Touch of Harm
+				[SpellName(185241)] = Defaults(), -- Edict of Condemnation
+				[SpellName(180526)] = Defaults(), -- Font of Corruption
 			
-			--Iron Qon
-			[SpellName(134691)] = Defaults(), --Impale
+			-- Fel Lord Zakuun
+				[SpellName(181508)] = Defaults(), -- Seed of Destruction
+				[SpellName(181653)] = Defaults(), -- Fel Crystals (Too Close)
+				[SpellName(179428)] = Defaults(), -- Rumbling Fissure (Soak)
+				[SpellName(182008)] = Defaults(), -- Latent Energy (Cannot soak)
+				[SpellName(179407)] = Defaults(), -- Disembodied (Player in Shadow Realm)
 			
-			--Twin Consorts
-			[SpellName(137440)] = Defaults(), --Icy Shadows
-			[SpellName(137408)] = Defaults(), --Fan of Flames
-			[SpellName(137360)] = Defaults(), --Corrupted Healing
+			-- Xhul'horac
+				[SpellName(188208)] = Defaults(), -- Ablaze
+				[SpellName(186073)] = Defaults(), -- Felsinged
+				[SpellName(186407)] = Defaults(), -- Fel Surge
+				[SpellName(186500)] = Defaults(), -- Chains of Fel
+				[SpellName(186063)] = Defaults(), -- Wasting Void
+				[SpellName(186333)] = Defaults(), -- Void Surge
 			
-			--Lei Shen
-			[SpellName(135000)] = Defaults(), --Decapitate
+			-- Mannoroth
+				[SpellName(181275)] = Defaults(), -- Curse of the Legion
+				[SpellName(181099)] = Defaults(), -- Mark of Doom
+				[SpellName(181597)] = Defaults(), -- Mannoroth's Gaze
+				[SpellName(182006)] = Defaults(), -- Empowered Mannoroth's Gaze
+				[SpellName(181841)] = Defaults(), -- Shadowforce
+				[SpellName(182088)] = Defaults(), -- Empowered Shadowforce
 			
-			--Ra-den
-		--Siege of Orgrimmar
-			--Immerseus
-				[SpellName(143436)] = Defaults(), -- Corrosive Blast
-				[SpellName(143579)] = Defaults(), --Sha Corruption(Heroic)
-			
-			--Fallen Protectors
-				[SpellName(147383)] = Defaults(), --Debilitation
-				
-			--Norushen
-				[SpellName(146124)] = Defaults(), --Self Doubt
-				[SpellName(144851)] = Defaults(), --Test of Confidence
-				
-			--Sha of Pride
-				[SpellName(144358)] = Defaults(), --Wounded Pride
-				[SpellName(144774)] = Defaults(), --Reaching Attacks
-				[SpellName(147207)] = Defaults(), --Weakened Resolve(Heroic)
-			
-			--Galakras
-			
-			--Iron Juggernaut
-				[SpellName(144467)] = Defaults(), --Ignite Armor
-			
-			--Kor'kron Dark Shaman
-				[SpellName(144215)] = Defaults(), --Froststorm Strike
-				[SpellName(143990)] = Defaults(), --Foul Geyser
-				[SpellName(144330)] = Defaults(), --Iron Prison(Heroic)
-				
-			--General Nazgrim
-				[SpellName(143494)] = Defaults(), --Sundering Blow
-				
-			--Malkorok
-				[SpellName(142990)] = Defaults(), --Fatal Strike
-				[SpellName(143919)] = Defaults(), --Languish(Heroic)
-				
-			--Thok the Bloodthirsty
-				[SpellName(143766)] = Defaults(), --Panic
-				[SpellName(143773)] = Defaults(), --Freezing Breath
-				[SpellName(146589)] = Defaults(), --Skeleton Key
-				[SpellName(143777)] = Defaults(), --Frozen Solid
-				
-			--Siegecrafter Blackfuse
-				[SpellName(143385)] = Defaults(), --Electrostatic Charge
-				
-			--Paragons of the Klaxxi
-				[SpellName(143974)] = Defaults(), --Shield Bash
-				
-			--Garrosh Hellscream
-				[SpellName(145183)] = Defaults(), --Gripping Despair
-				[SpellName(145195)] = Defaults(), --Empowered Gripping Despair
+			-- Archimonde
+				[SpellName(184964)] = Defaults(), -- Shackled Torment
+				[SpellName(186123)] = Defaults(), -- Wrought Chaos
+				[SpellName(185014)] = Defaults(), -- Focused Chaos
+				[SpellName(186952)] = Defaults(), -- Nether Banish
+				[SpellName(186961)] = Defaults(), -- Nether Banish
+				[SpellName(189891)] = Defaults(), -- Nether Tear
+				[SpellName(183634)] = Defaults(), -- Shadowfel Burst
+				[SpellName(189895)] = Defaults(), -- Void Star Fixate
+				[SpellName(190049)] = Defaults(), -- Nether Corruption
 	},
 }
 
@@ -641,16 +760,16 @@ E.ReverseTimer = {
 
 --BuffWatch
 --List of personal spells to show on unitframes as icon
-local function ClassBuff(id, point, color, anyUnit, onlyShowMissing, style, displayText, textColor, textThreshold, xOffset, yOffset)
+local function ClassBuff(id, point, color, anyUnit, onlyShowMissing, style, displayText, decimalThreshold, textColor, textThreshold, xOffset, yOffset)
 	local r, g, b = unpack(color)
-	
+
 	local r2, g2, b2 = 1, 1, 1
 	if textColor then
 		r2, g2, b2 = unpack(textColor)
 	end
-	
-	return {["enabled"] = true, ["id"] = id, ["point"] = point, ["color"] = {["r"] = r, ["g"] = g, ["b"] = b}, 
-	["anyUnit"] = anyUnit, ["onlyShowMissing"] = onlyShowMissing, ['style'] = style or 'coloredIcon', ['displayText'] = displayText or false, 
+
+	return {["enabled"] = true, ["id"] = id, ["point"] = point, ["color"] = {["r"] = r, ["g"] = g, ["b"] = b},
+	["anyUnit"] = anyUnit, ["onlyShowMissing"] = onlyShowMissing, ['style'] = style or 'coloredIcon', ['displayText'] = displayText or false, ['decimalThreshold'] = decimalThreshold or 5,
 	['textColor'] = {["r"] = r2, ["g"] = g2, ["b"] = b2}, ['textThreshold'] = textThreshold or -1, ['xOffset'] = xOffset or 0, ['yOffset'] = yOffset or 0}
 end
 
@@ -663,7 +782,7 @@ G.unitframe.buffwatch = {
 		ClassBuff(123258, "TOPLEFT", {0.81, 0.85, 0.1}, true),	 -- Power Word: Shield Power Insight
 		ClassBuff(10060 , "RIGHT", {227/255, 23/255, 13/255}), -- Power Infusion
 		ClassBuff(47788, "LEFT", {221/255, 117/255, 0}, true), -- Guardian Spirit
-		ClassBuff(33206, "LEFT", {227/255, 23/255, 13/255}, true), -- Pain Suppression		
+		ClassBuff(33206, "LEFT", {227/255, 23/255, 13/255}, true), -- Pain Suppression
 	},
 	DRUID = {
 		ClassBuff(774, "TOPRIGHT", {0.8, 0.4, 0.8}),	 -- Rejuvenation
@@ -700,16 +819,21 @@ G.unitframe.buffwatch = {
 	},
 	WARRIOR = {
 		ClassBuff(114030, "TOPLEFT", {0.2, 0.2, 1}), -- Vigilance
-		ClassBuff(3411, "TOPRIGHT", {227/255, 23/255, 13/255}), -- Intervene	
+		ClassBuff(3411, "TOPRIGHT", {227/255, 23/255, 13/255}), -- Intervene
 		ClassBuff(114029, "TOPRIGHT", {227/255, 23/255, 13/255}), -- Safe Guard
 	},
 	DEATHKNIGHT = {
-		ClassBuff(49016, "TOPRIGHT", {227/255, 23/255, 13/255}), -- Unholy Frenzy	
+		ClassBuff(49016, "TOPRIGHT", {227/255, 23/255, 13/255}), -- Unholy Frenzy
 	},
 	PET = {
 		ClassBuff(19615, 'TOPLEFT', {227/255, 23/255, 13/255}, true), -- Frenzy
 		ClassBuff(136, 'TOPRIGHT', {0.2, 0.8, 0.2}, true) --Mend Pet
 	},
+}
+
+--Profile specific BuffIndicator
+P['unitframe']['filters'] = {
+	['buffwatch'] = {},
 }
 
 --List of spells to display ticks
@@ -725,20 +849,50 @@ G.unitframe.ChannelTicks = {
 	--[SpellName(44203)] = 4, -- "Tranquility"
 	[SpellName(16914)] = 10, -- "Hurricane"
 	--Priest
-	[SpellName(15407)] = 3, -- "Mind Flay"
-	[SpellName(129197)] = 3, -- "Mind Flay (Insanity)"
 	[SpellName(48045)] = 5, -- "Mind Sear"
-	[SpellName(47540)] = 2, -- "Penance"
+	[SpellName(179338)] = 5, -- "Searing insanity"
 	--[SpellName(64901)] = 4, -- Hymn of Hope
 	[SpellName(64843)] = 4, -- Divine Hymn
 	--Mage
 	[SpellName(5143)] = 5, -- "Arcane Missiles"
 	[SpellName(10)] = 8, -- "Blizzard"
-	[SpellName(12051)] = 4, -- "Evocation"
-	
+	[SpellName(12051)] = 3, -- "Evocation"
+
 	--Monk
 	[SpellName(115175)] = 9, -- "Smoothing Mist"
 }
+
+local priestTier17 = {115560,115561,115562,115563,115564}
+local f = CreateFrame("Frame")
+f:RegisterEvent("PLAYER_ENTERING_WORLD")
+f:RegisterEvent("PLAYER_EQUIPMENT_CHANGED")
+f:SetScript("OnEvent", function(self, event)
+	local class = select(2, UnitClass("player"))
+	if lower(class) ~= "priest" then return; end
+
+	if event == "PLAYER_ENTERING_WORLD" then
+		self:UnregisterEvent("PLAYER_ENTERING_WORLD")
+
+		local mfTicks = 3
+		if IsSpellKnown(157223) then --Enhanced Mind Flay
+			mfTicks = 4
+		end
+		E.global.unitframe.ChannelTicks[SpellName(15407)] = mfTicks -- "Mind Flay"
+		E.global.unitframe.ChannelTicks[SpellName(129197)] = mfTicks -- "Mind Flay (Insanity)"
+	end
+
+	local penanceTicks = 2
+	local equippedPriestTier17 = 0
+	for _, item in pairs(priestTier17) do
+		if IsEquippedItem(item) then
+			equippedPriestTier17 = equippedPriestTier17 + 1
+		end
+	end
+	if equippedPriestTier17 >= 2 then
+		penanceTicks = 3
+	end
+	E.global.unitframe.ChannelTicks[SpellName(47540)] = penanceTicks --Penance
+end)
 
 G.unitframe.ChannelTicksSize = {
     --Warlock
@@ -751,7 +905,7 @@ G.unitframe.ChannelTicksSize = {
 --Spells Effected By Haste
 G.unitframe.HastedChannelTicks = {
 	--[SpellName(64901)] = true, -- Hymn of Hope
-	[SpellName(64843)] = true, -- Divine Hymn
+	-- [SpellName(64843)] = true, -- Divine Hymn
 }
 
 --This should probably be the same as the whitelist filter + any personal class ones that may be important to watch
@@ -764,4 +918,10 @@ G.unitframe.AuraBarColors = {
 
 G.unitframe.InvalidSpells = {
 	[65148] = true, --Sacred Shield
+	[95809] = true, --Insanity debuff (Hunter Pet heroism)
+}
+
+
+G.unitframe.DebuffHighlightColors = {
+	[SpellName(25771)] = {enable = false, style = "FILL", color = {r = 0.85, g = 0, b = 0, a = 0.85}},
 }

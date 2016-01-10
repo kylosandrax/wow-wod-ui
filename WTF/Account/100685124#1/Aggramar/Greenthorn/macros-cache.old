@@ -1,0 +1,41 @@
+MACRO 16777221 "Aspects" "Ability_Hunter_AspectoftheViper"
+#showtooltip
+/castsequence Aspect of the Hawk, Aspect of the Viper
+END
+MACRO 16777217 "Attack" "Ability_DualWield"
+#showtooltip
+/startattack
+END
+MACRO 16777223 "Misdirect" "Ability_Hunter_ImprovedSteadyShot"
+#showtooltip
+/cast [target=focus,help][help][target=pet,exists,nodead] Misdirection 
+END
+MACRO 16777224 "PetSting" "INV_Misc_QuestionMark"
+#showtooltip
+/petattack
+/cast Serpent Sting
+END
+MACRO 16777218 "Raptor-Mongose" "Ability_Hunter_SwiftStrike"
+/cast Raptor Strike
+/cast Mongoose Bite
+END
+MACRO 16777219 "Steady-Shot" "Ability_Hunter_SteadyShot"
+#showtooltip Steady Shot
+/script UIErrorsFrame:Hide()
+/cast Kill Command
+/script UIErrorsFrame:Clear(); UIErrorsFrame:Show()
+/cast Steady Shot
+END
+MACRO 16777222 "Super-Multi" "Ability_Rogue_DeadenedNerves"
+#showtooltip Multi-Shot
+/script UIErrorsFrame:Hide()
+/use 13
+/use 14
+/script UIErrorsFrame:Clear(); UIErrorsFrame:Show()
+/cast Multi-Shot
+END
+MACRO 16777220 "Target-Pet-Atk" "Ability_Hunter_SniperShot"
+#showtooltip Hunter's Mark
+/cast Hunter's Mark
+/petattack
+END

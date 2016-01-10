@@ -8,91 +8,80 @@
 
 -- This file contains function for the bank/gbank frame
 
--- loads the localization table --
-local L = LibStub("AceLocale-3.0"):GetLocale("TradeSkillMaster")
-
 -- load the parent file (TSM) into a local variable and register this file as a module
 local TSM = select(2, ...)
 local BankUI = TSM:NewModule("BankUI", "AceEvent-3.0")
-local AceGUI = LibStub("AceGUI-3.0") -- load the AceGUI librarie
-
-local ui
-local bankFrame, bankType
-local bFrame = nil
-local container = nil
-local registeredModules = {}
-local private = {}
-TSMAPI:RegisterForTracing(private, "TradeSkillMaster.BankUI_private")
-private.bankUiButtons = {}
+local L = LibStub("AceLocale-3.0"):GetLocale("TradeSkillMaster") -- loads the localization table
+local private = {registeredModules={}, bankUiButtons={}, bankType=nil, ui = nil, bankFrame = nil, bFrame = nil}
 
 function BankUI:OnEnable()
 	BankUI:RegisterEvent("GUILDBANKFRAME_OPENED", function(event)
-		bankType = "guild"
-		TSMAPI:CreateTimeDelay(0.1, function()
-			bankFrame = BankUI:getBankFrame("guildbank")
+		private.bankType = "guild"
+		TSMAPI.Delay:AfterTime(0.1, function()
+			private.bankFrame = BankUI:getBankFrame("guildbank")
 			if TSM.db.profile.isBankui then
 				if #private.bankUiButtons > 0 then
-					if ui then
-						BankUI:resetPoints(ui)
-						ui:Show()
+					if private.ui then
+						BankUI:resetPoints(private.ui)
+						private.ui:Show()
 						if TSM.db.global.bankUITab then
 							for index, info in ipairs(private.bankUiButtons) do
 								if info.moduleName == TSM.db.global.bankUITab then
-									ui.buttons[index]:Click()
+									private.ui.buttons[index]:Click()
 									break
 								end
 							end
 						else
-							ui.buttons[1]:Click()
+							private.ui.buttons[1]:Click()
 						end
 						return
 					end
-					ui = BankUI:getFrame(bankFrame)
+					private.ui = BankUI:getFrame(private.bankFrame)
 				end
 			end
 		end)
 	end)
 
 	BankUI:RegisterEvent("BANKFRAME_OPENED", function(event)
-		bankType = "bank"
-		TSMAPI:CreateTimeDelay(0.1, function()
-			bankFrame = BankUI:getBankFrame("bank")
+		private.bankType = "bank"
+		TSMAPI.Delay:AfterTime(0.1, function()
+			private.bankFrame = BankUI:getBankFrame("bank")
 			if TSM.db.profile.isBankui then
 				if #private.bankUiButtons > 0 then
-					if ui then
-						BankUI:resetPoints(ui)
-						ui:Show()
+					if private.ui then
+						BankUI:resetPoints(private.ui)
+						private.ui:Show()
 						if TSM.db.global.bankUITab then
 							for index, info in ipairs(private.bankUiButtons) do
 								if info.moduleName == TSM.db.global.bankUITab then
-									ui.buttons[index]:Click()
+									private.ui.buttons[index]:Click()
 									break
 								end
 							end
 						else
-							ui.buttons[1]:Click()
+							private.ui.buttons[1]:Click()
 						end
 						return
 					end
-					ui = BankUI:getFrame(bankFrame)
+					private.ui = BankUI:getFrame(private.bankFrame)
 				end
 			end
 		end)
 	end)
 
 	BankUI:RegisterEvent("GUILDBANKFRAME_CLOSED", function(event, addon)
-		if ui then ui:Hide() end
-		bankType = nil
+		if private.ui then private.ui:Hide() end
+		private.bankType = nil
 	end)
 
 	BankUI:RegisterEvent("BANKFRAME_CLOSED", function(event)
-		if ui then ui:Hide() end
-		bankType = nil
+		if private.ui then private.ui:Hide() end
+		private.bankType = nil
 	end)
 end
 
 local function createCloseButton(text, parent, func)
-	local btn = TSMAPI.GUI:CreateButton(bFrame, 18, "Button")
+	local btn = TSM.GUI:CreateButton(private.bFrame, 18, "Button")
 	btn:SetText(text)
 	btn:SetHeight(20)
 	btn:SetWidth(20)
@@ -100,8 +89,8 @@ local function createCloseButton(text, parent, func)
 end
 
 function TSM:RegisterBankUiButton(moduleName, callback)
-	if registeredModules[moduleName] then return end
-	registeredModules[moduleName] = true
+	if private.registeredModules[moduleName] then return end
+	private.registeredModules[moduleName] = true
 	local info = {}
 	info.moduleName = moduleName
 	info.callback = callback
@@ -158,50 +147,50 @@ function BankUI:getBankFrame(bank)
 end
 
 function BankUI:getFrame(frameType)
-	bFrame = CreateFrame("Frame", nil, UIParent)
-	bFrame:Hide()
+	private.bFrame = CreateFrame("Frame", nil, UIParent)
+	private.bFrame:Hide()
 	--size--
-	bFrame:SetWidth(275)
-	bFrame:SetHeight(470)
-	bFrame:SetPoint("CENTER", UIParent)
+	private.bFrame:SetWidth(305)
+	private.bFrame:SetHeight(490)
+	private.bFrame:SetPoint("CENTER", UIParent)
 
 	--for moving--
-	bFrame:SetScript("OnMouseDown", bFrame.StartMoving)
-	bFrame:SetScript("OnMouseUp", function(...) bFrame.StopMovingOrSizing(...)
-	if bankType == "guild" then
-		TSM.db.factionrealm.bankUIGBankFramePosition = { bFrame:GetLeft(), bFrame:GetBottom() }
+	private.bFrame:SetScript("OnMouseDown", private.bFrame.StartMoving)
+	private.bFrame:SetScript("OnMouseUp", function(...) private.bFrame.StopMovingOrSizing(...)
+	if private.bankType == "guild" then
+		TSM.db.factionrealm.bankUIGBankFramePosition = { private.bFrame:GetLeft(), private.bFrame:GetBottom() }
 	else
-		TSM.db.factionrealm.bankUIBankFramePosition = { bFrame:GetLeft(), bFrame:GetBottom() }
+		TSM.db.factionrealm.bankUIBankFramePosition = { private.bFrame:GetLeft(), private.bFrame:GetBottom() }
 	end
 	end)
-	bFrame:SetMovable(true)
-	bFrame:EnableMouse(true)
+	private.bFrame:SetMovable(true)
+	private.bFrame:EnableMouse(true)
 
-	bFrame:SetPoint("CENTER", UIParent)
+	private.bFrame:SetPoint("CENTER", UIParent)
 
 	local function OnFrameShow(self)
 		self:SetFrameLevel(0)
 		self:ClearAllPoints()
-		if bankType == "guild" then
+		if private.bankType == "guild" then
 			self:SetPoint("BOTTOMLEFT", UIParent, unpack(TSM.db.factionrealm.bankUIGBankFramePosition))
 		else
 			self:SetPoint("BOTTOMLEFT", UIParent, unpack(TSM.db.factionrealm.bankUIBankFramePosition))
 		end
 	end
 
-	TSMAPI.Design:SetFrameBackdropColor(bFrame)
-	bFrame:SetScript("OnShow", OnFrameShow)
-	bFrame:Show()
+	TSMAPI.Design:SetFrameBackdropColor(private.bFrame)
+	private.bFrame:SetScript("OnShow", OnFrameShow)
+	private.bFrame:Show()
 
-	local title = TSMAPI.GUI:CreateLabel(bFrame)
-	title:SetPoint("TOPLEFT", 40, -3)
-	title:SetPoint("BOTTOMRIGHT", bFrame, "TOPRIGHT", -5, -23)
+	local title = TSM.GUI:CreateLabel(private.bFrame)
+	title:SetPoint("TOPLEFT", 25, -13)
+	title:SetPoint("BOTTOMRIGHT", private.bFrame, "TOPRIGHT", -5, -33)
 	title:SetJustifyH("CENTER")
 	title:SetJustifyV("CENTER")
 	title:SetText("TradeSkillMaster - " .. TSM._version)
 	TSMAPI.Design:SetTitleTextColor(title)
 
-	local title2 = TSMAPI.GUI:CreateLabel(bFrame)
+	local title2 = TSM.GUI:CreateLabel(private.bFrame)
 	title2:SetPoint("TOPLEFT", title, "BOTTOMLEFT")
 	title2:SetPoint("TOPRIGHT", title, "BOTTOMRIGHT")
 	title2:SetJustifyH("CENTER")
@@ -210,21 +199,21 @@ function BankUI:getFrame(frameType)
 	TSMAPI.Design:SetTitleTextColor(title2)
 
 
-	bFrame.btnClose = createCloseButton("X", bFrame, nil)
-	bFrame.btnClose:SetPoint("TOPRIGHT", bFrame, "TOPRIGHT")
-	bFrame.btnClose:SetScript("OnClick", function(self)
-		if bFrame then bFrame:Hide() end
+	private.bFrame.btnClose = createCloseButton("X", private.bFrame, nil)
+	private.bFrame.btnClose:SetPoint("TOPRIGHT", private.bFrame, "TOPRIGHT")
+	private.bFrame.btnClose:SetScript("OnClick", function(self)
+		if private.bFrame then private.bFrame:Hide() end
 		TSM.db.profile.isBankui = false
 		TSM:Print(L["You have closed the bankui. Use '/tsm bankui' to view again."])
 	end)
 
 	-- module buttons
-	bFrame.buttons = {}
+	private.bFrame.buttons = {}
 
-	local iconFrame = CreateFrame("Frame", nil, bFrame)
-	iconFrame:SetPoint("CENTER", bFrame, "TOPLEFT", 25, -25)
-	iconFrame:SetHeight(80)
-	iconFrame:SetWidth(80)
+	local iconFrame = CreateFrame("Frame", nil, private.bFrame)
+	iconFrame:SetPoint("CENTER", private.bFrame, "TOPLEFT", 20, -20)
+	iconFrame:SetHeight(70)
+	iconFrame:SetWidth(70)
 	local icon = iconFrame:CreateTexture(nil, "ARTWORK")
 	icon:SetAllPoints()
 	icon:SetTexture("Interface\\Addons\\TradeSkillMaster\\Media\\TSM_Icon_Big")
@@ -245,8 +234,8 @@ function BankUI:getFrame(frameType)
 	iconFrame:SetScript("OnEnter", function() ag:Play() end)
 	iconFrame:SetScript("OnLeave", function() ag:Stop() end)
 
-	container = CreateFrame("Frame", nil, bFrame)
-	container:SetPoint("TOPLEFT", 5, -60)
+	local container = CreateFrame("Frame", nil, private.bFrame)
+	container:SetPoint("TOPLEFT", 5, -80)
 	container:SetPoint("BOTTOMRIGHT", -5, 5)
 	TSMAPI.Design:SetFrameColor(container)
 
@@ -258,18 +247,18 @@ function BankUI:getFrame(frameType)
 	if TSM.db.global.bankUITab then
 		for index, info in ipairs(private.bankUiButtons) do
 			if info.moduleName == TSM.db.global.bankUITab then
-				bFrame.buttons[index]:Click()
+				private.bFrame.buttons[index]:Click()
 				break
 			end
 		end
 	else
-		bFrame.buttons[1]:Click()
+		private.bFrame.buttons[1]:Click()
 	end
-	return bFrame
+	return private.bFrame
 end
 
 function BankUI:resetPoints(container)
-	if bankType == "guild" then
+	if private.bankType == "guild" then
 		container:SetPoint("BOTTOMLEFT", UIParent, unpack(TSM.db.factionrealm.bankUIGBankFramePosition))
 	else
 		container:SetPoint("BOTTOMLEFT", UIParent, unpack(TSM.db.factionrealm.bankUIBankFramePosition))
@@ -278,10 +267,12 @@ end
 
 function private:CreateBankButton(module)
 	local buttonIndex
+	local buttonCount = 0
 	for record, info in ipairs(private.bankUiButtons) do
 		if info.moduleName == module then
 			buttonIndex = record
 		end
+		buttonCount = buttonCount + 1
 	end
 
 	local function OnButtonClick(self)
@@ -289,7 +280,7 @@ function private:CreateBankButton(module)
 			info.bankTab:Hide()
 		end
 
-		for index, button in ipairs(bFrame.buttons) do
+		for index, button in ipairs(private.bFrame.buttons) do
 			button:UnlockHighlight()
 			if self == button then
 				private.bankUiButtons[index].bankTab:Show()
@@ -297,30 +288,33 @@ function private:CreateBankButton(module)
 		end
 		self:LockHighlight()
 	end
+	local buttonWidth = (buttonCount * 70) + ((buttonCount - 1)*5)
+	local offset = (305 - buttonWidth ) / 2
 
-	local button = TSMAPI.GUI:CreateButton(bFrame, 12)
+	local button = TSM.GUI:CreateButton(private.bFrame, 12)
 	if buttonIndex == 1 then
-		button:SetPoint("TOPLEFT", 85, -40)
+		button:SetPoint("TOPLEFT", offset, -60)
 	else
-		button:SetPoint("TOPLEFT", bFrame.buttons[buttonIndex - 1], "TOPRIGHT", 5, 0)
+		button:SetPoint("TOPLEFT", private.bFrame.buttons[buttonIndex - 1], "TOPRIGHT", 5, 0)
 	end
 	button:SetHeight(20)
 	button:SetWidth(70)
 	button:SetText(module)
 	button:SetScript("OnClick", OnButtonClick)
-	tinsert(bFrame.buttons, button)
+	tinsert(private.bFrame.buttons, button)
 end
 
 function TSM:toggleBankUI()
 	if TSM:areBanksVisible() then
-		if ui then
-			if ui:IsShown() then
-				ui:Hide()
+		if private.ui then
+			if private.ui:IsShown() then
+				private.ui:Hide()
 			else
-				ui:Show()
+				private.ui:Show()
+				TSM.db.profile.isBankui = true
 			end
 		else
-			ui = BankUI:getFrame(bankFrame)
+			private.ui = BankUI:getFrame(private.bankFrame)
 			TSM.db.profile.isBankui = true
 		end
 	else
@@ -339,8 +333,8 @@ end
 function TSM:ResetBankUIFramePosition()
 	TSM.db.factionrealm.bankUIGBankFramePosition = { 100, 300 }
 	TSM.db.factionrealm.bankUIBankFramePosition = { 100, 300 }
-	if ui then
-		ui:Hide()
-		ui:Show()
+	if private.ui then
+		private.ui:Hide()
+		private.ui:Show()
 	end
 end

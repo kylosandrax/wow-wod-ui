@@ -184,7 +184,7 @@ local methods = {
 		self:BuildTabs()
 	end,
 	
-	["ReloadTab"] = function(self)
+	["Reload"] = function(self)
 		local status = self.status or self.localstatus
 		if status and status.selected then
 			self:Fire("OnGroupSelected", status.selected)
@@ -305,7 +305,7 @@ local function Constructor()
 		widget[method] = func
 	end
 	
-	widget.Add = TSMAPI.AddGUIElement
+	widget.Add = TSM.AddGUIElement
 	return AceGUI:RegisterAsContainer(widget)
 end
 

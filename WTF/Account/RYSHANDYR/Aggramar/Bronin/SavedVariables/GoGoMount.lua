@@ -36,7 +36,7 @@ GoGo_Prefs = {
 			},
 			["Excluded"] = {
 			},
-			["ZoneID"] = 466,
+			["ZoneID"] = 478,
 		},
 		["Black Temple"] = {
 			["Preferred"] = {
@@ -52,12 +52,19 @@ GoGo_Prefs = {
 			},
 			["ZoneID"] = 993,
 		},
+		["Isle of Conquest"] = {
+			["Preferred"] = {
+			},
+			["Excluded"] = {
+			},
+			["ZoneID"] = 962,
+		},
 		["Orgrimmar"] = {
 			["Preferred"] = {
 			},
 			["Excluded"] = {
 			},
-			["ZoneID"] = -1,
+			["ZoneID"] = 321,
 		},
 		["The Everbloom"] = {
 			["Preferred"] = {
@@ -99,7 +106,7 @@ GoGo_Prefs = {
 			},
 			["Excluded"] = {
 			},
-			["ZoneID"] = 962,
+			["ZoneID"] = 696,
 		},
 		["Swamp of Sorrows"] = {
 			["Preferred"] = {
@@ -127,14 +134,14 @@ GoGo_Prefs = {
 			},
 			["Excluded"] = {
 			},
-			["ZoneID"] = 478,
+			["ZoneID"] = 724,
 		},
 		["Eastern Plaguelands"] = {
 			["Preferred"] = {
 			},
 			["Excluded"] = {
 			},
-			["ZoneID"] = 23,
+			["ZoneID"] = 962,
 		},
 		["Shrine of Two Moons"] = {
 			["Preferred"] = {
@@ -162,7 +169,7 @@ GoGo_Prefs = {
 			},
 			["Excluded"] = {
 			},
-			["ZoneID"] = 478,
+			["ZoneID"] = 723,
 		},
 		["Mulgore"] = {
 			["Preferred"] = {
@@ -176,7 +183,7 @@ GoGo_Prefs = {
 			},
 			["Excluded"] = {
 			},
-			["ZoneID"] = 948,
+			["ZoneID"] = 962,
 		},
 		["Auchindoun"] = {
 			["Preferred"] = {
@@ -211,7 +218,7 @@ GoGo_Prefs = {
 			},
 			["Excluded"] = {
 			},
-			["ZoneID"] = 978,
+			["ZoneID"] = 1011,
 		},
 		["The Jade Forest"] = {
 			["Preferred"] = {
@@ -241,6 +248,13 @@ GoGo_Prefs = {
 			},
 			["ZoneID"] = 862,
 		},
+		["Mogu'shan Vaults"] = {
+			["Preferred"] = {
+			},
+			["Excluded"] = {
+			},
+			["ZoneID"] = 962,
+		},
 		["Ulduar"] = {
 			["Preferred"] = {
 			},
@@ -253,7 +267,7 @@ GoGo_Prefs = {
 			},
 			["Excluded"] = {
 			},
-			["ZoneID"] = 862,
+			["ZoneID"] = 722,
 		},
 		["Thousand Needles"] = {
 			["Preferred"] = {
@@ -297,6 +311,13 @@ GoGo_Prefs = {
 			},
 			["ZoneID"] = 976,
 		},
+		["The Mechanar"] = {
+			["Preferred"] = {
+			},
+			["Excluded"] = {
+			},
+			["ZoneID"] = 730,
+		},
 		["Lumber Mill"] = {
 			["Preferred"] = {
 			},
@@ -318,12 +339,19 @@ GoGo_Prefs = {
 			},
 			["ZoneID"] = 807,
 		},
+		["The Arcatraz"] = {
+			["Preferred"] = {
+			},
+			["Excluded"] = {
+			},
+			["ZoneID"] = 731,
+		},
 		["Kun-Lai Summit"] = {
 			["Preferred"] = {
 			},
 			["Excluded"] = {
 			},
-			["ZoneID"] = 809,
+			["ZoneID"] = 862,
 		},
 		["The Veiled Stair"] = {
 			["Preferred"] = {
@@ -331,6 +359,13 @@ GoGo_Prefs = {
 			["Excluded"] = {
 			},
 			["ZoneID"] = 873,
+		},
+		["The Botanica"] = {
+			["Preferred"] = {
+			},
+			["Excluded"] = {
+			},
+			["ZoneID"] = 729,
 		},
 		["Stormstout Brewery"] = {
 			["Preferred"] = {
@@ -346,6 +381,27 @@ GoGo_Prefs = {
 			},
 			["ZoneID"] = 941,
 		},
+		["Undercity"] = {
+			["Preferred"] = {
+			},
+			["Excluded"] = {
+			},
+			["ZoneID"] = 962,
+		},
+		["Twisting Nether"] = {
+			["Preferred"] = {
+			},
+			["Excluded"] = {
+			},
+			["ZoneID"] = -1,
+		},
+		["Hellfire Peninsula"] = {
+			["Preferred"] = {
+			},
+			["Excluded"] = {
+			},
+			["ZoneID"] = 465,
+		},
 		["Icecrown"] = {
 			["Preferred"] = {
 			},
@@ -353,12 +409,33 @@ GoGo_Prefs = {
 			},
 			["ZoneID"] = 492,
 		},
+		["Brokenspear Tavern"] = {
+			["Preferred"] = {
+			},
+			["Excluded"] = {
+			},
+			["ZoneID"] = 1011,
+		},
+		["Netherstorm"] = {
+			["Preferred"] = {
+			},
+			["Excluded"] = {
+			},
+			["ZoneID"] = 479,
+		},
 		["Unga Ingoo"] = {
 			["Preferred"] = {
 			},
 			["Excluded"] = {
 			},
 			["ZoneID"] = 862,
+		},
+		["Enchanter's Study"] = {
+			["Preferred"] = {
+			},
+			["Excluded"] = {
+			},
+			["ZoneID"] = 976,
 		},
 		["Gate of the Setting Sun"] = {
 			["Preferred"] = {
@@ -372,7 +449,7 @@ GoGo_Prefs = {
 			},
 			["Excluded"] = {
 			},
-			["ZoneID"] = 962,
+			["ZoneID"] = 994,
 		},
 		["The Grimrail"] = {
 			["Preferred"] = {
@@ -442,14 +519,14 @@ GoGo_Prefs = {
 			},
 			["Excluded"] = {
 			},
-			["ZoneID"] = -1,
+			["ZoneID"] = 19,
 		},
 		["Proving Grounds"] = {
 			["Preferred"] = {
 			},
 			["Excluded"] = {
 			},
-			["ZoneID"] = 899,
+			["ZoneID"] = 809,
 		},
 		["Shado-Pan Monastery"] = {
 			["Preferred"] = {
@@ -479,19 +556,19 @@ GoGo_Prefs = {
 			},
 			["ZoneID"] = 941,
 		},
-		["Shattrath City"] = {
-			["Preferred"] = {
-			},
-			["Excluded"] = {
-			},
-			["ZoneID"] = 481,
-		},
 		["Vale of Eternal Blossoms"] = {
 			["Preferred"] = {
 			},
 			["Excluded"] = {
 			},
 			["ZoneID"] = -1,
+		},
+		["Shattrath City"] = {
+			["Preferred"] = {
+			},
+			["Excluded"] = {
+			},
+			["ZoneID"] = 481,
 		},
 		["Salvage Yard"] = {
 			["Preferred"] = {
@@ -519,14 +596,14 @@ GoGo_Prefs = {
 			},
 			["Excluded"] = {
 			},
-			["ZoneID"] = 13,
+			["ZoneID"] = 1011,
 		},
 		["Blackwing Lair"] = {
 			["Preferred"] = {
 			},
 			["Excluded"] = {
 			},
-			["ZoneID"] = 755,
+			["ZoneID"] = 962,
 		},
 		["Tower Of War"] = {
 			["Preferred"] = {
@@ -547,7 +624,7 @@ GoGo_Prefs = {
 			},
 			["Excluded"] = {
 			},
-			["ZoneID"] = 950,
+			["ZoneID"] = -1,
 		},
 	},
 	["DisableMountNotice"] = true,
@@ -555,7 +632,7 @@ GoGo_Prefs = {
 	["DruidDisableInCombat"] = false,
 	["DisableUpdateNotice"] = false,
 	["RemoveBuffs"] = true,
-	["version"] = "6.0.15",
+	["version"] = "6.2.1",
 	["DruidClickForm"] = true,
 	["GlobalPrefMounts"] = {
 		97493, -- [1]

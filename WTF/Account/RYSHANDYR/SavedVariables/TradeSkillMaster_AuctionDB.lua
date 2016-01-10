@@ -1,9 +1,7 @@
 
 TradeSkillMaster_AuctionDBDB = {
-	["realm"] = {
-		["Aggramar"] = {
-			["lastCompleteScan"] = 1417727181,
-			["appDataUpdate"] = 1417727181,
+	["profiles"] = {
+		["Default"] = {
 		},
 	},
 	["profileKeys"] = {
@@ -11,15 +9,21 @@ TradeSkillMaster_AuctionDBDB = {
 		["Greenthorn - Aggramar"] = "Default",
 		["Ryjax - Aggramar"] = "Default",
 		["Kylosandrax - Aggramar"] = "Default",
+		["Stormslinger - Aggramar"] = "Default",
 		["Feldspar - Aggramar"] = "Default",
 		["Kylozandrax - Earthen Ring"] = "Default",
+		["Ryvok - Terokkar"] = "Default",
+		["Kyloc - Aggramar"] = "Default",
 		["Banjax - Aggramar"] = "Default",
-		["Stormslinger - Aggramar"] = "Default",
+		["Kylosandrix - Aggramar"] = "Default",
 		["Ryvok - Aggramar"] = "Default",
 		["Bronin - Aggramar"] = "Default",
 	},
-	["profiles"] = {
-		["Default"] = {
+	["realm"] = {
+		["Aggramar"] = {
+			["lastCompleteScan"] = 1448298431,
+			["appDataUpdate"] = 1448298431,
+			["appHelperNoticeShown"] = true,
 		},
 	},
 }

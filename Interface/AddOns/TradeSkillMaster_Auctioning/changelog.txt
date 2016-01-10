@@ -1,3 +1,25 @@
+v3.0.3
+*Fixed lua error when viewing auctions during special cancel scan.
+
+v3.0.2
+*Fixed bug with blacklisted players not being undercut properly.
+
+v3.0.1
+*Fixed lua error when the post scan detects an invalid configuration.
+
+v3.0
+*Initial 3.0 version!
+\\
+
+v2.4.6
+*Updated for patch 6.2
+
+v2.4.5
+*Fixing interface version.
+
+v2.4.4
+*Updated for patch 6.1.
+
 v2.4.3
 *Added reagent bank for auctioning bankui functions.
 *Ignore Soulbound items for auctioning bankui functions.

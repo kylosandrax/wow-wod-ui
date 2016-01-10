@@ -555,259 +555,89 @@ end
 --- Registers a widget Constructor, this function returns a new instance of the Widget
 -- @param Name The name of the widget
 -- @param Constructor The widget constructor function
--- @param Version The version of the widget
-function AceGUI:RegisterWidgetType(Name, Constructor, Version)
-	assert(type(Constructor) == "function")
-	assert(type(Version) == "number") 
-	
-	local oldVersion = WidgetVersions[Name]
-	if oldVersion and oldVersion >= Version then return end
-	
-	WidgetVersions[Name] = Version
-	WidgetRegistry[Name] = Constructor
-end
+-- @param Version The version of the_^]ÃÌÌÌÌÌÌÌÌÌÌÌÌU‹ìjÿhğp`d¡    Pd‰%    ƒì<‹E‹0+ÑSVW3öVP»   èëù; ‹ø‰}ä‰uü‰uğ9wLÿ   ‰uìd$ ‹wPuì‹À Ñ‹j Pèºù; ‰EèÆEü‹¸   …Éx	;H Œ›   ‹j MØQU¸RÇEØ)   ‰EÜè¥z9 ‹øÆEü‹Ej MĞQUÄRÇEĞ(   ‰EÔèƒz9 ƒÄ‹ØÆEü‹Eè‹H Q‹Ïèle ‹–¸   P‹EğRP‹ËèYe Ph ƒj jjèØe ƒÄ$ÆEüMÄèI"e ÆEüM¸è="e ‹}ä‹Eè3ÛÆEü MàQ‹À Ñ‰EàèOj; ‹EğEìÀ   @‰Eğ;GLŒÿÿÿÇEüÿÿÿÿ‹0+ÑUàR‰}àèj; ‹Mô_^‹Ã[d‰    ‹å]ÃÌÌÌÌÌÌÌÌÌÌÌÌU‹ìjÿhq`d¡    Pd‰%    ƒì,SVWh¤ƒ3ÛSjjè!e ‹=Ä+Õ‹d	  ‹	ƒÄ¸ÿÿ  Uğf‰EìREìP3ö‰]ğè…ûÿÿ…À„§   MÔèe ‰]üMÈQ‹MğƒÁè#A ÆEüPMÔèö"e ˆ]üMÈè;!e MàèÓe ÆEüMÔèe PVUàhœƒRèW!e ƒÄMàèìe PSjjèe ƒÄFˆ]üMàèò e ÇEüÿÿÿÿMÔèã e ‹—d	  EğPMìQ‹
+èŞúÿÿ…À…Yÿÿÿ‹Mô_^[d‰    ‹å]ÃÌÌÌÌÌU‹ìd¡    jÿhAq`Pd‰%    ƒìV‹ñƒ¾   u$ƒ¾   t	è+ûÿÿ…ÀuƒÈÿ^‹Môd‰    ‹å]Ã·†  S·ØW‹ûiÿ¬   ¾  ‰Eğf‹Gh¬   W‰}ìf‰†  èïœd ƒÄ‰}èƒÉÿ‰Mü·†    ÁàÃ‰Q;Áuf–  ·  ÁáË‰f–  –  ·†  ºÿÿ  f;Âtf;Eğsf‹Eğf‰†  ‹‹Mô_[^d‰    ‹å]ÃÌU‹ì‹†d  ì(  SWƒÏÿ3Û…Àtƒøud‹†h  j j PèqÔüÿƒÄƒøÿ„¤   ‹Ä+Õ‹‰8	  …É„   Pè;ÑÎÿ…À„‚   ÷†d     tö€  t	ƒÈÿ_[‹å]Ã‹˜x  ë\ƒøu	‹h  Qëƒøu+‹–h  RènÁ÷ÿƒÄ…Àt6‹€Œ  Pè»h÷ÿƒÄ…Àt#‹X ëƒøu‹h  QèşÀ ƒÄ…Àt‹˜¨#  VèõÿÿƒÄ…Àu†‹F0ƒø‡[  ÿ$… UÅ 3ÿ9}t¿   ‹V8Rè|F ƒÄ…ÀuƒÏ‹F8ƒøÿt$‹M‹UóEjÿSWQRQó$PèŸıÿƒÄ‹øë‹~@Wè=êÎÿƒÄ…ÀuƒÏÿ‹†h  ‹l  ‹UPQRWè;7ıÿƒÄ‹Ç_[‹å]Ã‹E‹N8PQDÿÿÿè™Ïÿ‹URlÿÿÿè>¶òÿƒ¾x   ‹†l  ‰E˜‰]œtó†|  óE DÿÿÿQè€2øÿ‹øƒÄƒÿÿ„ˆ  Wèlg÷ÿ‹U‰Eü‹PèöÿÿƒÄ„À„i  ‹ø,®Q  SÿŒˆ{ƒÄ…À„J  j@U´SRèX“»ÿ‹h  ƒÄE´PQ‹MühôXàÇEô    è6Ê÷ÿ‹Ç_[‹å]Ã‹U‹P3ÿè±õÿÿƒÄ„Àt ‹h  WWQè,ÒüÿPè&ÑÓÿƒÄ…Àt¿   ‹U‹F8SWRPj èy‚ ‹M‹øQWèıq ƒÄ‹Ç_[‹å]Ã‹¾d  Áï	ƒçƒ~<EÇEüÿÿÿÿu‹V@‰Uü‹†d  P3Éè5õÿÿƒÄ„Àt"QQ‹h  Qè°ÑüÿPè:ÇÒÿ‹ˆ(  ÑéƒÄƒá‹U‹Eüóà=“ƒÂ‰UØUÔ‰EÜ‹F8‰Mä‹NRóEìó†   PÇEè    ‰]Ô‰}àóEğ‰Môèpëòÿ‹øWèx¥ÓÿƒÄ…À„  ‹MQ‹ÈèbÅòÿ‹Ç_[‹å]Ã‹–d  RèôÿÿƒÄ„À„Ë   ‹†h  j j PèÑüÿPèíçÎÿƒÄ‰Eü…À„§   ‹ˆˆ   QÇEøÿÿÿÿèlƒA ƒÄ…Àt‹Uü‹‚ˆ   ë[‹Mü‹‘ˆ   Rè+¨A ƒÄ…Àt‹Eü‹ˆˆ   Qè%¤H ë1‹Uü‹‚ˆ   PèDçÎÿƒÄ…Àt!Q‹ÌÇëôÿÿ‹Èèm^C ƒøÿtPèÂ¥H ƒÄ‰Eø‹MøQèçÎÿƒÄ…Àt‹UøRèóÎÓÿƒÄ…À„  ‹E‹N8SPQè
+¬ ‹U‹øRWè¨ ƒÄ‹Ç_[‹å]ÃWÀ‹Ej Q‹N8ó$SPQèú ‹øWèâ‚éÿƒÄ…À„½   ‹UR‹ÈèL ‹Ç_[‹å]Ã¡Ä+Õ‹ˆD	  ‹U‹F8SRP‰Müèè­ ‹øƒÿÿ„ƒ   ‹MQ‹MüWè ª ‹Ç_[‹å]Ã‹–h  Rè,ÅÒÿ¸˜   …ØşÿÿPèZÔS è…»Ôÿ‹V8j j Sj jjÿjÿWPØşÿÿQjÿRèT ‹ø‹EPWèˆ* ƒÄ@‹Ç_[‹å]Ãh¼ƒj jjèÍe ƒÄ‹Ç_[‹å]Ã‹ÿ¯PÅ 0QÅ RÅ ^RÅ UÅ -TÅ lTÅ UÅ UÅ ¨TÅ UÅ &SÅ UÅ ÌÌÌÌÌÌÌÌÌÌÌÌU‹ìóE‹UV‹u‹†Œ  ƒÉÿ…ÀGÈ‹EWPQQ‹Mó$QRèúÿÿ‹øƒÄƒÿÿ„  ƒÆVèÆ•? HƒÄƒø,‡í   ¶€ÔVÅ ÿ$…¨VÅ WèÄÒÿƒÄ_ˆh  ^]é$BøÿWè®ÎñÿƒÄ_ˆ   ^]éBøÿ‹Ä+Õ‹‰D	  Wèë¥ _HT^]éğAøÿ¡(iÎ‹ˆ  ·×iÒ  _Œ
+Ü   ^]éÍAøÿWè¢ ƒÄ_Hh^]é¹AøÿWèƒôÿÿƒÄ_ˆœ   ^]é¢AøÿWèœb÷ÿƒÄ_ˆ”   ^]é‹Aøÿjh%  hpà{j è(¬d ƒÄjèîCe jh)  ëájh-  ëØ_^]ÃÅUÅ GVÅ óUÅ ÜUÅ ^VÅ ’VÅ uVÅ 3VÅ VÅ ›VÅ ¤VÅ  
 
---- Registers a Layout Function
--- @param Name The name of the layout
--- @param LayoutFunc Reference to the layout function
-function AceGUI:RegisterLayout(Name, LayoutFunc)
-	assert(type(LayoutFunc) == "function")
-	if type(Name) == "string" then
-		Name = Name:upper()
-	end
-	LayoutRegistry[Name] = LayoutFunc
-end
 
---- Get a Layout Function from the registry
--- @param Name The name of the layout
-function AceGUI:GetLayout(Name)
-	if type(Name) == "string" then
-		Name = Name:upper()
-	end
-	return LayoutRegistry[Name]
-end
+
 
-AceGUI.counts = AceGUI.counts or {}
 
---- A type-based counter to count the number of widgets created.
--- This is used by widgets that require a named frame, e.g. when a Blizzard
--- Template requires it.
--- @param type The widget type
-function AceGUI:GetNextWidgetNum(type)
-	if not self.counts[type] then
-		self.counts[type] = 0
-	end
-	self.counts[type] = self.counts[type] + 1
-	return self.counts[type]
-end
 
---- Return the number of created widgets for this type.
--- In contrast to GetNextWidgetNum, the number is not incremented.
--- @param type The widget type
-function AceGUI:GetWidgetCount(type)
-	return self.counts[type] or 0
-end
 
---- Return the version of the currently registered widget type.
--- @param type The widget type
-function AceGUI:GetWidgetVersion(type)
-	return WidgetVersions[type]
-end
 
--------------
--- Layouts --
--------------
 
---[[
-	A Layout is a func that takes 2 parameters
-		content - the frame that widgets will be placed inside
-		children - a table containing the widgets to layout
-]]
 
--- Very simple Layout, Children are stacked on top of each other down the left side
-AceGUI:RegisterLayout("List",
-	function(content, children)
-		local height = 0
-		local width = content.width or content:GetWidth() or 0
-		for i = 1, #children do
-			local child = children[i]
-			
-			local frame = child.frame
-			frame:ClearAllPoints()
-			frame:Show()
-			if i == 1 then
-				frame:SetPoint("TOPLEFT", content)
-			else
-				frame:SetPoint("TOPLEFT", children[i-1].frame, "BOTTOMLEFT")
-			end
-			
-			if child.width == "fill" then
-				child:SetWidth(width)
-				frame:SetPoint("RIGHT", content)
-				
-				if child.DoLayout then
-					child:DoLayout()
-				end
-			elseif child.width == "relative" then
-				child:SetWidth(width * child.relWidth)
-				
-				if child.DoLayout then
-					child:DoLayout()
-				end
-			end
-			
-			height = height + (frame.height or frame:GetHeight() or 0)
-		end
-		safecall(content.obj.LayoutFinished, content.obj, nil, height)
-	end)
 
--- A single control fills the whole content area
-AceGUI:RegisterLayout("Fill",
-	function(content, children)
-		if children[1] then
-			children[1]:SetWidth(content:GetWidth() or 0)
-			children[1]:SetHeight(content:GetHeight() or 0)
-			children[1].frame:SetAllPoints(content)
-			children[1].frame:Show()
-			safecall(content.obj.LayoutFinished, content.obj, nil, children[1].frame:GetHeight())
-		end
-	end)
 
-local layoutrecursionblock = nil
-local function safelayoutcall(object, func, ...)
-	layoutrecursionblock = true
-	object[func](object, ...)
-	layoutrecursionblock = nil
-end
 
-AceGUI:RegisterLayout("Flow",
-	function(content, children)
-		if layoutrecursionblock then return end
-		--used height so far
-		local height = 0
-		--width used in the current row
-		local usedwidth = 0
-		--height of the current row
-		local rowheight = 0
-		local rowoffset = 0
-		local lastrowoffset
-		
-		local width = content.width or content:GetWidth() or 0
-		
-		--control at the start of the row
-		local rowstart
-		local rowstartoffset
-		local lastrowstart
-		local isfullheight
-		
-		local frameoffset
-		local lastframeoffset
-		local oversize 
-		for i = 1, #children do
-			local child = children[i]
-			oversize = nil
-			local frame = child.frame
-			local frameheight = frame.height or frame:GetHeight() or 0
-			local framewidth = frame.width or frame:GetWidth() or 0
-			lastframeoffset = frameoffset
-			-- HACK: Why did we set a frameoffset of (frameheight / 2) ? 
-			-- That was moving all widgets half the widgets size down, is that intended?
-			-- Actually, it seems to be neccessary for many cases, we'll leave it in for now.
-			-- If widgets seem to anchor weirdly with this, provide a valid alignoffset for them.
-			-- TODO: Investigate moar!
-			frameoffset = child.alignoffset or (frameheight / 2)
-			
-			if child.width == "relative" then
-				framewidth = width * child.relWidth
-			end
-			
-			frame:Show()
-			frame:ClearAllPoints()
-			if i == 1 then
-				-- anchor the first control to the top left
-				frame:SetPoint("TOPLEFT", content)
-				rowheight = frameheight
-				rowoffset = frameoffset
-				rowstart = frame
-				rowstartoffset = frameoffset
-				usedwidth = framewidth
-				if usedwidth > width then
-					oversize = true
-				end
-			else
-				-- if there isn't available width for the control start a new row
-				-- if a control is "fill" it will be on a row of its own full width
-				if usedwidth == 0 or ((framewidth) + usedwidth > width) or child.width == "fill" then
-					if isfullheight then
-						-- a previous row has already filled the entire height, there's nothing we can usefully do anymore
-						-- (maybe error/warn about this?)
-						break
-					end
-					--anchor the previous row, we will now know its height and offset
-					rowstart:SetPoint("TOPLEFT", content, "TOPLEFT", 0, -(height + (rowoffset - rowstartoffset) + 3))
-					height = height + rowheight + 3
-					--save this as the rowstart so we can anchor it after the row is complete and we have the max height and offset of controls in it
-					rowstart = frame
-					rowstartoffset = frameoffset
-					rowheight = frameheight
-					rowoffset = frameoffset
-					usedwidth = framewidth
-					if usedwidth > width then
-						oversize = true
-					end
-				-- put the control on the current row, adding it to the width and checking if the height needs to be increased
-				else
-					--handles cases where the new height is higher than either control because of the offsets
-					--math.max(rowheight-rowoffset+frameoffset, frameheight-frameoffset+rowoffset)
-					
-					--offset is always the larger of the two offsets
-					rowoffset = math_max(rowoffset, frameoffset)
-					rowheight = math_max(rowheight, rowoffset + (frameheight / 2))
-					
-					frame:SetPoint("TOPLEFT", children[i-1].frame, "TOPRIGHT", 0, frameoffset - lastframeoffset)
-					usedwidth = framewidth + usedwidth
-				end
-			end
+
 
-			if child.width == "fill" then
-				safelayoutcall(child, "SetWidth", width)
-				frame:SetPoint("RIGHT", content)
-				
-				usedwidth = 0
-				rowstart = frame
-				rowstartoffset = frameoffset
-				
-				if child.DoLayout then
-					child:DoLayout()
-				end
-				rowheight = frame.height or frame:GetHeight() or 0
-				rowoffset = child.alignoffset or (rowheight / 2)
-				rowstartoffset = rowoffset
-			elseif child.width == "relative" then
-				safelayoutcall(child, "SetWidth", width * child.relWidth)
-				
-				if child.DoLayout then
-					child:DoLayout()
-				end
-			elseif oversize then
-				if width > 1 then
-					frame:SetPoint("RIGHT", content)
-				end
-			end
-			
-			if child.height == "fill" then
-				frame:SetPoint("BOTTOM", content)
-				isfullheight = true
-			end
-		end
-		
-		--anchor the last row, if its full height needs a special case since  its height has just been changed by the anchor
-		if isfullheight then
-			rowstart:SetPoint("TOPLEFT", content, "TOPLEFT", 0, -height)
-		elseif rowstart then
-			rowstart:SetPoint("TOPLEFT", content, "TOPLEFT", 0, -(height + (rowoffset - rowstartoffset) + 3))
-		end
-		
-		height = height + rowheight + 3
-		safecall(content.obj.LayoutFinished, content.obj, nil, height)
-	end)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	ÌÌÌÌÌÌÌÌÌÌÌÌÌÌÌU‹ì‹E‹HIƒù,‡   ¶‰üXÅ Vÿ$ĞXÅ ‹PRèäÎÿ‹ğƒÄ…öt]j j VèbıÿƒÄ†\  …ÀtF‹0…öt@‹Ä+Õ‹‹‚d	  ‹v‹ƒùÿt$·Á;‚   siÀ¬   ‚  9u	PèvÿÿÿƒÄ…öuÀ^]Ã‹@Pèsa÷ÿ‹ğƒÄ…ötë‹Îè³ä÷ÿ†À  ë’‹HQè¢D÷ÿ‹ğƒÄ…ötÊVèÃ ƒÄ†X  élÿÿÿ‹P¡Ä+Õ‹ˆ,	  Rè¡Îæÿ…ÀtPè×l ƒÄ^]Ã‹HQèh ÓÿƒÄ…Àt‚j‹Èè¸¯òÿ^]Ã‹Ä+Õ‹@‹ŠD	  PèĞ£ …À„Yÿÿÿ‹È^]éŸ¢ ‹HQè&  ƒÄ…À„<ÿÿÿPè5¡ ƒÄ^]Ã‹PRè¶~éÿƒÄ…À„ÿÿÿj‹Èè’ ^]Ã‹@Pèæ¸ ƒÄ…À„üşÿÿƒÀ\éªşÿÿ‹HQè& ƒÄ…À„àşÿÿPèé& ƒÄ^]ÃI 2WÅ qXÅ +XÅ ëWÅ ¤WÅ ‘XÅ ÅWÅ QXÅ XÅ ­XÅ ¡WÅ  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	ÌÌÌÌÌÌÌU‹ì‹EW‹8…ÿ„  V‹‹5Ä+Õ‹–d	  ‹‹ƒùÿ„ø   ·Á;‚   ƒé   iÀ¬   ‚  9…Õ   ‹Hƒù-u)‹@Pè>% ƒÄ…À„¹   ‹Ä+Õ‹Q8B‰`Z  é¤   ƒùu4‹@ƒøÿ„“   ‹8	  …É„…   PèiÇÎÿ…Àt{\  PèJÿÿÿƒÄëkƒùuf‹@Pè'_÷ÿ‹ğƒÄ…ötTÀ  Qè"ÿÿÿ‹¶T  ƒÄ…öt;ëI ‹‹vƒøÿt(‹Ä+Õ‹Š8	  …ÉtPè ÇÎÿ…Àt\  PèáşÿÿƒÄ…öuÊ…ÿ…äşÿÿ^_]ÃÌÌÌÌÌÌÌÌÌÌÌÌÌÌ‹ˆ    ƒùw~ÿ$[Å ‹€¨   ƒøÿt‹Ä+Õ‹‰8	  …Ét
+PèÆÎÿ…Àu3ÀÃ\  Ã‹€¨   Pèd^÷ÿƒÄ…ÀtäÀ  Ã‹ˆ¨   Qè«¶ ƒÄ…ÀtËƒÀ\Ã‹¨   Rè„A÷ÿƒÄ…Àt´X  Ãjh<  hpà{j è¤§d ƒÄjèj?e ‹ÿ‚ZÅ °ZÅ °ZÅ ÉZÅ àZÅ ‚ZÅ U‹ì‹EW‹8…ÿ„¯   S‹]Vë¤$    ‹Ä+Õ‹‹‚d	  ‹‹ƒùÿt~·Á;‚   ssiÀ¬   ‚  9uc‹pƒşÿt[‹@HtƒèuPVè„]÷ÿƒÄ…ÀtCjS‹ÈèC‡÷ÿë7;'  u#‹Ä+Õ‹‰8	  …ÉtVèsÅÎÿ…Àtƒ¸¨   ujSVèÿÿƒÄ…ÿ…bÿÿÿ^[_]ÃÌÌÌÌÌÌÌÌÌÌÌÌÌU‹ìV‹u‹Nƒùÿ„‚   ‹VJ3ÀƒúC‡ä   ¶’T]Å ÿ$•$]Å Qè
+ßÎÿƒÄ÷ØÀ@^]ÃQèÙ\÷ÿƒÄ÷ØÀ@^]Ã¡Ä+ÕQ‹ˆ,	  è=Êæÿ÷ØÀ@^]ÃQ‹Ä+Õ‹‰D	  è“Ÿ ÷ØÀ@^]Ãèòÿ…ÀuÇFÿÿÿÿ¸   ^]Ã‹VRèÚ›ÓÿƒÄ÷ØÀ@^]ÃQè	œ ƒÄ÷ØÀ@^]ÃQèhzéÿƒÄ÷ØÀ@^]ÃQè—?÷ÿƒÄ÷ØÀ@^]ÃQè–´ ƒÄ÷ØÀ@^]ÃQèÕ! ƒÄ÷ØÀ@^]Ãjh¿  hpà{j è—¥d ƒÄjè]=e 0\Å Â\Å k\Å R\Å A\Å ä\Å Ó\Å ±\Å …\Å õ\Å š\Å ]Å  	
+ÌÌÌÌÌÌÌÌU‹ìjÿhaq`d¡    Pd‰%    ƒì¡Ä+Õ‹€d	  ‹èãğÿÿ‰EìƒøÿuÀ‹Môd‰    ‹å]Ã‹Ä+Õ‹‘d	  ‹
+‹UV·ğiö¬   ±  W‹}GP‰VèZ? ‹O8‰F‰N‹d  ‰N‹W<‰V‹‡d  ‰†    ‹‡h  ƒÄƒ¾    ‰†¤   uPèh³÷ÿƒÄ…Àt‹ˆø   ‰¨   ë‰†¨   S^Ç¤  ÇEğ   j@WSè£†»ÿƒÄƒÇ`ƒÃDÿMğué‹ÆèÎûÿÿ‹ø‹O3Û3öè€ÃÉÿ‰Eğ;Ãt‰Eè‰]ü‰X‰XÇEüÿÿÿÿ‹ğ‹Eì‰ÿG‰^‰^‹O;Ë[t‰q‹W‰V‰w_^‹Môd‰    ‹å]Ã‹Mô‰7‰w_^d‰    ‹å]ÃÌÌÌÌÌÌÌÌÌÌÌÌÌU‹ìd¡    jÿh€q`Pd‰%    ƒìVW‹}‹Çè)ûÿÿ…Àt*‹…Òt‹9
+„®   ‹R…Òuñh0ƒj jjènüd ƒÄè–”Ôÿ…Àt=EàPèùæÿÿƒÄÇEü    ‹Èè¸e Phƒj jjè7üd ƒÄÇEüÿÿÿÿMàè¥e ‹G‹O‹wÇGÿÿÿÿ‹Ä+Õ‰Mì‰Eğ‹‚d	  ‹Wè[èÿÿƒşÿ„ï   ‹EìHƒøC‡Ÿ   ¶ˆaÅ ÿ$ğ`Å …Ò„QÿÿÿR‹Èè7öéÿéWÿÿÿVè| ıÿƒÄ_^‹Môd‰    ‹å]ÃVèãX÷ÿ‹ğƒÄ…ö„“   ‹ÎèÏK÷ÿ‹Îè¨/øÿ_^‹Môd‰    ‹å]ÃVèò½ ƒÄ_^‹Môd‰    ‹å]ÃVè‰˜ ƒÄ_^‹Môd‰    ‹å]Ãj UìREàPè§f9 ƒÄÇEü   ‹Èè–e PhÜƒj jjèûd ƒÄÇEüÿÿÿÿMàèƒe ‹Mô_^d‰    ‹å]ÃI `Å 7`Å h`Å `Å İ`Å š`Å  ÌÌÌÌU‹ìd¡    jÿh˜q`Pd‰%    ƒìSVW‹}‹Çèøøÿÿ…Àt*‹…Òt‹9
+„™   ‹R…Òuñhƒj jjè=úd ƒÄèe’Ôÿ…Àt=EèPèÈäÿÿƒÄÇEü    ‹Èè‡e Phtƒj jjèúd ƒÄÇEüÿÿÿÿMèète ‹Ä+Õ‹‘d	  ‹
+‹_‹wWè:æÿÿƒşÿt8CÿƒøC‡?  ¶€¤cÅ ÿ$…tcÅ …Ò„fÿÿÿR‹ÈèôéÿélÿÿÿVè°•ıÿƒÄ_^[‹Môd‰    ‹å]ÃVèVøÿƒÄ_^[‹Môd‰    ‹å]ÃVè,v ƒÄ_^[‹Môd‰    ‹å]Ã‹Ä+Õ‹‰D	  Vè†œ _^[‹Môd‰    ‹å]ÃVèß©òÿƒÄ_^[‹Môd‰    ‹å]ÃVè™ ƒÄ_^[‹Môd‰    ‹å]ÃVèKtéÿƒÄ…À„Sÿÿÿ‹Èèéı _^[‹Môd‰    ‹å]ÃVèb ƒÄ_^[‹Môd‰    ‹å]ÃVè˜â ƒÄ_^[‹Môd‰    ‹å]ÃVèÎ ‹MôƒÄ_^[d‰    ‹å]Ãjhg  hpà{j èGŸd ƒÄjè7e :bÅ ßbÅ ˆbÅ nbÅ TbÅ "cÅ cÅ ÅbÅ «bÅ <cÅ CbÅ VcÅ  	
+ÌÌÌÌÌÌÌÌU‹ìd¡    jÿhÀq`Pd‰%    ƒìVW‹}‹GƒÀå3öƒø)‡  ¶€deÅ ÿ$…LeÅ ‹OQè(º ƒÄ¾   é”   ‹WRèÒT÷ÿƒÄ…Àt‹Èè¤+øÿ¾   ëv‹GPè¤” ƒÄ¾   ëc‹OQè”ÓÿƒÄ…À„§   ‹@0‹0+ÑSj Pè”á; ‹Ø‰]ÇEü    öCt‹WRèÙ§òÿƒÄ¾   ÇEüÿÿÿÿ‹0+ÑEP‰]è¸R; [è2Ôÿ…ÀtXMèQè•áÿÿƒÄÇEü   ‹ÈèT e PhÄƒj jjèÓöd ƒÄÇEüÿÿÿÿMèèA
+e _‹Æ^‹Môd‰    ‹å]ÃWèüÿÿƒÄ‹Mô_‹Æ^d‰    ‹å]ÃEdÅ /dÅ cdÅ vdÅ ;dÅ 1eÅ  ÌÌU‹ì‹EV‹0…ötSW‹ÿ‹Ä+Õ‹‹‚d	  ‹v‹ƒùÿt3·Á;‚   s(iÀ¬   ‚  ‹ø9uWèşÿÿƒÄ…Àt	Wè8ùÿÿƒÄ…öu±_^]ÃÌÌÌÌÌÌÌÌÌÌÌÌÌU‹ìd¡    jÿháq`Pd‰%    SVW‹}jWjh$  èÓˆd ‹ğ‹Eh   PVèò~»ÿ‹E‰†   iÀ¬   j Wh€   Pè¥ˆd ƒÄ,‹Î‰†  Ç†  ¬   ‰¾   èuâÿÿVèÿd %ÿ    w  f‰†  ‹\fà‹KƒÄ3ÿè‹»Éÿ3É‰E;Át‰E‰Mü‰H‰HÇEüÿÿÿÿ‹ø‰7ÿC‰O‰O‹C;Át‰x‹K‰Oë‰;‹Mô‰{_‹Æ^d‰    [‹å]ÃÌÌÌÌÌÌÌÌU‹ìV‹u‹…Òtc‹\fà‹…Àt¤$    9t	‹@…Àuõë
+…ÀtPèIÌËÿ‹‹ˆ   ‹  QRè„„d ‹Ç€      ‹‹ˆ   QPèi„d ƒÄÇ    ^]ÃÌÌÌÌÌÌÌÌÌÌÌÌÌV‹5Ä+Õ‹†d	  PèmÿÿÿèH‹9 ‹d	  PQè+„d ƒÄÇ†d	      ^ÃÌÌÌÌÌÌÌÌÌÌÌÌU‹ì‹EóE‹UV‹uPjÿQ‹Mó$QRèËçÿÿƒÄƒøÿuÀ^]ÃPVè§õÿÿƒÄ^]ÃÌU‹ìƒìW‹=Ä+Õ¸ÿÿ  Müf‰Eø‹‡d	  Q‹UøRÇEü    è>áÿÿ…Àt4V‹uüVèÀóÿÿƒÄ…Àt	VèùÿÿƒÄ‹‡d	  MüQ‹UøRèáÿÿ…ÀuÎ^_‹å]ÃÌè»„Ôÿ‹Èè$7; ƒøt
+ƒøtƒøuépÿÿÿÃÌÌÌÌÌÌÌÌÌÌÌÌÌÌÌU‹ì‹EV‹0…öteS‹]W‹}ë	¤$    ‹ÿ‹Ä+Õ‹‹‚d	  ‹v‹ƒùÿt4·Á;‚   s)iÀ¬   ‚  9u9XuP…ÿtèîúÿÿëèGøÿÿƒÄ…öu°_[^]ÃÌÌÌÌÌÌÌÌÌÌÌU‹ì‹EV‹0…ötJW‹}‹Ä+Õ‹‹‚d	  ‹v‹ƒùÿt)·Á;‚   siÀ¬   ‚  9u9xu	Pè±õÿÿƒÄ…öu»_^]ÃÌÌÌÌÌÌU‹ì‹E‹M‹UPQRèlüÿÿƒÄÇ€     ]ÃÌÌÌÌÌÌÌÌÌÌÌÌÌV‹5Ä+Õjj jjè<…d ƒÄ‰†d	  è^ƒÔÿ‹ÈèÇ5; ƒøt,èıˆ9 h   Phü}èüÿÿÇ€     ‹d	  ƒÄ‰^Ãh   èÌˆ9 Phü}èáûÿÿ‹–d	  ƒÄ‰^ÃÌÌÌÌU‹ì‹ESV‹ñ‹Èá  €yIƒÉàA™ƒâ»   ÓãÂÁø#\†0^÷ÛÛ÷ÛŠÃ[]Â ÌÌÌÌÌU‹ì‹ESV‹ñ‹Èá  €yIƒÉàA™ƒâ»   ÓãÂÁø#\†^÷ÛÛ÷ÛŠÃ[]Â ÌÌÌÌÌ‹A0ÁèƒàÃÌÌÌÌÌÌ‹A(…Àu¡tœÛ‹@(Ã‹AƒàÃÌÌÌÌÌÌÌÌÌ‹A…Àu¡|œÛ‹@Ã€  ÃÌÌÌÌÌÌÌÌÌ(
+  ÃÌÌÌÌÌÌÌÌÌU‹ìV‹u‹Æ™ƒâÂÁøD@‹Îá  €yIƒÉàAº   Óâ^	]Â ÌÌÌÌÌÌÌÌÌÌÌÌÌU‹ìQ‹EÇEü    ƒI@‰A‹å]Â ÌÌÌÌÌ‹ÃÌÌÌÌÌÌÌÌÌÌÌÌÌAÃÌÌÌÌÌÌÌÌÌÌÌÌVqVèæğÉÿƒÄ…Àu¸à*­^
