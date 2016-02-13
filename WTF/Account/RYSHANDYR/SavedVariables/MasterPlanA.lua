@@ -1,5 +1,9 @@
 
 MasterPlanAG = {
+	["Terokkar"] = {
+		["Ryvok"] = {
+		},
+	},
 	["Aggramar"] = {
 		["Bronin"] = {
 			["cacheSize"] = 750,
@@ -17,19 +21,15 @@ MasterPlanAG = {
 		},
 		["Banjax"] = {
 		},
-		["Kylosandrix"] = {
-			["faction"] = "Horde",
-			["class"] = "WARRIOR",
+		["Kylosandrax"] = {
+			["lastCacheTime"] = 1439156670,
 		},
 		["Stormslinger"] = {
 			["lastCacheTime"] = 1438897818,
 		},
-		["Kylosandrax"] = {
-			["lastCacheTime"] = 1439156670,
-		},
-	},
-	["Terokkar"] = {
-		["Ryvok"] = {
+		["Kylosandrix"] = {
+			["class"] = "WARRIOR",
+			["faction"] = "Horde",
 		},
 	},
 }

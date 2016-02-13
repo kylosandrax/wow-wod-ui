@@ -107,14 +107,14 @@ GoGo_Prefs = {
 			},
 			["ZoneID"] = 941,
 		},
-		["Frostfire Ridge"] = {
+		["Bloodmaul Slag Mines"] = {
 			["Preferred"] = {
 			},
 			["Excluded"] = {
 			},
 			["ZoneID"] = 941,
 		},
-		["Bloodmaul Slag Mines"] = {
+		["Frostfire Ridge"] = {
 			["Preferred"] = {
 			},
 			["Excluded"] = {
@@ -148,7 +148,7 @@ GoGo_Prefs = {
 	["DruidDisableInCombat"] = false,
 	["DisableUpdateNotice"] = true,
 	["RemoveBuffs"] = true,
-	["version"] = "6.2.7",
+	["version"] = "6.2.8",
 	["DruidClickForm"] = true,
 	["GlobalPrefMounts"] = {
 	},

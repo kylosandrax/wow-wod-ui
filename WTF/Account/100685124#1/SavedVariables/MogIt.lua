@@ -7,8 +7,9 @@ MogItDB = {
 		["Kxchanter - Aggramar"] = "Default",
 		["Kromethious - Aggramar"] = "Default",
 		["Kxtrader - Aggramar"] = "Default",
-		["Kylosandrax - Aggramar"] = "Default",
+		["Ryjax - Aggramar"] = "Default",
 		["Ryvok - Aggramar"] = "Default",
+		["Kylosandrax - Aggramar"] = "Default",
 	},
 	["profiles"] = {
 		["Default"] = {
@@ -35,8 +36,9 @@ MogItWishlist = {
 		["Kxchanter - Aggramar"] = "Kxchanter - Aggramar",
 		["Kromethious - Aggramar"] = "Kromethious - Aggramar",
 		["Kxtrader - Aggramar"] = "Kxtrader - Aggramar",
-		["Kylosandrax - Aggramar"] = "Kylosandrax - Aggramar",
+		["Ryjax - Aggramar"] = "Ryjax - Aggramar",
 		["Ryvok - Aggramar"] = "Ryvok - Aggramar",
+		["Kylosandrax - Aggramar"] = "Kylosandrax - Aggramar",
 	},
 	["global"] = {
 		["version"] = 60200,
@@ -48,9 +50,11 @@ MogItWishlist = {
 		},
 		["Kxtrader - Aggramar"] = {
 		},
-		["Kylosandrax - Aggramar"] = {
+		["Ryjax - Aggramar"] = {
 		},
 		["Ryvok - Aggramar"] = {
+		},
+		["Kylosandrax - Aggramar"] = {
 		},
 	},
 }

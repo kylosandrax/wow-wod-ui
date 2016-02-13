@@ -1,3 +1,23 @@
+v3.2
+*Added temporary mapping and warnings for WoWuction prices (http://bit.ly/tsmwuend for more info).
+*Added tooltip reset warning popup.
+*Improved custom price caching to reduce lag from complex custom prices.
+*Fixed bug with app data not being saved.
+
+v3.1.12
+*Fixed an issue where item filters ignored level.
+
+v3.1.11
+*Supporting update for TSM_Auctioning issue.
+
+v3.1.10
+*Fixed bug with previous version.
+
+v3.1.9
+*Fixed lag with large auction house scans.
+*Fixed lag from large custom prices with many price sources within them.
+*Fixed error in LibExtraTip library related to raid frames.
+
 v3.1.8
 *Fixed issue with filtering battlepets by type.
 *Added caching of battlepet species in guild vault.

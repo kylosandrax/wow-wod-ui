@@ -2,10 +2,10 @@
 ## Title: Shield Tracker
 ## Notes: Tracks a wide variety of shields / absorbs.
 ## Author: Talryn
-## Version: 6.2.0
+## Version: 6.2.1
 ## SavedVariables: ShieldTrackerDB
 ## OptionalDeps: Ace3, LibDataBroker-1.1, LibDBIcon-1.0, LibQTip-1.0, LibSharedMedia-3.0, AceGUI-3.0-SharedMediaWidgets, Tukui, ElvUI, AceGUI-3.0-Completing-EditBox
-## X-Curse-Packaged-Version: 6.2.0
+## X-Curse-Packaged-Version: 6.2.1
 ## X-Curse-Project-Name: Shield Tracker
 ## X-Curse-Project-ID: shield-tracker
 ## X-Curse-Repository-ID: wow/shield-tracker/mainline

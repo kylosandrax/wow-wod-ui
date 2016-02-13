@@ -89,8 +89,8 @@ DBM_AllSavedOptions = {
 		["ArrowPosY"] = -150,
 		["ShowRespawn"] = true,
 		["SpecialWarningFontShadow"] = false,
-		["AutoReplySound"] = true,
 		["RLReadyCheckSound"] = true,
+		["AutoReplySound"] = true,
 		["ChatFrame"] = "DEFAULT_CHAT_FRAME",
 		["WOTLKTWMessageShown"] = false,
 		["HideObjectivesFrame"] = true,
@@ -140,16 +140,20 @@ DBM_AllSavedOptions = {
 		["SpecialWarningFlashDura3"] = 1,
 		["MovieFilter"] = "Never",
 		["HPFramePoint"] = "CENTER",
-		["DontShowBossAnnounces"] = false,
-		["SpecialWarningSound4"] = "Sound\\Creature\\HoodWolf\\HoodWolfTransformPlayer01.ogg",
 		["WarningX"] = 0,
+		["SpecialWarningSound4"] = "Sound\\Creature\\HoodWolf\\HoodWolfTransformPlayer01.ogg",
+		["DontShowBossAnnounces"] = false,
 		["SpecialWarningFlashDura4"] = 0.7,
 		["DisableSFX"] = false,
 		["AutologBosses"] = false,
 		["DontShowRespawn"] = false,
 		["RangeFramePoint"] = "CENTER",
 		["ShowCountdownText"] = false,
-		["HUDSize4"] = 5,
+		["SpecialWarningFlashCol3"] = {
+			1, -- [1]
+			0, -- [2]
+			0, -- [3]
+		},
 		["WarningColors"] = {
 			{
 				["b"] = 0.941176470588235,
@@ -177,21 +181,25 @@ DBM_AllSavedOptions = {
 		["HelpMessageShown3"] = false,
 		["BlockNoteShare"] = false,
 		["HUDTexture2"] = "highlight",
-		["AutoCorrectTimer"] = false,
-		["WarningY"] = 260,
+		["CountdownVoice3v2"] = "HoTS_R",
+		["RaidWarningSound"] = "Sound\\Doodad\\BellTollNightElf.ogg",
 		["ModelSoundValue"] = "Short",
-		["FilterSelfHud"] = true,
+		["HUDColor3"] = {
+			1, -- [1]
+			0.5, -- [2]
+			0, -- [3]
+		},
 		["SpecialWarningFont"] = "Interface\\AddOns\\ElvUI\\media\\fonts\\PT_Sans_Narrow.ttf",
 		["FilterInterrupt"] = true,
 		["RangeFrameRadarPoint"] = "CENTER",
-		["SpecialWarningY"] = 75,
+		["DontShowInfoFrame"] = false,
 		["InfoFrameShowSelf"] = false,
 		["ShowTranscriptorMessage"] = true,
 		["RangeFrameUpdates"] = "Average",
-		["CountdownVoice3v2"] = "HoTS_R",
+		["AutoCorrectTimer"] = false,
 		["RoleSpecAlert"] = true,
-		["RaidWarningSound"] = "Sound\\Doodad\\BellTollNightElf.ogg",
-		["CustomSounds"] = 0,
+		["WarningY"] = 260,
+		["DontRestoreRange"] = false,
 		["FilterTankSpec"] = true,
 		["SpecialWarningFlashRepeat3"] = true,
 		["HideGarrisonUpdates"] = true,
@@ -205,7 +213,7 @@ DBM_AllSavedOptions = {
 		["ShowAdvSWSound"] = true,
 		["WarningIconLeft"] = true,
 		["RangeFrameLocked"] = false,
-		["HPFrameY"] = 50,
+		["HPFrameY"] = 50.0000228881836,
 		["WarningFontSize"] = 20,
 		["RangeFrameSound1"] = "none",
 		["SpecialWarningFlashDura2"] = 0.4,
@@ -219,7 +227,7 @@ DBM_AllSavedOptions = {
 		["DontSetIcons"] = false,
 		["BigBrotherAnnounceToRaid"] = false,
 		["WarningFont"] = "Interface\\AddOns\\ElvUI\\media\\fonts\\PT_Sans_Narrow.ttf",
-		["CountdownVoice"] = "Corsica",
+		["SpecialWarningFlashRepeat4"] = false,
 		["DontShowUserTimers"] = false,
 		["DisableStatusWhisper"] = false,
 		["CountdownVoice3"] = "Pewsey",
@@ -227,7 +235,7 @@ DBM_AllSavedOptions = {
 		["SpecialWarningFlashRepeat5"] = true,
 		["AutoRespond"] = true,
 		["HealthFrameGrowUp"] = false,
-		["SpecialWarningFlashRepeat4"] = false,
+		["CountdownVoice"] = "Corsica",
 		["RangeFrameFrames"] = "radar",
 		["HUDTexture1"] = "highlight",
 		["ShowBigBrotherOnCombatStart"] = false,
@@ -240,21 +248,13 @@ DBM_AllSavedOptions = {
 		["VoiceOverSpecW"] = false,
 		["WarningDuration"] = 4,
 		["WarningFontShadow"] = true,
-		["DontRestoreRange"] = false,
-		["DontShowInfoFrame"] = false,
+		["CustomSounds"] = 0,
+		["SpecialWarningY"] = 75,
 		["DontShowBossTimers"] = false,
-		["HUDTexture4"] = "highlight",
-		["HUDColor3"] = {
-			1, -- [1]
-			0.5, -- [2]
-			0, -- [3]
-		},
 		["DontShowFlexMessage"] = false,
-		["SpecialWarningFlashCol3"] = {
-			1, -- [1]
-			0, -- [2]
-			0, -- [3]
-		},
+		["FilterSelfHud"] = true,
+		["HUDTexture4"] = "highlight",
+		["HUDSize4"] = 5,
 		["WorldBossNearAlert"] = false,
 		["HPFrameMaxEntries"] = 5,
 		["SpecialWarningSound3"] = "Sound\\Creature\\KilJaeden\\KILJAEDEN02.ogg",
@@ -285,7 +285,7 @@ DBM_AllSavedOptions = {
 		["StripServerName"] = true,
 		["HideApplicantAlerts"] = 0,
 		["WarningAlphabetical"] = true,
-		["HPFrameX"] = -50,
+		["HPFrameX"] = -49.9999809265137,
 		["SWarnNameInNote"] = true,
 		["AFKHealthWarning"] = true,
 		["CATATWMessageShown"] = false,

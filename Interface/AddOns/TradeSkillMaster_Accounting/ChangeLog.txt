@@ -1,3 +1,16 @@
+v3.0.5
+*Fixed another issue with Accounting taking a long time to load.
+
+v3.0.4
+*Fixed issue with Accounting taking a long time to load.
+
+v3.0.3
+*Changed how Accounting data is stored.
+
+v3.0.2
+*Various changes to prepare for r303 of the TSM Desktop Application.
+*Removed a bunch of dead code.
+
 v3.0.1
 *Fixed error when attempting to loot mail past gold cap.
 

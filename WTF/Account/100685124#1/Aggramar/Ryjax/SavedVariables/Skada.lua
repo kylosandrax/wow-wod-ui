@@ -4,10 +4,10 @@ SkadaPerCharDB = {
 		["healingabsorbed"] = 0,
 		["dispells"] = 0,
 		["ccbreaks"] = 0,
-		["time"] = 1590,
+		["time"] = 1596,
 		["interrupts"] = 0,
 		["ovaleMax"] = 0,
-		["damage"] = 5005140,
+		["damage"] = 5005304,
 		["players"] = {
 			{
 				["healingabsorbed"] = 0,
@@ -19,35 +19,35 @@ SkadaPerCharDB = {
 						["name"] = "Intellect",
 						["active"] = 13,
 						["id"] = 60234,
-						["uptime"] = 1335,
+						["uptime"] = 1346,
 						["auratype"] = "BUFF",
 					},
 					["Lunar Peak"] = {
 						["name"] = "Lunar Peak",
 						["active"] = 10,
 						["id"] = 171743,
-						["uptime"] = 1539,
+						["uptime"] = 1550,
 						["auratype"] = "BUFF",
 					},
 					["Hurricane"] = {
 						["name"] = "Hurricane",
 						["active"] = 7,
 						["id"] = 16914,
-						["uptime"] = 861,
+						["uptime"] = 872,
 						["auratype"] = "BUFF",
 					},
 					["Sunfire"] = {
 						["name"] = "Sunfire",
 						["active"] = 2,
 						["id"] = 164815,
-						["uptime"] = 999,
+						["uptime"] = 1010,
 						["auratype"] = "DEBUFF",
 					},
 					["Solar Peak"] = {
 						["name"] = "Solar Peak",
 						["active"] = 6,
 						["id"] = 171744,
-						["uptime"] = 1136,
+						["uptime"] = 1147,
 						["auratype"] = "BUFF",
 					},
 					["Mark of the Wild"] = {
@@ -89,21 +89,21 @@ SkadaPerCharDB = {
 						["name"] = "Rejuvenation",
 						["active"] = 8,
 						["id"] = 774,
-						["uptime"] = 1351,
+						["uptime"] = 1362,
 						["auratype"] = "BUFF",
 					},
 					["Glyph of Barkskin"] = {
 						["name"] = "Glyph of Barkskin",
 						["active"] = 5,
 						["id"] = 63058,
-						["uptime"] = 1471,
+						["uptime"] = 1482,
 						["auratype"] = "BUFF",
 					},
 					["Feeding Area"] = {
 						["name"] = "Feeding Area",
 						["active"] = 1,
 						["id"] = 151190,
-						["uptime"] = 1708,
+						["uptime"] = 1719,
 						["auratype"] = "DEBUFF",
 					},
 					["Heart of the Wild"] = {
@@ -117,35 +117,35 @@ SkadaPerCharDB = {
 						["name"] = "Solar Empowerment",
 						["active"] = 6,
 						["id"] = 164545,
-						["uptime"] = 1294,
+						["uptime"] = 1305,
 						["auratype"] = "BUFF",
 					},
 					["Moonkin Form"] = {
 						["name"] = "Moonkin Form",
 						["active"] = 2,
 						["id"] = 24858,
-						["uptime"] = 173,
+						["uptime"] = 184,
 						["auratype"] = "BUFF",
 					},
 					["Tracked"] = {
 						["name"] = "Tracked",
 						["active"] = 2,
 						["id"] = 157256,
-						["uptime"] = 439,
+						["uptime"] = 450,
 						["auratype"] = "BUFF",
 					},
 					["Barkskin"] = {
 						["name"] = "Barkskin",
 						["active"] = 5,
 						["id"] = 22812,
-						["uptime"] = 1471,
+						["uptime"] = 1482,
 						["auratype"] = "BUFF",
 					},
 					["Starfall"] = {
 						["name"] = "Starfall",
 						["active"] = 2,
 						["id"] = 48505,
-						["uptime"] = 616,
+						["uptime"] = 627,
 						["auratype"] = "BUFF",
 					},
 					["Ogron Be-Gone"] = {
@@ -166,21 +166,21 @@ SkadaPerCharDB = {
 						["name"] = "Shooting Stars",
 						["active"] = 4,
 						["id"] = 93400,
-						["uptime"] = 1532,
+						["uptime"] = 1543,
 						["auratype"] = "BUFF",
 					},
 					["Exquisite Proficiency"] = {
 						["name"] = "Exquisite Proficiency",
 						["active"] = 11,
 						["id"] = 133630,
-						["uptime"] = 1722,
+						["uptime"] = 1733,
 						["auratype"] = "BUFF",
 					},
 					["Stag Form"] = {
 						["name"] = "Stag Form",
 						["active"] = 1,
 						["id"] = 165961,
-						["uptime"] = 1248,
+						["uptime"] = 1259,
 						["auratype"] = "BUFF",
 					},
 					["Ursol's Vortex"] = {
@@ -201,14 +201,14 @@ SkadaPerCharDB = {
 						["name"] = "Moonkin Aura",
 						["active"] = 2,
 						["id"] = 24907,
-						["uptime"] = 414,
+						["uptime"] = 425,
 						["auratype"] = "BUFF",
 					},
 					["Lunar Empowerment"] = {
 						["name"] = "Lunar Empowerment",
 						["active"] = 10,
 						["id"] = 164547,
-						["uptime"] = 1531,
+						["uptime"] = 1542,
 						["auratype"] = "BUFF",
 					},
 					["Solar Beam"] = {
@@ -419,9 +419,9 @@ SkadaPerCharDB = {
 							{
 								["ts"] = 1421587581.80001,
 								["amount"] = -4317,
+								["srcname"] = "Gutsmash the Destroyer",
 								["spellid"] = 88163,
 								["hp"] = 33567,
-								["srcname"] = "Gutsmash the Destroyer",
 							}, -- [1]
 							{
 								["absorb"] = 0,
@@ -434,16 +434,16 @@ SkadaPerCharDB = {
 							{
 								["ts"] = 1421587582.87803,
 								["amount"] = -8250,
+								["srcname"] = "Gutsmash the Destroyer",
 								["spellid"] = 88163,
 								["hp"] = 30422,
-								["srcname"] = "Gutsmash the Destroyer",
 							}, -- [3]
 							{
 								["ts"] = 1421587583.71204,
 								["amount"] = -4551,
+								["spellid"] = 88163,
 								["srcname"] = "Gutsmash the Destroyer",
 								["hp"] = 22172,
-								["spellid"] = 88163,
 							}, -- [4]
 							{
 								["spellname"] = "Fire",
@@ -462,16 +462,16 @@ SkadaPerCharDB = {
 							{
 								["ts"] = 1421587585.92807,
 								["amount"] = -8477,
+								["spellid"] = 88163,
 								["srcname"] = "Gutsmash the Destroyer",
 								["hp"] = 18667,
-								["spellid"] = 88163,
 							}, -- [7]
 							{
 								["ts"] = 1421587586.54408,
 								["amount"] = -1144,
+								["spellid"] = 162133,
 								["srcname"] = "Gutsmash the Destroyer",
 								["hp"] = 9046,
-								["spellid"] = 162133,
 							}, -- [8]
 							{
 								["ts"] = 1421587588.30209,
@@ -492,9 +492,9 @@ SkadaPerCharDB = {
 							{
 								["ts"] = 1421587590.09411,
 								["amount"] = -3774,
+								["spellid"] = 88163,
 								["srcname"] = "Gutsmash the Destroyer",
 								["hp"] = 11171,
-								["spellid"] = 88163,
 							}, -- [11]
 							{
 								["absorb"] = 0,
@@ -507,16 +507,16 @@ SkadaPerCharDB = {
 							{
 								["ts"] = 1421587592.09413,
 								["amount"] = -10574,
+								["spellid"] = 88163,
 								["srcname"] = "Gutsmash the Destroyer",
 								["hp"] = 8990,
-								["spellid"] = 88163,
 							}, -- [13]
 							{
 								["ts"] = 1421587592.09414,
 								["amount"] = -5942,
+								["spellid"] = 88163,
 								["srcname"] = "Gutsmash the Destroyer",
 								["hp"] = 8990,
-								["spellid"] = 88163,
 							}, -- [14]
 							{
 								["spellname"] = "Ryjax dies",
@@ -534,30 +534,30 @@ SkadaPerCharDB = {
 							{
 								["ts"] = 1421192027.34801,
 								["amount"] = -4151,
+								["srcname"] = "Iron Grunt",
 								["spellid"] = 88163,
 								["hp"] = 33048,
-								["srcname"] = "Iron Grunt",
 							}, -- [1]
 							{
 								["ts"] = 1421192027.39802,
 								["amount"] = -4549,
+								["srcname"] = "Iron Grunt",
 								["spellid"] = 88163,
 								["hp"] = 33048,
-								["srcname"] = "Iron Grunt",
 							}, -- [2]
 							{
 								["ts"] = 1421192027.99803,
 								["amount"] = -23248,
+								["srcname"] = "Iron Grunt",
 								["spellid"] = 149186,
 								["hp"] = 1100,
-								["srcname"] = "Iron Grunt",
 							}, -- [3]
 							{
 								["ts"] = 1421192028.96504,
 								["amount"] = -3365,
+								["srcname"] = "Iron Grunt",
 								["spellid"] = 88163,
 								["hp"] = 1100,
-								["srcname"] = "Iron Grunt",
 							}, -- [4]
 							{
 								["spellname"] = "Ryjax dies",
@@ -568,58 +568,58 @@ SkadaPerCharDB = {
 							{
 								["ts"] = 1421192017.23306,
 								["amount"] = -2006,
+								["srcname"] = "Iron Grunt",
 								["spellid"] = 88163,
 								["hp"] = 41264,
-								["srcname"] = "Iron Grunt",
 							}, -- [6]
 							{
 								["ts"] = 1421192018.18407,
 								["amount"] = -847,
+								["srcname"] = "Blackrock Hammer-Sister",
 								["spellid"] = 88163,
 								["hp"] = 38389,
-								["srcname"] = "Blackrock Hammer-Sister",
 							}, -- [7]
 							{
 								["ts"] = 1421192019.61408,
 								["amount"] = -1453,
+								["srcname"] = "Blackrock Hammer-Sister",
 								["spellid"] = 152679,
 								["hp"] = 36089,
-								["srcname"] = "Blackrock Hammer-Sister",
 							}, -- [8]
 							{
 								["ts"] = 1421192020.11409,
 								["amount"] = -3981,
+								["srcname"] = "Iron Grunt",
 								["spellid"] = 88163,
 								["hp"] = 36089,
-								["srcname"] = "Iron Grunt",
 							}, -- [9]
 							{
 								["ts"] = 1421192021.3141,
 								["amount"] = -840,
+								["srcname"] = "Blackrock Hammer-Sister",
 								["spellid"] = 88163,
 								["hp"] = 32108,
-								["srcname"] = "Blackrock Hammer-Sister",
 							}, -- [10]
 							{
 								["ts"] = 1421192021.34711,
 								["amount"] = -3776,
+								["srcname"] = "Iron Grunt",
 								["spellid"] = 88163,
 								["hp"] = 32108,
-								["srcname"] = "Iron Grunt",
 							}, -- [11]
 							{
 								["ts"] = 1421192022.53112,
 								["amount"] = -909,
+								["srcname"] = "Blackrock Hammer-Sister",
 								["spellid"] = 88163,
 								["hp"] = 27492,
-								["srcname"] = "Blackrock Hammer-Sister",
 							}, -- [12]
 							{
 								["ts"] = 1421192024.98113,
 								["amount"] = -4159,
+								["srcname"] = "Iron Grunt",
 								["spellid"] = 88163,
 								["hp"] = 26583,
-								["srcname"] = "Iron Grunt",
 							}, -- [13]
 							{
 								["absorb"] = 0,
@@ -647,65 +647,65 @@ SkadaPerCharDB = {
 							{
 								["ts"] = 1421190759.87801,
 								["amount"] = -863,
+								["spellid"] = 166347,
 								["srcname"] = "Frostwing Screecher",
 								["hp"] = 9432,
-								["spellid"] = 166347,
 							}, -- [1]
 							{
 								["ts"] = 1421190759.99502,
 								["amount"] = -1184,
+								["spellid"] = 166342,
 								["srcname"] = "Frostwing Screecher",
 								["hp"] = 8248,
-								["spellid"] = 166342,
 							}, -- [2]
 							{
 								["ts"] = 1421190760.19503,
 								["amount"] = -540,
+								["spellid"] = 149212,
 								["srcname"] = "Blackrock Warder",
 								["hp"] = 7708,
-								["spellid"] = 149212,
 							}, -- [3]
 							{
 								["ts"] = 1421190761.47804,
 								["amount"] = -2144,
+								["spellid"] = 88163,
 								["srcname"] = "Blackrock Warder",
 								["hp"] = 7708,
-								["spellid"] = 88163,
 							}, -- [4]
 							{
 								["ts"] = 1421190761.89505,
 								["amount"] = -1081,
+								["spellid"] = 88163,
 								["srcname"] = "Frostwing Screecher",
 								["hp"] = 5564,
-								["spellid"] = 88163,
 							}, -- [5]
 							{
 								["ts"] = 1421190762.47806,
 								["amount"] = -1227,
+								["spellid"] = 88163,
 								["srcname"] = "Blackrock Warder",
 								["hp"] = 4483,
-								["spellid"] = 88163,
 							}, -- [6]
 							{
 								["ts"] = 1421190763.12807,
 								["amount"] = -1488,
+								["spellid"] = 88163,
 								["srcname"] = "Blackrock Grunt",
 								["hp"] = 3256,
-								["spellid"] = 88163,
 							}, -- [7]
 							{
 								["ts"] = 1421190763.62908,
 								["amount"] = -1417,
+								["spellid"] = 166342,
 								["srcname"] = "Frostwing Screecher",
 								["hp"] = 351,
-								["spellid"] = 166342,
 							}, -- [8]
 							{
 								["ts"] = 1421190763.94409,
 								["amount"] = -1184,
+								["spellid"] = 88163,
 								["srcname"] = "Frostwing Screecher",
 								["hp"] = 351,
-								["spellid"] = 88163,
 							}, -- [9]
 							{
 								["spellname"] = "Ryjax dies",
@@ -716,37 +716,37 @@ SkadaPerCharDB = {
 							{
 								["ts"] = 1421190758.41011,
 								["amount"] = -2190,
+								["spellid"] = 88163,
 								["srcname"] = "Blackrock Warder",
 								["hp"] = 16527,
-								["spellid"] = 88163,
 							}, -- [11]
 							{
 								["ts"] = 1421190759.06012,
 								["amount"] = -1155,
+								["spellid"] = 88163,
 								["srcname"] = "Blackrock Grunt",
 								["hp"] = 14337,
-								["spellid"] = 88163,
 							}, -- [12]
 							{
 								["ts"] = 1421190759.39413,
 								["amount"] = -834,
+								["spellid"] = 88163,
 								["srcname"] = "Frostwing Screecher",
 								["hp"] = 13182,
-								["spellid"] = 88163,
 							}, -- [13]
 							{
 								["ts"] = 1421190759.39414,
 								["amount"] = -951,
+								["spellid"] = 88163,
 								["srcname"] = "Frostwing Screecher",
 								["hp"] = 13182,
-								["spellid"] = 88163,
 							}, -- [14]
 							{
 								["ts"] = 1421190759.39415,
 								["amount"] = -1102,
+								["spellid"] = 88163,
 								["srcname"] = "Blackrock Warder",
 								["hp"] = 13182,
-								["spellid"] = 88163,
 							}, -- [15]
 							["pos"] = 11,
 						},
@@ -758,16 +758,16 @@ SkadaPerCharDB = {
 							{
 								["ts"] = 1421190663.72901,
 								["amount"] = -668,
+								["spellid"] = 149212,
 								["hp"] = 3031,
 								["srcname"] = "Blackrock Warder",
-								["spellid"] = 149212,
 							}, -- [1]
 							{
 								["ts"] = 1421190664.07902,
 								["amount"] = -1881,
+								["hp"] = 3031,
 								["spellid"] = 88163,
 								["srcname"] = "Blackrock Warder",
-								["hp"] = 3031,
 							}, -- [2]
 							{
 								["spellname"] = "Ryjax dies",
@@ -778,58 +778,58 @@ SkadaPerCharDB = {
 							{
 								["ts"] = 1421190660.43004,
 								["amount"] = -2290,
+								["hp"] = 23320,
 								["spellid"] = 88163,
 								["srcname"] = "Blackrock Grunt",
-								["hp"] = 23320,
 							}, -- [4]
 							{
 								["ts"] = 1421190660.43005,
 								["amount"] = -1707,
+								["hp"] = 23320,
 								["spellid"] = 88163,
 								["srcname"] = "Blackrock Siegesmith",
-								["hp"] = 23320,
 							}, -- [5]
 							{
 								["ts"] = 1421190661.61106,
 								["amount"] = -1011,
+								["spellid"] = 88163,
 								["srcname"] = "Thunderlord Beastmaster",
 								["hp"] = 16109,
-								["spellid"] = 88163,
 							}, -- [6]
 							{
 								["ts"] = 1421190661.61107,
 								["amount"] = -2695,
+								["spellid"] = 149212,
 								["srcname"] = "Blackrock Warder",
 								["hp"] = 12403,
-								["spellid"] = 149212,
 							}, -- [7]
 							{
 								["ts"] = 1421190661.61108,
 								["amount"] = -1377,
+								["spellid"] = 88163,
 								["srcname"] = "Blackrock Warder",
 								["hp"] = 12403,
-								["spellid"] = 88163,
 							}, -- [8]
 							{
 								["ts"] = 1421190661.99509,
 								["amount"] = -1382,
+								["spellid"] = 88163,
 								["srcname"] = "Blackrock Grunt",
 								["hp"] = 11026,
-								["spellid"] = 88163,
 							}, -- [9]
 							{
 								["ts"] = 1421190661.9951,
 								["amount"] = -1777,
+								["spellid"] = 88163,
 								["srcname"] = "Blackrock Siegesmith",
 								["hp"] = 11026,
-								["spellid"] = 88163,
 							}, -- [10]
 							{
 								["ts"] = 1421190661.99511,
 								["amount"] = -1718,
+								["spellid"] = 88163,
 								["srcname"] = "Blackrock Grunt",
 								["hp"] = 11026,
-								["spellid"] = 88163,
 							}, -- [11]
 							{
 								["absorb"] = 0,
@@ -842,23 +842,23 @@ SkadaPerCharDB = {
 							{
 								["ts"] = 1421190662.34513,
 								["amount"] = -770,
+								["spellid"] = 88163,
 								["srcname"] = "Broken Clefthoof",
 								["hp"] = 7106,
-								["spellid"] = 88163,
 							}, -- [13]
 							{
 								["ts"] = 1421190662.84514,
 								["amount"] = -2637,
+								["spellid"] = 88163,
 								["hp"] = 6336,
 								["srcname"] = "Blackrock Warder",
-								["spellid"] = 88163,
 							}, -- [14]
 							{
 								["ts"] = 1421190663.72815,
 								["amount"] = -1337,
+								["spellid"] = 88163,
 								["srcname"] = "Blackrock Grunt",
 								["hp"] = 3699,
-								["spellid"] = 88163,
 							}, -- [15]
 							["pos"] = 4,
 						},
@@ -1475,100 +1475,100 @@ SkadaPerCharDB = {
 					{
 						["ts"] = 1421589806.942,
 						["amount"] = -1550,
+						["srcname"] = "Acidtooth Devourer",
 						["spellid"] = 88163,
 						["hp"] = 84690,
-						["srcname"] = "Acidtooth Devourer",
 					}, -- [1]
 					{
 						["ts"] = 1421589806.942,
 						["amount"] = -1374,
+						["spellid"] = 158982,
 						["srcname"] = "Acidtooth Devourer",
 						["hp"] = 81766,
-						["spellid"] = 158982,
 					}, -- [2]
 					{
 						["ts"] = 1421589808.959,
 						["amount"] = -1819,
+						["srcname"] = "Acidtooth Devourer",
 						["spellid"] = 88163,
 						["hp"] = 81766,
-						["srcname"] = "Acidtooth Devourer",
 					}, -- [3]
 					{
 						["ts"] = 1421589815.475,
 						["amount"] = -1422,
+						["spellid"] = 88163,
 						["srcname"] = "Acidtooth Devourer",
 						["hp"] = 79947,
-						["spellid"] = 88163,
 					}, -- [4]
 					{
 						["ts"] = 1421589727.995,
 						["amount"] = -2450,
+						["srcname"] = "Acidtooth Devourer",
 						["spellid"] = 158998,
 						["hp"] = 78227,
-						["srcname"] = "Acidtooth Devourer",
 					}, -- [5]
 					{
 						["ts"] = 1421589731.643,
 						["amount"] = -1416,
+						["spellid"] = 158982,
 						["hp"] = 76811,
 						["srcname"] = "Acidtooth Devourer",
-						["spellid"] = 158982,
 					}, -- [6]
 					{
 						["ts"] = 1421589731.948,
 						["amount"] = -1468,
+						["hp"] = 76811,
 						["spellid"] = 88163,
 						["srcname"] = "Acidtooth Devourer",
-						["hp"] = 76811,
 					}, -- [7]
 					{
 						["ts"] = 1421589733.943,
 						["amount"] = -1844,
+						["spellid"] = 88163,
 						["srcname"] = "Acidtooth Devourer",
 						["hp"] = 75343,
-						["spellid"] = 88163,
 					}, -- [8]
 					{
 						["ts"] = 1421589735.976,
 						["amount"] = -1899,
+						["srcname"] = "Acidtooth Devourer",
 						["spellid"] = 88163,
 						["hp"] = 73499,
-						["srcname"] = "Acidtooth Devourer",
 					}, -- [9]
 					{
 						["ts"] = 1421589742.321,
 						["amount"] = -357,
+						["srcname"] = "Acidspine Gnawers",
 						["spellid"] = 88163,
 						["hp"] = 71600,
-						["srcname"] = "Acidspine Gnawers",
 					}, -- [10]
 					{
 						["ts"] = 1421589744.309,
 						["amount"] = -470,
+						["spellid"] = 88163,
 						["hp"] = 71243,
 						["srcname"] = "Acidspine Gnawers",
-						["spellid"] = 88163,
 					}, -- [11]
 					{
 						["ts"] = 1421589746.275,
 						["amount"] = -402,
+						["spellid"] = 88163,
 						["srcname"] = "Acidspine Gnawers",
 						["hp"] = 70773,
-						["spellid"] = 88163,
 					}, -- [12]
 					{
 						["ts"] = 1421589748.325,
 						["amount"] = -382,
+						["spellid"] = 88163,
 						["srcname"] = "Acidspine Gnawers",
 						["hp"] = 70371,
-						["spellid"] = 88163,
 					}, -- [13]
 					{
 						["ts"] = 1421589804.443,
 						["amount"] = -2783,
+						["spellid"] = 158998,
 						["srcname"] = "Acidtooth Devourer",
 						["hp"] = 80419,
-						["spellid"] = 158998,
 					}, -- [14]
 					{
 						["ts"] = 1421589805.742,
@@ -1626,21 +1626,21 @@ SkadaPerCharDB = {
 						["name"] = "Thrash",
 						["active"] = 1,
 						["id"] = 77758,
-						["uptime"] = 1720,
+						["uptime"] = 1731,
 						["auratype"] = "DEBUFF",
 					},
 					["Bear Form"] = {
 						["name"] = "Bear Form",
 						["active"] = 1,
 						["id"] = 5487,
-						["uptime"] = 1722,
+						["uptime"] = 1733,
 						["auratype"] = "BUFF",
 					},
 					["Feeding Area"] = {
 						["name"] = "Feeding Area",
 						["active"] = 1,
 						["id"] = 151190,
-						["uptime"] = 1715,
+						["uptime"] = 1726,
 						["auratype"] = "DEBUFF",
 					},
 					["Moonfire"] = {
@@ -1962,6 +1962,51 @@ SkadaPerCharDB = {
 				},
 				["multistrikes"] = 0,
 			}, -- [3]
+			{
+				["healingabsorbed"] = 0,
+				["class"] = "DRUID",
+				["damaged"] = {
+				},
+				["auras"] = {
+				},
+				["role"] = "NONE",
+				["time"] = 6,
+				["interrupts"] = 0,
+				["ovaleMax"] = 0,
+				["ccbreaks"] = 0,
+				["damage"] = 164,
+				["damagespells"] = {
+					["Wrath"] = {
+						["min"] = 20,
+						["critical"] = 1,
+						["hit"] = 5,
+						["totalhits"] = 6,
+						["id"] = 5176,
+						["max"] = 51,
+						["damage"] = 164,
+					},
+				},
+				["power"] = {
+				},
+				["damagetaken"] = 0,
+				["deathlog"] = {
+				},
+				["id"] = "Player-106-084B8D56",
+				["maxhp"] = 196,
+				["dispells"] = 0,
+				["damagetakenspells"] = {
+				},
+				["healed"] = {
+				},
+				["healing"] = 0,
+				["name"] = "Ryjax",
+				["shielding"] = 0,
+				["healingspells"] = {
+				},
+				["overhealing"] = 0,
+				["ovale"] = 0,
+				["multistrikes"] = 0,
+			}, -- [4]
 		},
 		["deaths"] = 4,
 		["mobs"] = {
@@ -2034,6 +2079,23 @@ SkadaPerCharDB = {
 				},
 				["taken"] = 96411,
 				["done"] = 32377,
+				["htaken"] = 0,
+				["htakenspell"] = {
+				},
+			},
+			["Thunderlord Trapper"] = {
+				["players"] = {
+					["Ryjax"] = {
+						["taken"] = 52711,
+						["done"] = 15741,
+						["class"] = "DRUID",
+					},
+				},
+				["hdone"] = 0,
+				["hdonespell"] = {
+				},
+				["taken"] = 52711,
+				["done"] = 15741,
 				["htaken"] = 0,
 				["htakenspell"] = {
 				},
@@ -2150,22 +2212,22 @@ SkadaPerCharDB = {
 				["htakenspell"] = {
 				},
 			},
-			["Thunderlord Trapper"] = {
+			["Iron Engineer"] = {
 				["players"] = {
 					["Ryjax"] = {
-						["taken"] = 52711,
-						["done"] = 15741,
+						["taken"] = 61149,
+						["done"] = 23490,
 						["class"] = "DRUID",
 					},
 				},
 				["hdone"] = 0,
 				["hdonespell"] = {
 				},
-				["taken"] = 52711,
-				["done"] = 15741,
-				["htaken"] = 0,
+				["taken"] = 61149,
 				["htakenspell"] = {
 				},
+				["htaken"] = 0,
+				["done"] = 23490,
 			},
 			["Thunderlord Windreader"] = {
 				["players"] = {
@@ -2289,23 +2351,6 @@ SkadaPerCharDB = {
 				["htaken"] = 0,
 				["done"] = 40418,
 			},
-			["Trained Coldsnout"] = {
-				["players"] = {
-					["Ryjax"] = {
-						["taken"] = 50809,
-						["done"] = 13887,
-						["class"] = "DRUID",
-					},
-				},
-				["hdone"] = 0,
-				["hdonespell"] = {
-				},
-				["taken"] = 50809,
-				["htakenspell"] = {
-				},
-				["htaken"] = 0,
-				["done"] = 13887,
-			},
 			["Rat"] = {
 				["players"] = {
 					["Ryjax"] = {
@@ -2323,22 +2368,40 @@ SkadaPerCharDB = {
 				["htakenspell"] = {
 				},
 			},
-			["Iron Engineer"] = {
+			["Trained Coldsnout"] = {
 				["players"] = {
 					["Ryjax"] = {
-						["taken"] = 61149,
-						["done"] = 23490,
+						["taken"] = 50809,
+						["done"] = 13887,
 						["class"] = "DRUID",
 					},
 				},
 				["hdone"] = 0,
 				["hdonespell"] = {
 				},
-				["taken"] = 61149,
+				["taken"] = 50809,
 				["htakenspell"] = {
 				},
 				["htaken"] = 0,
-				["done"] = 23490,
+				["done"] = 13887,
+			},
+			["Plainstrider"] = {
+				["players"] = {
+					["Ryjax"] = {
+						["taken"] = 164,
+						["done"] = 0,
+						["class"] = "DRUID",
+						["role"] = "NONE",
+					},
+				},
+				["hdone"] = 0,
+				["hdonespell"] = {
+				},
+				["taken"] = 164,
+				["done"] = 0,
+				["htaken"] = 0,
+				["htakenspell"] = {
+				},
 			},
 			["Maggoc"] = {
 				["players"] = {
@@ -3126,7 +3189,7 @@ SkadaPerCharDB = {
 				["done"] = 53762,
 			},
 		},
-		["mobtaken"] = 5005140,
+		["mobtaken"] = 5005304,
 		["ovale"] = 0,
 		["healing"] = 486832,
 		["mobdone"] = 1537168,
@@ -3143,6 +3206,99 @@ SkadaPerCharDB = {
 		["multistrikes"] = 11,
 	},
 	["sets"] = {
+		{
+			["healingabsorbed"] = 0,
+			["dispells"] = 0,
+			["ccbreaks"] = 0,
+			["time"] = 6,
+			["interrupts"] = 0,
+			["ovaleMax"] = 0,
+			["mobdone"] = 0,
+			["players"] = {
+				{
+					["last"] = 1453934075,
+					["healingabsorbed"] = 0,
+					["class"] = "DRUID",
+					["damaged"] = {
+						["Plainstrider"] = 66,
+					},
+					["auras"] = {
+					},
+					["role"] = "NONE",
+					["time"] = 3,
+					["interrupts"] = 0,
+					["ovaleMax"] = 0,
+					["shielding"] = 0,
+					["damage"] = 66,
+					["damagespells"] = {
+						["Wrath"] = {
+							["min"] = 20,
+							["hit"] = 3,
+							["totalhits"] = 3,
+							["id"] = 5176,
+							["max"] = 24,
+							["damage"] = 66,
+						},
+					},
+					["dispells"] = 0,
+					["damagetaken"] = 0,
+					["power"] = {
+					},
+					["ovale"] = 0,
+					["first"] = 1453934072,
+					["maxhp"] = 196,
+					["damagetakenspells"] = {
+					},
+					["healed"] = {
+					},
+					["healing"] = 0,
+					["name"] = "Ryjax",
+					["healingspells"] = {
+					},
+					["overhealing"] = 0,
+					["ccbreaks"] = 0,
+					["id"] = "Player-106-084B8D56",
+					["multistrikes"] = 0,
+				}, -- [1]
+			},
+			["damage"] = 66,
+			["starttime"] = 1453934071,
+			["deaths"] = 0,
+			["mobs"] = {
+				["Plainstrider"] = {
+					["players"] = {
+						["Ryjax"] = {
+							["taken"] = 66,
+							["done"] = 0,
+							["class"] = "DRUID",
+							["role"] = "NONE",
+						},
+					},
+					["hdone"] = 0,
+					["hdonespell"] = {
+					},
+					["taken"] = 66,
+					["htakenspell"] = {
+					},
+					["htaken"] = 0,
+					["done"] = 0,
+				},
+			},
+			["mobtaken"] = 66,
+			["ovale"] = 0,
+			["healing"] = 0,
+			["power"] = {
+			},
+			["damagetaken"] = 0,
+			["overhealing"] = 0,
+			["shielding"] = 0,
+			["name"] = "Plainstrider",
+			["mobname"] = "Plainstrider",
+			["multistrikes"] = 0,
+			["mobhdone"] = 0,
+			["last_action"] = 1453934071,
+			["endtime"] = 1453934077,
+		}, -- [1]
 		{
 			["healingabsorbed"] = 0,
 			["dispells"] = 0,
@@ -3364,7 +3520,7 @@ SkadaPerCharDB = {
 			["mobhdone"] = 0,
 			["last_action"] = 1421589801,
 			["endtime"] = 1421589819,
-		}, -- [1]
+		}, -- [2]
 		{
 			["healingabsorbed"] = 0,
 			["dispells"] = 0,
@@ -3703,7 +3859,7 @@ SkadaPerCharDB = {
 			["mobhdone"] = 929,
 			["last_action"] = 1421589724,
 			["endtime"] = 1421589751,
-		}, -- [2]
+		}, -- [3]
 		{
 			["healingabsorbed"] = 0,
 			["dispells"] = 0,
@@ -4001,7 +4157,7 @@ SkadaPerCharDB = {
 			["mobhdone"] = 634,
 			["last_action"] = 1421589679,
 			["endtime"] = 1421589710,
-		}, -- [3]
+		}, -- [4]
 		{
 			["healingabsorbed"] = 0,
 			["dispells"] = 0,
@@ -4111,13 +4267,6 @@ SkadaPerCharDB = {
 							["uptime"] = 4,
 							["auratype"] = "BUFF",
 						},
-						["Sunfire"] = {
-							["name"] = "Sunfire",
-							["active"] = 0,
-							["id"] = 164815,
-							["uptime"] = 20,
-							["auratype"] = "DEBUFF",
-						},
 						["Glyph of Barkskin"] = {
 							["name"] = "Glyph of Barkskin",
 							["active"] = 0,
@@ -4131,6 +4280,13 @@ SkadaPerCharDB = {
 							["id"] = 774,
 							["uptime"] = 14,
 							["auratype"] = "BUFF",
+						},
+						["Sunfire"] = {
+							["name"] = "Sunfire",
+							["active"] = 0,
+							["id"] = 164815,
+							["uptime"] = 20,
+							["auratype"] = "DEBUFF",
 						},
 						["War Stomp"] = {
 							["name"] = "War Stomp",
@@ -4372,7 +4528,7 @@ SkadaPerCharDB = {
 			["mobhdone"] = 246,
 			["last_action"] = 1421589587,
 			["endtime"] = 1421589634,
-		}, -- [4]
+		}, -- [5]
 		{
 			["healingabsorbed"] = 0,
 			["dispells"] = 0,
@@ -4655,7 +4811,7 @@ SkadaPerCharDB = {
 			["mobhdone"] = 0,
 			["last_action"] = 1421589431,
 			["endtime"] = 1421589455,
-		}, -- [5]
+		}, -- [6]
 		{
 			["healingabsorbed"] = 0,
 			["dispells"] = 0,
@@ -4961,7 +5117,7 @@ SkadaPerCharDB = {
 			["mobhdone"] = 0,
 			["last_action"] = 1421589374,
 			["endtime"] = 1421589401,
-		}, -- [6]
+		}, -- [7]
 		{
 			["healingabsorbed"] = 0,
 			["dispells"] = 0,
@@ -5069,11 +5225,11 @@ SkadaPerCharDB = {
 							["uptime"] = 11,
 							["auratype"] = "BUFF",
 						},
-						["Solar Empowerment"] = {
-							["name"] = "Solar Empowerment",
-							["active"] = 1,
-							["id"] = 164545,
-							["uptime"] = 1,
+						["Shooting Stars"] = {
+							["name"] = "Shooting Stars",
+							["active"] = 0,
+							["id"] = 93400,
+							["uptime"] = 0,
 							["auratype"] = "BUFF",
 						},
 						["Moonfire"] = {
@@ -5083,11 +5239,11 @@ SkadaPerCharDB = {
 							["uptime"] = 13,
 							["auratype"] = "DEBUFF",
 						},
-						["Barkskin"] = {
-							["name"] = "Barkskin",
-							["active"] = 0,
-							["id"] = 22812,
-							["uptime"] = 12,
+						["Solar Empowerment"] = {
+							["name"] = "Solar Empowerment",
+							["active"] = 1,
+							["id"] = 164545,
+							["uptime"] = 1,
 							["auratype"] = "BUFF",
 						},
 						["Blaze"] = {
@@ -5139,11 +5295,11 @@ SkadaPerCharDB = {
 							["uptime"] = 5,
 							["auratype"] = "BUFF",
 						},
-						["Shooting Stars"] = {
-							["name"] = "Shooting Stars",
+						["Barkskin"] = {
+							["name"] = "Barkskin",
 							["active"] = 0,
-							["id"] = 93400,
-							["uptime"] = 0,
+							["id"] = 22812,
+							["uptime"] = 12,
 							["auratype"] = "BUFF",
 						},
 					},
@@ -5329,7 +5485,7 @@ SkadaPerCharDB = {
 			["mobhdone"] = 0,
 			["last_action"] = 1421589304,
 			["endtime"] = 1421589340,
-		}, -- [7]
+		}, -- [8]
 		{
 			["healingabsorbed"] = 0,
 			["dispells"] = 0,
@@ -5596,7 +5752,7 @@ SkadaPerCharDB = {
 			["mobhdone"] = 0,
 			["last_action"] = 1421589256,
 			["endtime"] = 1421589279,
-		}, -- [8]
+		}, -- [9]
 		{
 			["healingabsorbed"] = 0,
 			["dispells"] = 0,
@@ -5740,244 +5896,6 @@ SkadaPerCharDB = {
 			["mobhdone"] = 0,
 			["last_action"] = 1421589214,
 			["endtime"] = 1421589225,
-		}, -- [9]
-		{
-			["healingabsorbed"] = 0,
-			["dispells"] = 0,
-			["ccbreaks"] = 0,
-			["time"] = 15,
-			["interrupts"] = 0,
-			["ovaleMax"] = 0,
-			["mobdone"] = 8169,
-			["players"] = {
-				{
-					["last"] = 1421589155,
-					["healingabsorbed"] = 0,
-					["class"] = "DRUID",
-					["damaged"] = {
-						["Thunderlord Sky Rider"] = 29484,
-					},
-					["dispells"] = 0,
-					["ccbreaks"] = 0,
-					["time"] = 13,
-					["interrupts"] = 0,
-					["ovaleMax"] = 0,
-					["damage"] = 29484,
-					["damagespells"] = {
-						["Starfire"] = {
-							["min"] = 9643,
-							["hit"] = 1,
-							["totalhits"] = 1,
-							["id"] = 2912,
-							["max"] = 9643,
-							["damage"] = 9643,
-						},
-						["Moonfire"] = {
-							["min"] = 1204,
-							["hit"] = 4,
-							["totalhits"] = 4,
-							["id"] = 164812,
-							["max"] = 1477,
-							["damage"] = 5219,
-						},
-						["Starsurge"] = {
-							["min"] = 14622,
-							["hit"] = 1,
-							["totalhits"] = 1,
-							["id"] = 78674,
-							["max"] = 14622,
-							["damage"] = 14622,
-						},
-					},
-					["id"] = "Player-1325-03B3DDAD",
-					["damagetaken"] = 8169,
-					["shielding"] = 0,
-					["ovale"] = 0,
-					["first"] = 1421589142,
-					["auras"] = {
-						["Exquisite Proficiency"] = {
-							["name"] = "Exquisite Proficiency",
-							["active"] = 1,
-							["id"] = 133630,
-							["uptime"] = 8,
-							["auratype"] = "BUFF",
-						},
-						["Spear Throw"] = {
-							["name"] = "Spear Throw",
-							["active"] = 0,
-							["id"] = 156304,
-							["uptime"] = 0,
-							["auratype"] = "DEBUFF",
-						},
-						["Tracked"] = {
-							["name"] = "Tracked",
-							["active"] = 1,
-							["id"] = 157256,
-							["uptime"] = 1,
-							["auratype"] = "BUFF",
-						},
-						["Lunar Peak"] = {
-							["name"] = "Lunar Peak",
-							["active"] = 0,
-							["id"] = 171743,
-							["uptime"] = 5,
-							["auratype"] = "BUFF",
-						},
-						["Intellect"] = {
-							["name"] = "Intellect",
-							["active"] = 1,
-							["id"] = 60234,
-							["uptime"] = 3,
-							["auratype"] = "BUFF",
-						},
-						["Lunar Empowerment"] = {
-							["name"] = "Lunar Empowerment",
-							["active"] = 1,
-							["id"] = 164547,
-							["uptime"] = 1,
-							["auratype"] = "BUFF",
-						},
-						["Moonfire"] = {
-							["name"] = "Moonfire",
-							["active"] = 0,
-							["id"] = 164812,
-							["uptime"] = 7,
-							["auratype"] = "DEBUFF",
-						},
-						["Rejuvenation"] = {
-							["name"] = "Rejuvenation",
-							["active"] = 1,
-							["id"] = 774,
-							["uptime"] = 3,
-							["auratype"] = "BUFF",
-						},
-					},
-					["damagetakenspells"] = {
-						["Attack"] = {
-							["crushing"] = 0,
-							["id"] = 6603,
-							["damage"] = 8169,
-							["max"] = 2185,
-							["name"] = "Attack",
-							["min"] = 1816,
-							["multistrike"] = 0,
-							["critical"] = 0,
-							["blocked"] = 0,
-							["totalhits"] = 4,
-							["resisted"] = 0,
-							["glancing"] = 0,
-							["absorbed"] = 0,
-						},
-					},
-					["healed"] = {
-						["Player-1325-03B3DDAD"] = {
-							["amount"] = 2104,
-							["class"] = "DRUID",
-							["name"] = "Ryjax",
-							["shielding"] = 0,
-						},
-					},
-					["healing"] = 2104,
-					["name"] = "Ryjax",
-					["healingspells"] = {
-						["Rejuvenation"] = {
-							["shielding"] = 0,
-							["id"] = 774,
-							["healing"] = 2104,
-							["multistrikes"] = 0,
-							["min"] = 1001,
-							["multistrike"] = 0,
-							["name"] = "Rejuvenation",
-							["hits"] = 2,
-							["overhealing"] = 0,
-							["max"] = 1103,
-							["critical"] = 0,
-							["absorbed"] = 0,
-						},
-					},
-					["overhealing"] = 0,
-					["maxhp"] = 84645,
-					["power"] = {
-					},
-					["multistrikes"] = 0,
-				}, -- [1]
-			},
-			["damage"] = 29484,
-			["starttime"] = 1421589140,
-			["deaths"] = 0,
-			["mobs"] = {
-				["Tigerdyr"] = {
-					["players"] = {
-					},
-					["hdone"] = 1273,
-					["hdonespell"] = {
-						["Spirit Bond"] = {
-							["min"] = 1273,
-							["crits"] = 0,
-							["max"] = 1273,
-							["healing"] = 1273,
-							["overhealing"] = 2342,
-							["hits"] = 1,
-						},
-					},
-					["taken"] = 0,
-					["htakenspell"] = {
-					},
-					["htaken"] = 0,
-					["done"] = 0,
-				},
-				["Thunderlord Sky Rider"] = {
-					["players"] = {
-						["Ryjax"] = {
-							["taken"] = 29484,
-							["done"] = 8169,
-							["class"] = "DRUID",
-						},
-					},
-					["hdone"] = 0,
-					["hdonespell"] = {
-					},
-					["taken"] = 29484,
-					["htakenspell"] = {
-					},
-					["htaken"] = 0,
-					["done"] = 8169,
-				},
-				["Dissentation"] = {
-					["players"] = {
-					},
-					["hdone"] = 0,
-					["hdonespell"] = {
-					},
-					["taken"] = 0,
-					["htakenspell"] = {
-						["Spirit Bond"] = {
-							["min"] = 1273,
-							["crits"] = 0,
-							["max"] = 1273,
-							["healing"] = 1273,
-							["overhealing"] = 2342,
-							["hits"] = 1,
-						},
-					},
-					["htaken"] = 1273,
-					["done"] = 0,
-				},
-			},
-			["mobtaken"] = 29484,
-			["ovale"] = 0,
-			["healing"] = 2104,
-			["power"] = {
-			},
-			["damagetaken"] = 8169,
-			["overhealing"] = 0,
-			["shielding"] = 0,
-			["name"] = "Thunderlord War Rylak (5)",
-			["mobname"] = "Thunderlord War Rylak",
-			["multistrikes"] = 0,
-			["mobhdone"] = 1273,
-			["last_action"] = 1421589140,
-			["endtime"] = 1421589155,
 		}, -- [10]
 	},
 }

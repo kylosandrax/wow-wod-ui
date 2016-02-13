@@ -5,16 +5,16 @@ CliqueDB3 = {
 		["Stormslinger - Aggramar"] = {
 			["alerthidden"] = true,
 		},
-		["Ryvok - Aggramar"] = {
-			["alerthidden"] = true,
-		},
-		["Banjax - Aggramar"] = {
+		["Kylosandrax - Aggramar"] = {
 			["alerthidden"] = true,
 		},
 		["Ryjax - Aggramar"] = {
 			["alerthidden"] = true,
 		},
-		["Kylosandrax - Aggramar"] = {
+		["Banjax - Aggramar"] = {
+			["alerthidden"] = true,
+		},
+		["Ryvok - Aggramar"] = {
 			["alerthidden"] = true,
 		},
 		["Bronin - Aggramar"] = {
@@ -26,8 +26,8 @@ CliqueDB3 = {
 		["Greenthorn - Aggramar"] = "Greenthorn - Aggramar",
 		["Ryjax - Aggramar"] = "Ryjax - Aggramar",
 		["Kylosandrax - Aggramar"] = "Kylosandrax - Aggramar",
-		["Stormslinger - Aggramar"] = "Stormslinger - Aggramar",
 		["Feldspar - Aggramar"] = "Feldspar - Aggramar",
+		["Stormslinger - Aggramar"] = "Stormslinger - Aggramar",
 		["Kylozandrax - Earthen Ring"] = "Kylozandrax - Earthen Ring",
 		["Ryvok - Terokkar"] = "Ryvok - Terokkar",
 		["Kyloc - Aggramar"] = "Kyloc - Aggramar",
@@ -40,10 +40,10 @@ CliqueDB3 = {
 		["Zapunzel - Aggramar"] = {
 			["bindings"] = {
 				{
-					["type"] = "target",
 					["sets"] = {
 						["default"] = true,
 					},
+					["type"] = "target",
 					["key"] = "BUTTON1",
 					["unit"] = "mouseover",
 				}, -- [1]
@@ -59,10 +59,10 @@ CliqueDB3 = {
 		["Greenthorn - Aggramar"] = {
 			["bindings"] = {
 				{
+					["type"] = "target",
 					["sets"] = {
 						["default"] = true,
 					},
-					["type"] = "target",
 					["key"] = "BUTTON1",
 					["unit"] = "mouseover",
 				}, -- [1]
@@ -78,10 +78,10 @@ CliqueDB3 = {
 		["Ryjax - Aggramar"] = {
 			["bindings"] = {
 				{
-					["type"] = "target",
 					["sets"] = {
 						["default"] = true,
 					},
+					["type"] = "target",
 					["key"] = "BUTTON1",
 					["unit"] = "mouseover",
 				}, -- [1]
@@ -133,10 +133,10 @@ CliqueDB3 = {
 		["Kylosandrax - Aggramar"] = {
 			["bindings"] = {
 				{
-					["type"] = "target",
 					["sets"] = {
 						["default"] = true,
 					},
+					["type"] = "target",
 					["key"] = "BUTTON1",
 					["unit"] = "mouseover",
 				}, -- [1]
@@ -158,50 +158,13 @@ CliqueDB3 = {
 				}, -- [3]
 			},
 		},
-		["Stormslinger - Aggramar"] = {
-			["bindings"] = {
-				{
-					["sets"] = {
-						["default"] = true,
-					},
-					["type"] = "target",
-					["key"] = "BUTTON1",
-					["unit"] = "mouseover",
-				}, -- [1]
-				{
-					["type"] = "menu",
-					["key"] = "BUTTON2",
-					["sets"] = {
-						["default"] = true,
-					},
-				}, -- [2]
-				{
-					["spell"] = "Cleanse Spirit",
-					["key"] = "SHIFT-BUTTON3",
-					["sets"] = {
-						["default"] = true,
-					},
-					["icon"] = "Interface\\Icons\\Ability_Shaman_CleanseSpirit",
-					["type"] = "spell",
-				}, -- [3]
-				{
-					["spell"] = "Healing Surge",
-					["key"] = "SHIFT-BUTTON1",
-					["sets"] = {
-						["default"] = true,
-					},
-					["icon"] = "Interface\\Icons\\Spell_Nature_HealingWay",
-					["type"] = "spell",
-				}, -- [4]
-			},
-		},
 		["Feldspar - Aggramar"] = {
 			["bindings"] = {
 				{
-					["type"] = "target",
 					["sets"] = {
 						["default"] = true,
 					},
+					["type"] = "target",
 					["key"] = "BUTTON1",
 					["unit"] = "mouseover",
 				}, -- [1]
@@ -250,13 +213,50 @@ CliqueDB3 = {
 				}, -- [6]
 			},
 		},
-		["Kylozandrax - Earthen Ring"] = {
+		["Stormslinger - Aggramar"] = {
 			["bindings"] = {
 				{
+					["type"] = "target",
 					["sets"] = {
 						["default"] = true,
 					},
+					["key"] = "BUTTON1",
+					["unit"] = "mouseover",
+				}, -- [1]
+				{
+					["type"] = "menu",
+					["key"] = "BUTTON2",
+					["sets"] = {
+						["default"] = true,
+					},
+				}, -- [2]
+				{
+					["spell"] = "Cleanse Spirit",
+					["key"] = "SHIFT-BUTTON3",
+					["sets"] = {
+						["default"] = true,
+					},
+					["icon"] = "Interface\\Icons\\Ability_Shaman_CleanseSpirit",
+					["type"] = "spell",
+				}, -- [3]
+				{
+					["spell"] = "Healing Surge",
+					["key"] = "SHIFT-BUTTON1",
+					["sets"] = {
+						["default"] = true,
+					},
+					["icon"] = "Interface\\Icons\\Spell_Nature_HealingWay",
+					["type"] = "spell",
+				}, -- [4]
+			},
+		},
+		["Kylozandrax - Earthen Ring"] = {
+			["bindings"] = {
+				{
 					["type"] = "target",
+					["sets"] = {
+						["default"] = true,
+					},
 					["key"] = "BUTTON1",
 					["unit"] = "mouseover",
 				}, -- [1]
@@ -272,10 +272,10 @@ CliqueDB3 = {
 		["Ryvok - Terokkar"] = {
 			["bindings"] = {
 				{
-					["type"] = "target",
 					["sets"] = {
 						["default"] = true,
 					},
+					["type"] = "target",
 					["key"] = "BUTTON1",
 					["unit"] = "mouseover",
 				}, -- [1]
@@ -291,10 +291,10 @@ CliqueDB3 = {
 		["Kyloc - Aggramar"] = {
 			["bindings"] = {
 				{
-					["type"] = "target",
 					["sets"] = {
 						["default"] = true,
 					},
+					["type"] = "target",
 					["key"] = "BUTTON1",
 					["unit"] = "mouseover",
 				}, -- [1]
@@ -310,10 +310,10 @@ CliqueDB3 = {
 		["Banjax - Aggramar"] = {
 			["bindings"] = {
 				{
-					["type"] = "target",
 					["sets"] = {
 						["default"] = true,
 					},
+					["type"] = "target",
 					["key"] = "BUTTON1",
 					["unit"] = "mouseover",
 				}, -- [1]
@@ -392,10 +392,10 @@ CliqueDB3 = {
 		["Kylosandrix - Aggramar"] = {
 			["bindings"] = {
 				{
+					["type"] = "target",
 					["sets"] = {
 						["default"] = true,
 					},
-					["type"] = "target",
 					["key"] = "BUTTON1",
 					["unit"] = "mouseover",
 				}, -- [1]
@@ -460,10 +460,10 @@ CliqueDB3 = {
 		["Bronin - Aggramar"] = {
 			["bindings"] = {
 				{
-					["type"] = "target",
 					["sets"] = {
 						["default"] = true,
 					},
+					["type"] = "target",
 					["key"] = "BUTTON1",
 					["unit"] = "mouseover",
 				}, -- [1]

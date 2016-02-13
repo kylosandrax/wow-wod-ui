@@ -22,6 +22,12 @@ GoGo_Prefs = {
 			["Excluded"] = {
 			},
 		},
+		[241] = {
+			["Preferred"] = {
+			},
+			["Excluded"] = {
+			},
+		},
 		[4] = {
 			["Preferred"] = {
 			},
@@ -36,7 +42,7 @@ GoGo_Prefs = {
 		},
 	},
 	["DisableMountNotice"] = false,
-	["DisableWaterFlight"] = true,
+	["autodismount"] = true,
 	["DruidDisableInCombat"] = false,
 	["DisableUpdateNotice"] = false,
 	["RemoveBuffs"] = true,
@@ -47,7 +53,7 @@ GoGo_Prefs = {
 	["ShamanClickForm"] = false,
 	["ExtraPassengerMounts"] = {
 	},
-	["autodismount"] = true,
+	["DisableWaterFlight"] = true,
 }
 GoGo_DebugLog = {
 }

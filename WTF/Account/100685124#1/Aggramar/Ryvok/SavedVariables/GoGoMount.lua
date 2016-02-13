@@ -72,7 +72,7 @@ GoGo_Prefs = {
 			["Excluded"] = {
 			},
 		},
-		[181] = {
+		[1026] = {
 			["Preferred"] = {
 			},
 			["Excluded"] = {
@@ -84,7 +84,7 @@ GoGo_Prefs = {
 			["Excluded"] = {
 			},
 		},
-		[37] = {
+		[756] = {
 			["Preferred"] = {
 			},
 			["Excluded"] = {
@@ -97,18 +97,17 @@ GoGo_Prefs = {
 			},
 			["ZoneID"] = 945,
 		},
-		[692] = {
+		[121] = {
 			["Preferred"] = {
 			},
 			["Excluded"] = {
 			},
 		},
-		["Town Hall"] = {
+		[29] = {
 			["Preferred"] = {
 			},
 			["Excluded"] = {
 			},
-			["ZoneID"] = 976,
 		},
 		[874] = {
 			["Preferred"] = {
@@ -134,17 +133,18 @@ GoGo_Prefs = {
 			["Excluded"] = {
 			},
 		},
-		[756] = {
+		[382] = {
 			["Preferred"] = {
 			},
 			["Excluded"] = {
 			},
 		},
-		[749] = {
+		["Timeless Isle"] = {
 			["Preferred"] = {
 			},
 			["Excluded"] = {
 			},
+			["ZoneID"] = 951,
 		},
 		[760] = {
 			["Preferred"] = {
@@ -152,11 +152,12 @@ GoGo_Prefs = {
 			["Excluded"] = {
 			},
 		},
-		[29] = {
+		["Town Hall"] = {
 			["Preferred"] = {
 			},
 			["Excluded"] = {
 			},
+			["ZoneID"] = 976,
 		},
 		[34] = {
 			["Preferred"] = {
@@ -164,7 +165,7 @@ GoGo_Prefs = {
 			["Excluded"] = {
 			},
 		},
-		[699] = {
+		[686] = {
 			["Preferred"] = {
 			},
 			["Excluded"] = {
@@ -202,11 +203,12 @@ GoGo_Prefs = {
 			["Excluded"] = {
 			},
 		},
-		[321] = {
+		["Frostfire Ridge"] = {
 			["Preferred"] = {
 			},
 			["Excluded"] = {
 			},
+			["ZoneID"] = 941,
 		},
 		[9] = {
 			["Preferred"] = {
@@ -226,12 +228,12 @@ GoGo_Prefs = {
 			["Excluded"] = {
 			},
 		},
-		["Siege of Orgrimmar"] = {
+		["Bloodmaul Slag Mines"] = {
 			["Preferred"] = {
 			},
 			["Excluded"] = {
 			},
-			["ZoneID"] = 862,
+			["ZoneID"] = 13,
 		},
 		[465] = {
 			["Preferred"] = {
@@ -271,19 +273,18 @@ GoGo_Prefs = {
 			},
 			["ZoneID"] = 949,
 		},
-		["Bloodmaul Slag Mines"] = {
+		["Siege of Orgrimmar"] = {
 			["Preferred"] = {
 			},
 			["Excluded"] = {
 			},
-			["ZoneID"] = 13,
+			["ZoneID"] = 862,
 		},
-		["Frostfire Ridge"] = {
+		[321] = {
 			["Preferred"] = {
 			},
 			["Excluded"] = {
 			},
-			["ZoneID"] = 941,
 		},
 		["The Jade Forest"] = {
 			["Preferred"] = {
@@ -304,18 +305,17 @@ GoGo_Prefs = {
 			["Excluded"] = {
 			},
 		},
-		[686] = {
+		[699] = {
 			["Preferred"] = {
 			},
 			["Excluded"] = {
 			},
 		},
-		["Timeless Isle"] = {
+		[749] = {
 			["Preferred"] = {
 			},
 			["Excluded"] = {
 			},
-			["ZoneID"] = 951,
 		},
 		[688] = {
 			["Preferred"] = {
@@ -329,13 +329,13 @@ GoGo_Prefs = {
 			["Excluded"] = {
 			},
 		},
-		[121] = {
+		[692] = {
 			["Preferred"] = {
 			},
 			["Excluded"] = {
 			},
 		},
-		[382] = {
+		[37] = {
 			["Preferred"] = {
 			},
 			["Excluded"] = {
@@ -347,7 +347,7 @@ GoGo_Prefs = {
 			["Excluded"] = {
 			},
 		},
-		[1026] = {
+		[181] = {
 			["Preferred"] = {
 			},
 			["Excluded"] = {
@@ -355,7 +355,7 @@ GoGo_Prefs = {
 		},
 	},
 	["DisableMountNotice"] = false,
-	["DisableWaterFlight"] = true,
+	["autodismount"] = true,
 	["DruidDisableInCombat"] = false,
 	["DisableUpdateNotice"] = false,
 	["RemoveBuffs"] = true,
@@ -366,7 +366,7 @@ GoGo_Prefs = {
 	["ShamanClickForm"] = false,
 	["ExtraPassengerMounts"] = {
 	},
-	["autodismount"] = true,
+	["DisableWaterFlight"] = true,
 }
 GoGo_DebugLog = {
 }

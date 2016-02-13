@@ -807,7 +807,7 @@ function private:UpdateAuctionsSTData()
 	if not auctionsST:IsVisible() then return end
 	local db = TSM.Scan:GetDatabase()
 	if db then
-		auctionsST:SetDatabase(db, private.AuctionSTFilterFunc)
+		auctionsST:SetDatabase(db, private.AuctionSTFilterFunc, private:GetCurrentAuctionSTItem())
 	else
 		auctionsST:Clear()
 	end

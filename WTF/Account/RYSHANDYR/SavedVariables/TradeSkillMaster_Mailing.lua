@@ -1,39 +1,41 @@
 
 TradeSkillMaster_MailingDB = {
-	["profileKeys"] = {
-		["Zapunzel - Aggramar"] = "Default",
-		["Greenthorn - Aggramar"] = "Default",
-		["Ryjax - Aggramar"] = "Default",
-		["Kylosandrax - Aggramar"] = "Default",
-		["Stormslinger - Aggramar"] = "Default",
-		["Feldspar - Aggramar"] = "Default",
-		["Kylozandrax - Earthen Ring"] = "Default",
-		["Ryvok - Terokkar"] = "Default",
-		["Kyloc - Aggramar"] = "Default",
-		["Banjax - Aggramar"] = "Default",
-		["Kylosandrix - Aggramar"] = "Default",
-		["Ryvok - Aggramar"] = "Default",
-		["Bronin - Aggramar"] = "Default",
-	},
-	["global"] = {
-		["optionsTreeStatus"] = {
-			["groups"] = {
-				["1"] = true,
-				["2MatsMail_Enchanting"] = true,
-				[2] = true,
-				["2MatsMail_Cooking"] = true,
-				["2MatsMail_Jewelcrafting"] = true,
-				["2Mailer-Tailoring-Mats"] = true,
-				["2MatsMail_Alchemy"] = true,
-				["2"] = true,
-				["2MatsMail_Blacksmithing"] = true,
-				["2MatsMail_Tailoring"] = true,
-			},
-			["scrollvalue"] = 0,
-			["fullwidth"] = 782.999877929688,
-			["treesizable"] = true,
-			["treewidth"] = 175,
-			["selected"] = 1,
+	["g@ @sendDelay"] = 0.5,
+	["g@ @sendItemsIndividually"] = false,
+	["_scopeKeys"] = {
+		["char"] = {
+			"Kylosandrix - Aggramar", -- [1]
+		},
+		["realm"] = {
+			"Aggramar", -- [1]
+		},
+		["profile"] = {
+			"Default", -- [1]
+		},
+		["factionrealm"] = {
+			"Horde - Aggramar", -- [1]
 		},
 	},
+	["g@ @helpPlatesShown"] = {
+	},
+	["_hash"] = 3711258,
+	["g@ @inboxMessages"] = true,
+	["f@Horde - Aggramar@deMailTarget"] = "",
+	["c@Kylosandrix - Aggramar@goldMailTarget"] = "",
+	["_currentProfile"] = {
+		["Kylosandrix - Aggramar"] = "Default",
+	},
+	["g@ @resendDelay"] = 1,
+	["c@Kylosandrix - Aggramar@goldKeepAmount"] = 1000000,
+	["g@ @defaultPage"] = 1,
+	["g@ @deleteEmptyNPCMail"] = false,
+	["g@ @openMailSound"] = "TSM_NO_SOUND",
+	["g@ @displayMoneyCollected"] = true,
+	["g@ @keepMailSpace"] = 0,
+	["g@ @sendMessages"] = true,
+	["g@ @showReloadBtn"] = true,
+	["g@ @defaultMailTab"] = true,
+	["g@ @deMaxQuality"] = 2,
+	["_version"] = 1,
+	["g@ @autoCheck"] = true,
 }

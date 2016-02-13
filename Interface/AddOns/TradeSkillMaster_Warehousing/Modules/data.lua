@@ -13,6 +13,9 @@ local L = LibStub("AceLocale-3.0"):GetLocale("TradeSkillMaster_Warehousing")
 local TSM = select(2, ...)
 local data = TSM:NewModule("data", "AceEvent-3.0")
 local AceGUI = LibStub("AceGUI-3.0") -- load the AceGUI librarie
+local private = {
+	petSpeciesCache={},
+}
 
 ----------------------------------
 -- Generates the Bagstate table --
@@ -131,18 +134,17 @@ function data:unIndexRestockGroupTree(grpInfo, src)
 						totalq = totalItems[itemString] or 0
 					end
 					if opSettings.restockQtyEnabled then -- work out qty to add or remove from bags
-						local stacksize = 1
-						if opSettings.restockStackSizeEnabled and opSettings.restockStackSize then -- only move in multiples of the stack size set
-							stacksize = opSettings.stackSize
-						end
 						local q
 						if opSettings.restockKeepBankQtyEnabled then
 							q = min(opSettings.restockQuantity, totalq - opSettings.restockKeepBankQuantity)
 						else
-							q = min(opSettings.restockQuantity, totalq)
+							q = opSettings.restockQuantity - (bagItems[itemString] or 0)
+						end
+						if opSettings.restockStackSizeEnabled and opSettings.restockStackSize then -- only move in multiples of the stack size set
+							q = floor(tonumber(q) / tonumber(opSettings.restockStackSize)) * tonumber(opSettings.restockStackSize)
 						end
 						if q ~= 0 then
-							newgrp[itemString] = floor(tonumber(q)  / tonumber(stacksize)) * tonumber(stacksize) - (bagItems[itemString] or 0)
+							newgrp[itemString] = tonumber(q)
 						end
 					end
 				end
@@ -208,8 +210,7 @@ function data:getTotalItems(src, dest)
 				local itemString = TSMAPI.Item:ToBaseItemString(GetContainerItemLink(bag, slot), true)
 				if itemString then
 					local quantity = select(2, GetContainerItemInfo(bag, slot))
-					if not results[itemString] then results[itemString] = 0 end
-					results[itemString] = results[itemString] + quantity
+					results[itemString] = (results[itemString] or 0) + quantity
 				end
 			end
 		end
@@ -224,18 +225,21 @@ function data:getTotalItems(src, dest)
 
 		return results
 	elseif src == "guildbank" then
-		for bag = 1, GetNumGuildBankTabs() do
-			for slot = 1, MAX_GUILDBANK_SLOTS_PER_TAB or 98 do
-				local link = GetGuildBankItemLink(bag, slot)
-				local itemString = TSMAPI.Item:ToBaseItemString(link, true)
-				if itemString then
-					if itemString == "i:82800" then
-						local speciesID = GameTooltip:SetGuildBankItem(bag, slot)
-						itemString = speciesID and ("p:" .. speciesID)
+		for tab = 1, GetNumGuildBankTabs() do
+			if select(5, GetGuildBankTabInfo(tab)) > 0 or IsGuildLeader(UnitName("player")) then
+				for slot = 1, MAX_GUILDBANK_SLOTS_PER_TAB or 98 do
+					local link = GetGuildBankItemLink(tab, slot)
+					local itemString = TSMAPI.Item:ToBaseItemString(link, true)
+					if itemString then
+						if itemString == "i:82800" then
+							if not private.petSpeciesCache[link] then
+								private.petSpeciesCache[link] = GameTooltip:SetGuildBankItem(tab, slot)
+							end
+							itemString = private.petSpeciesCache[link] and ("p:" .. private.petSpeciesCache[link])
+						end
+						local quantity = select(2, GetGuildBankItemInfo(tab, slot))
+						results[itemString] = (results[itemString] or 0) + quantity
 					end
-					local quantity = select(2, GetGuildBankItemInfo(bag, slot))
-					if not results[itemString] then results[itemString] = 0 end
-					results[itemString] = results[itemString] + quantity
 				end
 			end
 		end

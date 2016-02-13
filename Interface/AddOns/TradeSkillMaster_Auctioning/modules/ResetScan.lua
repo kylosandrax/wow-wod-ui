@@ -163,7 +163,7 @@ function private:CreateResetFrame(parent)
 					GameTooltip:AddLine(data.itemLink)				
 					GameTooltip:AddLine(L["Max Cost:"].." "..(TSMAPI:MoneyToString(prices.resetMaxCost, "|cffffffff") or "---"))
 					GameTooltip:AddLine(L["Min Profit:"].." "..(TSMAPI:MoneyToString(prices.resetMinProfit, "|cffffffff") or "---"))
-					GameTooltip:AddLine(L["Max Quantity:"].." "..(TSMAPI:MoneyToString(data.operation.resetMaxQuantity, "|cffffffff") or "---"))
+					GameTooltip:AddLine(L["Max Quantity:"].." |cffffffff"..data.operation.resetMaxQuantity.."|r")
 					GameTooltip:AddLine(L["Max Price Per:"].." "..(TSMAPI:MoneyToString(data.operation.resetMaxPricePer, "|cffffffff") or "---"))
 					
 					if self.enabled then
@@ -263,7 +263,7 @@ end
 function private:UpdateAuctionST(currentItem)
 	private.filterItem = currentItem.itemString
 	local dbView = TSM.Scan:GetDatabaseView()
-	dbView:SetFilter(private.MatchingItemFilter)
+	dbView:SetFilter(private.MatchingItemFilter, private.filterItem)
 	local rows = {}
 	for _, record in ipairs(dbView:Execute()) do
 		if record.itemBuyout and record.itemBuyout >= currentItem.targetPrice then
@@ -432,7 +432,7 @@ function private.ResetScanThread(self, scanList)
 			local row = private.frame.auctionST.rowData[private.frame.auctionST:GetSelection()]
 			if row then
 				local dbView = TSM.Scan:GetDatabaseView()
-				dbView:SetFilter(private.MatchingItemFilter)
+				dbView:SetFilter(private.MatchingItemFilter, currentItem.itemString)
 				private.filterItem = currentItem.itemString
 				dbView:Remove(row.record)
 				private.filterItem = nil
@@ -471,7 +471,7 @@ end
 function private:ProcessItemOperation(itemString, operation)
 	private.filterItem = itemString
 	local dbView = TSM.Scan:GetDatabaseView()
-	dbView:SetFilter(private.MatchingItemFilter)
+	dbView:SetFilter(private.MatchingItemFilter, private.filterItem)
 	local records = dbView:Execute()
 	private.filterItem = nil
 	if #records == 0 then return 0 end

@@ -884,6 +884,7 @@ function private.AuctionTabThread(self)
 
 	local scanThreadId, confirmThreadId = nil, nil
 	local auctionInfo = { record = nil, database = nil, searchItems = nil, searchInfo = nil, searchItemsLookup = nil }
+	local dbFilterFunc = function(record) return private.ValidateDatabaseRecord(record, auctionInfo) end
 	while true do
 		local args = self:ReceiveMsg()
 		local event = tremove(args, 1)
@@ -999,7 +1000,7 @@ function private.AuctionTabThread(self)
 		elseif event == "SCAN_NEW_DATA" then
 			-- process scan data
 			local database = unpack(args)
-			private.frame.content.result.rt:SetDatabase(database, function(record) return private.ValidateDatabaseRecord(record, auctionInfo) end)
+			private.frame.content.result.rt:SetDatabase(database, dbFilterFunc)
 			self:SendMsgToSelf("RESULT_ROW_SELECTED", private.frame.content.result.rt:GetSelection())
 			auctionInfo.database = database
 		elseif event == "SCAN_DONE" then
@@ -1071,7 +1072,6 @@ function private.AuctionTabThread(self)
 				private.frame.content.result.postBtn:Disable()
 				private.frame.content.result.bidBtn:Disable()
 				private.frame.content.result.buyoutBtn:Disable()
-				TSM:LOG_INFO("selected auction (nil)")
 			end
 		elseif event == "SHOW_CONFIRMATION" then
 			-- show the confirmation window for the currently selected auction
@@ -1118,7 +1118,7 @@ function private.AuctionTabThread(self)
 				TSM:Print(L["Purchased the maximum quantity of this item!"])
 			end
 			private.frame.UpdateConfirmation()
-			private.frame.content.result.rt:SetDatabase(auctionInfo.database, function(record) return private.ValidateDatabaseRecord(record, auctionInfo) end)
+			private.frame.content.result.rt:SetDatabase(auctionInfo.database, dbFilterFunc)
 
 			if private.extraInfo.searchType == "sniper" then
 				-- resume the sniper scan

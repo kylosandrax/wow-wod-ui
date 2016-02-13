@@ -9,8 +9,8 @@ OvaleDB = {
 		["Greenthorn - Aggramar"] = "Greenthorn - Aggramar",
 		["Ryjax - Aggramar"] = "Ryjax - Aggramar",
 		["Kylosandrax - Aggramar"] = "Kylosandrax - Aggramar",
-		["Stormslinger - Aggramar"] = "Stormslinger - Aggramar",
 		["Feldspar - Aggramar"] = "Feldspar - Aggramar",
+		["Stormslinger - Aggramar"] = "Stormslinger - Aggramar",
 		["Kylozandrax - Earthen Ring"] = "Kylozandrax - Earthen Ring",
 		["Ryvok - Terokkar"] = "Ryvok - Terokkar",
 		["Kyloc - Aggramar"] = "Kyloc - Aggramar",
@@ -30,25 +30,25 @@ OvaleDB = {
 		},
 		["Greenthorn - Aggramar"] = {
 			["apparence"] = {
-				["offsetY"] = -171.999786376953,
 				["raccourcis"] = false,
+				["offsetY"] = -171.999786376953,
 				["offsetX"] = -0.9998779296875,
 				["verrouille"] = true,
 			},
 			["check"] = {
 				["opt_hunter_beast_mastery_aoe"] = true,
-				["opt_trap_launcher"] = true,
-				["opt_potion_agility"] = true,
 				["opt_interrupt"] = true,
+				["opt_potion_agility"] = true,
+				["opt_trap_launcher"] = true,
 			},
 			["standaloneOptions"] = true,
 		},
 		["Ryjax - Aggramar"] = {
 			["check"] = {
 				["opt_potion_intellect"] = true,
-				["opt_druid_guardian_aoe"] = true,
-				["opt_potion_agility"] = true,
 				["opt_interrupt"] = true,
+				["opt_potion_agility"] = true,
+				["opt_druid_guardian_aoe"] = true,
 			},
 		},
 		["Kylosandrax - Aggramar"] = {
@@ -69,14 +69,21 @@ OvaleDB = {
 			},
 			["standaloneOptions"] = true,
 		},
+		["Feldspar - Aggramar"] = {
+			["check"] = {
+				["opt_potion_intellect"] = true,
+				["opt_potion_mana"] = true,
+				["opt_interrupt"] = true,
+			},
+		},
 		["Stormslinger - Aggramar"] = {
 			["check"] = {
 				["opt_bloodlust"] = true,
 				["opt_shaman_elemental_aoe"] = true,
 				["opt_potion_intellect"] = true,
-				["opt_interrupt"] = true,
-				["opt_potion_agility"] = true,
 				["opt_shaman_enhancement_aoe"] = true,
+				["opt_potion_agility"] = true,
+				["opt_interrupt"] = true,
 			},
 			["apparence"] = {
 				["moving"] = false,
@@ -90,13 +97,6 @@ OvaleDB = {
 				},
 			},
 			["standaloneOptions"] = true,
-		},
-		["Feldspar - Aggramar"] = {
-			["check"] = {
-				["opt_potion_intellect"] = true,
-				["opt_potion_mana"] = true,
-				["opt_interrupt"] = true,
-			},
 		},
 		["Kylozandrax - Earthen Ring"] = {
 		},
@@ -116,8 +116,8 @@ OvaleDB = {
 				["opt_chi_burst"] = true,
 			},
 			["apparence"] = {
-				["offsetY"] = -326.999816894531,
 				["raccourcis"] = false,
+				["offsetY"] = -326.999816894531,
 			},
 		},
 		["Kylosandrix - Aggramar"] = {
@@ -127,15 +127,15 @@ OvaleDB = {
 				["opt_potion_strength"] = true,
 				["opt_potion_armor"] = true,
 				["opt_paladin_protection_aoe"] = true,
-				["opt_interrupt"] = true,
-				["opt_righteous_fury_check"] = true,
 				["opt_paladin_retribution_aoe"] = true,
+				["opt_righteous_fury_check"] = true,
+				["opt_interrupt"] = true,
 			},
 			["apparence"] = {
-				["offsetY"] = -180.999572753906,
-				["raccourcis"] = false,
-				["offsetX"] = 2.9998779296875,
 				["clickThru"] = true,
+				["offsetY"] = -180.999572753906,
+				["offsetX"] = 2.9998779296875,
+				["raccourcis"] = false,
 			},
 		},
 		["Bronin - Aggramar"] = {
@@ -152,10 +152,10 @@ OvaleDB = {
 				["offsetX"] = -2.9998779296875,
 				["hideVehicule"] = true,
 				["offsetY"] = -147.999206542969,
+				["verrouille"] = true,
 				["minimap"] = {
 					["hide"] = true,
 				},
-				["verrouille"] = true,
 			},
 			["standaloneOptions"] = true,
 		},

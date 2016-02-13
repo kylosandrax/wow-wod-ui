@@ -1,66 +1,58 @@
 
 TradeSkillMaster_AuctioningDB = {
-	["factionrealm"] = {
-		["Horde - Aggramar"] = {
-			["player"] = {
-				["Bronin"] = true,
-				["Ryjax"] = true,
-				["Zapunzel"] = true,
-				["Kylosandrax"] = true,
-				["Greenthorn"] = true,
-				["Kylosandrix"] = true,
-				["Feldspar"] = true,
-				["Banjax"] = true,
-				["Ryvok"] = true,
-				["Stormslinger"] = true,
-				["Kyloc"] = true,
-			},
-		},
-		["Horde - Terokkar"] = {
-			["player"] = {
-				["Ryvok"] = true,
-			},
-		},
-		["Horde - Earthen Ring"] = {
-			["player"] = {
-				["Kylozandrax"] = true,
-			},
-		},
+	["g@ @confirmCompleteSound"] = "TSM_NO_SOUND",
+	["g@ @scanCompleteSound"] = "TSM_NO_SOUND",
+	["g@ @disableInvalidMsg"] = false,
+	["g@ @cancelWithBid"] = false,
+	["g@ @helpPlatesShown"] = {
 	},
-	["profileKeys"] = {
-		["Zapunzel - Aggramar"] = "Default",
-		["Greenthorn - Aggramar"] = "Default",
-		["Ryjax - Aggramar"] = "Default",
-		["Kylosandrax - Aggramar"] = "Default",
-		["Stormslinger - Aggramar"] = "Default",
-		["Feldspar - Aggramar"] = "Default",
-		["Kylozandrax - Earthen Ring"] = "Default",
-		["Ryvok - Terokkar"] = "Default",
-		["Kyloc - Aggramar"] = "Default",
-		["Banjax - Aggramar"] = "Default",
+	["f@Horde - Aggramar@player"] = {
+		["Bronin"] = true,
+		["Ryjax"] = true,
+		["Zapunzel"] = true,
+		["Kylosandrax"] = true,
+		["Greenthorn"] = true,
+		["Kyloc"] = true,
+		["Stormslinger"] = true,
+		["Banjax"] = true,
+		["Ryvok"] = true,
+		["Feldspar"] = true,
+		["Kylosandrix"] = true,
+	},
+	["f@Horde - Terokkar@player"] = {
+		["Ryvok"] = true,
+	},
+	["_currentProfile"] = {
 		["Kylosandrix - Aggramar"] = "Default",
-		["Ryvok - Aggramar"] = "Default",
-		["Bronin - Aggramar"] = "Default",
 	},
-	["global"] = {
-		["optionsTreeStatus"] = {
-			["groups"] = {
-				["1"] = true,
-				["3"] = true,
-				[3] = true,
-				["3Sell BoE Greens"] = true,
-				["3Sell BoE Blues"] = true,
-				["3Sell Enchanting"] = true,
-			},
-			["scrollvalue"] = 0,
-			["fullwidth"] = 782.999877929688,
-			["treesizable"] = true,
-			["treewidth"] = 175,
-			["selected"] = "3Sell BoE Greens",
+	["g@ @roundNormalPrice"] = false,
+	["f@Horde - Earthen Ring@whitelist"] = {
+	},
+	["g@ @priceColumn"] = 1,
+	["f@Horde - Aggramar@whitelist"] = {
+	},
+	["g@ @matchWhitelist"] = true,
+	["f@Horde - Earthen Ring@player"] = {
+		["Kylozandrax"] = true,
+	},
+	["_scopeKeys"] = {
+		["char"] = {
+			"Kylosandrix - Aggramar", -- [1]
+		},
+		["realm"] = {
+			"Aggramar", -- [1]
+		},
+		["profile"] = {
+			"Default", -- [1]
+		},
+		["factionrealm"] = {
+			"Horde - Aggramar", -- [1]
+			"Horde - Terokkar", -- [2]
+			"Horde - Earthen Ring", -- [3]
 		},
 	},
-	["profiles"] = {
-		["Default"] = {
-		},
+	["f@Horde - Terokkar@whitelist"] = {
 	},
+	["_version"] = 1,
+	["_hash"] = 5870975,
 }

@@ -1,3 +1,13 @@
+v3.0.6
+*Added two new module APIs for third-party addons to use.
+
+v3.0.5
+*Increase max slider values to 5k for reset scan options.
+
+v3.0.4
+*Fixed issue with item auctions not properly updating.
+*Fixed visual issue with log tooltip for reset scan.
+
 v3.0.3
 *Fixed lua error when viewing auctions during special cancel scan.
 

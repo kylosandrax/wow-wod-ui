@@ -23,7 +23,7 @@ local function cleanupVersion(version)
 end
 
 local ADDON_NAME = ...
-local ADDON_VERSION = cleanupVersion("6.2.0")
+local ADDON_VERSION = cleanupVersion("6.2.1")
 
 -- Define Bar for now but the rest is at the bottom of the file.
 local Bar = {}
@@ -87,6 +87,8 @@ local LookupOrKeyMT = {__index = function (t,k) return k end}
 
 local ItemIds = {
 	["Indomitable Pride"] = 77211,
+--	["Shieldtronic Shield"] = 118006,
+	["Purified Shard of the Third Moon"] = 133598,
 }
 local ItemNames = {}
 setmetatable(ItemNames, LookupOrKeyMT)
@@ -113,6 +115,7 @@ local SpellIds = {
 	["Illuminated Healing"] = 86273,
 	["Sacred Shield"] = 65148,
 	["Saved by the Light"] = 157047,
+	["Avenger's Reprieve"] = 185676,
 	-- Death Knight
 	["Blood Shield"] = 77535,
 	["Death Barrier"] = 115635,
@@ -135,6 +138,9 @@ local SpellIds = {
 	["Soul Leech"] = 108366,
 	-- Items
 	["Indomitable"] = 108008,
+--	["Shieldtronic Shield"] = 173260,  -- Engineering Item
+	["Bulwark of Purity (Demons)"] = 201414, -- Purified Shard of the Third Moon
+	["Bulwark of Purity"] = 202052, -- Purified Shard of the Third Moon
 	-- Miscellaneous
 	["Crystal Shell"] = 137633,  -- Heroic Tortos
 	["Resolve"] = 158300,
@@ -205,6 +211,7 @@ local AbsorbsTracked = {
 		["Illuminated Healing"] = true,
 		["Sacred Shield"] = true,
 		["Saved by the Light"] = true,
+		["Avenger's Reprieve"] = true
 	},
 	["Death Knight"] = {
 		["Blood Shield"] = true,
@@ -235,6 +242,9 @@ local AbsorbsTracked = {
 	},
 	["Items"] = {
 		["Indomitable"] = true,
+--		["Shieldtronic Shield"] = true,
+		["Bulwark of Purity (Demons)"] = true,
+		["Bulwark of Purity"] = true,
 	},
 	["Special Debuffs"] = {
 		["Crystal Shell"] = true,
@@ -442,6 +452,7 @@ local defaults = {
 }
 
 function ShieldTracker:ShowOptions()
+	_G.InterfaceOptionsFrame_OpenToCategory(self.optionsFrame.Main)
 	_G.InterfaceOptionsFrame_OpenToCategory(self.optionsFrame.Main)
 end
 

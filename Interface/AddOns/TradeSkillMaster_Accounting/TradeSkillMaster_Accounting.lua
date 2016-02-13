@@ -9,12 +9,12 @@
 -- register this file with Ace Libraries
 local TSM = select(2, ...)
 TSM = LibStub("AceAddon-3.0"):NewAddon(TSM, "TSM_Accounting", "AceEvent-3.0", "AceConsole-3.0")
-TSM.SELL_KEYS = { "itemString", "itemName", "stackSize", "quantity", "price", "buyer", "player", "time", "source" }
-TSM.BUY_KEYS = { "itemString", "itemName", "stackSize", "quantity", "price", "seller", "player", "time", "source" }
+TSM.SELL_KEYS = { "itemString", "stackSize", "quantity", "price", "buyer", "player", "time", "source" }
+TSM.BUY_KEYS = { "itemString", "stackSize", "quantity", "price", "seller", "player", "time", "source" }
 TSM.INCOME_KEYS = { "type", "amount", "source", "player", "time" }
 TSM.EXPENSE_KEYS = { "type", "amount", "destination", "player", "time" }
-TSM.EXPIRED_KEYS = { "itemString", "itemName", "stackSize", "quantity", "player", "time" }
-TSM.CANCELLED_KEYS = { "itemString", "itemName", "stackSize", "quantity", "player", "time" }
+TSM.EXPIRED_KEYS = { "itemString", "stackSize", "quantity", "player", "time" }
+TSM.CANCELLED_KEYS = { "itemString", "stackSize", "quantity", "player", "time" }
 TSM.GOLD_LOG_KEYS = { "startMinute", "endMinute", "copper" }
 local MAX_CSV_RECORDS = 55000
 local L = LibStub("AceLocale-3.0"):GetLocale("TradeSkillMaster_Accounting") -- loads the localization table
@@ -22,7 +22,7 @@ local LibParse = LibStub("LibParse")
 local baseItemLookup = { update = 0 }
 
 local settingsInfo = {
-	version = 1,
+	version = 2,
 	global = {
 		displayTransfers = { type = "boolean", default = true, lastModifiedVersion = 1 },
 		trackTrades = { type = "boolean", default = true, lastModifiedVersion = 1 },
@@ -43,6 +43,8 @@ local settingsInfo = {
 		csvCancelled = { type = "string", default = "", lastModifiedVersion = 1 },
 		saveTimeSales = { type = "string", default = "", lastModifiedVersion = 1 },
 		saveTimeBuys = { type = "string", default = "", lastModifiedVersion = 1 },
+		saveTimeExpires = { type = "string", default = "", lastModifiedVersion = 2 },
+		saveTimeCancels = { type = "string", default = "", lastModifiedVersion = 2 },
 		goldGraphCharacter = { type = "string", default = nil, lastModifiedVersion = 1 },
 		goldGraphTimeframe = { type = "number", default = 30, lastModifiedVersion = 1 },
 		goldLog = { type = "table", default = {}, lastModifiedVersion = 1 },
@@ -252,27 +254,23 @@ function TSM:LoadTooltip(itemString, quantity, options, moneyCoins, lines)
 	end
 end
 
-function TSM:OnTSMDBShutdown(appDB)
+function TSM:OnTSMDBShutdown()
 	-- process items
-	local appDBSales = {}
 	local sales, buys, cancels, expires = {}, {}, {}, {}
-	local saveTimeSales, saveTimeBuys = {}, {}
+	local saveTimeSales, saveTimeBuys, saveTimeExpires, saveTimeCancels = {}, {}, {}, {}
 	for itemString, data in pairs(TSM.items) do
 		local name = data.itemName or TSMAPI.Item:GetInfo(itemString) or TSM:GetItemName(itemString) or "?"
-		name = gsub(name, ",", "") -- can't have commas in the itemNames in the CSV
-		local itemAppData = {}
+		TSM.db.global.itemStrings[name] = TSM.db.global.itemStrings[name] or itemString
 
 		-- process sales
 		for _, record in ipairs(data.sales) do
 			record.itemString = itemString
-			record.itemName = name
 			record.buyer = record.otherPlayer
 			record.source = record.key
 			record.price = record.copper
 			if record.key == "Auction" then
 				record.saveTime = record.saveTime or time()
 				tinsert(saveTimeSales, record.saveTime)
-				tinsert(itemAppData, { record.copper, record.quantity, record.time, record.saveTime, 2 })
 			end
 			tinsert(sales, record)
 		end
@@ -280,36 +278,26 @@ function TSM:OnTSMDBShutdown(appDB)
 		-- process buys
 		for _, record in ipairs(data.buys) do
 			record.itemString = itemString
-			record.itemName = name
 			record.seller = record.otherPlayer
 			record.source = record.key
 			record.price = record.copper
 			if record.key == "Auction" then
 				record.saveTime = record.saveTime or time()
 				tinsert(saveTimeBuys, record.saveTime)
-				tinsert(itemAppData, { record.copper, record.quantity, record.time, record.saveTime, 3 })
 			end
 			tinsert(buys, record)
-		end
-		local itemID = TSMAPI.Item:ToItemID(itemString)
-		if itemID and #itemAppData > 0 then
-			itemID = tostring(itemID)
-			if appDBSales[itemID] then
-				for i = 1, #itemAppData do
-					tinsert(appDBSales[itemID], itemAppData[i])
-				end
-			else
-				appDBSales[itemID] = itemAppData
-			end
 		end
 
 		-- process auctions
 		for _, record in ipairs(data.auctions) do
 			record.itemString = itemString
-			record.itemName = name
 			if record.key == "Cancel" then
+				record.saveTime = record.saveTime or time()
+				tinsert(saveTimeCancels, record.saveTime)
 				tinsert(cancels, record)
 			elseif record.key == "Expire" then
+				record.saveTime = record.saveTime or time()
+				tinsert(saveTimeExpires, record.saveTime)
 				tinsert(expires, record)
 			end
 		end
@@ -328,6 +316,8 @@ function TSM:OnTSMDBShutdown(appDB)
 
 	TSM.db.realm.saveTimeSales = table.concat(saveTimeSales, ",")
 	TSM.db.realm.saveTimeBuys = table.concat(saveTimeBuys, ",")
+	TSM.db.realm.saveTimeExpires = table.concat(saveTimeExpires, ",")
+	TSM.db.realm.saveTimeCancels = table.concat(saveTimeCancels, ",")
 	TSM.db.realm.csvSales = LibParse:CSVEncode(TSM.SELL_KEYS, sales)
 	TSM.db.realm.csvBuys = LibParse:CSVEncode(TSM.BUY_KEYS, buys)
 	TSM.db.realm.csvCancelled = LibParse:CSVEncode(TSM.CANCELLED_KEYS, cancels)
@@ -375,20 +365,18 @@ function TSM:OnTSMDBShutdown(appDB)
 			TSM.db.realm.goldLog[player] = LibParse:CSVEncode(TSM.GOLD_LOG_KEYS, data)
 		end
 	end
-
-	-- TODO: remove and clean up when the new app is released
-	if not appDB and TSM.appDB then
-		TSM.appDB.realm.sales = appDBSales
-		TradeSkillMasterAppDB.version = max(TradeSkillMasterAppDB.version, 9)
-	end
 end
 
+local itemNameCache = {}
+local itemNameCacheTime = 0
 function TSM:GetItemName(item)
-	for itemName, itemString in pairs(TSM.db.global.itemStrings) do
-		if itemString == item then
-			return itemName
+	if itemNameCacheTime ~= GetTime() then
+		for itemName, itemString in pairs(TSM.db.global.itemStrings) do
+			itemNameCache[itemString] = itemName
 		end
+		itemNameCacheTime = GetTime()
 	end
+	return itemNameCache[item]
 end
 
 function TSM:UpdateBaseItemLookup()

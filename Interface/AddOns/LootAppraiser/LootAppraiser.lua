@@ -6,6 +6,9 @@ local AceGUI = LibStub("AceGUI-3.0")
 local LibToast = LibStub("LibToast-1.0")
 local LSM = LibStub:GetLibrary("LibSharedMedia-3.0")
 
+-- Lua APIs
+local tostring, pairs, ipairs, table, tonumber, select, time, math, floor, date, print, type = tostring, pairs, ipairs, table, tonumber, select, time, math, floor, date, print, type
+
 LA.DEBUG = false
 
 LA.METADATA = {
@@ -15,7 +18,9 @@ LA.METADATA = {
 
 -- GUI related local vars
 -- frames
-local START_SESSION_PROMPT, MAIN_UI, LITE_UI, LAST_NOTEWOTHYITEM_UI
+local START_SESSION_PROMPT, MAIN_UI, LITE_UI, LAST_NOTEWOTHYITEM_UI, TIMER_UI
+local TIMER_UI_TAB, b1
+
 -- single elements
 local VALUE_TOTALCURRENCY, VALUE_LOOTEDITEMVALUE, VALUE_LOOTEDITEMCOUNTER, VALUE_NOTEWORTHYITEMCOUNTER, VALUE_ZONE, VALUE_SESSIONDURATION, dataContainer
 local STATUSTEXT
@@ -39,8 +44,6 @@ local totalItemLootedCounter = 0	-- counter for looted items (before filtering)
 
 local savedLoot = {}
 local lootCollectedLastEntry = nil  -- remember last element from loot collected list to add elements before this (on top of the list)
-
-local dbDefaults
 
 local ITEM_FILTER_VENDOR = {
 	--DEFAULT ITEM IDs BELOW TO VENDORSELL PRICING
@@ -88,6 +91,10 @@ LA.PRICE_SOURCE = {
 	["DBHistorical"] = "AuctionDB: Historical Price",
 	["DBMarket"] = "AuctionDB: Market Value",
 	["DBMinBuyout"] = "AuctionDB: Min Buyout",
+	["DBRegionHistorical"] = "AuctionDB: Region Historical Price",
+	["DBRegionMarketAvg"] = "AuctionDB: Region Market Value Avg",
+	["DBRegionMinBuyoutAvg"] = "AuctionDB: Region Min Buyout Avg",
+	["DBRegionSaleAvg"] = "AuctionDB: Region Global Sale Average",
 	["VendorSell"] = "VendorSell: Sell to Vendor cost",
 	["wowuctionMarket"] = "wowuction: Realm Market Value",
 	["wowuctionMedian"] = "wowuction: Realm Median Price",
@@ -109,70 +116,6 @@ LibToast:Register(LootAppraiser,
 		end
 	end
 )
-
-
---[[-------------------------------------------------------------------------------------
--- prepare minimap icon
----------------------------------------------------------------------------------------]]
-local _laLDB = LibStub("LibDataBroker-1.1"):NewDataObject(LA.METADATA.NAME, {
-	type = "launcher",
-	text = "Loot Appraiser", -- for what?
-	icon = "Interface\\Icons\\Ability_Racial_PackHobgoblin",
-	OnClick = function(self, button, down)
-		if button == "LeftButton" then
-			if not LA:isSessionRunning() then
-		        LA:StartSession(true)        
-		    end
-
-		    LA:ShowMainWindow(true)
-		elseif button == "RightButton" then
-			LA:Print("Open LootAppraiser Configuration")
-
-			InterfaceOptionsFrame_OpenToCategory(LA.METADATA.NAME)
-			InterfaceOptionsFrame_OpenToCategory(LA.METADATA.NAME)
-		end
-	end,
-	OnTooltipShow = function (tooltip)
-		LA:miniMapIconOnTooltipShow(tooltip)
-	end
-})
-local _icon = LibStub("LibDBIcon-1.0")
-
-function LA:miniMapIconOnTooltipShow(tooltip)
-	tooltip:AddLine(LA.METADATA.NAME .. " " .. LA.METADATA.VERSION, 1 , 1, 1)
-	tooltip:AddLine("|cFFFFFFCCLeft-Click|r to open the main window")
-	tooltip:AddLine("|cFFFFFFCCRight-Click|r to open options window")
-	tooltip:AddLine("|cFFFFFFCCDrag|r to move this button")
-	tooltip:AddLine(" ") -- spacer
-
-	if LA:isSessionRunning() then
-		local offset
-		if pauseStart ~= nil then
-			offset = pauseStart -- session is paused
-		else
-			offset = time() -- session is running
-		end
-
-		local delta = offset - currentSession["start"] - sessionPause
-
-		-- don't show seconds
-		local noSeconds = false
-		if delta > 3600 then
-			noSeconds = true
-		end
-
-		local text = "Session is "
-		if pauseStart ~= nil then
-			text = text .. "paused: "
-		else
-			text = text .. "running: "
-		end
-
-		tooltip:AddDoubleLine(text, SecondsToTime(delta, noSeconds, false))
-	else
-		tooltip:AddLine("Session is not running")
-	end
-end
 
 
 --[[-------------------------------------------------------------------------------------
@@ -234,12 +177,100 @@ end
 function LA:OnInitialize()
 	LA:Debug("LA:OnInitialize()")
 
-	LA:initDB()
+	self:initDB()
 
-	LA:SetSinkStorage(LA.db.profile.notification.sink)
+	-- price source check --
+	local priceSources = self:GetAvailablePriceSources()
+	-- only 2 or less price sources -> chat msg: missing modules
+	if self:tablelength(priceSources) <= 2 then
+		-- chat msg
+		self:Print("|cffff0000Attention!|r Missing TSM Modules for additional price sources (e.g. like TradeSkillMaster_AuctionDB for AuctionDB price sources).")
+		self:Print("|cffff0000LootAppraiser disabled.|r")
+		self:Disable()
+		return
+	else
+		-- current preselected price source
+		local priceSource = self:getPriceSource() -- die voreingestellte Preisquelle von LA
 
-	-- minimap icon --
-	_icon:Register(LA.METADATA.NAME, _laLDB, LA.db.profile.minimapIcon)
+		-- price source 'custom'
+		if priceSource == "Custom" then
+			-- validate 'custom' price source 
+			local isValidCustomPriceSource = self:ParseCustomPrice(self:getCustomPriceSource())
+			if not isValidCustomPriceSource then
+				-- invalid -> chat msg: invalid 'custom' price source
+				self:Print("|cffff0000Attention!|r You have selected 'Custom' as price source but your formular ist invalid (see TSM documentation for detailed custom price source informations).")
+				self:Print(self:getCustomPriceSource())
+			end
+		else
+			-- normal price source check against prepared list
+			if not priceSources[priceSource] then
+				-- invalid -> chat msg: invalid price source
+				self:Print("|cffff0000Attention!|r Your selected price source is not valid (maybe due to a missing TSM module). Please select another price source or install the needed TSM module for the selected price source (see TSM documentation).")
+			end
+	 	end
+	end
+
+	self:SetSinkStorage(self.db.profile.notification.sink)
+
+	-- prepare minimap icon --
+	self.LibDBIcon = LibStub("LibDBIcon-1.0")
+	self.LibDataBroker = LibStub("LibDataBroker-1.1"):NewDataObject(LA.METADATA.NAME, {
+		type = "launcher",
+		text = "Loot Appraiser", -- for what?
+		icon = "Interface\\Icons\\Ability_Racial_PackHobgoblin",
+
+		OnClick = function(self, button, down)
+			if button == "LeftButton" then
+				if not LA:isSessionRunning() then
+			        LA:StartSession(true)        
+			    end
+
+			    LA:ShowMainWindow(true)
+			elseif button == "RightButton" then
+				LA:Print("Open LootAppraiser Configuration")
+
+				InterfaceOptionsFrame_OpenToCategory(LA.METADATA.NAME)
+				InterfaceOptionsFrame_OpenToCategory(LA.METADATA.NAME)
+			end
+		end,
+
+		OnTooltipShow = function (tooltip)
+			tooltip:AddLine(LA.METADATA.NAME .. " " .. LA.METADATA.VERSION, 1 , 1, 1)
+			tooltip:AddLine("|cFFFFFFCCLeft-Click|r to open the main window")
+			tooltip:AddLine("|cFFFFFFCCRight-Click|r to open options window")
+			tooltip:AddLine("|cFFFFFFCCDrag|r to move this button")
+			tooltip:AddLine(" ") -- spacer
+
+			if self:isSessionRunning() then
+				local offset
+				if pauseStart ~= nil then
+					offset = pauseStart -- session is paused
+				else
+					offset = time() -- session is running
+				end
+
+				local delta = offset - currentSession["start"] - sessionPause
+
+				-- don't show seconds
+				local noSeconds = false
+				if delta > 3600 then
+					noSeconds = true
+				end
+
+				local text = "Session is "
+				if pauseStart ~= nil then
+					text = text .. "paused: "
+				else
+					text = text .. "running: "
+				end
+
+				tooltip:AddDoubleLine(text, SecondsToTime(delta, noSeconds, false))
+			else
+				tooltip:AddLine("Session is not running")
+			end
+		end
+	})
+	self.LibDBIcon:Register(LA.METADATA.NAME, self.LibDataBroker, self.db.profile.minimapIcon)
 
 	-- hook into tooltip to add lines
 	GameTooltip:HookScript("OnTooltipCleared", OnTooltipCleared)
@@ -257,8 +288,10 @@ function LA:OnEnable()
 
 	-- register event for...
 	-- ...loot window open
-	LA:RegisterEvent("LOOT_OPENED", LA.OnLootOpened)
+	LA:RegisterEvent("LOOT_READY", LA.OnLootReady)
 	LA:RegisterEvent("BAG_UPDATE", LA.OnBagUpdate)
+
+	LA:RegisterEvent("CHAT_MSG_MONEY", LA.OnChatMsgMoney)
 
 	-- set DEBUG=true if player is Netatik-Antonidas --
 	local nameString = GetUnitName("player", true)
@@ -276,6 +309,17 @@ function LA:OnDisable()
 end
 
 
+function LA.OnChatMsgMoney(event, msg)
+	if not LA:isSessionRunning() then return end
+	
+	LA:D("  OnChatMsgMoney: msg=" .. tostring(msg))
+
+	local lootedCopper = LA:getLootedCopperFromText(msg)
+
+	LA:D("    lootedCopper=" .. tostring(lootedCopper))
+	LA:handleCurrencyLooted(lootedCopper)
+end
+
 --[[-------------------------------------------------------------------------------------
 -- init lootappraiser db
 ---------------------------------------------------------------------------------------]]
@@ -285,20 +329,24 @@ function LA:initDB()
 	local parentWidth = UIParent:GetWidth()
 	local parentHeight = UIParent:GetHeight()
 
-	dbDefaults = {
+	-- la defaults
+	self.dbDefaults = {
 		profile = {
 			enableDebugOutput = false,
 			-- minimap icon position and visibility
 			minimapIcon = { hide = false, minimapPos = 220, radius = 80, },
 			mainUI = { ["height"] = 400, ["top"] = (parentHeight-50), ["left"] = 50, ["width"] = 400, },
+			timerUI = { ["height"] = 32, ["top"] = (parentHeight+55), ["left"] = 50, ["width"] = 400, },
+			challengeUI = { ["height"] = 400, ["top"] = (parentHeight-50), ["left"] = 50, ["width"] = 400, },
 			liteUI = { ["height"] = 32, ["top"] = (parentHeight+20), ["left"] = 50, ["width"] = 400, },
 			lastNotewothyItemUI = { ["height"] = 32, ["top"] = (parentHeight-15), ["left"] = 50, ["width"] = 400, },
+			startSessionPromptUI = { },
 			general = { ["qualityFilter"] = "2", ["goldAlertThreshold"] = "100", ["ignoreRandomEnchants"] = true, ["surpressSessionStartDialog"] = false, },
 			pricesource = { ["source"] = "DBGlobalMarketAvg", },
 			notification = { ["sink"] = { ["sink20Sticky"] = false, ["sink20OutputSink"] = "Blizzard", }, ["enableToasts"] = true, ["playSoundEnabled"] = true, ["soundName"] = "Auction Window Open", },
 			sellTrash = { ["tsmGroupEnabled"] = false, ["tsmGroup"] = "LootAppraiser`Trash", },
 			blacklist = { ["tsmGroupEnabled"] = false, ["tsmGroup"] = "LootAppraiser`Blacklist", ["addBlacklistedItems2DestroyTrash"] = false, },
-			display = { lootedItemListRowCount = 5, showZoneInfo = true, showSessionDuration = true, showLootedItemValue = true, showLootedItemValuePerHour = true, showCurrencyLooted = true, showItemsLooted = true, showNoteworthyItems = true, enableLastNoteworthyItemUI = false, enableLootAppraiserLite = false, enableLootAppraiserNativeBlizzardTimer = false, },
+			display = { lootedItemListRowCount = 5, showZoneInfo = true, showSessionDuration = true, showLootedItemValue = true, showLootedItemValuePerHour = true, showCurrencyLooted = true, showItemsLooted = true, showNoteworthyItems = true, enableLastNoteworthyItemUI = false, enableLootAppraiserLite = false, enableLootAppraiserTimerUI = false, },
 			sessionData = { groupBy = "datetime", },
 			challenge = { },
 		},
@@ -306,7 +354,7 @@ function LA:initDB()
 	}
 	
 	-- load the saved db values
-	LA.db = LibStub:GetLibrary("AceDB-3.0"):New("LootAppraiserDB", dbDefaults, true)
+	self.db = LibStub:GetLibrary("AceDB-3.0"):New("LootAppraiserDB", self.dbDefaults, true)
 end
 
 
@@ -337,7 +385,7 @@ function LA.chatCmdLootAppraiser(input)
 		MAIN_UI.frame:SetScript("OnEvent", 
 			function (self, event, ...) 
 			-- filter events
-				if string.find(event, "LOOT") and not (event == "BAG_UPDATE_COOLDOWN") then --string.startsWith(event, "LOOT_") or
+				if string.startsWith(event, "CHAT_MSG_") then --string.startsWith(event, "LOOT_") or
 					-- prepare event parameters
 					local variables = ""
 					for n=1,select('#',...) do
@@ -409,7 +457,11 @@ function LA.OnBagUpdate(event, bagID)
 			-- check against saved loot
 			local data = currentSavedLoot[currentItemID]
 			if data ~= nil then
-				currentSavedLoot[currentItemID] = nil -- remove from saved loot
+				if data["multiNonStackItem"] == true then
+					--LA:D("  |cffff0000non-stackable item -> not removing|r")
+				else
+					currentSavedLoot[currentItemID] = nil -- remove from saved loot
+				end
 
 				local itemLink = data["link"]
 				local quantity = data["quantity"]
@@ -428,7 +480,7 @@ function LA.OnBagUpdate(event, bagID)
 end
 
 
-function LA.OnLootOpened( ... )
+function LA.OnLootReady( ... )
 	-- is LootAppraiser running?
 	if lootAppraiserDisabled then return end
 
@@ -467,21 +519,22 @@ function LA.OnLootOpened( ... )
 				data["quantity"] = quantity
 				data["itemID"] = itemID
 
+				-- check for already existing itemID
+				if currentSavedLoot[itemID] then
+					-- add flag to signal multiple non stacking items
+					data["multiNonStackItem"] = true
+				end
+
 				-- save data
 				currentSavedLoot[itemID] = data
 
 			elseif slotType == 2 then
 				-- currency looted
 
-				local lootedCoin = select(2, GetLootSlotInfo(i))
-				local lootedCopper = LA:getLootedCopperFromText(lootedCoin)
+				--local lootedCoin = select(2, GetLootSlotInfo(i))
+				--local lootedCopper = LA:getLootedCopperFromText(lootedCoin)
 
-				--local data = {}
-				--data["currency"] = lootedCopper
-
-				-- save data
-				LA:handleCurrencyLooted(lootedCopper)
-				--currentSavedLoot[tostring(i)] = data
+				--LA:handleCurrencyLooted(lootedCopper)
 			end
 		end
 
@@ -504,14 +557,16 @@ function LA.OnLootOpened( ... )
 		end
 
 		-- todo: remove
-		LA:D("event:OnLootOpened")
+		--[[
+		LA:D("event:OnLootReady")
 		for key, value in pairs(currentSavedLoot) do
 			local data = ""
 			for k,v in pairs(value) do
-				data = data .. k .. "=" .. v .. "; "
+				data = data .. tostring(k) .. "=" .. tostring(v) .. "; "
 			end
 			LA:D("  key=" .. key .. "; value=" .. data)
 		end
+		]]
 	end
 end
 
@@ -617,7 +672,7 @@ function LA:handleItemLooted(itemLink, itemID, quantity)
 			end
 
 			-- add item to drops
-			local drops = LA.db.global.drops
+			local drops = self.db.global.drops
 			local itemDrops = drops[itemID]
 			if itemDrops == nil then
 				itemDrops = {}
@@ -635,8 +690,8 @@ function LA:handleItemLooted(itemLink, itemID, quantity)
 			-- play sound (if enabled)
 			if LA:isPlaySoundEnabled() then
 				--PlaySound("AuctionWindowOpen", "master");
-				local soundName = LA.db.profile.notification.soundName or "None"
-				PlaySoundFile(LSM:Fetch("sound", soundName))
+				local soundName = self.db.profile.notification.soundName or "None"
+				PlaySoundFile(LSM:Fetch("sound", soundName), "master")
 			end
 
 			-- check current mapID with session mapID
@@ -743,14 +798,15 @@ function LA:ShowLastNoteworthyItemWindow()
 
 	LAST_NOTEWOTHYITEM_UI = AceGUI:Create("LALiteWindow")
 	LAST_NOTEWOTHYITEM_UI:Hide()
-	LAST_NOTEWOTHYITEM_UI:SetStatusTable(LA.db.profile.lastNotewothyItemUI)
+	LAST_NOTEWOTHYITEM_UI:SetStatusTable(self.db.profile.lastNotewothyItemUI)
 	LAST_NOTEWOTHYITEM_UI:SetWidth(350)
-	LAST_NOTEWOTHYITEM_UI:SetHeight(32)
+	LAST_NOTEWOTHYITEM_UI:SetHeight(30)
 
 	LAST_NOTEWOTHYITEM_UI:SetTitle("Gold Alert Threshold")
 
 	LAST_NOTEWOTHYITEM_UI:Show()
 end
+
 
 --[[-------------------------------------------------------------------------------------
 -- the lite ui
@@ -765,15 +821,122 @@ function LA:ShowLiteWindow()
 
 	LITE_UI = AceGUI:Create("LALiteWindow")
 	LITE_UI:Hide()
-	LITE_UI:SetStatusTable(LA.db.profile.liteUI)
+	LITE_UI:SetStatusTable(self.db.profile.liteUI)
 	LITE_UI:SetWidth(150)
-	LITE_UI:SetHeight(32)
+	LITE_UI:SetHeight(30)
 	--LITE_UI:EnableResize(false)
 
 	local totalItemValue = currentSession["liv"] or 0
 	LITE_UI:SetTitle("|cffffffff" .. LA:FormatTextMoney(totalItemValue) .. "|r")
 
 	LITE_UI:Show()
+end
+
+
+--[[-------------------------------------------------------------------------------------
+-- the timer ui
+---------------------------------------------------------------------------------------]]
+local timerUItotal = 0
+function LA:ShowTimerWindow()
+	LA:Debug("ShowTimerWindow")
+
+	if TIMER_UI then
+		TIMER_UI:Show()
+		return 
+	end
+
+	TIMER_UI = AceGUI:Create("LALiteWindow")
+	TIMER_UI:Hide()
+
+	TIMER_UI:SetTitle("|cffffffff" .. date("!%X", 0) .. "|r")
+	TIMER_UI:SetStatusTable(self.db.profile.timerUI)
+	TIMER_UI:SetWidth(110)
+	TIMER_UI:SetHeight(30)
+	TIMER_UI.frame:SetScript("OnUpdate", 
+		function(event, elapsed)
+			timerUItotal = timerUItotal + elapsed
+    		if timerUItotal >= 1 then
+    			LA:refreshUIs()
+		        timerUItotal = 0
+		    end	
+		end
+	)
+
+	-- tab --
+	TIMER_UI_TAB = CreateFrame("Frame", nil, TIMER_UI.frame)
+	TIMER_UI_TAB.prevMouseIsOver = false
+	TIMER_UI_TAB:SetSize(104, 47)
+	TIMER_UI_TAB:SetPoint("BOTTOMLEFT", TIMER_UI.frame, "BOTTOMLEFT", 3, 3)
+	TIMER_UI_TAB:SetScript("OnUpdate", 
+		function(self)
+			if ( self.prevMouseIsOver ) then
+				if ( not self:IsMouseOver() ) then
+					UIFrameFadeOut(TIMER_UI_TAB, CHAT_FRAME_FADE_TIME)
+					self.prevMouseIsOver = false
+				end
+			else
+				if ( self:IsMouseOver() ) then
+					UIFrameFadeIn(TIMER_UI_TAB, CHAT_FRAME_FADE_TIME)
+					self.prevMouseIsOver = true
+				end
+			end
+		end
+	)
+	UIFrameFadeOut(TIMER_UI_TAB, CHAT_FRAME_FADE_TIME);
+
+	local l1 = TIMER_UI_TAB:CreateTexture(nil, "BACKGROUND")
+	l1:SetTexture([[Interface\ChatFrame\ChatFrameTab]])
+	l1:SetSize(7, 24)
+	l1:SetPoint("TOPLEFT", TIMER_UI_TAB, "TOPLEFT", 26, 0)
+	l1:SetTexCoord(0.03125, 0.140625, 0.28125, 1.0)
+
+	local l2 = TIMER_UI_TAB:CreateTexture(nil, "BACKGROUND")
+	l2:SetTexture([[Interface\ChatFrame\ChatFrameTab]])
+	l2:SetSize(31, 24)
+	l2:SetPoint("LEFT", l1, "RIGHT")
+	l2:SetTexCoord(0.140625, 0.859375, 0.28125, 1.0)
+
+	local l3 = TIMER_UI_TAB:CreateTexture(nil, "BACKGROUND")
+	l3:SetTexture([[Interface\ChatFrame\ChatFrameTab]])
+	l3:SetSize(7, 24)
+	l3:SetPoint("LEFT", l2, "RIGHT")
+	l3:SetTexCoord(0.859375, 0.96875, 0.28125, 1.0)
+
+	b1 = CreateFrame("Button", nil, TIMER_UI_TAB)
+	b1:SetSize(20, 20)
+	if pauseStart ~= nil then
+		b1:SetNormalTexture([[Interface\Buttons\UI-SpellbookIcon-NextPage-Up]])
+	else
+		b1:SetNormalTexture([[Interface\TimeManager\PauseButton]])
+	end
+	b1:SetHighlightTexture([[Interface\Buttons\UI-Common-MouseHilight]], "ADD")
+	b1:SetPoint("BOTTOMLEFT", l1, "BOTTOMLEFT", 4, 1)
+	b1:SetScript("OnClick",
+		function (self)
+			--LA:D("  b1")
+			if pauseStart ~= nil then
+				b1:SetNormalTexture([[Interface\Buttons\UI-SpellbookIcon-NextPage-Up]])
+				LA:onBtnStartSessionClick()
+			else
+				b1:SetNormalTexture([[Interface\TimeManager\PauseButton]])
+				LA:onBtnStopSessionClick()
+			end
+		end
+	)
+
+	local b2 = CreateFrame("Button", nil, TIMER_UI_TAB)
+	b2:SetSize(20, 20)
+	b2:SetNormalTexture([[Interface\TimeManager\ResetButton]])
+	b2:SetHighlightTexture([[Interface\Buttons\UI-Common-MouseHilight]], "ADD")
+	b2:SetPoint("LEFT", b1, "RIGHT", -2, 0)
+	b2:SetScript("OnClick",
+		function (self)
+			--LA:D("  b2")
+			LA:onBtnNewSessionClick()
+		end
+	)
+
+	TIMER_UI:Show()	
 end
 
 
@@ -788,7 +951,7 @@ local PaneBackdrop  = {
 }
 
 local additionalButtonHeight = 0
-local total = 0
+local mainUItotal = 0
 function LA:ShowMainWindow(showMainUI) 
 	LA:Debug("ShowMainWindow")
 
@@ -798,31 +961,37 @@ function LA:ShowMainWindow(showMainUI)
 		if LA:isLootAppraiserLiteEnabled() then
 			LA:ShowLiteWindow()
 		end
+
 		if LA:isLastNoteworthyItemUIEnabled() then
 			LA:ShowLastNoteworthyItemWindow()
 		end
+
+		if LA:isLootAppraiserTimerUIEnabled() then
+			LA:ShowTimerWindow()
+		end
+
 		return
 	end 
 
 	MAIN_UI = AceGUI:Create("Window")
 	MAIN_UI:Hide()
-	MAIN_UI:SetStatusTable(LA.db.profile.mainUI)
+	MAIN_UI:SetStatusTable(self.db.profile.mainUI)
 	MAIN_UI:SetTitle(LA.METADATA.NAME .. " " .. LA.METADATA.VERSION .. ": Make Farming Sexy!")
 	MAIN_UI:SetLayout("Flow")
 	MAIN_UI:SetWidth(410)
 	MAIN_UI:EnableResize(false)
 	MAIN_UI.frame:SetScript("OnUpdate", 
 		function(event, elapsed)
-			total = total + elapsed
-    		if total >= 1 then
+			mainUItotal = mainUItotal + elapsed
+    		if mainUItotal >= 1 then
     			LA:refreshUIs()
-		        total = 0
+		        mainUItotal = 0
 		    end	
 		end
 	)
 	MAIN_UI:SetCallback("OnClose",
-		function()
-			LA:Debug("Session ended")
+		function(widget, event)
+			--LA:Debug("Session ended")
 		end
 	)
 
@@ -913,7 +1082,7 @@ function LA:ShowMainWindow(showMainUI)
 			LA:onBtnStopSessionClick()
 		end)
 	else 
-		BUTTON_STOPSESSION:SetText("Start")
+		BUTTON_STOPSESSION:SetText("(Re)Start")
 		BUTTON_STOPSESSION:SetCallback("OnClick", function()
 			LA:onBtnStartSessionClick()
 		end)
@@ -938,7 +1107,7 @@ function LA:ShowMainWindow(showMainUI)
 	-- adjust height
 	local baseHeight = 112
 
-	local rowCount = LA.db.profile.display.lootedItemListRowCount or 10
+	local rowCount = self.db.profile.display.lootedItemListRowCount or 10
 	local listHeight = rowCount * 15
 
 	local dataContainerHeight = dataContainer.frame:GetHeight()
@@ -951,8 +1120,13 @@ function LA:ShowMainWindow(showMainUI)
 		if LA:isLootAppraiserLiteEnabled() then
 			LA:ShowLiteWindow()
 		end
+
 		if LA:isLastNoteworthyItemUIEnabled() then
 			LA:ShowLastNoteworthyItemWindow()
+		end
+
+		if LA:isLootAppraiserTimerUIEnabled() then
+			LA:ShowTimerWindow()
 		end
 	end
 end
@@ -974,7 +1148,7 @@ function LA:prepareDataContainer()
 	-- resize 
 	local listHeight
 	if GUI_SCROLLCONTAINER ~= nil then
-		local rowCount = LA.db.profile.display.lootedItemListRowCount or 10
+		local rowCount = self.db.profile.display.lootedItemListRowCount or 10
 		listHeight = rowCount * 15
 		GUI_SCROLLCONTAINER:SetHeight(listHeight)
 	end
@@ -994,18 +1168,18 @@ function LA:prepareDataContainer()
 	local currentMapID = GetCurrentMapAreaID()
 	local zoneInfo = GetMapNameByID(currentMapID)
 	
-	VALUE_ZONE = AceGUI:Create("Label")
-	VALUE_ZONE.label:SetWordWrap(false)
+	VALUE_ZONE = AceGUI:Create("LALabel")
+	VALUE_ZONE:SetWordWrap(false)
 	VALUE_ZONE:SetText(zoneInfo)
 	VALUE_ZONE:SetWidth(labelWidth) -- TODO
-	VALUE_ZONE.label:SetJustifyH("LEFT")
+	VALUE_ZONE:SetJustifyH("LEFT")
 	grp:AddChild(VALUE_ZONE)
 
 	-- ...and session duration
-    VALUE_SESSIONDURATION = AceGUI:Create("Label")
+    VALUE_SESSIONDURATION = AceGUI:Create("LALabel")
 	VALUE_SESSIONDURATION:SetText("not running")
 	VALUE_SESSIONDURATION:SetWidth(valueWidth) -- TODO
-	VALUE_SESSIONDURATION.label:SetJustifyH("RIGHT")
+	VALUE_SESSIONDURATION:SetJustifyH("RIGHT")
 	grp:AddChild(VALUE_SESSIONDURATION)
 
 	-- ...looted item value (with liv/h)
@@ -1033,7 +1207,7 @@ function LA:prepareDataContainer()
 	-- adjust height
 	local baseHeight = 112
 
-	local rowCount = LA.db.profile.display.lootedItemListRowCount or 10
+	local rowCount = self.db.profile.display.lootedItemListRowCount or 10
 	local listHeight = rowCount * 15
 
 	local dataContainerHeight = dataContainer.frame:GetHeight()
@@ -1062,17 +1236,17 @@ function LA:defineRowForFrame(frame, id, name, value)
 	frame:AddChild(grp)
 
 	-- add label...
-	local label = AceGUI:Create("Label")
+	local label = AceGUI:Create("LALabel")
 	label:SetText(name)
 	label:SetWidth(labelWidth) -- TODO
-	label.label:SetJustifyH("LEFT")
+	label:SetJustifyH("LEFT")
 	grp:AddChild(label)
 
 	-- ...and value
-	local VALUE = AceGUI:Create("Label")
+	local VALUE = AceGUI:Create("LALabel")
 	VALUE:SetText(value)
 	VALUE:SetWidth(valueWidth) -- TODO
-	VALUE.label:SetJustifyH("RIGHT")
+	VALUE:SetJustifyH("RIGHT")
 	grp:AddChild(VALUE)
 
 	return VALUE
@@ -1106,15 +1280,33 @@ function LA:refreshUIs()
 		if pauseStart ~= nil then 
 			if time() % 2 == 0 then
 				VALUE_SESSIONDURATION:SetText(" " .. SecondsToTime(delta, noSeconds, false))
+				--VALUE_SESSIONDURATION:SetText(" " .. date("!%X", delta))
 			else
 				VALUE_SESSIONDURATION:SetText(" ")
 			end
 		else
 			VALUE_SESSIONDURATION:SetText(" " .. SecondsToTime(delta, noSeconds, false))
 		end
+
+		-- timer ui
+		if TIMER_UI then
+			if pauseStart ~= nil then 
+				if time() % 2 == 0 then
+					TIMER_UI:SetTitle("|cffffffff" .. date("!%X", delta) .. "|r")
+				else
+					TIMER_UI:SetTitle(" ")
+				end
+			else
+				TIMER_UI:SetTitle("|cffffffff" .. date("!%X", delta) .. "|r")
+			end
+		end
 	else
 		--tooltip:AddLine("Session is not running")
 		VALUE_SESSIONDURATION:SetText("not running")
+
+		if TIMER_UI then
+			TIMER_UI:SetTitle("|cffffffff" .. date("!%X", 0) .. "|r")
+		end
 	end
 
 	-- zone info
@@ -1175,7 +1367,8 @@ function LA:ShowStartSessionDialog()
 	local openLootAppraiser = true
 
 	-- create 'start session prompt' frame
-	START_SESSION_PROMPT = AceGUI:Create("Frame")
+	START_SESSION_PROMPT = AceGUI:Create("Frame")	
+	START_SESSION_PROMPT:SetStatusTable(self.db.profile.startSessionPromptUI)
 	START_SESSION_PROMPT:SetLayout("Flow")
 	START_SESSION_PROMPT:SetTitle("Would you like to start a LootAppraiser session?")
 	START_SESSION_PROMPT:SetPoint("CENTER")
@@ -1339,7 +1532,7 @@ function LA:prepareNewSession()
 
 	currentSession["player"] = nameString .. "-" .. realm
 
-	local sessions = LA.db.global.sessions
+	local sessions = self.db.global.sessions
 	currentSessionID = #sessions + 1
 
 	sessions[currentSessionID] = currentSession
@@ -1391,6 +1584,13 @@ function LA:restartSession()
 		LA:onBtnStopSessionClick()
 	end)
 
+	if b1 then
+		b1:SetNormalTexture([[Interface\TimeManager\PauseButton]])
+		b1:SetScript("OnClick", function()
+			LA:onBtnStopSessionClick()
+		end)
+	end
+
 	-- ui refresh
 	LA:refreshUIs()
 end
@@ -1403,33 +1603,6 @@ function LA:onBtnStopSessionClick()
 	LA:Debug("onBtnStopSessionClick")
 
 	LA:pauseSession()
-
---[[
-	-- save session
-	if currentSession ~= nil then
-		if currentSession["liv"] and currentSession["liv"] > 0 then
-			LA:Debug("  -> set session end")
-			currentSession["end"] = time()
-			currentSession["totalItemsLooted"] = totalItemLootedCounter
-
-			LA:prepareStatisticGroups()
-		else
-			-- delete current session
-			local sessions = LA.db.global.sessions
-			sessions[currentSessionID] = nil
-		end
-	end
-
-	pauseStart = time()
-
-	-- change stop button to start button
-	BUTTON_STOPSESSION:SetText("(Re)Start")
-	BUTTON_STOPSESSION:SetCallback("OnClick", function()
-		LA:onBtnStartSessionClick()
-	end)
-
-	LA:refreshUIs()
-	]]
 end
 
 
@@ -1453,7 +1626,7 @@ function LA:pauseSession()
 			LA:prepareStatisticGroups()
 		else
 			-- delete current session
-			local sessions = LA.db.global.sessions
+			local sessions = self.db.global.sessions
 			sessions[currentSessionID] = nil
 		end
 	end
@@ -1465,6 +1638,13 @@ function LA:pauseSession()
 	BUTTON_STOPSESSION:SetCallback("OnClick", function()
 		LA:onBtnStartSessionClick()
 	end)
+
+	if b1 then
+		b1:SetNormalTexture([[Interface\Buttons\UI-SpellbookIcon-NextPage-Up]])
+		b1:SetScript("OnClick", function()
+			LA:onBtnStartSessionClick()
+		end)
+	end
 
 	LA:refreshUIs()
 end
@@ -1492,7 +1672,7 @@ function LA:NewSession()
 			LA:prepareStatisticGroups()
 		else
 			-- delete current session
-			local sessions = LA.db.global.sessions
+			local sessions = self.db.global.sessions
 			sessions[currentSessionID] = nil
 			-- TODO delete currentSession
 		end
@@ -1527,6 +1707,13 @@ function LA:NewSession()
 	BUTTON_STOPSESSION:SetCallback("OnClick", function()
 		LA:onBtnStopSessionClick()
 	end)
+
+	if b1 then
+		b1:SetNormalTexture([[Interface\TimeManager\PauseButton]])
+		b1:SetScript("OnClick", function()
+			LA:onBtnStopSessionClick()
+		end)
+	end
 
 	LA:refreshUIs()
 
@@ -1799,7 +1986,7 @@ function LA:refreshStatusText()
 		-- prepare status text
 		local preparedText = "Filter: " .. LA.QUALITY_FILTER[tostring(LA:getQualityFilter())] 								-- filter
 		preparedText = preparedText .. " - GAT: |cffffffff" .. LA:getGoldAlertThreshold() .. "|cffffd100g|r"				-- gat
-		preparedText = preparedText .. " - Source: |cffffffff" .. tostring(LA.db.profile.pricesource.source) .. "|r" 	-- price source
+		preparedText = preparedText .. " - Source: |cffffffff" .. tostring(self.db.profile.pricesource.source) .. "|r" 	-- price source
 		
 		--MAIN_UI:SetStatusText(preparedText)
 		STATUSTEXT:SetText(preparedText)
@@ -1813,8 +2000,8 @@ end
 
 -- add a blank line to the given frame
 function LA:addSpacer(frame)
-	local SPACER = AceGUI:Create("Label")
-	SPACER.label:SetJustifyH("LEFT")
+	local SPACER = AceGUI:Create("LALabel")
+	SPACER:SetJustifyH("LEFT")
 	SPACER:SetText("   ")
 	SPACER:SetWidth(350)
 	frame:AddChild(SPACER)
@@ -1862,80 +2049,88 @@ end
 -- access methods for loot appraiser db values (saved variables)
 ---------------------------------------------------------------------------------------]]
 function LA:isBlacklistTsmGroupEnabled()
-	if LA.db.profile.blacklist.tsmGroupEnabled == nil then
-		LA.db.profile.blacklist.tsmGroupEnabled = dbDefaults.profile.blacklist.tsmGroupEnabled
+	if self.db.profile.blacklist.tsmGroupEnabled == nil then
+		self.db.profile.blacklist.tsmGroupEnabled = self.dbDefaults.profile.blacklist.tsmGroupEnabled
 	end
 
-	return LA.db.profile.blacklist.tsmGroupEnabled
+	return self.db.profile.blacklist.tsmGroupEnabled
 end
 
 function LA:isDestroyBlacklistedItems()
-	--if LA:isBlacklistTsmGroupEnabled() and LA.db.profile.addBlacklistedItems2DestroyTrash then
-	if LA.db.profile.blacklist.addBlacklistedItems2DestroyTrash then
+	--if LA:isBlacklistTsmGroupEnabled() and self.db.profile.addBlacklistedItems2DestroyTrash then
+	if self.db.profile.blacklist.addBlacklistedItems2DestroyTrash then
 		return true
 	end
 	return false
 end
 
 function LA:getBlacklistTsmGroup()
-	if LA.db.profile.blacklist.tsmGroup == nil then
-		LA.db.profile.blacklist.tsmGroup = dbDefaults.profile.blacklist.tsmGroup
+	if self.db.profile.blacklist.tsmGroup == nil then
+		self.db.profile.blacklist.tsmGroup = self.dbDefaults.profile.blacklist.tsmGroup
 	end
 
-	return LA.db.profile.blacklist.tsmGroup
+	return self.db.profile.blacklist.tsmGroup
 end
 
 function LA:getGoldAlertThreshold()
-	if LA.db.profile.general.goldAlertThreshold == nil then
-		LA.db.profile.general.goldAlertThreshold = dbDefaults.profile.general.goldAlertThreshold
+	if self.db.profile.general.goldAlertThreshold == nil then
+		self.db.profile.general.goldAlertThreshold = self.dbDefaults.profile.general.goldAlertThreshold
 	end
 
-	return tonumber(LA.db.profile.general.goldAlertThreshold)
+	return tonumber(self.db.profile.general.goldAlertThreshold)
 end
 
 function LA:getQualityFilter()
-	if LA.db.profile.general.qualityFilter == nil then
-		LA.db.profile.general.qualityFilter = dbDefaults.profile.general.qualityFilter
+	if self.db.profile.general.qualityFilter == nil then
+		self.db.profile.general.qualityFilter = self.dbDefaults.profile.general.qualityFilter
 	end
 
-	return tonumber(LA.db.profile.general.qualityFilter)
+	return tonumber(self.db.profile.general.qualityFilter)
 end
 
 function LA:getIgnoreRandomEnchants()
-	if LA.db.profile.general.ignoreRandomEnchants == nil then
-		LA.db.profile.general.ignoreRandomEnchants = dbDefaults.profile.general.ignoreRandomEnchants
+	if self.db.profile.general.ignoreRandomEnchants == nil then
+		self.db.profile.general.ignoreRandomEnchants = self.dbDefaults.profile.general.ignoreRandomEnchants
 	end
 
-	return LA.db.profile.general.ignoreRandomEnchants
+	return self.db.profile.general.ignoreRandomEnchants
 end
 
 function LA:getSessions()
-	if LA.db.global.sessions == nil then
-		LA.db.global.sessions = {}
+	if self.db.global.sessions == nil then
+		self.db.global.sessions = {}
 	end
 
-	return LA.db.global.sessions
+	return self.db.global.sessions
 end
 
 function LA:getPriceSource()
-	if LA.db.profile.pricesource.source == nil then
-		LA.db.profile.pricesource.source = dbDefaults.profile.pricesource.source
+	if self.db.profile.pricesource.source == nil then
+		self.db.profile.pricesource.source = self.dbDefaults.profile.pricesource.source
 	end
 
-	local priceSource = LA.db.profile.pricesource.source
+	local priceSource = self.db.profile.pricesource.source
 	--if priceSource == "Custom" then
-	--	priceSource = LA.db.profile.pricesource.customPriceSource
+	--	priceSource = self.db.profile.pricesource.customPriceSource
 	--end
 
 	return priceSource
 end
 
-function LA:isToastsEnabled()
-	if LA.db.profile.notification.enableToasts == nil then
-		LA.db.profile.notification.enableToasts = dbDefaults.profile.enableToasts
+function LA:getCustomPriceSource()
+	if self.db.profile.pricesource.customPriceSource == nil then
+		self.db.profile.pricesource.customPriceSource = self.dbDefaults.profile.pricesource.customPriceSource
 	end
 
-	return LA.db.profile.notification.enableToasts
+	return self.db.profile.pricesource.customPriceSource
+end
+
+function LA:isToastsEnabled()
+	if self.db.profile.notification.enableToasts == nil then
+		self.db.profile.notification.enableToasts = self.dbDefaults.profile.enableToasts
+	end
+
+	return self.db.profile.notification.enableToasts
 end
 
 function LA:isSessionRunning()
@@ -1943,43 +2138,43 @@ function LA:isSessionRunning()
 end
 
 function LA:isPlaySoundEnabled()
-	if LA.db.profile.notification.playSoundEnabled == nil then
-		LA.db.profile.notification.playSoundEnabled = dbDefaults.profile.notification.playSoundEnabled
+	if self.db.profile.notification.playSoundEnabled == nil then
+		self.db.profile.notification.playSoundEnabled = self.dbDefaults.profile.notification.playSoundEnabled
 	end
 
-	return LA.db.profile.notification.playSoundEnabled
+	return self.db.profile.notification.playSoundEnabled
 end
 
 function LA:isSellTrashTsmGroupEnabled()
-	if LA.db.profile.sellTrash.tsmGroupEnabled == nil then
-		LA.db.profile.sellTrash.tsmGroupEnabled = dbDefaults.profile.sellTrash.tsmGroupEnabled
+	if self.db.profile.sellTrash.tsmGroupEnabled == nil then
+		self.db.profile.sellTrash.tsmGroupEnabled = self.dbDefaults.profile.sellTrash.tsmGroupEnabled
 	end
 
-	return LA.db.profile.sellTrash.tsmGroupEnabled
+	return self.db.profile.sellTrash.tsmGroupEnabled
 end
 
 function LA:getSellTrashTsmGroup()
-	if LA.db.profile.sellTrash.tsmGroup == nil then
-		LA.db.profile.sellTrash.tsmGroup = dbDefaults.profile.sellTrash.tsmGroup
+	if self.db.profile.sellTrash.tsmGroup == nil then
+		self.db.profile.sellTrash.tsmGroup = self.dbDefaults.profile.sellTrash.tsmGroup
 	end
 
-	return LA.db.profile.sellTrash.tsmGroup
+	return self.db.profile.sellTrash.tsmGroup
 end
 
 function LA:isDisplayEnabled(name)
-	if LA.db.profile.display[name] == nil then
-		LA.db.profile.display[name] = dbDefaults.profile.display[name]
+	if self.db.profile.display[name] == nil then
+		self.db.profile.display[name] = self.dbDefaults.profile.display[name]
 	end
 
-	return LA.db.profile.display[name]
+	return self.db.profile.display[name]
 end
 
 function LA:isSurpressSessionStartDialog()
-	if LA.db.profile.general.surpressSessionStartDialog == nil then
-		LA.db.profile.general.surpressSessionStartDialog = dbDefaults.profile.general.surpressSessionStartDialog
+	if self.db.profile.general.surpressSessionStartDialog == nil then
+		self.db.profile.general.surpressSessionStartDialog = self.dbDefaults.profile.general.surpressSessionStartDialog
 	end
 
-	return LA.db.profile.general.surpressSessionStartDialog
+	return self.db.profile.general.surpressSessionStartDialog
 end
 
 function LA:getCurrentSession()
@@ -1987,37 +2182,35 @@ function LA:getCurrentSession()
 end
 
 function LA:isLootAppraiserLiteEnabled()
-	if LA.db.profile.display.enableLootAppraiserLite == nil then
-		LA.db.profile.display.enableLootAppraiserLite = dbDefaults.profile.display.enableLootAppraiserLite
+	if self.db.profile.display.enableLootAppraiserLite == nil then
+		self.db.profile.display.enableLootAppraiserLite = self.dbDefaults.profile.display.enableLootAppraiserLite
 	end
 
-	return LA.db.profile.display.enableLootAppraiserLite
+	return self.db.profile.display.enableLootAppraiserLite
 end
 
---[[
-function LA:isLootAppraiserNativeTimerEnabled()
-	if LA.db.profile.display.enableLootAppraiserNativeTimer == nil then
-		LA.db.profile.display.enableLootAppraiserNativeTimer = dbDefaults.profile.display.enableLootAppraiserNativeTimer
+function LA:isLootAppraiserTimerUIEnabled()
+	if self.db.profile.display.enableLootAppraiserTimerUI == nil then
+		self.db.profile.display.enableLootAppraiserTimerUI = self.dbDefaults.profile.display.enableLootAppraiserTimerUI
 	end
 
-	return LA.db.profile.display.enableLootAppraiserNativeTimer
+	return self.db.profile.display.enableLootAppraiserTimerUI
 end
-]]
 
 function LA:isLastNoteworthyItemUIEnabled()
-	if LA.db.profile.display.enableLastNoteworthyItemUI == nil then
-		LA.db.profile.display.enableLastNoteworthyItemUI = dbDefaults.profile.display.enableLastNoteworthyItemUI
+	if self.db.profile.display.enableLastNoteworthyItemUI == nil then
+		self.db.profile.display.enableLastNoteworthyItemUI = self.dbDefaults.profile.display.enableLastNoteworthyItemUI
 	end
 
-	return LA.db.profile.display.enableLastNoteworthyItemUI
+	return self.db.profile.display.enableLastNoteworthyItemUI
 end
 
 function LA:isDebugOutputEnabled()
-	if LA.db.profile.enableDebugOutput == nil then
-		LA.db.profile.enableDebugOutput = dbDefaults.profile.enableDebugOutput
+	if self.db.profile.enableDebugOutput == nil then
+		self.db.profile.enableDebugOutput = self.dbDefaults.profile.enableDebugOutput
 	end
 
-	return LA.db.profile.enableDebugOutput
+	return self.db.profile.enableDebugOutput
 end
 
 --[[-------------------------------------------------------------------------------------
@@ -2089,10 +2282,22 @@ function LA:round(val, decimal)
 end
 
 
+function LA:split(str, sep)
+    local sep, fields = sep or ":", {}
+    local pattern = string.format("([^%s]+)", sep)
+    str:gsub(pattern, 
+    	function(c) 
+    		fields[#fields+1] = c 
+    	end
+    )
+    return fields
+end
+
+
 function LA:printSessions()
 	if not LA.DEBUG then return end
 
-	local sessions = LA.db.global.sessions
+	local sessions = self.db.global.sessions
 	for i,v in ipairs(sessions) do
 		local sessionMapID = v["mapID"]
 		local sessionStart = v["start"];

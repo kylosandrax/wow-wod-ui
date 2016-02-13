@@ -15,7 +15,7 @@ L["Addons"] = "애드온"
 L["Add to group %s"] = "%s 그룹에 추가"
 L["Add to new Dynamic Group"] = "새 유동적 그룹에 추가"
 L["Add to new Group"] = "새 그룹 추가"
-L["Add Trigger"] = "조건 추가"
+L["Add Trigger"] = "활성 조건 추가"
 L["A group that dynamically controls the positioning of its children"] = "포함된 개체들의 배열을 유동적으로 조절하는 그룹"
 L["Align"] = "정렬"
 L["Allow Full Rotation"] = "완전 회전 허용"
@@ -73,7 +73,7 @@ L["Change the name of this display"] = "이 디스플레이의 이름 변경"
 L["Channel Number"] = "채널 번호"
 L["Check On..."] = "체크..."
 L["Choose"] = "선택"
-L["Choose Trigger"] = "조건 선택"
+L["Choose Trigger"] = "활성 조건 선택"
 L["Choose whether the displayed icon is automatic or defined manually"] = "아이콘을 자동으로 표시할 지 또는 수동 지정할 지 선택"
 L["Clone option enabled dialog"] = [=[|cFFFF0000자동복제|r 옵션을 활성화 했습니다.
 
@@ -104,21 +104,21 @@ L["Crop X"] = "X 자르기"
 L["Crop Y"] = "Y 자르기"
 L["Crusader"] = "성전사"
 L["Custom Code"] = "사용자 설정 코드"
-L["Custom Trigger"] = "사용자 설정 조건"
-L["Custom trigger event tooltip"] = [=[사용자 설정 조건을 체크할 이벤트를 선택하세요.
+L["Custom Trigger"] = "활성 조건 사용자 설정"
+L["Custom trigger event tooltip"] = [=[사용자 설정 활성 조건을 체크할 이벤트를 선택하세요.
 콤마와 공백을 사용해 여러 이벤트를 선택할 수 있습니다.
 
 |cFF4444FF예제:|r
 UNIT_POWER, UNIT_AURA PLAYER_TARGET_CHANGED]=]
-L["Custom trigger status tooltip"] = [=[사용자 설정 조건을 체크할 이벤트를 선택하세요.
-상태 형식 조건이면, 특정 이벤트는 독립 변수없이 WeakAuras에 의해 불러와집니다.
+L["Custom trigger status tooltip"] = [=[사용자 설정 활성 조건을 체크할 이벤트를 선택하세요.
+상태 형식 조건이면 특정 이벤트는 독립 변수없이 WeakAuras에 의해 불러와집니다.
 콤마와 공백을 사용해 여러 이벤트를 선택할 수 있습니다.
 
 |cFF4444FF예제:|r
 UNIT_POWER, UNIT_AURA PLAYER_TARGET_CHANGED]=]
-L["Custom Untrigger"] = "사용자 설정 비활성 조건"
-L["Custom untrigger event tooltip"] = [=[사용자 설정 숨김 조건을 체크할 이벤트를 선택하세요.
-발생 조건과 다른 이벤트도 상관 없습니다.
+L["Custom Untrigger"] = "비활성 조건 사용자 설정"
+L["Custom untrigger event tooltip"] = [=[사용자 설정 비활성 조건을 체크할 이벤트를 선택하세요.
+활성 조건과 다른 이벤트도 상관 없습니다.
 콤마와 공백을 사용해 여러 이벤트를 선택할 수 있습니다.
 
 |cFF4444FF예제:|r
@@ -131,7 +131,7 @@ L["Delete"] = "삭제"
 L["Delete all"] = "모두 삭제"
 L["Delete children and group"] = "자식과 그룹 삭제"
 L["Deletes this display - |cFF8080FFShift|r must be held down while clicking"] = "이 디스플레이 삭제 - |cFF8080FFShift|r키를 누르고 클릭해야 합니다"
-L["Delete Trigger"] = "조건 삭제"
+L["Delete Trigger"] = "활성 조건 삭제"
 L["Desaturate"] = "흑백"
 L["Devotion"] = "헌신"
 L["Disabled"] = "비활성화됨"
@@ -167,7 +167,7 @@ L["Export"] = "내보내기"
 L["Export to Lua table..."] = "Lua table로 내보내기"
 L["Export to string..."] = "문자열로 내보내기"
 L["Fade"] = "사라짐"
-L["Finish"] = "완료"
+L["Finish"] = "종료"
 L["Fire Resistance"] = "화염 저항"
 L["Flight(Non-Feral)"] = "폭풍날개(비-야성)"
 L["Font"] = "글꼴"
@@ -205,6 +205,7 @@ L["Height"] = "높이"
 L["Hide this group's children"] = "이 그룹의 자식 숨기기"
 L["Hide When Not In Group"] = "파티중이 아닐 때 숨기기"
 L["Horizontal Align"] = "가로 정렬"
+L["Icon Color"] = "아이콘 색상"
 L["Icon Info"] = "아이콘 정보"
 L["Icon Inset"] = "아이콘 축소"
 L["Ignored"] = "무시됨"
@@ -217,7 +218,7 @@ L["Left Text"] = "왼쪽 텍스트"
 L["Load"] = "불러오기"
 L["Loaded"] = "로드됨"
 L["Main"] = "메인"
-L["Main Trigger"] = "메인 조건"
+L["Main Trigger"] = "메인 활성 조건"
 L["Mana (%)"] = "마나 (%)"
 L["Manage displays defined by Addons"] = "애드온에 의해 정의된 디스플레이 관리"
 L["Message Prefix"] = "메시지 접두사"
@@ -231,7 +232,7 @@ L["Move this display down in its group's order"] = "그룹에서 이 디스플�
 L["Move this display up in its group's order"] = "그룹에서 이 디스플레이의 순서를 위로 올립니다"
 L["Move Up"] = "위로 이동"
 L["Multiple Displays"] = "다중 디스플레이"
-L["Multiple Triggers"] = "다중 조건"
+L["Multiple Triggers"] = "다중 활성 조건"
 L["Multiselect ignored tooltip"] = [=[|cFFFF0000무시|r - |cFF777777단일|r - |cFF777777다중|r
 디스플레이를 불러오는 데 영향을 주지 않습니다]=]
 L["Multiselect multiple tooltip"] = [=[|cFF777777무시|r - |cFF777777단일|r - |cFF00FF00다중|r
@@ -262,6 +263,7 @@ L["Outline"] = "외곽선"
 L["Own Only"] = "내 것만"
 L["Player Character"] = "플레이어 캐릭터"
 L["Play Sound"] = "소리 재생"
+L["Portrait Zoom"] = "초상화 확대"
 L["Presence (DK)"] = "형상"
 L["Presence (Rogue)"] = "상태"
 L["Prevents duration information from decreasing when an aura refreshes. May cause problems if used with multiple auras with different durations."] = "오라가 갱신 됐을 때 지속시간이 감소 하지 않게 합니다. 다른 지속시간을 가진 여러 오라를 사용할 때 문제가 발생할 수 있습니다."
@@ -285,6 +287,7 @@ L["Rotate In"] = "시계방향 회전"
 L["Rotate Out"] = "반시계방향 회전"
 L["Rotate Text"] = "텍스트 회전"
 L["Rotation"] = "회전"
+L["Rotation Mode"] = "회전 모드"
 L["Same"] = "동일한"
 L["Search"] = "검색"
 L["Secondary"] = "부"
@@ -342,7 +345,7 @@ L["Texture"] = "텍스쳐"
 L["Texture Info"] = "텍스쳐 정보"
 L["The children of this group have different display types, so their display options cannot be set as a group."] = "이 그룹의 자식들은 다른 디스플레이 형식을 가지고 있어서, 디스플레이 옵션을 그룹으로 설정할 수 없습니다."
 L["The duration of the animation in seconds."] = "애니메이션 지속시간 (초)"
-L["The type of trigger"] = "조건의 유형"
+L["The type of trigger"] = "활성 조건의 유형"
 L["This condition will not be tested"] = "이 상태는 테스트되지 않음"
 L["This display is currently loaded"] = "이 디스플레이 현재 로드됨"
 L["This display is not currently loaded"] = "이 디스플레이 현재 로드되지 않음"
@@ -363,14 +366,14 @@ L["to screen's"] = "화면 기준"
 L["Total Time Precision"] = "전체 시간 정확도"
 L["Tracking"] = "추적"
 L["Travel"] = "날쌘 동물"
-L["Trigger"] = "조건"
-L["Trigger %d"] = "%d 조건"
-L["Triggers"] = "조건"
+L["Trigger"] = "활성 조건"
+L["Trigger %d"] = "%d 활성 조건"
+L["Triggers"] = "활성 조건"
 L["Type"] = "유형"
 L["Ungroup"] = "그룹해제"
 L["Unholy"] = "부정"
 L["Unit Exists"] = "유닛 존재"
-L["Unlike the start or finish animations, the main animation will loop over and over until the display is hidden."] = "시작 또는 종료 애니메이션과 다르게, 메인 애니메이션은 디스플레이가 숨겨질 때까지 계속 반복됩니다."
+L["Unlike the start or finish animations, the main animation will loop over and over until the display is hidden."] = "시작 또는 종료 애니메이션과 달리 메인 애니메이션은 디스플레이가 숨겨질 때까지 계속 반복됩니다."
 L["Unstealthed"] = "은신 안함"
 L["Update Custom Text On..."] = "개인추가 텍스트 갱신 중..."
 L["Use Full Scan (High CPU)"] = "전체 스캔 사용 (높은 CPU 사용률)"

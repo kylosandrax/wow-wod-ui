@@ -102,8 +102,34 @@ function TSM:RegisterModule()
 	TSM.moduleOptions = {callback="Options:Load"}
 	TSM.bankUiButton = { callback = "Util:createTab" }
 	TSM.tooltip = {callbackLoad="LoadTooltip", callbackOptions="Options:LoadTooltipOptions", defaults=tooltipDefaults}
+	TSM.moduleAPIs = {
+		{key="getMinPrice", callback="GetMinPrice"},
+		{key="getPostCap", callback="GetPostCap"},
+	}
 
 	TSMAPI:NewModule(TSM)
+end
+
+function TSM:GetMinPrice(item)
+	local itemString = TSMAPI.Item:ToItemString(item)
+	if not itemString then return end
+	local operationName = TSMAPI.Operations:GetFirstByItem(itemString, "Auctioning")
+	if not operationName then return end
+	TSMAPI.Operations:Update("Auctioning", operationName)
+	local operation = TSM.operations[operationName]
+	if not operation then return end
+	return TSM.Util:GetMinPrice(operation, itemString)
+end
+
+function TSM:GetPostCap(item)
+	local itemString = TSMAPI.Item:ToItemString(item)
+	if not itemString then return end
+	local operationName = TSMAPI.Operations:GetFirstByItem(itemString, "Auctioning")
+	if not operationName then return end
+	TSMAPI.Operations:Update("Auctioning", operationName)
+	local operation = TSM.operations[operationName]
+	if not operation then return end
+	return operation.postCap
 end
 
 function TSM:GetOperationInfo(operationName)

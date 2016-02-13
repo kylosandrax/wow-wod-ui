@@ -28,27 +28,19 @@ GoGo_Prefs = {
 			["Excluded"] = {
 			},
 		},
-		["War Mill"] = {
-			["Preferred"] = {
-			},
-			["Excluded"] = {
-			},
-			["ZoneID"] = 976,
-		},
-		[734] = {
+		[492] = {
 			["Preferred"] = {
 			},
 			["Excluded"] = {
 			},
 		},
-		["Skyreach"] = {
+		[988] = {
 			["Preferred"] = {
 			},
 			["Excluded"] = {
 			},
-			["ZoneID"] = 962,
 		},
-		[686] = {
+		[32] = {
 			["Preferred"] = {
 			},
 			["Excluded"] = {
@@ -60,37 +52,17 @@ GoGo_Prefs = {
 			["Excluded"] = {
 			},
 		},
-		[722] = {
+		[34] = {
 			["Preferred"] = {
 			},
 			["Excluded"] = {
 			},
 		},
-		["Black Temple"] = {
+		[806] = {
 			["Preferred"] = {
 			},
 			["Excluded"] = {
 			},
-			["ZoneID"] = 862,
-		},
-		[61] = {
-			["Preferred"] = {
-			},
-			["Excluded"] = {
-			},
-		},
-		[978] = {
-			["Preferred"] = {
-			},
-			["Excluded"] = {
-			},
-		},
-		["Isle of Conquest"] = {
-			["Preferred"] = {
-			},
-			["Excluded"] = {
-			},
-			["ZoneID"] = 962,
 		},
 		[941] = {
 			["Preferred"] = {
@@ -110,33 +82,44 @@ GoGo_Prefs = {
 			["Excluded"] = {
 			},
 		},
-		["The Everbloom"] = {
-			["Preferred"] = {
-			},
-			["Excluded"] = {
-			},
-			["ZoneID"] = 949,
-		},
 		[38] = {
 			["Preferred"] = {
 			},
 			["Excluded"] = {
 			},
 		},
-		["Hillsbrad Foothills"] = {
-			["Preferred"] = {
-			},
-			["Excluded"] = {
-			},
-			["ZoneID"] = 962,
-		},
-		[858] = {
+		[989] = {
 			["Preferred"] = {
 			},
 			["Excluded"] = {
 			},
 		},
-		[807] = {
+		[607] = {
+			["Preferred"] = {
+			},
+			["Excluded"] = {
+			},
+		},
+		[495] = {
+			["Preferred"] = {
+			},
+			["Excluded"] = {
+			},
+		},
+		["Netherstorm"] = {
+			["Preferred"] = {
+			},
+			["Excluded"] = {
+			},
+			["ZoneID"] = 479,
+		},
+		[362] = {
+			["Preferred"] = {
+			},
+			["Excluded"] = {
+			},
+		},
+		[529] = {
 			["Preferred"] = {
 			},
 			["Excluded"] = {
@@ -148,17 +131,18 @@ GoGo_Prefs = {
 			["Excluded"] = {
 			},
 		},
-		[680] = {
+		[11] = {
 			["Preferred"] = {
 			},
 			["Excluded"] = {
 			},
 		},
-		[607] = {
+		["Isle of Conquest"] = {
 			["Preferred"] = {
 			},
 			["Excluded"] = {
 			},
+			["ZoneID"] = 962,
 		},
 		[477] = {
 			["Preferred"] = {
@@ -171,13 +155,6 @@ GoGo_Prefs = {
 			},
 			["Excluded"] = {
 			},
-		},
-		["Shadowmoon Burial Grounds"] = {
-			["Preferred"] = {
-			},
-			["Excluded"] = {
-			},
-			["ZoneID"] = 947,
 		},
 		["Shadow Labyrinth"] = {
 			["Preferred"] = {
@@ -192,39 +169,25 @@ GoGo_Prefs = {
 			["Excluded"] = {
 			},
 		},
+		[948] = {
+			["Preferred"] = {
+			},
+			["Excluded"] = {
+			},
+		},
+		[30] = {
+			["Preferred"] = {
+			},
+			["Excluded"] = {
+			},
+		},
 		[382] = {
 			["Preferred"] = {
 			},
 			["Excluded"] = {
 			},
 		},
-		[903] = {
-			["Preferred"] = {
-			},
-			["Excluded"] = {
-			},
-		},
-		["Mulgore"] = {
-			["Preferred"] = {
-			},
-			["Excluded"] = {
-			},
-			["ZoneID"] = 9,
-		},
-		[988] = {
-			["Preferred"] = {
-			},
-			["Excluded"] = {
-			},
-		},
-		["Tower Of War"] = {
-			["Preferred"] = {
-			},
-			["Excluded"] = {
-			},
-			["ZoneID"] = 941,
-		},
-		[696] = {
+		[726] = {
 			["Preferred"] = {
 			},
 			["Excluded"] = {
@@ -237,13 +200,51 @@ GoGo_Prefs = {
 			},
 			["ZoneID"] = 962,
 		},
-		[806] = {
+		[504] = {
 			["Preferred"] = {
 			},
 			["Excluded"] = {
 			},
 		},
+		["Mulgore"] = {
+			["Preferred"] = {
+			},
+			["Excluded"] = {
+			},
+			["ZoneID"] = 9,
+		},
+		[696] = {
+			["Preferred"] = {
+			},
+			["Excluded"] = {
+			},
+		},
+		[951] = {
+			["Preferred"] = {
+			},
+			["Excluded"] = {
+			},
+		},
+		[807] = {
+			["Preferred"] = {
+			},
+			["Excluded"] = {
+			},
+		},
+		["Twisting Nether"] = {
+			["Preferred"] = {
+			},
+			["Excluded"] = {
+			},
+			["ZoneID"] = -1,
+		},
 		[721] = {
+			["Preferred"] = {
+			},
+			["Excluded"] = {
+			},
+		},
+		[602] = {
 			["Preferred"] = {
 			},
 			["Excluded"] = {
@@ -255,30 +256,30 @@ GoGo_Prefs = {
 			["Excluded"] = {
 			},
 		},
-		[504] = {
+		[734] = {
 			["Preferred"] = {
 			},
 			["Excluded"] = {
 			},
 		},
-		[34] = {
+		["Bladespire Citadel"] = {
+			["Preferred"] = {
+			},
+			["Excluded"] = {
+			},
+			["ZoneID"] = 941,
+		},
+		[725] = {
 			["Preferred"] = {
 			},
 			["Excluded"] = {
 			},
 		},
-		[32] = {
+		[903] = {
 			["Preferred"] = {
 			},
 			["Excluded"] = {
 			},
-		},
-		["Timeless Isle"] = {
-			["Preferred"] = {
-			},
-			["Excluded"] = {
-			},
-			["ZoneID"] = 951,
 		},
 		[523] = {
 			["Preferred"] = {
@@ -286,18 +287,24 @@ GoGo_Prefs = {
 			["Excluded"] = {
 			},
 		},
-		[987] = {
+		[680] = {
 			["Preferred"] = {
 			},
 			["Excluded"] = {
 			},
 		},
-		["Thunder Bluff"] = {
+		[502] = {
 			["Preferred"] = {
 			},
 			["Excluded"] = {
 			},
-			["ZoneID"] = 862,
+		},
+		["Trading Post"] = {
+			["Preferred"] = {
+			},
+			["Excluded"] = {
+			},
+			["ZoneID"] = 976,
 		},
 		[809] = {
 			["Preferred"] = {
@@ -305,12 +312,11 @@ GoGo_Prefs = {
 			["Excluded"] = {
 			},
 		},
-		["Shado-Pan Monastery"] = {
+		[604] = {
 			["Preferred"] = {
 			},
 			["Excluded"] = {
 			},
-			["ZoneID"] = 877,
 		},
 		[478] = {
 			["Preferred"] = {
@@ -343,18 +349,24 @@ GoGo_Prefs = {
 			["Excluded"] = {
 			},
 		},
-		[502] = {
+		[4] = {
 			["Preferred"] = {
 			},
 			["Excluded"] = {
 			},
 		},
-		["Trading Post"] = {
+		["Siege of Niuzao Temple"] = {
 			["Preferred"] = {
 			},
 			["Excluded"] = {
 			},
-			["ZoneID"] = 976,
+			["ZoneID"] = 862,
+		},
+		[1008] = {
+			["Preferred"] = {
+			},
+			["Excluded"] = {
+			},
 		},
 		[510] = {
 			["Preferred"] = {
@@ -376,13 +388,6 @@ GoGo_Prefs = {
 			},
 			["ZoneID"] = 13,
 		},
-		["Ulduar"] = {
-			["Preferred"] = {
-			},
-			["Excluded"] = {
-			},
-			["ZoneID"] = 862,
-		},
 		[-1] = {
 			["Preferred"] = {
 			},
@@ -396,11 +401,12 @@ GoGo_Prefs = {
 			},
 			["ZoneID"] = 730,
 		},
-		[4] = {
+		["Scholomance"] = {
 			["Preferred"] = {
 			},
 			["Excluded"] = {
 			},
+			["ZoneID"] = 862,
 		},
 		[945] = {
 			["Preferred"] = {
@@ -414,14 +420,13 @@ GoGo_Prefs = {
 			["Excluded"] = {
 			},
 		},
-		["Lumber Mill"] = {
+		[261] = {
 			["Preferred"] = {
 			},
 			["Excluded"] = {
 			},
-			["ZoneID"] = 941,
 		},
-		[19] = {
+		[969] = {
 			["Preferred"] = {
 			},
 			["Excluded"] = {
@@ -433,12 +438,11 @@ GoGo_Prefs = {
 			["Excluded"] = {
 			},
 		},
-		["Temple of the Jade Serpent"] = {
+		[858] = {
 			["Preferred"] = {
 			},
 			["Excluded"] = {
 			},
-			["ZoneID"] = 806,
 		},
 		[993] = {
 			["Preferred"] = {
@@ -447,6 +451,12 @@ GoGo_Prefs = {
 			},
 		},
 		[20] = {
+			["Preferred"] = {
+			},
+			["Excluded"] = {
+			},
+		},
+		[23] = {
 			["Preferred"] = {
 			},
 			["Excluded"] = {
@@ -503,31 +513,24 @@ GoGo_Prefs = {
 			["Excluded"] = {
 			},
 		},
-		[732] = {
+		["Wor'gol"] = {
+			["Preferred"] = {
+			},
+			["Excluded"] = {
+			},
+			["ZoneID"] = 941,
+		},
+		[970] = {
 			["Preferred"] = {
 			},
 			["Excluded"] = {
 			},
 		},
-		["Icecrown"] = {
+		[978] = {
 			["Preferred"] = {
 			},
 			["Excluded"] = {
 			},
-			["ZoneID"] = 492,
-		},
-		[23] = {
-			["Preferred"] = {
-			},
-			["Excluded"] = {
-			},
-		},
-		["Netherstorm"] = {
-			["Preferred"] = {
-			},
-			["Excluded"] = {
-			},
-			["ZoneID"] = 479,
 		},
 		["Unga Ingoo"] = {
 			["Preferred"] = {
@@ -549,14 +552,19 @@ GoGo_Prefs = {
 			},
 			["ZoneID"] = 862,
 		},
-		["Wor'gol"] = {
+		[732] = {
 			["Preferred"] = {
 			},
 			["Excluded"] = {
 			},
-			["ZoneID"] = 941,
 		},
-		[261] = {
+		[61] = {
+			["Preferred"] = {
+			},
+			["Excluded"] = {
+			},
+		},
+		[772] = {
 			["Preferred"] = {
 			},
 			["Excluded"] = {
@@ -568,38 +576,31 @@ GoGo_Prefs = {
 			["Excluded"] = {
 			},
 		},
-		["Redridge Mountains"] = {
+		["Temple of the Jade Serpent"] = {
 			["Preferred"] = {
 			},
 			["Excluded"] = {
 			},
-			["ZoneID"] = 36,
+			["ZoneID"] = 806,
 		},
-		[772] = {
-			["Preferred"] = {
-			},
-			["Excluded"] = {
-			},
-		},
-		["Scholomance"] = {
-			["Preferred"] = {
-			},
-			["Excluded"] = {
-			},
-			["ZoneID"] = 862,
-		},
-		[970] = {
+		[201] = {
 			["Preferred"] = {
 			},
 			["Excluded"] = {
 			},
 		},
-		["The Storm Peaks"] = {
+		["Lumber Mill"] = {
 			["Preferred"] = {
 			},
 			["Excluded"] = {
 			},
-			["ZoneID"] = 485,
+			["ZoneID"] = 941,
+		},
+		[19] = {
+			["Preferred"] = {
+			},
+			["Excluded"] = {
+			},
 		},
 		[947] = {
 			["Preferred"] = {
@@ -607,19 +608,11 @@ GoGo_Prefs = {
 			["Excluded"] = {
 			},
 		},
-		["Twisting Nether"] = {
+		[722] = {
 			["Preferred"] = {
 			},
 			["Excluded"] = {
 			},
-			["ZoneID"] = -1,
-		},
-		["Siege of Niuzao Temple"] = {
-			["Preferred"] = {
-			},
-			["Excluded"] = {
-			},
-			["ZoneID"] = 862,
 		},
 		[717] = {
 			["Preferred"] = {
@@ -627,18 +620,18 @@ GoGo_Prefs = {
 			["Excluded"] = {
 			},
 		},
-		[725] = {
+		["Shado-Pan Monastery"] = {
 			["Preferred"] = {
 			},
 			["Excluded"] = {
 			},
+			["ZoneID"] = 877,
 		},
-		["Bladespire Citadel"] = {
+		[987] = {
 			["Preferred"] = {
 			},
 			["Excluded"] = {
 			},
-			["ZoneID"] = 941,
 		},
 		[995] = {
 			["Preferred"] = {
@@ -677,7 +670,7 @@ GoGo_Prefs = {
 			["Excluded"] = {
 			},
 		},
-		[726] = {
+		[36] = {
 			["Preferred"] = {
 			},
 			["Excluded"] = {
@@ -689,23 +682,25 @@ GoGo_Prefs = {
 			["Excluded"] = {
 			},
 		},
-		[11] = {
+		["Black Temple"] = {
+			["Preferred"] = {
+			},
+			["Excluded"] = {
+			},
+			["ZoneID"] = 862,
+		},
+		[686] = {
 			["Preferred"] = {
 			},
 			["Excluded"] = {
 			},
 		},
-		[30] = {
+		["Hillsbrad Foothills"] = {
 			["Preferred"] = {
 			},
 			["Excluded"] = {
 			},
-		},
-		[948] = {
-			["Preferred"] = {
-			},
-			["Excluded"] = {
-			},
+			["ZoneID"] = 962,
 		},
 		["The Arcatraz"] = {
 			["Preferred"] = {
@@ -716,7 +711,7 @@ GoGo_Prefs = {
 		},
 	},
 	["DisableMountNotice"] = true,
-	["DisableWaterFlight"] = true,
+	["autodismount"] = true,
 	["DruidDisableInCombat"] = false,
 	["DisableUpdateNotice"] = false,
 	["RemoveBuffs"] = true,
@@ -730,7 +725,7 @@ GoGo_Prefs = {
 	["ShamanClickForm"] = false,
 	["ExtraPassengerMounts"] = {
 	},
-	["autodismount"] = true,
+	["DisableWaterFlight"] = true,
 }
 GoGo_DebugLog = {
 }

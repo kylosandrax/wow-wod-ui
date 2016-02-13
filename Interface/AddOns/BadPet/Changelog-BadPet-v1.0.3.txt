@@ -1,0 +1,12 @@
+tag v1.0.3
+99eacd7a0ebdd53b35e644d88f3dafd6c1f3ffb5
+Stephen Nelson <stephen@umber.local>
+2015-07-05 19:12:40 +1200
+
+Release 1.0.3
+
+
+--------------------
+
+Stephen Nelson:
+	- Updated interface version for 6.2.0

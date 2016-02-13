@@ -1207,6 +1207,10 @@ function WeakAuras.ShowOptions(msg)
       end
     end
   end
+
+  if (frame.window == "codereview") then
+    frame.codereview:Close();
+  end
 end
 
 function WeakAuras.HideOptions()
@@ -6154,6 +6158,8 @@ function WeakAuras.CreateFrame()
         frame.importexport.frame:Show();
       elseif(frame.window == "texteditor") then
         frame.texteditor.frame:Show();
+      elseif(frame.window == "codereview") then
+        frame.codereview.frame:Show();
       end
       minimizebutton:SetNormalTexture("Interface\\BUTTONS\\UI-Panel-CollapseButton-Up.blp");
       minimizebutton:SetPushedTexture("Interface\\BUTTONS\\UI-Panel-CollapseButton-Down.blp");
@@ -6166,6 +6172,7 @@ function WeakAuras.CreateFrame()
       frame.modelPick.frame:Hide();
       frame.importexport.frame:Hide();
       frame.texteditor.frame:Hide();
+      frame.codereview.frame:Hide();
       frame.container.frame:Hide();
       minimizebutton:SetNormalTexture("Interface\\BUTTONS\\UI-Panel-ExpandButton-Up.blp");
       minimizebutton:SetPushedTexture("Interface\\BUTTONS\\UI-Panel-ExpandButton-Down.blp");
@@ -7082,6 +7089,85 @@ function WeakAuras.CreateFrame()
 
     frame:RefreshPick();
   end
+
+  local codereview = AceGUI:Create("InlineGroup");
+  codereview.frame:SetParent(frame);
+  codereview.frame:SetPoint("BOTTOMRIGHT", frame, "BOTTOMRIGHT", -17, 30);
+  codereview.frame:SetPoint("TOPLEFT", frame, "TOPLEFT", 17, -10);
+  codereview.frame:Hide();
+  codereview:SetLayout("flow");
+  frame.codereview = codereview;
+
+  local codeTree = AceGUI:Create("TreeGroup");
+  codereview.codeTree = codeTree;
+  codereview:SetLayout("fill");
+  codereview:AddChild(codeTree);
+
+  local codebox = AceGUI:Create("MultiLineEditBox");
+  codebox.frame:SetAllPoints(codeTree.content);
+  codebox.frame:SetFrameStrata("FULLSCREEN");
+  codebox:SetLabel("");
+  codereview:AddChild(codebox);
+
+  codebox.button:Hide();
+  IndentationLib.enable(codebox.editBox, colorTable, 4);
+  local fontPath = SharedMedia:Fetch("font", "Fira Mono Medium");
+  if(fontPath) then
+    codebox.editBox:SetFont(fontPath, 12);
+  end
+  codereview.codebox = codebox;
+
+  codeTree:SetCallback("OnGroupSelected", function(self, event, value)
+     for _, v in pairs(codereview.data) do
+       if (v.value == value) then
+          codebox:SetText(v.code);
+       end
+     end
+  end);
+
+  local codereviewCancel = CreateFrame("Button", nil, codereview.frame, "UIPanelButtonTemplate");
+  codereviewCancel:SetScript("OnClick", function() codereview:Close() end);
+  codereviewCancel:SetPoint("bottomright", frame, "bottomright", -27, 11);
+  codereviewCancel:SetHeight(20);
+  codereviewCancel:SetWidth(100);
+  codereviewCancel:SetText(L["Okay"]);
+
+  function codereview.Close(self)
+    if (frame.window ~= "codereview") then
+      return
+    end
+    self.frame:Hide();
+    frame.window = "importexport";
+    frame.importexport.frame:Show();
+  end
+
+  function codereview.Open(self, data)
+    if frame.window == "codereview" then
+      return
+    end
+    
+    self.data = data;
+
+    self.codeTree:SetTree(data);
+    self.codebox.frame:Show();
+
+    WeakAuras.ShowOptions();
+
+    frame.importexport.frame:Hide();
+    frame.container.frame:Hide();
+    frame.buttonsContainer.frame:Hide();
+    self.frame:Show();
+    frame.window = "codereview";
+  end
+
+  function codereview.Close()
+    codereview.frame:Hide();
+    codebox.frame:Hide();
+    frame.container.frame:Show();
+    frame.buttonsContainer.frame:Show();
+    frame.window = "default";
+  end
+
 
   local buttonsContainer = AceGUI:Create("InlineGroup");
   buttonsContainer:SetWidth(170);
@@ -8074,6 +8160,7 @@ function WeakAuras.ImportFromString()
 end
 
 function WeakAuras.CloseImportExport()
+  frame.codereview:Close();
   frame.importexport:Close();
 end
 
@@ -8421,6 +8508,14 @@ function WeakAuras.OpenModelPick(data, field)
     frame.modelPick.modelTree:SetTree(WeakAuras.ModelPaths);
   end
   frame.modelPick:Open(data, field);
+end
+
+function WeakAuras.OpenCodeReview(data)
+  frame.codereview:Open(data);
+end
+
+function WeakAuras.CloseCodeReview(data)
+  frame.codereview:Close();
 end
 
 function WeakAuras.ResetMoverSizer()

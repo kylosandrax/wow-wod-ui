@@ -1,3 +1,6 @@
+v3.1
+*TSM_WoWuction is no longer supported. See http://bit.ly/tsmwuend for more info.
+
 v3.0.1
 *Removed some unused code which may have caused errors with upcoming WoWuction changes.
 

@@ -10,13 +10,13 @@ GoGo_Prefs = {
 	["AutoExcludeFlyingMounts"] = false,
 	["DruidFormNotRandomize"] = false,
 	["Zones"] = {
-		[890] = {
+		[1026] = {
 			["Preferred"] = {
 			},
 			["Excluded"] = {
 			},
 		},
-		[1026] = {
+		[890] = {
 			["Preferred"] = {
 			},
 			["Excluded"] = {
@@ -24,18 +24,18 @@ GoGo_Prefs = {
 		},
 	},
 	["DisableMountNotice"] = false,
-	["autodismount"] = true,
+	["DisableWaterFlight"] = true,
 	["DruidDisableInCombat"] = false,
 	["DisableUpdateNotice"] = false,
 	["RemoveBuffs"] = true,
-	["version"] = "6.2.5",
+	["version"] = "6.2.8",
 	["DruidClickForm"] = true,
 	["GlobalPrefMounts"] = {
 	},
 	["ShamanClickForm"] = false,
 	["ExtraPassengerMounts"] = {
 	},
-	["DisableWaterFlight"] = true,
+	["autodismount"] = true,
 }
 GoGo_DebugLog = {
 }

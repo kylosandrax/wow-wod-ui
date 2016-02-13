@@ -18,10 +18,10 @@ DraenorTreasuresDB = {
 		["Default"] = {
 			["GorgrondRares"] = false,
 			["SoARares"] = false,
-			["FFRRares"] = false,
+			["TaladorRares"] = false,
 			["NagrandRares"] = false,
 			["SMVRares"] = false,
-			["TaladorRares"] = false,
+			["FFRRares"] = false,
 		},
 	},
 }

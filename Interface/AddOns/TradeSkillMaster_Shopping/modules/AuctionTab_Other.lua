@@ -87,7 +87,7 @@ function private.StartSearchThread(self, mode)
 	
 	local lastScanTime = TSMAPI:ModuleAPI("AuctionDB", "lastCompleteScanTime")
 	local lastScanData = TSMAPI:ModuleAPI("AuctionDB", "lastCompleteScan")
-	if lastScanTime < time() - 60 * 60 * 12 or not lastScanData or not next(lastScanData) then
+	if not lastScanData or lastScanTime < time() - 60 * 60 * 12 or not next(lastScanData) then
 		TSM:Print(L["No recent AuctionDB scan data found."])
 		return
 	end
@@ -501,7 +501,7 @@ function AuctionTabOther:GetFrameInfo()
 					for _, info in pairs(appData) do
 						local realmName, data = unpack(info)
 						if TSMAPI.AppHelper:IsCurrentRealm(realmName) then
-							private.appData = data
+							private.appData = assert(loadstring(data))()
 							break
 						end
 					end

@@ -237,6 +237,15 @@ CliqueDB3 = {
 					["icon"] = "Interface\\Icons\\Ability_Warrior_Safeguard",
 					["type"] = "spell",
 				}, -- [3]
+				{
+					["spell"] = "Intervene",
+					["key"] = "SHIFT-BUTTON1",
+					["sets"] = {
+						["default"] = true,
+					},
+					["icon"] = "Interface\\Icons\\Ability_Warrior_VictoryRush",
+					["type"] = "spell",
+				}, -- [4]
 			},
 		},
 		["Kxtrader - Aggramar"] = {

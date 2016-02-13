@@ -2,13 +2,13 @@
 AUCTIONATOR_SAVEDVARS = {
 	["_50000"] = 500,
 	["_2000"] = 100,
+	["_10000"] = 200,
+	["_500"] = 5,
+	["_1000000"] = 2500,
 	["_200000"] = 1000,
 	["STARTING_DISCOUNT"] = 5,
-	["_1000000"] = 2500,
-	["_5000000"] = 10000,
 	["LOG_DE_DATA_X"] = true,
-	["_500"] = 5,
-	["_10000"] = 200,
+	["_5000000"] = 10000,
 }
 AUCTIONATOR_PRICING_HISTORY = {
 }
@@ -63,8 +63,8 @@ AUCTIONATOR_LAST_SCAN_TIME = nil
 AUCTIONATOR_TOONS = {
 	["Bronin"] = {
 		["firstSeen"] = 1413724157,
-		["firstVersion"] = "3.1.6",
 		["guid"] = "Player-1325-03B9525A",
+		["firstVersion"] = "3.1.6",
 	},
 	["Ryjax"] = {
 		["firstSeen"] = 1413753189,
@@ -82,41 +82,41 @@ AUCTIONATOR_TOONS = {
 		["firstSeen"] = 1413753437,
 		["firstVersion"] = "3.1.6",
 	},
-	["Kylosandrix"] = {
-		["firstSeen"] = 1447545742,
-		["firstVersion"] = "3.2.4",
+	["Kyloc"] = {
+		["firstSeen"] = 1424899476,
+		["firstVersion"] = "3.2.2",
 	},
-	["Kylozandrax"] = {
-		["firstSeen"] = 1414365977,
-		["firstVersion"] = "3.1.6",
-		["guid"] = "Player-1317-065406C1",
-	},
-	["Ryvok"] = {
-		["firstSeen"] = 1413753142,
-		["guid"] = "Player-1389-068E699E",
-		["firstVersion"] = "3.1.6",
-	},
-	["Banjax"] = {
-		["firstSeen"] = 1415050082,
+	["Greenthorn"] = {
+		["firstSeen"] = 1413753390,
 		["firstVersion"] = "3.1.6",
 	},
 	["Stormslinger"] = {
 		["firstSeen"] = 1413753241,
 		["firstVersion"] = "3.1.6",
 	},
-	["Greenthorn"] = {
-		["firstSeen"] = 1413753390,
+	["Banjax"] = {
+		["firstSeen"] = 1415050082,
 		["firstVersion"] = "3.1.6",
 	},
-	["Kyloc"] = {
-		["firstSeen"] = 1424899476,
-		["firstVersion"] = "3.2.2",
+	["Ryvok"] = {
+		["firstSeen"] = 1413753142,
+		["firstVersion"] = "3.1.6",
+		["guid"] = "Player-1389-068E699E",
+	},
+	["Kylozandrax"] = {
+		["firstSeen"] = 1414365977,
+		["guid"] = "Player-1317-065406C1",
+		["firstVersion"] = "3.1.6",
+	},
+	["Kylosandrix"] = {
+		["firstSeen"] = 1447545742,
+		["firstVersion"] = "3.2.4",
 	},
 }
 AUCTIONATOR_STACKING_PREFS = {
 	["savage blood"] = {
-		["stacksize"] = 1,
 		["numstacks"] = 0,
+		["stacksize"] = 1,
 	},
 }
 AUCTIONATOR_SCAN_MINLEVEL = 2

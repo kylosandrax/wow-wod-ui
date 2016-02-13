@@ -76,6 +76,20 @@ private.AuctionRecord = setmetatable({}, {
 			self.hash2 = strjoin("~", self.itemLink, self.bid, self.displayedBid, self.buyout, self.timeLeft, self.stackSize, self.seller)
 			self.hash3 = strjoin("~", self.itemLink, self.minBid, self.minIncrement, self.buyout, self.bid, self.seller, self.timeLeft, self.stackSize, tostring(self.isHighBidder))
 			self.isPlayer = TSMAPI.Player:IsPlayer(self.seller, true, true, true)
+			-- caching of filters
+			self._filterHash = nil
+			self._filterResult = nil
+		end,
+		
+		Filter = function(self, filterFunc, filterHash)
+			if not filterFunc then
+				self._filterHash = nil
+				self._filterResult = true
+			elseif filterHash ~= self._filterHash then
+				self._filterHash = filterHash
+				self._filterResult = filterFunc(self)
+			end
+			return self._filterResult
 		end,
 
 		ValidateIndex = function(self, auctionType, index)
@@ -179,7 +193,7 @@ private.AuctionRecordDatabaseView = setmetatable({}, {
 			if self.database.updateCounter > self._lastUpdate then
 				wipe(self._result)
 				for _, record in ipairs(self.database.records) do
-					if not self._filterFunc or self._filterFunc(record) then
+					if record:Filter(self._filterFunc, self._filterHash or self._filterFunc) then
 						tinsert(self._result, record)
 					end
 				end

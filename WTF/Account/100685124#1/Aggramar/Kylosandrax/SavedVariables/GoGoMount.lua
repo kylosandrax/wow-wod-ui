@@ -10,89 +10,61 @@ GoGo_Prefs = {
 	["AutoExcludeFlyingMounts"] = false,
 	["DruidFormNotRandomize"] = false,
 	["Zones"] = {
-		[761] = {
+		[488] = {
 			["Preferred"] = {
 			},
 			["Excluded"] = {
 			},
 		},
-		[889] = {
+		[726] = {
 			["Preferred"] = {
 			},
 			["Excluded"] = {
 			},
 		},
-		["Iron Docks"] = {
-			["Preferred"] = {
-			},
-			["Excluded"] = {
-			},
-			["ZoneID"] = 987,
-		},
-		[704] = {
+		[734] = {
 			["Preferred"] = {
 			},
 			["Excluded"] = {
 			},
 		},
-		[4] = {
+		[750] = {
 			["Preferred"] = {
 			},
 			["Excluded"] = {
 			},
 		},
-		["Ashran"] = {
-			["Preferred"] = {
-			},
-			["Excluded"] = {
-			},
-			["ZoneID"] = 978,
-		},
-		["Talador"] = {
-			["Preferred"] = {
-			},
-			["Excluded"] = {
-			},
-			["ZoneID"] = 962,
-		},
-		["Frostwall"] = {
-			["Preferred"] = {
-			},
-			["Excluded"] = {
-			},
-			["ZoneID"] = 976,
-		},
-		[301] = {
+		[520] = {
 			["Preferred"] = {
 			},
 			["Excluded"] = {
 			},
 		},
-		[765] = {
+		[34] = {
 			["Preferred"] = {
 			},
 			["Excluded"] = {
 			},
 		},
-		[27] = {
+		[536] = {
 			["Preferred"] = {
 			},
 			["Excluded"] = {
 			},
 		},
-		[20] = {
+		[798] = {
 			["Preferred"] = {
 			},
 			["Excluded"] = {
 			},
 		},
-		[28] = {
+		[687] = {
 			["Preferred"] = {
 			},
 			["Excluded"] = {
 			},
 		},
-		[797] = {
+		[37] = {
 			["Preferred"] = {
 			},
 			["Excluded"] = {
@@ -105,18 +77,277 @@ GoGo_Prefs = {
 			},
 			["ZoneID"] = 810,
 		},
-		[181] = {
+		["Tanaan Jungle"] = {
+			["Preferred"] = {
+			},
+			["Excluded"] = {
+			},
+			["ZoneID"] = 945,
+		},
+		["Warspear"] = {
+			["Preferred"] = {
+			},
+			["Excluded"] = {
+			},
+			["ZoneID"] = 1011,
+		},
+		[461] = {
 			["Preferred"] = {
 			},
 			["Excluded"] = {
 			},
 		},
-		["Frostfire Ridge"] = {
+		[465] = {
+			["Preferred"] = {
+			},
+			["Excluded"] = {
+			},
+		},
+		[680] = {
+			["Preferred"] = {
+			},
+			["Excluded"] = {
+			},
+		},
+		[688] = {
+			["Preferred"] = {
+			},
+			["Excluded"] = {
+			},
+		},
+		[477] = {
+			["Preferred"] = {
+			},
+			["Excluded"] = {
+			},
+		},
+		["Town Hall"] = {
+			["Preferred"] = {
+			},
+			["Excluded"] = {
+			},
+			["ZoneID"] = 976,
+		},
+		["Bloodmaul Slag Mines"] = {
 			["Preferred"] = {
 			},
 			["Excluded"] = {
 			},
 			["ZoneID"] = 941,
+		},
+		[728] = {
+			["Preferred"] = {
+			},
+			["Excluded"] = {
+			},
+		},
+		["Shrine of Two Moons"] = {
+			["Preferred"] = {
+			},
+			["Excluded"] = {
+			},
+			["ZoneID"] = 962,
+		},
+		[871] = {
+			["Preferred"] = {
+			},
+			["Excluded"] = {
+			},
+		},
+		[760] = {
+			["Preferred"] = {
+			},
+			["Excluded"] = {
+			},
+		},
+		["Blasted Lands"] = {
+			["Preferred"] = {
+			},
+			["Excluded"] = {
+			},
+			["ZoneID"] = -1,
+		},
+		[522] = {
+			["Preferred"] = {
+			},
+			["Excluded"] = {
+			},
+		},
+		[530] = {
+			["Preferred"] = {
+			},
+			["Excluded"] = {
+			},
+		},
+		["Auction House"] = {
+			["Preferred"] = {
+			},
+			["Excluded"] = {
+			},
+			["ZoneID"] = 978,
+		},
+		["Gorgrond"] = {
+			["Preferred"] = {
+			},
+			["Excluded"] = {
+			},
+			["ZoneID"] = 949,
+		},
+		["The Jade Forest"] = {
+			["Preferred"] = {
+			},
+			["Excluded"] = {
+			},
+			["ZoneID"] = 806,
+		},
+		[761] = {
+			["Preferred"] = {
+			},
+			["Excluded"] = {
+			},
+		},
+		["Timeless Isle"] = {
+			["Preferred"] = {
+			},
+			["Excluded"] = {
+			},
+			["ZoneID"] = 951,
+		},
+		[521] = {
+			["Preferred"] = {
+			},
+			["Excluded"] = {
+			},
+		},
+		[606] = {
+			["Preferred"] = {
+			},
+			["Excluded"] = {
+			},
+		},
+		["Throne of Thunder"] = {
+			["Preferred"] = {
+			},
+			["Excluded"] = {
+			},
+			["ZoneID"] = 930,
+		},
+		[478] = {
+			["Preferred"] = {
+			},
+			["Excluded"] = {
+			},
+		},
+		[43] = {
+			["Preferred"] = {
+			},
+			["Excluded"] = {
+			},
+		},
+		[486] = {
+			["Preferred"] = {
+			},
+			["Excluded"] = {
+			},
+		},
+		["Iron Docks"] = {
+			["Preferred"] = {
+			},
+			["Excluded"] = {
+			},
+			["ZoneID"] = 987,
+		},
+		[730] = {
+			["Preferred"] = {
+			},
+			["Excluded"] = {
+			},
+		},
+		[4] = {
+			["Preferred"] = {
+			},
+			["Excluded"] = {
+			},
+		},
+		["Talador"] = {
+			["Preferred"] = {
+			},
+			["Excluded"] = {
+			},
+			["ZoneID"] = 962,
+		},
+		[889] = {
+			["Preferred"] = {
+			},
+			["Excluded"] = {
+			},
+		},
+		["Frostwall"] = {
+			["Preferred"] = {
+			},
+			["Excluded"] = {
+			},
+			["ZoneID"] = 976,
+		},
+		[-1] = {
+			["Preferred"] = {
+			},
+			["Excluded"] = {
+			},
+		},
+		[523] = {
+			["Preferred"] = {
+			},
+			["Excluded"] = {
+			},
+		},
+		[504] = {
+			["Preferred"] = {
+			},
+			["Excluded"] = {
+			},
+		},
+		[691] = {
+			["Preferred"] = {
+			},
+			["Excluded"] = {
+			},
+		},
+		[699] = {
+			["Preferred"] = {
+			},
+			["Excluded"] = {
+			},
+		},
+		[686] = {
+			["Preferred"] = {
+			},
+			["Excluded"] = {
+			},
+		},
+		[510] = {
+			["Preferred"] = {
+			},
+			["Excluded"] = {
+			},
+		},
+		[723] = {
+			["Preferred"] = {
+			},
+			["Excluded"] = {
+			},
+		},
+		[401] = {
+			["Preferred"] = {
+			},
+			["Excluded"] = {
+			},
+		},
+		[473] = {
+			["Preferred"] = {
+			},
+			["Excluded"] = {
+			},
 		},
 		["Valley of the Four Winds"] = {
 			["Preferred"] = {
@@ -125,19 +356,17 @@ GoGo_Prefs = {
 			},
 			["ZoneID"] = 807,
 		},
-		["Tanaan Jungle"] = {
+		[467] = {
 			["Preferred"] = {
 			},
 			["Excluded"] = {
 			},
-			["ZoneID"] = 945,
 		},
-		["Timeless Isle"] = {
+		[692] = {
 			["Preferred"] = {
 			},
 			["Excluded"] = {
 			},
-			["ZoneID"] = 951,
 		},
 		["Kun-Lai Summit"] = {
 			["Preferred"] = {
@@ -153,7 +382,7 @@ GoGo_Prefs = {
 			},
 			["ZoneID"] = 873,
 		},
-		[687] = {
+		[533] = {
 			["Preferred"] = {
 			},
 			["Excluded"] = {
@@ -166,23 +395,12 @@ GoGo_Prefs = {
 			},
 			["ZoneID"] = 862,
 		},
-		[691] = {
+		["Frostfire Ridge"] = {
 			["Preferred"] = {
 			},
 			["Excluded"] = {
 			},
-		},
-		[756] = {
-			["Preferred"] = {
-			},
-			["Excluded"] = {
-			},
-		},
-		[699] = {
-			["Preferred"] = {
-			},
-			["Excluded"] = {
-			},
+			["ZoneID"] = 941,
 		},
 		[321] = {
 			["Preferred"] = {
@@ -190,20 +408,37 @@ GoGo_Prefs = {
 			["Excluded"] = {
 			},
 		},
-		["Town Hall"] = {
-			["Preferred"] = {
-			},
-			["Excluded"] = {
-			},
-			["ZoneID"] = 976,
-		},
-		[764] = {
+		[475] = {
 			["Preferred"] = {
 			},
 			["Excluded"] = {
 			},
 		},
-		[750] = {
+		[690] = {
+			["Preferred"] = {
+			},
+			["Excluded"] = {
+			},
+		},
+		[28] = {
+			["Preferred"] = {
+			},
+			["Excluded"] = {
+			},
+		},
+		[181] = {
+			["Preferred"] = {
+			},
+			["Excluded"] = {
+			},
+		},
+		[491] = {
+			["Preferred"] = {
+			},
+			["Excluded"] = {
+			},
+		},
+		[732] = {
 			["Preferred"] = {
 			},
 			["Excluded"] = {
@@ -215,40 +450,41 @@ GoGo_Prefs = {
 			["Excluded"] = {
 			},
 		},
-		["Shrine of Two Moons"] = {
+		[30] = {
 			["Preferred"] = {
 			},
 			["Excluded"] = {
 			},
-			["ZoneID"] = 962,
 		},
-		["Siege of Orgrimmar"] = {
+		[756] = {
 			["Preferred"] = {
 			},
 			["Excluded"] = {
 			},
-			["ZoneID"] = 862,
 		},
-		["The Burning Glacier"] = {
+		[764] = {
 			["Preferred"] = {
 			},
 			["Excluded"] = {
 			},
-			["ZoneID"] = 941,
 		},
-		["Warspear"] = {
+		[301] = {
 			["Preferred"] = {
 			},
 			["Excluded"] = {
 			},
-			["ZoneID"] = 1011,
 		},
-		["Blasted Lands"] = {
+		[526] = {
 			["Preferred"] = {
 			},
 			["Excluded"] = {
 			},
-			["ZoneID"] = -1,
+		},
+		[534] = {
+			["Preferred"] = {
+			},
+			["Excluded"] = {
+			},
 		},
 		[101] = {
 			["Preferred"] = {
@@ -256,52 +492,7 @@ GoGo_Prefs = {
 			["Excluded"] = {
 			},
 		},
-		["Gorgrond"] = {
-			["Preferred"] = {
-			},
-			["Excluded"] = {
-			},
-			["ZoneID"] = 949,
-		},
 		[721] = {
-			["Preferred"] = {
-			},
-			["Excluded"] = {
-			},
-		},
-		["Bloodmaul Slag Mines"] = {
-			["Preferred"] = {
-			},
-			["Excluded"] = {
-			},
-			["ZoneID"] = 941,
-		},
-		[898] = {
-			["Preferred"] = {
-			},
-			["Excluded"] = {
-			},
-		},
-		[686] = {
-			["Preferred"] = {
-			},
-			["Excluded"] = {
-			},
-		},
-		["Auction House"] = {
-			["Preferred"] = {
-			},
-			["Excluded"] = {
-			},
-			["ZoneID"] = 978,
-		},
-		[30] = {
-			["Preferred"] = {
-			},
-			["Excluded"] = {
-			},
-		},
-		[465] = {
 			["Preferred"] = {
 			},
 			["Excluded"] = {
@@ -314,6 +505,37 @@ GoGo_Prefs = {
 			},
 			["ZoneID"] = 811,
 		},
+		[20] = {
+			["Preferred"] = {
+			},
+			["Excluded"] = {
+			},
+		},
+		["Ashran"] = {
+			["Preferred"] = {
+			},
+			["Excluded"] = {
+			},
+			["ZoneID"] = 978,
+		},
+		[898] = {
+			["Preferred"] = {
+			},
+			["Excluded"] = {
+			},
+		},
+		[27] = {
+			["Preferred"] = {
+			},
+			["Excluded"] = {
+			},
+		},
+		[725] = {
+			["Preferred"] = {
+			},
+			["Excluded"] = {
+			},
+		},
 		["Bladespire Citadel"] = {
 			["Preferred"] = {
 			},
@@ -321,26 +543,26 @@ GoGo_Prefs = {
 			},
 			["ZoneID"] = 941,
 		},
-		[760] = {
+		[704] = {
 			["Preferred"] = {
 			},
 			["Excluded"] = {
 			},
 		},
-		["The Jade Forest"] = {
-			["Preferred"] = {
-			},
-			["Excluded"] = {
-			},
-			["ZoneID"] = 806,
-		},
-		[680] = {
+		[749] = {
 			["Preferred"] = {
 			},
 			["Excluded"] = {
 			},
 		},
-		[871] = {
+		["Siege of Orgrimmar"] = {
+			["Preferred"] = {
+			},
+			["Excluded"] = {
+			},
+			["ZoneID"] = 862,
+		},
+		[765] = {
 			["Preferred"] = {
 			},
 			["Excluded"] = {
@@ -353,29 +575,30 @@ GoGo_Prefs = {
 			},
 			["ZoneID"] = 807,
 		},
-		[749] = {
+		[29] = {
 			["Preferred"] = {
 			},
 			["Excluded"] = {
 			},
 		},
-		[688] = {
+		[1026] = {
 			["Preferred"] = {
 			},
 			["Excluded"] = {
 			},
 		},
-		[690] = {
+		[797] = {
 			["Preferred"] = {
 			},
 			["Excluded"] = {
 			},
 		},
-		[692] = {
+		["The Burning Glacier"] = {
 			["Preferred"] = {
 			},
 			["Excluded"] = {
 			},
+			["ZoneID"] = 941,
 		},
 		["The Forge"] = {
 			["Preferred"] = {
@@ -384,14 +607,13 @@ GoGo_Prefs = {
 			},
 			["ZoneID"] = 976,
 		},
-		["Throne of Thunder"] = {
+		[481] = {
 			["Preferred"] = {
 			},
 			["Excluded"] = {
 			},
-			["ZoneID"] = 930,
 		},
-		[1026] = {
+		[696] = {
 			["Preferred"] = {
 			},
 			["Excluded"] = {

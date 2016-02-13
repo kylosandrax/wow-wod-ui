@@ -16,3 +16,5 @@ VuhDo: disabled
 VuhDoOptions: disabled
 ElvUI: enabled
 ShieldHealth: disabled
+TradeSkillMaster_WoWuction: disabled
+_NPCScan: disabled

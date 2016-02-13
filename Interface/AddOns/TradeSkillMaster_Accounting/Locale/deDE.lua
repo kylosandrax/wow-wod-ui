@@ -74,7 +74,7 @@ L["If checked, whenever you buy or sell any quantity of a single item via trade,
 L["If checked, you won't get a popup confirmation about whether or not to track trades."] = "Wenn aktiviert, werdet Ihr keine Bestätigungsabfrage bekommen, ob Ihr einen Handel aufzeichnen wollt."
 L["Item Name"] = "Gegenstandsname"
 L["Items"] = "Gegenstände"
-L["Items/Resale Price Format"] = "Gegenstände/Wiederverkauf Preis Format" -- Needs review
+L["Items/Resale Price Format"] = "Gegenstände/Wiederverkauf Preisformat" -- Needs review
 -- L["Last %d Days"] = ""
 L["Last Purchased:"] = "Zuletzt eingekauft:"
 L["Last Sold:"] = "Zuletzt verkauft:"

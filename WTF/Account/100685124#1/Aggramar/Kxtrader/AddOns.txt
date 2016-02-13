@@ -1,1 +1,3 @@
 ShieldHealth: disabled
+TradeSkillMaster_WoWuction: disabled
+_NPCScan: disabled

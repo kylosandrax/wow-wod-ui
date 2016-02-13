@@ -7,64 +7,87 @@ TradeSkillMaster_AuctioningDB = {
 	["g@ @helpPlatesShown"] = {
 		["selection"] = true,
 	},
-	["f@Horde - Aggramar@player"] = {
-		["Bronin"] = true,
-		["Ryjax"] = true,
-		["Zapunzel"] = true,
-		["Kxtrader"] = true,
-		["Kylosandrax"] = true,
-		["Kyloc"] = true,
-		["Greenthorn"] = true,
-		["Kromethious"] = true,
-		["Feldspar"] = true,
-		["Banjax"] = true,
-		["Stormslinger"] = true,
-		["Ryvok"] = true,
-		["Kxchanter"] = true,
-		["Kylosandrix"] = true,
+	["f@Alliance - Outland@whitelist"] = {
 	},
-	["f@Horde - Terokkar@player"] = {
-		["Ryvok"] = true,
-	},
+	["_hash"] = 5870975,
 	["_currentProfile"] = {
+		["Ifarmforyou - Outland"] = "Default",
+		["Ryjax - Aggramar"] = "Default",
+		["Sheyshey - Outland"] = "Default",
+		["Shayshey - Outland"] = "Default",
+		["Sheyshay - Outland"] = "Default",
+		["Sheyrah - Outland"] = "Default",
+		["Kylosandrax - Aggramar"] = "Default",
+		["Lokbawks - Outland"] = "Default",
+		["Sheyrrah - Outland"] = "Default",
+		["Farmershey - Outland"] = "Default",
 		["Kxchanter - Aggramar"] = "Default",
 		["Kromethious - Aggramar"] = "Default",
 		["Kxtrader - Aggramar"] = "Default",
-		["Kylosandrax - Aggramar"] = "Default",
+		["Glyphdealz - Outland"] = "Default",
 		["Ryvok - Aggramar"] = "Default",
+		["Haroohiipan - Outland"] = "Default",
 	},
 	["g@ @roundNormalPrice"] = false,
-	["f@Horde - Earthen Ring@whitelist"] = {
+	["f@Alliance - Outland@player"] = {
+		["Ifarmforyou"] = true,
+		["Farmershey"] = true,
+		["Sheyrrah"] = true,
+		["Sheyshey"] = true,
+		["Sheyshay"] = true,
+		["Glyphdealz"] = true,
+		["Sheyrah"] = true,
+		["Shayshey"] = true,
+		["Lokbawks"] = true,
 	},
 	["g@ @priceColumn"] = 1,
 	["f@Horde - Aggramar@whitelist"] = {
 	},
 	["g@ @matchWhitelist"] = true,
-	["f@Horde - Earthen Ring@player"] = {
-		["Kylozandrax"] = true,
+	["f@Horde - Aggramar@player"] = {
+		["Ryvok"] = true,
+		["Kromethious"] = true,
+		["Ryjax"] = true,
+		["Kxtrader"] = true,
+		["Kylosandrax"] = true,
+		["Kxchanter"] = true,
+	},
+	["f@Neutral - Outland@whitelist"] = {
 	},
 	["_scopeKeys"] = {
 		["char"] = {
-			"Kxtrader - Aggramar", -- [1]
-			"Kxchanter - Aggramar", -- [2]
-			"Kylosandrax - Aggramar", -- [3]
-			"Ryvok - Aggramar", -- [4]
-			"Kromethious - Aggramar", -- [5]
+			"Ifarmforyou - Outland", -- [1]
+			"Lokbawks - Outland", -- [2]
+			"Sheyrrah - Outland", -- [3]
+			"Sheyshay - Outland", -- [4]
+			"Farmershey - Outland", -- [5]
+			"Sheyrah - Outland", -- [6]
+			"Sheyshey - Outland", -- [7]
+			"Shayshey - Outland", -- [8]
+			"Haroohiipan - Outland", -- [9]
+			"Glyphdealz - Outland", -- [10]
+			"Kxtrader - Aggramar", -- [11]
+			"Kromethious - Aggramar", -- [12]
+			"Kxchanter - Aggramar", -- [13]
+			"Kylosandrax - Aggramar", -- [14]
+			"Ryvok - Aggramar", -- [15]
+			"Ryjax - Aggramar", -- [16]
 		},
 		["realm"] = {
-			"Aggramar", -- [1]
+			"Outland", -- [1]
+			"Aggramar", -- [2]
 		},
 		["profile"] = {
 			"Default", -- [1]
 		},
 		["factionrealm"] = {
-			"Horde - Aggramar", -- [1]
-			"Horde - Terokkar", -- [2]
-			"Horde - Earthen Ring", -- [3]
+			"Alliance - Outland", -- [1]
+			"Neutral - Outland", -- [2]
+			"Horde - Aggramar", -- [3]
 		},
 	},
-	["f@Horde - Terokkar@whitelist"] = {
-	},
 	["_version"] = 1,
-	["_hash"] = 5870975,
+	["f@Neutral - Outland@player"] = {
+		["Haroohiipan"] = true,
+	},
 }

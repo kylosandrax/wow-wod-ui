@@ -86,42 +86,42 @@ OvaleDB = {
 		["Ryvok - Terokkar"] = {
 		},
 		["Kromethious - Aggramar"] = {
+			["source"] = "simulationcraft_death_knight_frost_2h_t18m",
 			["check"] = {
-				["opt_potion"] = true,
+				["opt_deathknight_frost_aoe"] = true,
 				["opt_potion_armor"] = true,
 				["opt_interrupt"] = true,
-				["opt_deathknight_frost_aoe"] = true,
 				["opt_potion_strength"] = true,
+				["opt_potion"] = true,
 				["opt_legendary_ring_strength"] = true,
 				["opt_deathknight_blood_aoe"] = true,
 			},
-			["source"] = "simulationcraft_death_knight_blood_t17m",
 			["apparence"] = {
-				["clickThru"] = true,
 				["offsetX"] = 2,
+				["verrouille"] = true,
+				["clickThru"] = true,
 				["offsetY"] = -215.998992919922,
 				["minimap"] = {
 					["hide"] = false,
 				},
-				["verrouille"] = true,
 			},
 		},
 		["Kylosandrax - Aggramar"] = {
 			["check"] = {
+				["opt_warrior_fury_aoe"] = true,
 				["opt_potion_strength"] = true,
 				["opt_potion_armor"] = true,
 				["opt_interrupt"] = true,
-				["opt_warrior_fury_aoe"] = true,
+				["opt_melee_range"] = true,
 				["opt_warrior_arms_aoe"] = true,
 				["opt_legendary_ring_strength"] = true,
 				["opt_warrior_protection_aoe"] = true,
 			},
 			["apparence"] = {
 				["raccourcis"] = false,
-				["offsetX"] = -3.00048828125,
-				["offsetY"] = -324.999496459961,
+				["offsetX"] = 0.99951171875,
+				["offsetY"] = -250.999633789063,
 			},
-			["source"] = "simulationcraft_warrior_protection_t17m",
 			["standaloneOptions"] = true,
 		},
 		["Kxtrader - Aggramar"] = {
@@ -162,9 +162,9 @@ OvaleDB = {
 				["opt_potion_strength"] = true,
 				["opt_potion_armor"] = true,
 				["opt_paladin_protection_aoe"] = true,
-				["opt_paladin_retribution_aoe"] = true,
-				["opt_righteous_fury_check"] = true,
 				["opt_interrupt"] = true,
+				["opt_righteous_fury_check"] = true,
+				["opt_paladin_retribution_aoe"] = true,
 			},
 			["apparence"] = {
 				["raccourcis"] = false,

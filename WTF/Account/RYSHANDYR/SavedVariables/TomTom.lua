@@ -5,8 +5,8 @@ TomTomDB = {
 		["Greenthorn - Aggramar"] = "Default",
 		["Ryjax - Aggramar"] = "Default",
 		["Kylosandrax - Aggramar"] = "Default",
-		["Stormslinger - Aggramar"] = "Default",
 		["Feldspar - Aggramar"] = "Default",
+		["Stormslinger - Aggramar"] = "Default",
 		["Kylozandrax - Earthen Ring"] = "Default",
 		["Ryvok - Terokkar"] = "Default",
 		["Kyloc - Aggramar"] = "Default",
@@ -30,8 +30,8 @@ TomTomWaypointsMF = {
 		["Greenthorn - Aggramar"] = "Greenthorn - Aggramar",
 		["Ryjax - Aggramar"] = "Ryjax - Aggramar",
 		["Kylosandrax - Aggramar"] = "Kylosandrax - Aggramar",
-		["Stormslinger - Aggramar"] = "Stormslinger - Aggramar",
 		["Feldspar - Aggramar"] = "Feldspar - Aggramar",
+		["Stormslinger - Aggramar"] = "Stormslinger - Aggramar",
 		["Kylozandrax - Earthen Ring"] = "Kylozandrax - Earthen Ring",
 		["Ryvok - Terokkar"] = "Ryvok - Terokkar",
 		["Kyloc - Aggramar"] = "Kyloc - Aggramar",
@@ -49,9 +49,9 @@ TomTomWaypointsMF = {
 		},
 		["Kylosandrax - Aggramar"] = {
 		},
-		["Stormslinger - Aggramar"] = {
-		},
 		["Feldspar - Aggramar"] = {
+		},
+		["Stormslinger - Aggramar"] = {
 		},
 		["Kylozandrax - Earthen Ring"] = {
 		},

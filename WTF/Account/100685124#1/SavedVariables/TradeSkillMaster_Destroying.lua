@@ -7,176 +7,131 @@ TradeSkillMaster_DestroyingDB = {
 	["_scopeKeys"] = {
 		["char"] = {
 			"Kxtrader - Aggramar", -- [1]
-			"Kxchanter - Aggramar", -- [2]
-			"Kylosandrax - Aggramar", -- [3]
-			"Ryvok - Aggramar", -- [4]
-			"Kromethious - Aggramar", -- [5]
-		},
-		["realm"] = {
-			"Aggramar", -- [1]
-		},
-		["profile"] = {
-			"Default", -- [1]
+			"Kromethious - Aggramar", -- [2]
+			"Kxchanter - Aggramar", -- [3]
+			"Kylosandrax - Aggramar", -- [4]
+			"Ryvok - Aggramar", -- [5]
+			"Ryjax - Aggramar", -- [6]
 		},
 		["factionrealm"] = {
 			"Horde - Aggramar", -- [1]
 		},
+		["profile"] = {
+			"Default", -- [1]
+		},
+		["realm"] = {
+			"Aggramar", -- [1]
+		},
 	},
-	["g@ @autoShow"] = false,
+	["g@ @autoShow"] = true,
 	["g@ @autoStack"] = true,
-	["g@ @logDays"] = 14,
-	["g@ @deAbovePrice"] = "0c",
+	["_currentProfile"] = {
+		["Kxchanter - Aggramar"] = "Default",
+		["Kromethious - Aggramar"] = "Default",
+		["Kxtrader - Aggramar"] = "Default",
+		["Ryjax - Aggramar"] = "Default",
+		["Ryvok - Aggramar"] = "Default",
+		["Kylosandrax - Aggramar"] = "Default",
+	},
+	["_version"] = 1,
 	["g@ @history"] = {
 		["Disenchant"] = {
 			{
 				["result"] = {
-					["i:11083"] = 5,
+					["i:34054"] = 7,
 				},
-				["item"] = "i:7407:-69",
-				["time"] = 1451435122,
+				["isDraenicEnchanting"] = true,
+				["item"] = "i:36062:-21",
+				["time"] = 1453064532,
 			}, -- [1]
 			{
 				["result"] = {
-					["i:11083"] = 2,
+					["i:34055"] = 1,
 				},
-				["item"] = "i:2077:-19",
-				["time"] = 1451435126,
+				["isDraenicEnchanting"] = true,
+				["item"] = "i:36178:-40",
+				["time"] = 1453064536,
 			}, -- [2]
 			{
 				["result"] = {
-					["i:22445"] = 2,
+					["i:34054"] = 4,
 				},
-				["item"] = "i:24705:-10",
-				["time"] = 1451435130,
+				["isDraenicEnchanting"] = true,
+				["item"] = "i:36130:-11",
+				["time"] = 1453064539,
 			}, -- [3]
 			{
 				["result"] = {
-					["i:22445"] = 2,
+					["i:34054"] = 7,
 				},
-				["item"] = "i:24828:-20",
-				["time"] = 1451435134,
+				["isDraenicEnchanting"] = true,
+				["item"] = "i:36374:-18",
+				["time"] = 1453064542,
 			}, -- [4]
 			{
 				["result"] = {
-					["i:22447"] = 3,
+					["i:16202"] = 1,
 				},
-				["item"] = "i:24816:-26",
-				["time"] = 1451435138,
+				["isDraenicEnchanting"] = true,
+				["item"] = "i:13869",
+				["time"] = 1453752816,
 			}, -- [5]
 			{
 				["result"] = {
-					["i:22445"] = 3,
+					["i:11176"] = 3,
 				},
-				["item"] = "i:24603:-9",
-				["time"] = 1451435141,
+				["isDraenicEnchanting"] = true,
+				["item"] = "i:13858",
+				["time"] = 1453752819,
 			}, -- [6]
 			{
 				["result"] = {
-					["i:22445"] = 2,
+					["i:11176"] = 4,
 				},
-				["item"] = "i:24816:-39",
-				["time"] = 1451435144,
+				["isDraenicEnchanting"] = true,
+				["item"] = "i:13869",
+				["time"] = 1453752824,
 			}, -- [7]
 			{
 				["result"] = {
-					["i:34056"] = 1,
+					["i:16202"] = 2,
 				},
-				["item"] = "i:36487:-44",
-				["time"] = 1451435148,
+				["isDraenicEnchanting"] = true,
+				["item"] = "i:13869",
+				["time"] = 1453752827,
 			}, -- [8]
 			{
 				["result"] = {
-					["i:11083"] = 2,
+					["i:11176"] = 3,
 				},
-				["item"] = "i:3067",
-				["time"] = 1451435151,
+				["isDraenicEnchanting"] = true,
+				["item"] = "i:13869",
+				["time"] = 1453752830,
 			}, -- [9]
 			{
 				["result"] = {
-					["i:22447"] = 2,
+					["i:11176"] = 2,
 				},
-				["item"] = "i:24739:-13",
-				["time"] = 1451435155,
+				["isDraenicEnchanting"] = true,
+				["item"] = "i:13869",
+				["time"] = 1453752833,
 			}, -- [10]
 			{
 				["result"] = {
-					["i:22445"] = 2,
+					["i:11176"] = 4,
 				},
-				["item"] = "i:24590:-31",
-				["time"] = 1451435158,
+				["isDraenicEnchanting"] = true,
+				["item"] = "i:13858",
+				["time"] = 1453752836,
 			}, -- [11]
-			{
-				["result"] = {
-					["i:22445"] = 3,
-				},
-				["item"] = "i:24994:-36",
-				["time"] = 1451435161,
-			}, -- [12]
-			{
-				["result"] = {
-					["i:11083"] = 1,
-				},
-				["item"] = "i:9807:-19",
-				["time"] = 1451435166,
-			}, -- [13]
-			{
-				["result"] = {
-					["i:16204"] = 1,
-				},
-				["item"] = "i:10372",
-				["time"] = 1451435169,
-			}, -- [14]
-			{
-				["result"] = {
-					["i:11084"] = 1,
-				},
-				["item"] = "i:9837:-84",
-				["time"] = 1451435175,
-			}, -- [15]
-			{
-				["result"] = {
-					["i:22445"] = 2,
-				},
-				["item"] = "i:24598:-34",
-				["time"] = 1451435179,
-			}, -- [16]
-			{
-				["result"] = {
-					["i:22446"] = 2,
-				},
-				["item"] = "i:25149:-10",
-				["time"] = 1451435182,
-			}, -- [17]
-			{
-				["result"] = {
-					["i:11083"] = 2,
-				},
-				["item"] = "i:9809:-78",
-				["time"] = 1451435185,
-			}, -- [18]
-			{
-				["result"] = {
-					["i:22445"] = 5,
-				},
-				["item"] = "i:25039:-7",
-				["time"] = 1451435188,
-			}, -- [19]
-		},
-		["Milling"] = {
 		},
 	},
 	["g@ @helpPlatesShown"] = {
 		["destroyingFrame"] = true,
 	},
-	["_hash"] = 14107345,
 	["g@ @includeSoulbound"] = false,
-	["g@ @deMaxQuality"] = 2,
-	["_version"] = 1,
-	["_currentProfile"] = {
-		["Kxchanter - Aggramar"] = "Default",
-		["Kromethious - Aggramar"] = "Default",
-		["Kxtrader - Aggramar"] = "Default",
-		["Kylosandrax - Aggramar"] = "Default",
-		["Ryvok - Aggramar"] = "Default",
-	},
+	["_hash"] = 14107345,
+	["g@ @deMaxQuality"] = 3,
+	["g@ @deAbovePrice"] = "0c",
+	["g@ @logDays"] = 14,
 }

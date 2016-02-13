@@ -25,9 +25,9 @@ L["Auto-cloning: 1/10"] = "자동복제: 1/10"
 L["Auto-cloning 1/10 Text"] = [=[|cFF8800FF1.4|r에서 추가된 가장 큰 특징은 |cFFFF0000자동복제|r입니다. |cFFFF0000자동복제|r는 정보의 여러 출처를 보여주기 위해 자동으로 디스플레이를 복제합니다. 유동적 그룹에 있는 경우, 정보의 광범위한 유동적 설정을 만들 수 있게 해줍니다.
 
 |cFFFF0000자동복제|r는 3가지 조건 형식을 지원합니다: 오라 모두 스캔, 그룹 오라, 그리고 다중대상 오라.]=]
-L["Beginners Finished Text"] = [=[초보자 가이드 였습니다. 하지만, 아직 |cFF8800FFWeakAuras|r의 힘을 수박 겉핥기 정도만 봤습니다.
+L["Beginners Finished Text"] = [=[초보자 가이드였습니다. 하지만 아직 |cFF8800FFWeakAuras|r의 힘을 수박 겉핥기 정도만 봤습니다.
 
-미래에는, 당신을 |cFF8800FFWeakAuras|r의 끝없는 가능성 속으로 이끌어줄 |cFFFFFF00더|r |cFFFF7F00강력한|r |cFFFF0000설명서|r가 나올겁니다.]=]
+미래에는 당신을 |cFF8800FFWeakAuras|r의 끝없는 가능성 속으로 이끌어 줄 |cFFFFFF00더|r |cFFFF7F00강력한|r |cFFFF0000설명서|r가 나올겁니다.]=]
 L["Beginners Guide Desc"] = "초보자 가이드"
 L["Beginners Guide Desc Text"] = "WeakAuras 기본적인 옵션 설정에 대하여 안내합니다"
 L["Create a Display: 1/5"] = "디스플레이 생성: 1/5"
@@ -103,22 +103,22 @@ L["New in 1.4 Text1"] = [=[|cFF8800FFWeakAuras|r 1.4 버전의 여러 강력한 
 이 설명서는 중요한 새로운 능력 살펴보기를 제공하며, 어떻게 사용하는지도 안내합니다.]=]
 L["New in 1.4 Text2"] = "첫째, 실험 목적을 위한 새로운 디스플레이 생성."
 L["Previous"] = "이전"
-L["Trigger Options: 1/4"] = "조건 옵션: 1/4"
+L["Trigger Options: 1/4"] = "활성 조건 옵션: 1/4"
 L["Trigger Options 1/4 Text"] = [=[추가로 \"다중 대상\"은 유닛 옵션에 새로운 설정이 있습니다: 특정 유닛.
 
 선택하면 새로운 문자 영역을 만들 수 있습니다.]=]
-L["Trigger Options: 2/4"] = "조건 옵션: 2/4"
-L["Trigger Options 2/4 Text"] = [=[이 영역에서, 그룹의 아무 플레이어의 이름 또는 개인추가 유닛 ID를 지정할 수 있습니다. 유닛 ID는 \"boss1\" \"boss2\" 등등 입니다. 특히 공격대 전투에서 유용합니다.
+L["Trigger Options: 2/4"] = "활성 조건 옵션: 2/4"
+L["Trigger Options 2/4 Text"] = [=[이 영역에서 그룹의 아무 플레이어의 이름 또는 개인추가 유닛 ID를 지정할 수 있습니다. 유닛 ID는 \"boss1\" \"boss2\" 등등 입니다. 특히 공격대 전투에서 유용합니다.
 
-모든 조건에 특정 유닛 옵션을 지원하는 유닛(오라 조건이 아니라도)을 지정할 수 있습니다.]=]
-L["Trigger Options: 3/4"] = "조건 옵션: 3/4"
-L["Trigger Options 3/4 Text"] = [=[|cFF8800FFWeakAuras 1.4|r는 새로운 조건 형식이 추가되었습니다.
+모든 활성 조건에 특정 유닛 옵션을 지원하는 유닛(오라 조건이 아니라도)을 지정할 수 있습니다.]=]
+L["Trigger Options: 3/4"] = "활성 조건 옵션: 3/4"
+L["Trigger Options 3/4 Text"] = [=[|cFF8800FFWeakAuras 1.4|r는 새로운 활성 조건 형식이 추가되었습니다.
 
 상태 범주에서 선택하고 그것들을 살펴보세요.]=]
-L["Trigger Options: 4/4"] = "조건 옵션: 4/4"
-L["Trigger Options 4/4 Text"] = [=[|cFFFFFFFF유닛 특징|r 조건은 유닛의 이름, 직업, 적대성, 그리고 플레이어인지 비플레이어인지 테스트할 수 있습니다.
+L["Trigger Options: 4/4"] = "활성 조건 옵션: 4/4"
+L["Trigger Options 4/4 Text"] = [=[|cFFFFFFFF유닛 특징|r 활성 조건은 유닛의 이름, 직업, 적대성, 그리고 플레이어인지 비플레이어인지 테스트할 수 있습니다.
 
-|cFFFFFFFF글로벌 쿨다운|r과 |cFFFFFFFF일반공격 타이머|r 조건은 시전 조건을 보완합니다.]=]
+|cFFFFFFFF글로벌 쿨다운|r과 |cFFFFFFFF일반공격 타이머|r 활성 조건은 시전 조건을 보완합니다.]=]
 L["WeakAuras Tutorials"] = "WeakAuras 설명서"
 L["Welcome"] = "환영합니다"
 L["Welcome Text"] = [=[|cFF8800FFWeakAuras|r 초보자 가이드에 오신 것을 환영합니다.

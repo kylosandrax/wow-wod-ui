@@ -10,9 +10,9 @@ Overachiever_Tabs_Settings = {
 	},
 	["Version"] = "0.84",
 	["SearchFullList"] = true,
-	["WatchedList"] = 0,
 	["AchFilters"] = {
 	},
+	["WatchedList"] = 0,
 	["WatchLists"] = {
 	},
 }

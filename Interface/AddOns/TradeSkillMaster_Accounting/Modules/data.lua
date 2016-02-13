@@ -72,15 +72,18 @@ function private:LoadItemRecords(csvData, recordType, key)
 		saveTimes = TSMAPI.Util:SafeStrSplit(TSM.db.realm.saveTimeSales, ",")
 	elseif recordType == "buys" then
 		saveTimes = TSMAPI.Util:SafeStrSplit(TSM.db.realm.saveTimeBuys, ",")
+	elseif recordType == "auctions" and key == "Expire" then
+		saveTimes = TSMAPI.Util:SafeStrSplit(TSM.db.realm.saveTimeExpires, ",")
+	elseif recordType == "auctions" and key == "Cancel" then
+		saveTimes = TSMAPI.Util:SafeStrSplit(TSM.db.realm.saveTimeCancels, ",")
 	end
 	for _, record in ipairs(select(2, LibParse:CSVDecode(csvData)) or {}) do
 		local itemString = TSMAPI.Item:ToItemString(record.itemString)
 		if itemString and type(record.time) == "number" then
-			local itemName = (record.itemName ~= "?") and record.itemName or nil
-			itemName = itemName or TSMAPI.Item:GetInfo(itemString) or TSM:GetItemName(itemString)
+			local itemName = TSM:GetItemName(itemString) or TSMAPI.Item:GetInfo(itemString) 
 			record.key = key or record.source or "Auction"
 			private:CleanRecord(record)
-			if saveTimes and record.key == "Auction" then
+			if saveTimes and (record.key == "Auction" or record.key == "Expire" or record.key == "Cancel") then
 				record.saveTime = tonumber(saveTimes[saveTimeIndex])
 				saveTimeIndex = saveTimeIndex + 1
 			end

@@ -29,22 +29,22 @@ SkadaDB = {
 				{
 					["barheight"] = 20,
 					["barslocked"] = true,
-					["modeincombat"] = "Damage",
-					["wipemode"] = "Damage",
-					["y"] = 5.99993562698364,
-					["barfont"] = "ElvUI Font",
-					["title"] = {
-						["font"] = "ElvUI Font",
-					},
-					["point"] = "BOTTOMLEFT",
-					["mode"] = "Damage",
-					["name"] = "Damage",
-					["barwidth"] = 204.000564575195,
-					["barfontsize"] = 12,
-					["x"] = 429.000152587891,
 					["background"] = {
 						["height"] = 161.000198364258,
 					},
+					["wipemode"] = "Damage",
+					["y"] = 5.99993562698364,
+					["barfont"] = "ElvUI Font",
+					["name"] = "Damage",
+					["point"] = "BOTTOMLEFT",
+					["mode"] = "Damage",
+					["title"] = {
+						["font"] = "ElvUI Font",
+					},
+					["barwidth"] = 204.000564575195,
+					["barfontsize"] = 12,
+					["x"] = 429.000152587891,
+					["modeincombat"] = "Damage",
 				}, -- [1]
 				{
 					["titleset"] = true,
@@ -133,8 +133,6 @@ SkadaDB = {
 			},
 			["report"] = {
 				["channel"] = "instance_chat",
-				["mode"] = "DPS",
-				["set"] = "total",
 			},
 			["reset"] = {
 				["instance"] = 2,

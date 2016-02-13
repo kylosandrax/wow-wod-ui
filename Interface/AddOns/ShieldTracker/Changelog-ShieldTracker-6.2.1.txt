@@ -1,0 +1,16 @@
+tag 6.2.1
+4ba24f6bed2752266f0ce942440c4efeb01f8219
+Talryn <git@talryn.sent.com>
+2016-02-03 01:05:47 -0500
+
+Tag as 6.2.1.
+
+
+--------------------
+
+Talryn:
+	- Call option window twice to ensure it opens.
+	- Add Purified Shard of the Third Moon absorbs.
+	- Fix some whitespace.
+Sinceat:
+	- added paladin t18 4p shield buff

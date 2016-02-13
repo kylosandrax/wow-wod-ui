@@ -1,5 +1,5 @@
 SET autoQuestPopUps "v"
-SET trackedQuests "v$aL$aK"
+SET trackedQuests "v$aK$aL"
 SET hardTrackedQuests "v"
 SET trackedAchievements "v"
 SET cameraSavedDistance "34.006386"

@@ -89,6 +89,10 @@ do
 	local function Show(self)
 		self.frame:Show()
 	end
+
+	local function SetMinResize(self, width, height)
+		self.frame:SetMinResize(width, height)
+	end
 	
 	local function OnAcquire(self)
 		self.frame:SetParent(UIParent)
@@ -223,8 +227,8 @@ do
 		
 		local titletext = frame:CreateFontString(nil, "ARTWORK")
 		titletext:SetFontObject(GameFontNormal)
-		titletext:SetPoint("TOPLEFT", 12, -8)
-		titletext:SetPoint("TOPRIGHT", -32, -8)
+		titletext:SetPoint("TOPLEFT", 12, -10)
+		titletext:SetPoint("TOPRIGHT", -32, -10)
 		self.titletext = titletext
 		
 		local title = CreateFrame("Button", nil, frame)

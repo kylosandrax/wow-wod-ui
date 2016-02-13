@@ -325,6 +325,9 @@ function ShowTooltip(content)
     if(ItemRefTooltip.WeakAuras_Tooltip_Button) then
         ItemRefTooltip.WeakAuras_Tooltip_Button:Hide();
     end
+    if(ItemRefTooltip.WeakAuras_Tooltip_Button2) then
+        ItemRefTooltip.WeakAuras_Tooltip_Button2:Hide();
+    end
     if(ItemRefTooltip.WeakAuras_Desc_Box) then
         ItemRefTooltip.WeakAuras_Desc_Box:Hide();
     end
@@ -512,6 +515,144 @@ function WeakAuras.DisplayToTableString(id)
     return ret;
 end
 
+local function checkTrigger(codes, id, trigger, untrigger)
+  if (not trigger) then return end;
+  if trigger.type == "custom" then
+    local t = {};
+    if (trigger.custom) then
+      t.text = L["%s Trigger Function"]:format(id);
+      t.value = t.text;
+      t.code = trigger.custom;
+      tinsert(codes, t);
+    end
+
+    if (untrigger and untrigger.custom) then
+      t = {} 
+      t.text = L["%s Untrigger Function"]:format(id);
+      t.value = t.text;
+      t.code = untrigger.custom;
+      tinsert(codes, t);
+    end
+
+    if (trigger.customDuration) then
+      t = {}
+      t.text = L["%s Duration Function"]:format(id);
+      t.value = t.text;
+      t.code = trigger.customDuration
+      tinsert(codes, t);
+    end
+
+    if (trigger.customName) then
+      t = {}
+      t.text = L["%s Name Function"]:format(id);
+      t.value = t.text;
+      t.code = trigger.customName
+      tinsert(codes, t);
+    end
+
+    if (trigger.customIcon) then
+      t = {}
+      t.text = L["%s Icon Function"]:format(id);
+      t.value = t.text;
+      t.code = trigger.customIcon
+      tinsert(codes, t);
+    end
+
+    if (trigger.customTexture) then
+      t = {}
+      t.text = L["%s Texture Function"]:format(id);
+      t.value = t.text;
+      t.code = trigger.customTexture
+      tinsert(codes, t);
+    end
+
+    if (trigger.customStacks) then
+      t = {}
+      t.text = L["%s Stacks Function"]:format(id);
+      t.value = t.text;
+      t.code = trigger.customStacks
+      tinsert(codes, t);
+    end
+  end
+end
+
+local function checkCustom(codes, id, base)
+  if (not base) then return end
+  if (base.do_custom) then
+    local t = {};
+    t.text = id;
+    t.value = id;
+    t.code = base.custom
+    tinsert(codes, t);
+  end
+end
+
+local function checkAnimation(codes, id, a)
+  if (not a) then return end
+  if (a.type == "custom") then
+    if (a.alphaType == "custom" and a.use_alpha and a.alphaFunc) then
+      local t = {};
+      t.text = L["%s - Alpha Animation"]:format(id);
+      t.value = t.text;
+      t.code = a.alphaFunc;
+      tinsert(codes, t);
+    end
+
+    if (a.translateType == "custom" and a.use_translate and a.translateFunc) then
+      local t = {};
+      t.text = L["%s - Translate Animation"]:format(id);
+      t.value = t.text;
+      t.code = a.translateFunc;
+      tinsert(codes, t);
+    end
+
+    if (a.scaleType == "custom" and a.use_scale and a.scaleFunc) then
+      local t = {};
+      t.text = L["%s - Scale Animation"]:format(id);
+      t.value = t.text;
+      t.code = a.scaleFunc;
+      tinsert(codes, t);
+    end
+
+    if (a.rotateType == "custom" and a.use_rotate and a.rotateFunc) then
+      local t = {};
+      t.text = L["%s - Rotate Animation"]:format(id);
+      t.value = t.text;
+      t.code = a.rotateFunc;
+      tinsert(codes, t);
+    end
+
+    if (a.colorType == "custom" and a.use_color and a.colorFunc) then
+      local t = {};
+      t.text = L["%s - Color Animation"]:format(id);
+      t.value = t.text;
+      t.code = a.colorFunc
+      tinsert(codes, t);
+    end
+  end
+end
+
+local function scamCheck(codes, data)
+    checkTrigger(codes, L["%s - 1. Trigger"]:format(data.id), data.trigger, data.untrigger);
+    if (data.additional_triggers) then
+        for i, v in ipairs(data.additional_triggers) do
+          checkTrigger(codes, L["%s - %i. Trigger"]:format(data.id, i+1), v.trigger, v.untrigger);
+        end
+    end
+
+    if (data.actions) then
+      r = checkCustom(codes, L["%s - Init Action"]:format(data.id), data.actions.init);
+      r = checkCustom(codes, L["%s - Start Action"]:format(data.id), data.actions.start);
+      r = checkCustom(codes, L["%s - Finish Action"]:format(data.id), data.actions.finish);
+    end
+
+    if (data.animation) then
+      r = checkAnimation(codes, L["%s - Start"]:format(data.id), data.animation.start);
+      r = checkAnimation(codes, L["%s - Main"]:format(data.id), data.animation.main);
+      r = checkAnimation(codes, L["%s - Finish"]:format(data.id), data.animation.finish);
+    end
+end
+
 function WeakAuras.ShowDisplayTooltip(data, children, icon, icons, import, compressed, alterdesc)
     if(type(data) == "table") then
         if(compressed) then
@@ -533,9 +674,12 @@ function WeakAuras.ShowDisplayTooltip(data, children, icon, icons, import, compr
             {1, " ", 1, 1, 1}
         };
 
+        local codes = {};
+        scamCheck(codes, data);
         if(children) then
             for index, childData in pairs(children) do
                 tinsert(tooltip, {2, " ", childData.id, 1, 1, 1, 1, 1, 1});
+                scamCheck(codes, childData);
             end
             if(#tooltip > 3) then
                 tooltip[4][2] = L["Children:"];
@@ -609,22 +753,36 @@ function WeakAuras.ShowDisplayTooltip(data, children, icon, icons, import, compr
         end
 
         local importbutton;
+        local showcodebutton;
         if(import) then
             tinsert(tooltip, {1, " "});
             if(type(import) == "string" and import ~= "unknown") then
                 tinsert(tooltip, {2, L["From"]..": "..import, "                         ", 0, 1, 0});
-            else
-                tinsert(tooltip, {2, " ", "                         ", 0, 1, 0});
             end
+
+            if #codes > 0 then
+              tinsert(tooltip, {1, "The Aura you are importing contains custom code.", 1, 0, 0});
+              tinsert(tooltip, {1, "Make sure you can trust the person who sent it!", 1, 0, 0});
+            end
+
+            tinsert(tooltip, {2, " ", "                         ", 0, 1, 0});
+            tinsert(tooltip, {2, " ", "                         ", 0, 1, 0});
 
             if not(ItemRefTooltip.WeakAuras_Tooltip_Button) then
                 ItemRefTooltip.WeakAuras_Tooltip_Button = CreateFrame("Button", "WeakAurasTooltipImportButton", ItemRefTooltip, "UIPanelButtonTemplate")
             end
             importbutton = ItemRefTooltip.WeakAuras_Tooltip_Button;
-            importbutton:SetPoint("BOTTOMRIGHT", ItemRefTooltip, "BOTTOMRIGHT", -20, 8);
-            importbutton:SetWidth(100);
+            importbutton:SetPoint("BOTTOMRIGHT", ItemRefTooltip, "BOTTOMRIGHT", -8, 8);
+            importbutton:SetWidth(90);
             importbutton:RegisterEvent("PLAYER_REGEN_ENABLED");
             importbutton:RegisterEvent("PLAYER_REGEN_DISABLED");
+
+            if not(ItemRefTooltip.WeakAuras_Tooltip_Button2) then
+                ItemRefTooltip.WeakAuras_Tooltip_Button2 = CreateFrame("Button", "WeakAurasTooltipImportButton", ItemRefTooltip, "UIPanelButtonTemplate")
+            end
+            showcodebutton = ItemRefTooltip.WeakAuras_Tooltip_Button2;
+            showcodebutton:SetPoint("BOTTOMLEFT", ItemRefTooltip, "BOTTOMLEFT", 8, 8);
+            showcodebutton:SetWidth(90);
 
             local function onCombat(self, event)
               if (event == "PLAYER_REGEN_ENABLED") then
@@ -638,6 +796,7 @@ function WeakAuras.ShowDisplayTooltip(data, children, icon, icons, import, compr
             if (InCombatLockdown()) then
               importbutton:Disable();
             end
+            showcodebutton:SetText(L["Show Code"]);
             if not WeakAurasSaved.import_disabled or WeakAuras.IsImporting() then
                 importbutton:SetText("Import");
                 importbutton:SetScript("OnClick", function()
@@ -719,12 +878,22 @@ function WeakAuras.ShowDisplayTooltip(data, children, icon, icons, import, compr
                     WeakAuras.CloseImportExport();
                 end);
             end
+
+            showcodebutton:SetScript("OnClick", function() 
+                WeakAuras.OpenOptions();
+                WeakAuras.OpenCodeReview(codes); 
+            end);
         end
 
         ShowTooltip(tooltip);
 
         if(import) then
             importbutton:Show();
+            if (#codes > 0) then
+              showcodebutton:Show();
+            else
+              showcodebutton:Hide();
+            end
         end
 
         if not(ItemRefTooltip.WeakAuras_Tooltip_Thumbnail_Frame) then
@@ -866,23 +1035,13 @@ function WeakAuras.ShowDisplayTooltip(data, children, icon, icons, import, compr
     end
 end
 
-local function scamCheck(data)
-    if type(data) == "table" then
-        for k,v in pairs(data) do
-            scamCheck(v)
-        end
-    elseif type(data) == "string" and (string.find(data, "SendMail") or string.find(data, "SetTradeMoney")) then
-        print("|cffffff00The Aura you are importing contains code to send mail and/or trade gold to other players!|r")
-    end
-end
-
 function WeakAuras.ImportString(str)
     local received = StringToTable(str, true);
     if(received and type(received) == "table" and received.m) then
         if(received.m == "d") then
             tooltipLoading = nil;
             if(version < received.v) then
-                local errorMsg = L["Version error recevied higher"]
+                local errorMsg = L["Version error received higher"]
                 ShowTooltip({
                     {1, "WeakAuras", 0.5333, 0, 1},
                     {1, errorMsg:format(received.s, versionString), 1, 0, 0}
@@ -890,20 +1049,6 @@ function WeakAuras.ImportString(str)
             else
                 local data = received.d;
                 WeakAuras.ShowDisplayTooltip(data, received.c, received.i, received.a, "unknown", true)
-                -- Scam alert
-                local found = nil
-                if (data.additional_triggers) then
-                    for _, v in ipairs(data.additional_triggers) do
-                        if v.trigger.type == "custom" then
-                            found = true
-                            break
-                        end
-                    end
-                end
-                if found or data.trigger.type == "custom" then
-                    print("|cffff0000The Aura you are importing contains custom code, make sure you can trust the person who sent it!|r")
-                end
-                scamCheck(data)
             end
         end
     elseif(type(received) == "string") then
@@ -968,7 +1113,7 @@ Comm:RegisterComm("WeakAuras", function(prefix, message, distribution, sender)
         if(received.m == "d") and safeSenders[sender] then
             tooltipLoading = nil;
             if(version ~= received.v) then
-                local errorMsg = version > received.v and L["Version error recevied lower"] or L["Version error recevied higher"]
+                local errorMsg = version > received.v and L["Version error received lower"] or L["Version error received higher"]
                 ShowTooltip({
                     {1, "WeakAuras", 0.5333, 0, 1},
                     {1, errorMsg:format(received.s, versionString), 1, 0, 0}

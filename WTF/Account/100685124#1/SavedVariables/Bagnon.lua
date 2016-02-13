@@ -4,16 +4,97 @@ Bagnon_Sets = {
 	},
 	["leatherColor"] = {
 	},
-	["enchantColor"] = {
-	},
-	["glowAlpha"] = 0.5,
 	["engineerColor"] = {
 	},
-	["refrigeColor"] = {
+	["herbColor"] = {
+	},
+	["inscribeColor"] = {
+	},
+	["glowUnusable"] = false,
+	["glowQuest"] = true,
+	["reagentColor"] = {
+	},
+	["gemColor"] = {
+	},
+	["global"] = {
+		["inventory"] = {
+			["point"] = "BOTTOMRIGHT",
+			["hiddenBags"] = {
+				false, -- [1]
+				[0] = false,
+			},
+			["scale"] = 1,
+			["alpha"] = 1,
+			["y"] = 100,
+			["x"] = -50,
+			["borderColor"] = {
+				1, -- [1]
+				0.725490196078431, -- [2]
+				0, -- [3]
+				1, -- [4]
+			},
+			["columns"] = 16,
+			["itemScale"] = 1,
+			["color"] = {
+			},
+		},
+		["vault"] = {
+			["columns"] = 16,
+			["hiddenBags"] = {
+			},
+			["scale"] = 1,
+			["itemScale"] = 1,
+			["y"] = 186.999984741211,
+			["x"] = 95.0000076293945,
+			["borderColor"] = {
+			},
+			["alpha"] = 1,
+			["color"] = {
+			},
+			["point"] = "BOTTOMLEFT",
+		},
+		["guild"] = {
+			["columns"] = 6,
+			["hiddenBags"] = {
+			},
+			["scale"] = 1,
+			["itemScale"] = 1,
+			["y"] = 530,
+			["x"] = -51.500732421875,
+			["borderColor"] = {
+			},
+			["alpha"] = 1,
+			["color"] = {
+			},
+			["point"] = "BOTTOMRIGHT",
+		},
+		["bank"] = {
+			["columns"] = 16,
+			["hiddenBags"] = {
+				[5] = false,
+				[6] = false,
+			},
+			["scale"] = 1,
+			["alpha"] = 1,
+			["y"] = 434.999969482422,
+			["x"] = -54.000732421875,
+			["borderColor"] = {
+			},
+			["point"] = "BOTTOMRIGHT",
+			["color"] = {
+			},
+			["itemScale"] = 1,
+		},
+	},
+	["glowAlpha"] = 0.5,
+	["normalColor"] = {
 	},
 	["mineColor"] = {
 	},
-	["inscribeColor"] = {
+	["glowSets"] = false,
+	["enchantColor"] = {
+	},
+	["refrigeColor"] = {
 	},
 	["players"] = {
 		["Aggramar"] = {
@@ -268,11 +349,11 @@ Bagnon_Sets = {
 					},
 					["scale"] = 1,
 					["alpha"] = 1,
-					["y"] = 186.999969482422,
-					["x"] = 95.0000076293945,
+					["y"] = 256.999877929688,
+					["x"] = -709.000122070313,
 					["borderColor"] = {
 					},
-					["point"] = "BOTTOMLEFT",
+					["point"] = "BOTTOMRIGHT",
 					["color"] = {
 					},
 					["itemScale"] = 1,
@@ -293,15 +374,15 @@ Bagnon_Sets = {
 					["columns"] = 16,
 				},
 				["guild"] = {
+					["scale"] = 1,
+					["columns"] = 16,
+					["hiddenBags"] = {
+					},
 					["color"] = {
 					},
-					["columns"] = 16,
-					["borderColor"] = {
-					},
-					["scale"] = 1,
 					["itemScale"] = 1,
 					["alpha"] = 1,
-					["hiddenBags"] = {
+					["borderColor"] = {
 					},
 				},
 				["bank"] = {
@@ -390,16 +471,16 @@ Bagnon_Sets = {
 			},
 			["Ryvok"] = {
 				["vault"] = {
-					["hiddenBags"] = {
-					},
-					["columns"] = 16,
 					["borderColor"] = {
 					},
-					["scale"] = 1,
-					["alpha"] = 1,
-					["itemScale"] = 1,
+					["columns"] = 16,
+					["hiddenBags"] = {
+					},
 					["color"] = {
 					},
+					["alpha"] = 1,
+					["itemScale"] = 1,
+					["scale"] = 1,
 				},
 				["inventory"] = {
 					["point"] = "BOTTOMRIGHT",
@@ -449,83 +530,6 @@ Bagnon_Sets = {
 			},
 		},
 		["Terokkar"] = {
-		},
-	},
-	["reagentColor"] = {
-	},
-	["gemColor"] = {
-	},
-	["normalColor"] = {
-	},
-	["herbColor"] = {
-	},
-	["global"] = {
-		["inventory"] = {
-			["point"] = "BOTTOMRIGHT",
-			["hiddenBags"] = {
-				[0] = false,
-			},
-			["scale"] = 1,
-			["alpha"] = 1,
-			["y"] = 100,
-			["x"] = -50,
-			["borderColor"] = {
-				1, -- [1]
-				0.725490196078431, -- [2]
-				0, -- [3]
-				1, -- [4]
-			},
-			["columns"] = 16,
-			["itemScale"] = 1,
-			["color"] = {
-			},
-		},
-		["vault"] = {
-			["columns"] = 16,
-			["hiddenBags"] = {
-			},
-			["scale"] = 1,
-			["itemScale"] = 1,
-			["y"] = 186.999984741211,
-			["x"] = 95.0000076293945,
-			["borderColor"] = {
-			},
-			["alpha"] = 1,
-			["color"] = {
-			},
-			["point"] = "BOTTOMLEFT",
-		},
-		["guild"] = {
-			["columns"] = 6,
-			["hiddenBags"] = {
-			},
-			["scale"] = 1,
-			["itemScale"] = 1,
-			["y"] = 530,
-			["x"] = -51.500732421875,
-			["borderColor"] = {
-			},
-			["alpha"] = 1,
-			["color"] = {
-			},
-			["point"] = "BOTTOMRIGHT",
-		},
-		["bank"] = {
-			["columns"] = 16,
-			["hiddenBags"] = {
-				[5] = false,
-				[6] = false,
-			},
-			["scale"] = 1,
-			["alpha"] = 1,
-			["y"] = 473.999938964844,
-			["x"] = -54.000732421875,
-			["borderColor"] = {
-			},
-			["point"] = "BOTTOMRIGHT",
-			["color"] = {
-			},
-			["itemScale"] = 1,
 		},
 	},
 }

@@ -29,7 +29,7 @@ Postal3DB = {
 				"Kxchanter|Aggramar|Horde|5|MAGE", -- [6]
 				"Kxtrader|Aggramar|Horde|5|SHAMAN", -- [7]
 				"Kyloc|Aggramar|Horde|1|WARLOCK", -- [8]
-				"Kylosandrax|Aggramar|Horde|60|WARRIOR", -- [9]
+				"Kylosandrax|Aggramar|Horde|77|WARRIOR", -- [9]
 				"Kylosandrix|Aggramar|Horde|4|WARRIOR", -- [10]
 				"Kylozandrax|Earthen Ring|Horde|71|WARRIOR", -- [11]
 				"Ryjax|Aggramar|Horde|1|DRUID", -- [12]
@@ -75,10 +75,10 @@ Postal3DB = {
 		["Kromethious - Aggramar"] = {
 			["BlackBook"] = {
 				["recent"] = {
-					"kxtrader|Aggramar|Horde", -- [1]
-					"Kxchanter|Aggramar|Horde", -- [2]
-					"Kylosandrax|Aggramar|Horde", -- [3]
-					"Kxtrader|Aggramar|Horde", -- [4]
+					"Kylosandrax|Aggramar|Horde", -- [1]
+					"kxtrader|Aggramar|Horde", -- [2]
+					"Kxtrader|Aggramar|Horde", -- [3]
+					"Kxchanter|Aggramar|Horde", -- [4]
 					"kxchanter|Aggramar|Horde", -- [5]
 					"Ryvok|Aggramar|Horde", -- [6]
 				},
@@ -87,9 +87,9 @@ Postal3DB = {
 		["Kylosandrax - Aggramar"] = {
 			["BlackBook"] = {
 				["recent"] = {
-					"Kxchanter|Aggramar|Horde", -- [1]
+					"kxtrader|Aggramar|Horde", -- [1]
 					"Kxtrader|Aggramar|Horde", -- [2]
-					"kxtrader|Aggramar|Horde", -- [3]
+					"Kxchanter|Aggramar|Horde", -- [3]
 					"kxchanter|Aggramar|Horde", -- [4]
 					"Ryvok|Aggramar|Horde", -- [5]
 					"Zapunzel|Aggramar|Horde", -- [6]
@@ -104,8 +104,10 @@ Postal3DB = {
 			["BlackBook"] = {
 				["recent"] = {
 					"Kromethious|Aggramar|Horde", -- [1]
-					"Kxchanter|Aggramar|Horde", -- [2]
-					"Ryvok|Aggramar|Horde", -- [3]
+					"Ryjax|Aggramar|Horde", -- [2]
+					"Kylosandrax|Aggramar|Horde", -- [3]
+					"Kxchanter|Aggramar|Horde", -- [4]
+					"Ryvok|Aggramar|Horde", -- [5]
 				},
 			},
 		},
@@ -124,8 +126,11 @@ Postal3DB = {
 		["Kxchanter - Aggramar"] = {
 			["BlackBook"] = {
 				["recent"] = {
-					"kromethious|Aggramar|Horde", -- [1]
-					"Ryvok|Aggramar|Horde", -- [2]
+					"kxtrader|Aggramar|Horde", -- [1]
+					"Kxtrader|Aggramar|Horde", -- [2]
+					"Kromethious|Aggramar|Horde", -- [3]
+					"kromethious|Aggramar|Horde", -- [4]
+					"Ryvok|Aggramar|Horde", -- [5]
 				},
 			},
 		},
@@ -143,9 +148,9 @@ Postal3DB = {
 		["Ryvok - Aggramar"] = {
 			["BlackBook"] = {
 				["recent"] = {
-					"kxchanter|Aggramar|Horde", -- [1]
-					"Kxchanter|Aggramar|Horde", -- [2]
-					"Kxtrader|Aggramar|Horde", -- [3]
+					"Kxtrader|Aggramar|Horde", -- [1]
+					"kxchanter|Aggramar|Horde", -- [2]
+					"Kxchanter|Aggramar|Horde", -- [3]
 					"kxtrader|Aggramar|Horde", -- [4]
 					"Kylosandrax|Aggramar|Horde", -- [5]
 					"Feldspar|Aggramar|Horde", -- [6]

@@ -20,17 +20,12 @@ Config.SESSIONDATA_GROUPBY = {
 local options = {
 	type = "group",
 	args = {
-		general = {
-			type = "group", 
-			name = LootAppraiser, 
-			get = function(info) 
-				return LA.db.profile[info[#info]] 
-			end,
+		general = { type = "group", name = LootAppraiser, childGroups = "tab",
+			get = function(info) return LA.db.profile[info[#info]] end,
 			set = function(info, value) 
 				LA.db.profile[info[#info]] = value;
 				LA:refreshStatusText()
 			end,
-			childGroups = "tab",
 			args = {
 				generalOptionsGrp = {
 					type = "group",
@@ -113,6 +108,7 @@ local options = {
 					order = 50,
 					name = "Price Source",
 					get = function(info) 
+						--LA:print_r(LA:GetAvailablePriceSources())
 						return LA.db.profile.pricesource[info[#info]] 
 					end,
 					set = function(info, value) 
@@ -124,7 +120,10 @@ local options = {
 							order = 20,
 							name = "Price Source",
 							desc = "TSM predefined price sources for item value calculation.",
-							values = LA.PRICE_SOURCE,
+							--values = LA.PRICE_SOURCE,
+							values = function()
+								return LA:GetAvailablePriceSources()
+							end,
 							width = "double",
 							set = function(info, value) 
 								local oldValue = LA.db.profile.pricesource[info[#info]]
@@ -269,9 +268,7 @@ local options = {
 							--width = "double",
 							set = function(info, value) 
 								local oldValue = LA.db.profile.blacklist[info[#info]]
-								if oldValue ~= value then
-									LA:Print("Blacklist items via TSM group: " .. Config:formatBoolean(value) .. ".")
-								end
+								if oldValue ~= value then LA:Print("Blacklist items via TSM group: " .. Config:formatBoolean(value) .. ".") end
 								LA.db.profile.blacklist[info[#info]] = value;
 							end,
 						},
@@ -288,7 +285,6 @@ local options = {
 								LA:Print("Blacklisted items TSM group set to: " .. value)
 								LA.db.profile.blacklist[info[#info]] = value;
 							end,
-							-- TODO validation
 							validate = function(info, value)
 								-- validate the tsn group
 								if value == nil or value == "" then
@@ -299,69 +295,25 @@ local options = {
 								return true
 							end,
 						},
-						emptyLine2 = {
-							type = "description",
-							order = 40,
-							name = " ",
-							width = "full"
-						},
-						
-
-
+						emptyLine2 = { type = "description", order = 40, name = " ", width = "full" },
 					},
 				},
-				notificationOptionsGrp = {
-					type = "group",
-					order = 75,
-					name = "Notifications",
-					get = function(info) 
-						return LA.db.profile.notification[info[#info]] 
-					end,
-					set = function(info, value) 
-						LA.db.profile.notification[info[#info]] = value;
-					end,
+				notificationOptionsGrp = { type = "group", order = 75, name = "Notifications",
+					get = function(info) return LA.db.profile.notification[info[#info]] end,
+					set = function(info, value) LA.db.profile.notification[info[#info]] = value end,
 					args = {
-						noteworthyItemOutputHeader = {
-							order = 100,
-							type = "header",
-							name = "Noteworthy Item Output Channel",
-							--cmdHidden = true,
-						},
+						noteworthyItemOutputHeader = { order = 100, type = "header", name = "Noteworthy Item Output Channel", },
 						notificationLibSink = LA:GetSinkAce3OptionsDataTable(),
-						enableToasts = {
-							type = "toggle",
-							order = 300,
-							name = "Enable Toasts",
-							desc = "Enable Toasts",
-							width = "double",
+						enableToasts = { type = "toggle", order = 300, name = "Enable Toasts", desc = "Enable Toasts", width = "double",
 							set = function(info, value) 
 								local oldValue = LA.db.profile.notification[info[#info]]
-								if oldValue ~= value then
-									LA:Print("Enable Toasts set: " .. Config:formatBoolean(value) .. ".")
-								end
+								if oldValue ~= value then LA:Print("Enable Toasts set: " .. Config:formatBoolean(value) .. ".") end
 								LA.db.profile.notification[info[#info]] = value;
 							end,
 						},
-						noteworthyItemSoundHeader = {
-							order = 400,
-							type = "header",
-							name = "Noteworthy Item Sound",
-							--cmdHidden = true,
-						},
-						playSoundEnabled = {
-							order = 425,
-							type = "toggle",
-							name = "Play Sound",
-							desc = "Play Sound",
-						},
-						soundName = {
-							order = 450,
-							type = "select",
-							name = "Sound",
-							desc = "Sound",
-							width = "double",
-							dialogControl = "LSM30_Sound",
-							values = LSM:HashTable("sound"),							
+						noteworthyItemSoundHeader = { order = 400, type = "header", name = "Noteworthy Item Sound", },
+						playSoundEnabled = { order = 425, type = "toggle", name = "Play Sound", desc = "Play Sound", },
+						soundName = { order = 450, type = "select", name = "Sound", desc = "Sound", width = "double", dialogControl = "LSM30_Sound", values = LSM:HashTable("sound"),
 							disabled = function() return not LA.db.profile.notification.playSoundEnabled end,
 						},
 					},
@@ -370,7 +322,8 @@ local options = {
 					get = function(info) return LA.db.profile.display[info[#info]] end,
 					set = function(info, value) 
 						LA.db.profile.display[info[#info]] = value 
-						LA:prepareDataContainer() end,
+						LA:prepareDataContainer() 
+					end,
 					args = {
 						displayMainUiOptions = { type = "group", order = 10, name = "Main UI", hidden = false, inline = true,
 							args = {
@@ -384,33 +337,14 @@ local options = {
 							},
 							plugins = {},
 						},
-						displayLastNoteworthyItemOptions = { type = "group", order = 20, name = "Last Noteworthy Item UI", hidden = false, inline = true,
-							args = { enableLastNoteworthyItemUI = { type = "toggle", order = 10, name = "Enable 'Last Noteworthy Item' UI", desc = "Enables the 'Last Noteworthy Item' UI", width = "double", }, },
-							plugins = {},
-						},
-						displayLootAppraiserLiteOptions = { type = "group", order = 30, name = "Loot Appraiser Lite UI", hidden = false, inline = true,
-							args = { enableLootAppraiserLite = { type = "toggle", order = 10, name = "Enable 'Loot Appraiser Lite' UI", desc = "Enables the 'Loot Appraiser Lite' UI which shows the looted item value.", width = "double", }, },
-							plugins = {},
-						},
-						--[[
-						displayLootAppraiserNativeTimerOptions = {
-							type = "group",
-							order = 40,
-							name = "Blizard Native Timer",
-							hidden = false,
-							inline = true,
-							args = {
-								enableLootAppraiserNativeTimer = {
-									type = "toggle",
-									order = 10,
-									name = "Enable 'Blizzard Native Timer' UI",
-									desc = "Enables the 'Blizzard Native Timer' interface.",
-									width = "double",
-								},
+						displayLastNoteworthyItemOptions = { type = "group", order = 20, name = "Additional Loot Appraiser 'Lite' windows", hidden = false, inline = true,
+							args = { 
+								enableLastNoteworthyItemUI = { type = "toggle", order = 10, name = "Enable 'Last Noteworthy Item' UI", desc = "Enables the 'Last Noteworthy Item' UI", width = "double", }, 
+								enableLootAppraiserLite = { type = "toggle", order = 10, name = "Enable 'Loot Appraiser Lite' UI", desc = "Enables the 'Loot Appraiser Lite' UI which shows the looted item value.", width = "double", },
+								enableLootAppraiserTimerUI = { type = "toggle", order = 10, name = "Enable 'Timer' UI", desc = "Enables the 'Timer' UI.", width = "double", set = function(info, value) LA.db.profile.display[info[#info]] = value end, },
 							},
 							plugins = {},
 						},
-						]]
 						displayTooltipOptions = { type = "group", order = 40, name = "Tooltip", hidden = true, inline = true,
 							args = {},
 							plugins = {},
@@ -424,24 +358,28 @@ local options = {
 						generalText15 = { type = "description", order = 15, fontSize = "medium",name = "EMail:",width = "half", }, 
 						generalText16 = { type = "description", order = 16, fontSize = "medium",name = "lootappraiser@gmail.com",width = "double", }, 
 						generalText20 = { type = "description", order = 20, fontSize = "medium", name = "\nAuthor/Designer/Developer: Profitz", width = "full", }, 
-						generalText26 = { type = "description", order = 26, fontSize = "small", name = "", width = "full", }, 
+						blank26 = { type = "description", order = 26, fontSize = "small", name = "", width = "full", }, 
 						generalText30 = { type = "description", order = 30, fontSize = "medium", name = "Twitter:", width = "half", }, 
 						generalText35 = { type = "description", order = 35, fontSize = "medium", name = "@WowProfitz (https://twitter.com/WowProfitz)", width = "double", }, 
-						generalText36 = { type = "description", order = 36, fontSize = "small", name = "", width = "full", }, 
+						blank36 = { type = "description", order = 36, fontSize = "small", name = "", width = "full", }, 
 						generalText40 = { type = "description", order = 40, fontSize = "medium", name = "Twitch:", width = "half", }, 
 						generalText45 = { type = "description", order = 45, fontSize = "medium", name = "ProfitzTV (http://www.twitch.tv/profitztv)", width = "double", }, 
-						generalText46 = { type = "description", order = 46, fontSize = "small", name = "", width = "full", }, 
+						blank46 = { type = "description", order = 46, fontSize = "small", name = "", width = "full", }, 
 						generalText50 = { type = "description", order = 50, fontSize = "medium", name = "EMail:", width = "half", }, 
 						generalText55 = { type = "description", order = 55, fontSize = "medium", name = "WowProfitz@Gmail.com", width = "double", }, 
 						generalText60 = { type = "description", order = 60, fontSize = "medium", name = "\nCo-Author/Lead Developer/Designer:  Testerle", width = "full", }, 
-						generalText66 = { type = "description", order = 66, fontSize = "small",name = "",width = "full", }, 
+						blank66 = { type = "description", order = 66, fontSize = "small",name = "",width = "full", }, 
 						generalText70 = { type = "description", order = 70, fontSize = "medium", name = "Twitter:", width = "half", }, 
 						generalText75 = { type = "description", order = 75, fontSize = "medium", name = "@Testerle (https://twitter.com/Testerle)", width = "double", }, 
+						blank76 = { type = "description", order = 76, fontSize = "small", name = "", width = "full", }, 
+						generalText77 = { type = "description", order = 77, fontSize = "medium", name = "Twitch:", width = "half", }, 
+						generalText78 = { type = "description", order = 78, fontSize = "medium", name = "Testerle (http://www.twitch.tv/testerle)", width = "double", }, 
 						generalText80 = { type = "description", order = 80, fontSize = "medium", name = "\nContributor(s)/Developer: Munglunch\n\nEarly Adopters/Beta Testers:", width = "full", }, 
-						generalText86 = { type = "description", order = 86, fontSize = "small", name = "", width = "full", }, 
+						blank86 = { type = "description", order = 86, fontSize = "small", name = "", width = "full", }, 
 						generalText100 = { type = "description", order = 100, fontSize = "medium", name = "ACubed10\nBrozerian\nConzec89\nDecepticon2012\nDozerBob\nFatherfajita\nGoblinRaset\nJuniorDeBoss\nMorricade\nPhatLewts\nSelltacular", width = "full", }, 
-						generalText110 = { type = "description", order = 110, fontSize = "small",name = "",width = "full", }, 
+						blank110 = { type = "description", order = 110, fontSize = "small",name = "",width = "full", }, 
 						enableDebugOutput = { type = "toggle",order = 120,name = "Enable debug output",desc = "Enable debug output",width = "full", },
+						blank130 = { type = "description", order = 130, fontSize = "small",name = "",width = "full", }, 
 					}, 
 				},
 			}, 
@@ -475,8 +413,7 @@ function Config:OnInitialize()
 	AceConfigRegistry:RegisterOptionsTable(LootAppraiser .. " Statistic", options.args.statistic, LootAppraiser)
 
 	local lootAppraiserConfig = AceConfigDialog:AddToBlizOptions(LootAppraiser)
-	-- add reset function
-	lootAppraiserConfig.default = Config.resetDB
+	lootAppraiserConfig.default = Config.resetDB -- add reset function
 
 	statisticFrame = AceConfigDialog:AddToBlizOptions(LootAppraiser .. " Statistic", "Statistic", LootAppraiser)
 	LA:prepareStatisticGroups() -- prepare statistic groups

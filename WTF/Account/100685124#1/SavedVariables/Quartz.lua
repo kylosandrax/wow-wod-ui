@@ -79,8 +79,8 @@ Quartz3DB = {
 			["modules"] = {
 				["Buff"] = false,
 				["Timer"] = false,
-				["Mirror"] = false,
 				["Pet"] = false,
+				["Mirror"] = false,
 				["Focus"] = false,
 			},
 		},

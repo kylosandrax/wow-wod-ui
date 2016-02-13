@@ -1,3 +1,7 @@
+v3.0.1
+*Add caching of pet species in Guild Vault.
+*Optimize scanning of Guild Vault inventory.
+
 v3.0
 *Initial 3.0 version!
 \\
