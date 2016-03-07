@@ -1,5 +1,5 @@
 ## Title: oGear
-## Version: 0.1.4
+## Version: 0.1.7
 ## Interface: 60000
 ## Author: Tiny of the Zerg
 ## Notes: Oath's gear tool
@@ -8,7 +8,7 @@
 ## DefaultState: enabled
 ## X-Curse-Project-Name: oGear
 ## X-Curse-Project-ID: ogear
-## X-Curse-Packaged-Version: 0.1.4
+## X-Curse-Packaged-Version: 0.1.7
 ## SavedVariables: OGEAR
 
 ogear.lua

@@ -96,6 +96,7 @@ L["No Item Specified"] = true
 L["No Target Player"] = true
 L["No Target Specified"] = true
 L["Nothing to Move"] = true
+L["Not sending any gold as you either did not enter a limit or did not press enter to store the limit."] = true
 L["Not sending any gold as you have less than the specified limit."] = true
 L["Not Target Specified"] = true
 L["Open All Mail"] = true

@@ -658,6 +658,26 @@ function oq.get_raid_name( raid_id )
   return nil ;
 end
 
+function oq.get_raid_name_from_abbrev( raid_abbrev ) 
+  local raid_id, v ;
+  for raid_id,v in pairs(OQ.raid_abbrevation) do
+    if (v == raid_abbrev) then
+      local name, id ;
+      for name,id in pairs(OQ.raid_ids) do
+        if (id == raid_id) then
+          return name, raid_abbrev, raid_id ;
+        end
+      end
+      break ;
+    end
+  end
+  return "", raid_abbrev, 0 ;
+end
+
+function oq.get_difficulty_desc( diff_id )
+  return OQ._difficulty[diff_id] and OQ._difficulty[diff_id].desc or "n/a" ;
+end
+
 function oq.get_raid_index( raid_id )
   if (raid_id == 0) then
     return 0 ;
@@ -805,7 +825,7 @@ end
 
 function oq.oceanic_conflict( p )
   oq.__conflict = L[": none"] ;
-  if (string.sub(GetCVar("portal"),1,2) == "EU") then
+  if (string.sub(strupper(GetCVar("portal")),1,2) == "EU") then
     return nil ; -- no oceanic style conflict for the EU
   end
   if (p.type ~= OQ.TYPE_RAID) or (#p.pdata < 8) then

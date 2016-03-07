@@ -92,6 +92,7 @@ If you loot all mail with this enabled, it will wait and recheck then keep auto 
 -- L["No Target Player"] = ""
 -- L["No Target Specified"] = ""
 -- L["Nothing to Move"] = ""
+-- L["Not sending any gold as you either did not enter a limit or did not press enter to store the limit."] = ""
 -- L["Not sending any gold as you have less than the specified limit."] = ""
 -- L["Not Target Specified"] = ""
 -- L["Open All Mail"] = ""

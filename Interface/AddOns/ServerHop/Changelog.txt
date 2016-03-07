@@ -1,0 +1,212 @@
+**Server Hop 1.17**
+
+* Global:
+** Minimap button can now be caught by other addons.
+** Addon will no longer reset position after logout when being moved to the bottom or right edge of the screen.
+* Custom Search:
+** Fixed a bug where changing favourite keywords wouldn't update them until restart.
+* Options:
+** **NEW** Value of blacklist duration slider can now be saved.
+** **NEW** Added macro text to the settings. Simply copy paste this text into an actual macro. Reminder: macros also work while addon window is hidden.
+** "Auto-accept only" checkbutton was renamed into "non-auto accept groups" and now contains a slider beneath it to change waiting time for invites.
+** Frame height was increased to be able to fit new elements.
+
+**Server Hop 1.16a**
+
+* Global:
+** Fixed a bug that caused addon to stuck while leaving from a raid where you were a leader.
+
+**Server Hop 1.16**
+
+I think that all hop mode bugs have been fixed now! If you enjoy using Server Hop, please give it a thumbs up on curse.
+* Hop Search:
+** Addon now avoids home realm.
+** Addon will no longer set home realm as a last visited realm.
+** Changed the way queuing was done:
+** Addon will now properly queue and cancel up to 5 groups at once. Autoinviting groups get higher priority.
+** You should no longer see "You are queued for too many instances." error message.
+
+**Server Hop 1.15**
+*Global:
+** **NEW**: Server Hop can now send clickable chat notifications. Currently it'll notify you about the realm you're visiting. Custom search notifications are coming soon. If you have any ideas about improving this feature, leave your messages on curse.
+** You can turn this off in options.
+* Hop Search:
+** Addon missing party invites because user/other addon did it faster will no longer cause UI to stuck.
+** Hopping is now ~1 second more faster.
+** Hopping to non auto-accept groups is even more faster!
+
+**Server Hop 1.14**
+Hello everyone, sorry for a slow update. I'm constantly watching your youtube reviews of my addon and really happy about it, however almost no one ever using this addon for raid/dungeon/mount searching, only for hopping (I wonder why. Also right click that favourite star!).  That's why from now on I'll be steadily reworking search engine to allow searching multiple dungeons/raids at once. I'll be releasing it as the Legion launches where, I believe, those activities'll become ultra popular. During the wait time, I'll be pushing some fixes and small features as your suggestions come to the comment section. Cheers!
+* Global:
+** Added credits.
+* Hop Search:
+** Fixed blank realm bug.
+** Addon will wait up to 5 seconds if you hop to non auto-accept groups.
+
+**Server Hop 1.13**
+* Custom Search:
+** Favourites window is now draggable and remembers where you've placed it. Changed look a little bit.
+
+**Server Hop 1.12**
+* Global:
+** Minimap button now uses Ace libraries and can be displayed by broker addons. Settings has beed reset.
+
+**Server Hop 1.11**
+* Hop Search:
+** **NEW**: YOU CAN NOW SEPARATE PVP AND PVE HOPPING! Wooooo!
+
+**Server Hop 1.10**
+* Global:
+** **NEW**: There's now an option to automatically accept all invitations from premade groups.
+* Custom Search:
+** **NEW**: Added 3 new filters (creation time, item level and auto accepting).
+** **NEW**: WoW icon will now flash on the taskbar when group is found.
+
+**Server Hop 1.9**
+* Global:
+** **NEW**: There's now a help button for new users to learn about addon functionality.
+** Interface changed accordingly.
+** Addon now saves last mode you were using.
+** Added an option to disable group info frame.
+** Fixed minimap conflicting with other addons.
+* Hop Search:
+** Added an option to change blacklist timer. Useful when hopping during the night or at the peak times.
+
+**Server Hop 1.8**
+* Global:
+** There's now a reminder frame in Premade Groups to remind you if Server Hop searches in background.
+* Custom Search:
+** You're now able to queue your whole group if you're a leader.
+
+**Server Hop 1.7**
+* Custom Search:
+** **NEW**: Search string now accepts subtraction of keywords. Ex: //terror fist кулак страха -pound -пудовый//, //rep -shaohao//. You can use it with instance filters. Ex: enable world bosses and search //-kazzak//.
+** Switched searched algorithm back to more consistent.
+
+**Server Hop 1.6**
+
+* Global:
+** Made some interface changes.
+** Filters got attached to locale.
+* Custom Search:
+** **NEW**: You can now right click on favourites star for easy-access drop down menu.
+
+**Server Hop 1.5**
+
+* Global:
+** You can now left click on queued group on top to whisper a leader.
+** More fixes.
+
+**Server Hop 1.4.2**
+* Global:
+** Changed sound that plays when search completes.
+* Custom Search:
+** Fixed a bug where found group list wasn't updating.
+** Reduced the time between searches.
+** Changed favourites button icon.
+
+Server Hop 1.4.1
+* Global:
+** Fixed minimap settings checkbox.
+* Custom Search:
+** Fixed a bug, where applying to the last group in list wouldn't continue search.
+
+Server Hop 1.4
+This update was focused on optimization and bug fixind. Next updates will be focused on features.
+- Global:
+-- New: Added a minimap button. You can disable it in the new options tab.
+-- New: You can now open addon window with /serverhop and /sh.
+-- Options window is now draggable.
+-- Fixed overlapping frames.
+- Custom Search:
+-- New: Addon will continue to scan with closed window. Once new group is found, addon will show up again and make a sound (if set in options).
+-- The way addon was searching groups was changed. You will scan less on popular searches and get results way faster overall.
+-- Raid and dungeon filters were regrouped. Old content got it's own tab and you can access current activities easier.
+-- Other small fixes.
+- Hopping:
+-- New: You can hop with addon being closed. Use macros: /run ServerHop_HopForward() for hopping and /run ServerHop_HopBack() to return to previous realm.
+-- The way addon was queuing for groups was changed. It won't be skipping groups anymore and queue way faster.
+-- Searching for new realms, if all of present are blacklisted, is now faster.
+-- Hopping back will also account group size filter.
+-- You won't be stuck in a group if you became a leader.
+-- Fixed bug that caused 'phantom groups' to appear and required a relog.
+
+Server Hop 1.3
+- Global:
+-- Locale fix.
+- Custom Search:
+-- NEW: Added dungeon and raid filters.
+-- NEW: You can now start search without keywords. Just press enter in empty search field.
+-- You're now able to select needed category right away. Before you had to open LFG tab at least once.
+- Hop Search:
+-- NEW: Added group size filter.
+-- Interface changed accordingly.
+
+Server Hop 1.2
+- Global:
+-- There's now a block that shows group information and allows to manage it.
+-- You can now see what tab is selected in options.
+-- Changed code hierarchy, more tools soon.
+- Hop Search:
+-- Blacklisted groups in options are now getting counted correctly if they've expired.
+
+Server Hop 1.1
+- Global:
+-- 2.2.3 compatibility
+-- Addon's options now opens a new window. Some options added.
+- Custom Search:
+-- No longer throws error when you refresh LFG manually
+
+Server Hop 1.0.1
+- Global
+-- Fixed bug where you'd see scrollwheels of phantom groups on top. There's no fix yet to prevent phantom groups from appearing though.
+- Hop Search
+-- Fixed tooltip bug on 'Last' button throwing an error.
+
+Server Hop 1.0 RELEASE
+- Global
+- Hop Search
+-- Interface redone. (WIP)
+-- Reimplemented back hop. (WIP)
+
+Server Hop 0.7 BETA
+- Global
+-- Fixing phantom groups bug. (WIP)
+-- Added some options.
+
+- Custom Search:
+-- Fixed search resuming after joining last group in the suggestion list.
+
+Server Hop 0.6 BETA
+- Global:
+-- English locale.
+
+Server Hop 0.5 BETA
+- Global:
+-- Addon position is now saved per character.
+-- Started splitting into modules (WIP).
+-- Frame strata set to HIGH.
+-- There's now a close button.
+
+- Custom Search:
+-- New Feature! "Favourites". Save your favourite keywords and query them in one click. Favourites are saved across all characters.
+-- Search query is now saved. You can still clear it with "X" button at the right of the search field.
+-- "X" at the end of search field now stops search if you're searching and clears the field if you're not.
+-- Queued groups now show on top and no longer visible in list.
+-- Error sound when you try to queue for a group, but there're are already 5 in queue.
+
+Server Hop 0.4 BETA
+- Global
+-- Anchored to UIParent: can be hidden with interface hide, scales with interface.
+-- Addon toggle button is now anchored to LFGList
+-- Now saves frame visibility status
+
+- Hop Search
+-- Enabled
+-- Drop down removed from hop search, now always searches in "Other" category (PVE and PVP at the same time)
+-- Now always searches for auto invite groups only
+
+- Custom Search
+-- Plays sound on successfull search in "Master" channel
+-- Tooltips are being refreshed on blacklisting
+-- Category dropdown is now visible in custom search only

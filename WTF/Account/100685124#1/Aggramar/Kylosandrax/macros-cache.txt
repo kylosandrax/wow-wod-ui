@@ -1,3 +1,11 @@
+VER 3 0100000000000003 "Bloodthirst" "SPELL_NATURE_BLOODLUST"
+#showtooltip Bloodthirst
+/script UIErrorsFrame:Hide()
+/use 13
+/use 14
+/cast Bloodthirst
+/script UIErrorsFrame:Clear(); UIErrorsFrame:Show() 
+END
 VER 3 0100000000000001 "VuhDoDCShieldData" "Ability_Repair"
 P[x][x][x][x][x][x][x][x][x][x][x][x][x][x][x][x][x][x][x][x][x][x][x][x][x][x][x][x][x][x][x][x][x][x][x][x][x][x][x][x]1WM[x][x][x][x][x][x][x][x][x][x][x][x][x][x][x][x][x][x][x][x][x][x][x][x][x][x][x][x][x][x][x][x][x][x][x][x][x][x][x][x][x]
 END

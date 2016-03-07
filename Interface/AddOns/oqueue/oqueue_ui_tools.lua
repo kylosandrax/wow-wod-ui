@@ -16,7 +16,7 @@ local tbl = OQ.table ;
 
 OQ.MENU_DISPLAY_TM  = 3 ;
 OQ.BUTTON_SZ        = 32 ;
-OQ.MAX_MENU_OPTIONS = 40 ;
+OQ.MAX_MENU_OPTIONS = 50 ;
 OQ.DOWNARROW_DOWN   = "INTERFACE/CHATFRAME/UI-ChatIcon-ScrollDown-Down" ;
 OQ.DOWNARROW_UP     = "INTERFACE/CHATFRAME/UI-ChatIcon-ScrollDown-Up" ;
 OQ.BUTTON_PREV_DN   = "INTERFACE/BUTTONS/UI-SpellbookIcon-PrevPage-Down" ;
@@ -602,7 +602,12 @@ function oq.menu_create()
                                 if (self._func) then self._highlight:Hide() ; end 
                                 if (self:GetParent()) then self:GetParent()._last_move_tm = GetTime() ; end 
                               end ) ;
-      m:RegisterForClicks("LeftButtonUp", "RightButtonUp") ;      
+      m:RegisterForClicks("LeftButtonUp", "RightButtonUp") ;    
+      m.trigger = function(self, button)
+                    if (self._func) then 
+                      self._func( self:GetParent():GetParent(), self._arg1, self._arg2, button ) ; 
+                    end 
+                  end  
       m:SetScript( "OnClick", function(self,button) 
                                 local stay_open = nil ;
                                 if (self._func) then 
@@ -713,7 +718,7 @@ function oq.menu_is_visible()
 end
 
 function oq.combo_box( parent, x, y, edit_cx, cy, populate_list_func, init_text ) 
-  local cb = oq.texture_button( parent, x + edit_cx + 2, y, 16, cy, OQ.DOWNARROW_UP, OQ.DOWNARROW_DOWN ) ;
+  local cb = oq.texture_button( parent, x + edit_cx + 2, y, 24, cy, OQ.DOWNARROW_UP, OQ.DOWNARROW_DOWN ) ;
   cb:SetFrameLevel( parent:GetFrameLevel() + 5 ) ;
   cb._populate = populate_list_func ;
   cb._edit = oq.editbox( parent, cb:GetName() .."Edit", x, y, edit_cx, cy, 35, nil, "" ) ;   

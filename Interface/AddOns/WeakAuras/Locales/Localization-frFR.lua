@@ -442,7 +442,7 @@ L["Spiral In And Out"] = "Spirale entrante et sortante"
 -- L["%s Rotate Animation"] = ""
 -- L["%s Scale Animation"] = ""
 -- L["%s Stacks Function"] = ""
--- L["%s - Start"] = ""
+L["%s - Start"] = "%s - Début" -- Needs review
 -- L["%s - Start Action"] = ""
 L["Stacks"] = "Piles"
 L["Stance/Form/Aura"] = "Posture/Forme/Aura"
@@ -488,8 +488,8 @@ L["Unit Characteristics"] = "Caractéristique d'unité"
 L["Unit Destroyed"] = "Unité détruite"
 L["Unit Died"] = "Unité morte"
 L["Up"] = "Haut"
-L["Version error received higher"] = "Cet affichage est incompatible avec votre version de WeakAura - il a été créé avec la version %s, mais vous avez la version %s. Mettez à jour votre version de WeakAura." -- Needs review
-L["Version error received lower"] = "Cet affichage est incompatible avec votre version de WeakAura - il a été créé avec la version %s, mais vous avez la version %s. Veuillez dire à la personne qui vous l'a envoyé de mettre à jour sa version de WeakAura." -- Needs review
+L["Version error received higher"] = "Cet affichage est incompatible avec votre version de WeakAura - il a été créé avec la version %s, mais vous avez la version %s. Mettez à jour votre version de WeakAura."
+L["Version error received lower"] = "Cet affichage est incompatible avec votre version de WeakAura - il a été créé avec la version %s, mais vous avez la version %s. Veuillez dire à la personne qui vous l'a envoyé de mettre à jour sa version de WeakAura."
 L["Warlock"] = "Démoniste"
 L["Warrior"] = "Guerrier"
 L["Water"] = "Eau"
@@ -507,6 +507,7 @@ L["Wobble"] = "Osciller"
 L["Yell"] = "Crier"
 L["Zone"] = "Zone"
 L["Zone ID"] = "Zone ID"
+-- L["Zone ID List"] = ""
 
 
 

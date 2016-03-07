@@ -29,7 +29,7 @@ actions.precombat+=/dampen_harm
 
 actions=auto_attack
 actions+=/touch_of_death,if=target.health<health
-actions+=/spear_hand_strike
+actions+=/spear_hand_strike,if=target.debuff.casting.react
 actions+=/nimble_brew
 actions+=/blood_fury,if=energy<=40
 actions+=/berserking,if=energy<=40
@@ -42,6 +42,7 @@ actions+=/diffuse_magic,if=incoming_damage_1500ms&buff.fortifying_brew.down
 actions+=/dampen_harm,if=incoming_damage_1500ms&buff.fortifying_brew.down&buff.elusive_brew_activated.down
 actions+=/fortifying_brew,if=incoming_damage_1500ms&(buff.dampen_harm.down|buff.diffuse_magic.down)&buff.elusive_brew_activated.down
 actions+=/use_item,name=tablet_of_turnbuckle_teamwork,if=incoming_damage_1500ms&(buff.dampen_harm.down|buff.diffuse_magic.down)&buff.fortifying_brew.down&buff.elusive_brew_activated.down
+actions+=/use_item,slot=trinket1,if=incoming_damage_1500ms&(buff.dampen_harm.down|buff.diffuse_magic.down)&buff.fortifying_brew.down&buff.elusive_brew_activated.down
 actions+=/elusive_brew,if=buff.elusive_brew_stacks.react>=9&(buff.dampen_harm.down|buff.diffuse_magic.down)&buff.elusive_brew_activated.down
 actions+=/invoke_xuen,if=talent.invoke_xuen.enabled&target.time_to_die>15&buff.shuffle.remains>=3&buff.serenity.down
 actions+=/serenity,if=talent.serenity.enabled&cooldown.keg_smash.remains>6

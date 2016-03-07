@@ -46,7 +46,6 @@ OQ.BUT_NOTAVAILABLE   = "pending" ;
 OQ.BUT_FINDMESH       = "find mesh" ;
 OQ.BUT_CLEARFILTERS   = "clear filters" ;
 OQ.BUT_SUBMIT2MESH    = "submit b-tag" ;
-OQ.BUT_PULL_BTAG      = "remove b-tag" ;
 OQ.BUT_BAN_BTAG       = "ban b-tag" ;
 OQ.BUT_INVITE_ALL     = "invite " ;
 OQ.BUT_REMOVE_OFFLINE = "remove offline" ;
@@ -251,6 +250,7 @@ OQ.LABEL_ALL          = "all premades" ;
 OQ.LABEL_ALL_PENDING  = "all pending" ;
 OQ.LABEL_BGS          = "battlegrounds" ;
 OQ.LABEL_RBGS         = "rated bgs" ;
+OQ.LABEL_ASHRAN       = "ashran" ;
 OQ.LABEL_DUNGEONS     = "dungeons" ;
 OQ.LABEL_LADDERS      = "ladders" ;
 OQ.LABEL_RAIDS        = "raids" ;
@@ -265,7 +265,7 @@ OQ.LABEL_LADDER       = "ladder" ;
 OQ.LABEL_RAID         = "raid" ;
 OQ.LABEL_SCENARIO     = "scenario" ;
 OQ.LABEL_CHALLENGE    = "challenge" ;
-OQ.LABEL_MISC         = "miscellaneous" ;
+OQ.LABEL_MISC         = "custom" ;
 OQ.LABEL_ROLEPLAY     = "roleplay" ;
 OQ.PATTERN_CAPS       = "[ABCDEFGHIJKLMNOPQRSTUVWXYZ]" ;
 OQ.CONTRIBUTE         = "send beer!" ;
@@ -782,6 +782,7 @@ OQ.raid_ids = { [L["Ahn'Qiraj Temple"           ]] =  1,
                 [L["Siege of Orgrimmar"         ]] = 31,
                 [L["Terrace of Endless Spring"  ]] = 32,
                 [L["Throne of Thunder"          ]] = 33,
+                [L["Highmaul"                   ]] = 34,
                 [L["World Boss"                 ]] = 63,
               } ;
               
@@ -818,7 +819,41 @@ OQ.raid_abbrevation = { [ 1] = L["AQ"], -- Ahn'Qiraj temple
                         [31] = L["SoO"], -- siege of orgrimmar
                         [32] = L["ToES"], -- terrace of endless spring
                         [33] = L["ToT"], -- throne of thunder
+                        [34] = L["HM"], -- Highmaul
                         [63] = L["Boss"], -- world boss
+                      } ;
+                      
+OQ.raid_difficulties = { [ "SoO"   ] = OQ.d_normal .. OQ.d_heroic .. OQ.d_mythic,
+                         [ "ToT"   ] = OQ.d_10norm .. OQ.d_25norm .. OQ.d_10hero .. OQ.d_25hero,
+                         [ "ToES"  ] = OQ.d_10norm .. OQ.d_25norm,
+                         [ "HoF"   ] = OQ.d_10norm .. OQ.d_25norm,
+                         [ "MSV"   ] = OQ.d_10norm .. OQ.d_25norm,
+                         [ "4Winds"] = OQ.d_10norm .. OQ.d_25norm,
+                         [ "BoT"   ] = OQ.d_10norm .. OQ.d_25norm,
+                         [ "FL"    ] = OQ.d_10norm .. OQ.d_25norm,
+                         [ "DS"    ] = OQ.d_10norm .. OQ.d_25norm,
+                         [ "BWD"   ] = OQ.d_10norm .. OQ.d_25norm,
+                         [ "Uld"   ] = OQ.d_10norm .. OQ.d_25norm,
+                         [ "ToC"   ] = OQ.d_10norm .. OQ.d_25norm .. OQ.d_10hero .. OQ.d_25hero,
+                         [ "RS"    ] = OQ.d_10norm .. OQ.d_25norm .. OQ.d_10hero .. OQ.d_25hero,
+                         [ "OS"    ] = OQ.d_10norm .. OQ.d_25norm,
+                         [ "EoE"   ] = OQ.d_10norm .. OQ.d_25norm,
+                         [ "Ony"   ] = OQ.d_10norm .. OQ.d_25norm,
+                         [ "Naxx"  ] = OQ.d_10norm .. OQ.d_25norm,
+                         [ "ICC"   ] = OQ.d_10norm .. OQ.d_25norm .. OQ.d_25hero,
+                         [ "SWP"   ] = OQ.d_10norm .. OQ.d_25norm,
+                         [ "Hyjal" ] = OQ.d_10norm .. OQ.d_25norm,
+                         [ "TK"    ] = OQ.d_10norm .. OQ.d_25norm,
+                         [ "SSC"   ] = OQ.d_10norm .. OQ.d_25norm,
+                         [ "Mag"   ] = OQ.d_10norm .. OQ.d_25norm,
+                         [ "Kara"  ] = OQ.d_10norm .. OQ.d_25norm,
+                         [ "Gruul" ] = OQ.d_10norm .. OQ.d_25norm,
+                         [ "BT"    ] = OQ.d_10norm .. OQ.d_25norm,
+                         [ "AQ20"  ] = OQ.d_10norm .. OQ.d_25norm,
+                         [ "MC"    ] = OQ.d_10norm .. OQ.d_25norm,
+                         [ "BWL"   ] = OQ.d_10norm .. OQ.d_25norm,
+                         [ "AQ"    ] = OQ.d_10norm .. OQ.d_25norm,
+                         [ "HM"    ] = OQ.d_10norm .. OQ.d_25norm .. OQ.d_10hero .. OQ.d_25hero,
                       } ;
                       
 OQ.raid_bosses = { [ 1] = { [ 1] = L["The Prophet Skeram"],
@@ -1060,6 +1095,14 @@ OQ.raid_bosses = { [ 1] = { [ 1] = L["The Prophet Skeram"],
                             [12] = L["Lei Shen"],
                             [13] = L["Ra-den"],
                           },
+                   [34] = { [ 1] = L["The Butcher"],
+                            [ 2] = L["Kargath Bladefist"],
+                            [ 3] = L["Twin Ogron"],
+                            [ 4] = L["Ko'ragh"],
+                            [ 5] = L["Tectus"],
+                            [ 6] = L["Brackenspore"],
+                            [ 7] = L["Imperator Mar'gok"],
+                          },
                    [63] = { [ 1] = L["Omen"],
                             [ 2] = L["Galleon"],
                             [ 3] = L["Sha of Anger"],
@@ -1169,6 +1212,8 @@ OQ.boss_nicknames = { [ L["The Prophet Skeram"        ] ] = L["The Prophet"],
                       [ L["Council of Elders"         ] ] = L["Council"],
                       [ L["Durumu the Forgotten"      ] ] = L["Durumu"],
                       [ L["Twin Consorts"             ] ] = L["Twins"],
+                      [ L["Kargath Bladefist"         ] ] = L["Kargath"],
+                      [ L["Imperator Mar'gok"         ] ] = L["Mar'gok"],
                     } ;
                     
 OQ.lieutenants = { [L["Prince Valanar"       ]] = L["Blood Council"],

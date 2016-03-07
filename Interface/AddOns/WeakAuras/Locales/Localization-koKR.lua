@@ -502,6 +502,7 @@ L["Wobble"] = "흔들기"
 L["Yell"] = "외치기"
 L["Zone"] = "지역"
 L["Zone ID"] = "지역 ID"
+L["Zone ID List"] = "지역 ID 목록"
 
 
 

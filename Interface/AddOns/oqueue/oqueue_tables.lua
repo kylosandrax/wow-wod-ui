@@ -245,9 +245,11 @@ function tbl.orderedNext(t, state)
 
   if state == nil then
     -- the first time, generate the index
-    t.__orderedIndex = tbl.__genOrderedIndex( t, t.__orderedIndex )
-    local key = t.__orderedIndex[1]
-    return key, t[key]
+    local ndx = t.__orderedIndex ; -- save it
+    t.__orderedIndex = nil ; -- remove it
+    t.__orderedIndex = tbl.__genOrderedIndex( t, ndx ) ; -- sort it and put it back
+    local key = t.__orderedIndex[1] ; 
+    return key, t[key] ; 
   end
   -- fetch the next value
   local key = nil

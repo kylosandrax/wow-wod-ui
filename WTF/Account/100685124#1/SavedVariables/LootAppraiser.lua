@@ -1,13 +1,5 @@
 
 LootAppraiserDB = {
-	["profileKeys"] = {
-		["Kxchanter - Aggramar"] = "Default",
-		["Kromethious - Aggramar"] = "Default",
-		["Kxtrader - Aggramar"] = "Default",
-		["Ryjax - Aggramar"] = "Default",
-		["Ryvok - Aggramar"] = "Default",
-		["Kylosandrax - Aggramar"] = "Default",
-	},
 	["global"] = {
 		["sessions"] = {
 			{
@@ -165,10 +157,10 @@ LootAppraiserDB = {
 			{
 				["noteworthyItems"] = {
 					["15628"] = 1,
-					["15177"] = 1,
+					["15638"] = 1,
 					["14840"] = 1,
 					["9512"] = 1,
-					["15638"] = 1,
+					["15177"] = 1,
 				},
 				["mapID"] = 686,
 				["settings"] = {
@@ -200,8 +192,8 @@ LootAppraiserDB = {
 			{
 				["noteworthyItems"] = {
 					["15649"] = 1,
-					["14683"] = 1,
 					["14336"] = 1,
+					["14683"] = 1,
 				},
 				["mapID"] = 717,
 				["settings"] = {
@@ -246,6 +238,97 @@ LootAppraiserDB = {
 				["totalItemsLooted"] = 300,
 				["player"] = "Kylosandrax-Aggramar",
 			}, -- [15]
+			{
+				["noteworthyItems"] = {
+				},
+				["mapID"] = 789,
+				["settings"] = {
+					["priceSource"] = "DBGlobalMarketAvg",
+					["qualityFilter"] = 2,
+					["gat"] = 500,
+				},
+				["end"] = 1455415372,
+				["start"] = 1455413575,
+				["liv"] = 17408967,
+				["totalItemsLooted"] = 235,
+				["player"] = "Kromethious-Aggramar",
+			}, -- [16]
+			{
+				["noteworthyItems"] = {
+				},
+				["mapID"] = 766,
+				["settings"] = {
+					["priceSource"] = "DBGlobalMarketAvg",
+					["qualityFilter"] = 2,
+					["gat"] = 500,
+				},
+				["end"] = 1455991056,
+				["start"] = 1455990288,
+				["liv"] = 5284858,
+				["totalItemsLooted"] = 122,
+				["player"] = "Kromethious-Aggramar",
+			}, -- [17]
+			{
+				["noteworthyItems"] = {
+					["14978"] = 1,
+				},
+				["mapID"] = 766,
+				["settings"] = {
+					["priceSource"] = "DBGlobalMarketAvg",
+					["qualityFilter"] = 2,
+					["gat"] = 500,
+				},
+				["end"] = 1455994054,
+				["start"] = 1455991138,
+				["liv"] = 15227734,
+				["totalItemsLooted"] = 179,
+				["player"] = "Kromethious-Aggramar",
+			}, -- [18]
+			{
+				["noteworthyItems"] = {
+				},
+				["mapID"] = 755,
+				["settings"] = {
+					["priceSource"] = "DBGlobalMarketAvg",
+					["qualityFilter"] = 2,
+					["gat"] = 500,
+				},
+				["end"] = 1456011544,
+				["start"] = 1456007004,
+				["liv"] = 26509786,
+				["totalItemsLooted"] = 440,
+				["player"] = "Kromethious-Aggramar",
+			}, -- [19]
+			{
+				["noteworthyItems"] = {
+				},
+				["mapID"] = 798,
+				["settings"] = {
+					["priceSource"] = "DBMinBuyout",
+					["qualityFilter"] = 2,
+					["gat"] = 500,
+				},
+				["end"] = 1456590344,
+				["start"] = 1456584888,
+				["liv"] = 5529431,
+				["totalItemsLooted"] = 115,
+				["player"] = "Kylosandrax-Aggramar",
+			}, -- [20]
+			{
+				["noteworthyItems"] = {
+				},
+				["mapID"] = 488,
+				["settings"] = {
+					["priceSource"] = "DBMinBuyout",
+					["qualityFilter"] = 2,
+					["gat"] = 500,
+				},
+				["end"] = 1456617437,
+				["start"] = 1456612848,
+				["liv"] = 27457501,
+				["totalItemsLooted"] = 572,
+				["player"] = "Kromethious-Aggramar",
+			}, -- [21]
 		},
 		["drops"] = {
 			[9512] = {
@@ -257,17 +340,20 @@ LootAppraiserDB = {
 			[15638] = {
 				[686] = 1,
 			},
+			[14978] = {
+				[766] = 1,
+			},
 			[14682] = {
 				[717] = 1,
 			},
-			[15649] = {
+			[15628] = {
 				[686] = 1,
 			},
-			[14683] = {
-				[717] = 1,
+			[14291] = {
+				[686] = 1,
 			},
-			[14336] = {
-				[717] = 1,
+			[11382] = {
+				[696] = 2,
 			},
 			[14840] = {
 				[686] = 1,
@@ -278,25 +364,36 @@ LootAppraiserDB = {
 			[14949] = {
 				[686] = 1,
 			},
-			[14291] = {
-				[686] = 1,
+			[14336] = {
+				[717] = 1,
 			},
-			[15628] = {
-				[686] = 1,
+			[14683] = {
+				[717] = 1,
 			},
-			[11382] = {
-				[696] = 2,
+			[15649] = {
+				[686] = 1,
 			},
 		},
 	},
+	["profileKeys"] = {
+		["Kxchanter - Aggramar"] = "Default",
+		["Kromethious - Aggramar"] = "Default",
+		["Kxtrader - Aggramar"] = "Default",
+		["Kylosandrax - Aggramar"] = "Default",
+		["Ryvok - Aggramar"] = "Default",
+		["Ryjax - Aggramar"] = "Default",
+	},
 	["profiles"] = {
 		["Default"] = {
-			["minimapIcon"] = {
-				["minimapPos"] = 167.228730118567,
+			["pricesource"] = {
+				["source"] = "DBMinBuyout",
 			},
 			["general"] = {
 				["goldAlertThreshold"] = "500",
 				["surpressSessionStartDialog"] = true,
+			},
+			["minimapIcon"] = {
+				["minimapPos"] = 167.228730118567,
 			},
 			["mainUI"] = {
 				["top"] = 454.999969482422,

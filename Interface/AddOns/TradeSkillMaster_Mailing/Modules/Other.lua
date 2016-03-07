@@ -219,6 +219,10 @@ function Other:CreateTab()
 				},
 				btn = {
 					OnClick = function()
+						if not TSM.db.char.goldKeepAmount then
+							TSM:Print(L["Not sending any gold as you either did not enter a limit or did not press enter to store the limit."])
+							return
+						end
 						local extra = (GetMoney() - 30) - (TSM.db.char.goldKeepAmount * COPPER_PER_GOLD)
 						if extra <= 0 then
 							TSM:Print(L["Not sending any gold as you have less than the specified limit."])

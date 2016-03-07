@@ -94,6 +94,7 @@ L["No Item Specified"] = "Kein Gegenstand angegeben" -- Needs review
 L["No Target Player"] = "Kein Zielcharakter" -- Needs review
 L["No Target Specified"] = "Kein Ziel angegeben" -- Needs review
 -- L["Nothing to Move"] = ""
+-- L["Not sending any gold as you either did not enter a limit or did not press enter to store the limit."] = ""
 L["Not sending any gold as you have less than the specified limit."] = "Gold wird nicht gesendet, weil Ihr weniger als den angegebenen Betrag besitzt."
 L["Not Target Specified"] = "Kein Ziel angegeben" -- Needs review
 -- L["Open All Mail"] = ""

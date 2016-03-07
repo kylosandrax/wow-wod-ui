@@ -1,5 +1,19 @@
 change.log for oGear
 
+v0.1.7  UPD: tweak usage info
+        add: item level now shown on equipment compare when alt is depressed on character frame item hover
+
+v0.1.6  UPD: brightened the blue color associated with rare items
+        UPD: improved performance when inspecting targets
+
+v0.1.5  BUGFIX: 'show ilevel' moved up on character window
+        BUGFIX: reduced number of item checks when inspecting (too many events coming in)
+        BUGFIX: updated for enchants on ilevels >= 600
+        UPD: stopped using the main game tooltip for scanning information
+        add: item quality color now used for item level
+
+v0.1.4  BUGFIX: hitting 'okay' on interface/addon/ogear wasn't setting properly
+
 v0.1.3  UPD: toc version update for WOD
 
 v0.1.2  BUGFIX: updated spelling from 'hilight' to 'highlight'

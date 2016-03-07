@@ -506,6 +506,7 @@ L["Wobble"] = "Wackeln"
 L["Yell"] = "Schreien"
 L["Zone"] = "Zone"
 L["Zone ID"] = "Zonen-ID"
+-- L["Zone ID List"] = ""
 
 
 

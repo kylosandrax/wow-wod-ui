@@ -56,7 +56,7 @@ local function get_score()
   end
   if (AlwaysUpFrame1Text ~= nil) then
     local line1 = AlwaysUpFrame1Text:GetText() ;
-    if (line1 ~= nil) then
+    if (line1) and (line1 ~= "") then
       local tm = line1:match( "Remaining: (%d+)" ) ;  
       local dt = _tp_expire_tm - GetTime() ;
       tm = tonumber(tm) * 60 ;

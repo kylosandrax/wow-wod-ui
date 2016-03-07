@@ -9,6 +9,15 @@ local AceGUI = LibStub("AceGUI-3.0")
 
 local LSM = LibStub:GetLibrary("LibSharedMedia-3.0")
 
+-- Lua APIs
+local tostring, pairs, ipairs, table, tonumber, select, time, math, floor, date, print, type, string, sort = 
+	  tostring, pairs, ipairs, table, tonumber, select, time, math, floor, date, print, type, string, sort
+
+-- wow APIs
+local InterfaceOptions_AddCategory, GetMapNameByID, SecondsToTime, GameFontHighlightSmall, GetItemInfo = 
+      InterfaceOptions_AddCategory, GetMapNameByID, SecondsToTime, GameFontHighlightSmall, GetItemInfo
+local DEFAULT_CHAT_FRAME = 
+      DEFAULT_CHAT_FRAME
 
 Config.SESSIONDATA_GROUPBY = {
 	["datetime"] = "Date", 
@@ -20,7 +29,7 @@ Config.SESSIONDATA_GROUPBY = {
 local options = {
 	type = "group",
 	args = {
-		general = { type = "group", name = LootAppraiser, childGroups = "tab",
+		general = { type = "group", name = LootAppraiser .. " " .. LA.METADATA.VERSION, childGroups = "tab",
 			get = function(info) return LA.db.profile[info[#info]] end,
 			set = function(info, value) 
 				LA.db.profile[info[#info]] = value;
@@ -51,6 +60,9 @@ local options = {
 								end
 								LA.db.profile.general[info[#info]] = value;
 								LA:refreshStatusText()
+							end,
+							disabled = function(info)
+								return not Config:SettingsChangeAllowed(info[#info])
 							end,
 						},
 						spacer = {
@@ -108,7 +120,6 @@ local options = {
 					order = 50,
 					name = "Price Source",
 					get = function(info) 
-						--LA:print_r(LA:GetAvailablePriceSources())
 						return LA.db.profile.pricesource[info[#info]] 
 					end,
 					set = function(info, value) 
@@ -120,10 +131,7 @@ local options = {
 							order = 20,
 							name = "Price Source",
 							desc = "TSM predefined price sources for item value calculation.",
-							--values = LA.PRICE_SOURCE,
-							values = function()
-								return LA:GetAvailablePriceSources()
-							end,
+							values = function() return LA.TSM:GetAvailablePriceSources() end,
 							width = "double",
 							set = function(info, value) 
 								local oldValue = LA.db.profile.pricesource[info[#info]]
@@ -132,6 +140,9 @@ local options = {
 								end
 								LA.db.profile.pricesource[info[#info]] = value;
 								LA:refreshStatusText()
+							end,
+							disabled = function(info)
+								return not Config:SettingsChangeAllowed(info[#info])
 							end,
 						},
 						customPriceSource = {
@@ -148,7 +159,7 @@ local options = {
 								LA.db.profile.pricesource[info[#info]] = value;
 							end,
 							validate = function(info, value)
-								local isValidPriceSource = LA:ParseCustomPrice(value)
+								local isValidPriceSource = LA.TSM:ParseCustomPrice(value)
 								if not isValidPriceSource then
 									-- error message
 									DEFAULT_CHAT_FRAME:AddMessage("Invalid custom price source. See TSM documentation for detailed description.")
@@ -271,6 +282,9 @@ local options = {
 								if oldValue ~= value then LA:Print("Blacklist items via TSM group: " .. Config:formatBoolean(value) .. ".") end
 								LA.db.profile.blacklist[info[#info]] = value;
 							end,
+							disabled = function(info)
+								return not Config:SettingsChangeAllowed(info[#info])
+							end,
 						},
 						tsmGroup = {
 							type = "input",
@@ -334,6 +348,7 @@ local options = {
 								showItemsLooted = { type = "toggle", order = 60, name = "Show 'Items Looted'", desc = "Show 'Items Looted'", width = "double", },
 								showNoteworthyItems = { type = "toggle", order = 70, name = "Show 'Noteworthy Items'", desc = "Show 'Noteworthy Items'", width = "double", },
 								showResetInstanceButton = { type = "toggle", order = 80, name = "Show 'Reset Instance' Button (/reload necessary)", desc = "Show 'Reset Instance' Button", width = "double", set = function(info, value) LA.db.profile.display[info[#info]] = value end, },
+								descResetInstanceButton = { type = "description", order = 85, fontSize = "medium", name = "The displayed instance lockout should only help to optimize the 10 instance resets per hour. Not more and not less. No lockout magic, cross char tracking or such stuff. Those who want more should install the addon SavedInstances from Curse.", width = "full", },
 							},
 							plugins = {},
 						},
@@ -543,7 +558,7 @@ function Config:test()
 			rowGrp:AddChild(labelDuration)
 			
 			-- looted item value
-			local formattedLiv = LA:FormatTextMoney(liv) or 0
+			local formattedLiv = LA.TSM:FormatTextMoney(liv) or 0
 
 			local labelLiv = AceGUI:Create("Label")
 			labelLiv:SetText(formattedLiv)
@@ -678,7 +693,7 @@ function Config:createSessionGrp(session, order)
 	elseif groupBy == "liv" then
 		local liv = session["liv"]
 
-		name = LA:FormatTextMoney(liv) or 0
+		name = LA.TSM:FormatTextMoney(liv) or 0
 	elseif groupBy == "livPerHour" then
 		local liv = session["liv"] or 0
 		local sessionStart = session["start"]
@@ -784,7 +799,7 @@ function Config:getStatisticGroups()
 			Config:addEmptyLine(sessionGrp, (index+40))
 
 			-- looted item value
-			local formattedLiv = LA:FormatTextMoney(liv) or 0
+			local formattedLiv = LA.TSM:FormatTextMoney(liv) or 0
 			Config:addSessionData(sessionGrp, "liv", "Looted Item Value:", formattedLiv, (index+50))
 
 			-- ...per hour			
@@ -859,6 +874,20 @@ end
 
 
 function Config:deleteStatisticEntry(entryID)
-	LA:Debug("  deleteStatisticEntry: entryID=" .. tostring(entryID))
+	--LA:Debug("  deleteStatisticEntry: entryID=" .. tostring(entryID))
 end
 
+
+function Config:SettingsChangeAllowed(setting)
+	LA:D("SettingsChangeAllowed: name=" .. tostring(setting))
+	if LA.regModules then
+		for name, data in pairs(LA.regModules) do
+			if data and data.callback and data.callback.settingsChangeAllowed then
+				local callback = data.callback.settingsChangeAllowed
+
+				return callback(setting)
+			end
+		end
+	end
+	return true -- default
+end

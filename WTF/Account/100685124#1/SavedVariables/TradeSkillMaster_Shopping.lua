@@ -1,6 +1,6 @@
 
 TradeSkillMaster_ShoppingDB = {
-	["g@ @sniperCustomPrice"] = "30% min(wowuctionmarket, wowuctionregionmarket)",
+	["g@ @sniperCustomPrice"] = "check(minprice - 100000g, 90% minprice, check(minprice - 50000g, 80% minprice, check(minprice - 10000g, 60% minprice, check(minprice - 5000g, 50% minprice, check(minprice - 1000g, 30% minprice, check(minprice - 500g, 20% minprice, 10% minprice))))))",
 	["g@ @maxDeSearchPercent"] = 1,
 	["g@ @postUndercut"] = "1c",
 	["g@ @postBidPercent"] = 0.8,
@@ -16,12 +16,11 @@ TradeSkillMaster_ShoppingDB = {
 			"Shayshey - Outland", -- [8]
 			"Haroohiipan - Outland", -- [9]
 			"Glyphdealz - Outland", -- [10]
-			"Kxtrader - Aggramar", -- [11]
-			"Kromethious - Aggramar", -- [12]
-			"Kxchanter - Aggramar", -- [13]
+			"Startree - Outland", -- [11]
+			"Kxtrader - Aggramar", -- [12]
+			"Kromethious - Aggramar", -- [13]
 			"Kylosandrax - Aggramar", -- [14]
-			"Ryvok - Aggramar", -- [15]
-			"Ryjax - Aggramar", -- [16]
+			"Kxchanter - Aggramar", -- [15]
 		},
 		["realm"] = {
 			"Outland", -- [1]
@@ -43,635 +42,634 @@ TradeSkillMaster_ShoppingDB = {
 	["_hash"] = 1861581,
 	["g@ @savedSearches"] = {
 		{
-			["searchMode"] = "normal",
-			["lastSearch"] = 1452807049,
-			["name"] = "/tsm",
-			["filter"] = "/tsm",
+			["searchMode"] = "crafting",
+			["lastSearch"] = 1454783566,
+			["name"] = "Large Brilliant Shard",
+			["filter"] = "Large Brilliant Shard",
 		}, -- [1]
 		{
 			["searchMode"] = "normal",
-			["lastSearch"] = 1452471043,
-			["name"] = "grumpus",
-			["filter"] = "grumpus",
+			["lastSearch"] = 1454783338,
+			["name"] = "Ethereal Shard/exact",
+			["filter"] = "Ethereal Shard/exact",
 		}, -- [2]
 		{
 			["searchMode"] = "normal",
-			["lastSearch"] = 1451415847,
-			["name"] = "Red Wooden Sled/exact",
-			["filter"] = "Red Wooden Sled/exact",
+			["lastSearch"] = 1454783116,
+			["name"] = "spirit dust",
+			["filter"] = "spirit dust",
 		}, -- [3]
 		{
 			["searchMode"] = "normal",
-			["lastSearch"] = 1451413023,
-			["name"] = "ancient",
-			["filter"] = "ancient",
+			["lastSearch"] = 1454782653,
+			["name"] = "Strange Dust/exact",
+			["filter"] = "Strange Dust/exact",
 		}, -- [4]
 		{
 			["searchMode"] = "normal",
-			["lastSearch"] = 1451402656,
-			["name"] = "Sumptuous Fur/exact",
-			["filter"] = "Sumptuous Fur/exact",
+			["lastSearch"] = 1454782619,
+			["name"] = "Soul Dust/exact",
+			["filter"] = "Soul Dust/exact",
 		}, -- [5]
 		{
 			["searchMode"] = "normal",
-			["lastSearch"] = 1451392728,
-			["name"] = "True Iron Ore/exact",
-			["filter"] = "True Iron Ore/exact",
+			["lastSearch"] = 1454782590,
+			["name"] = "Vision Dust/exact",
+			["filter"] = "Vision Dust/exact",
 		}, -- [6]
 		{
 			["searchMode"] = "normal",
-			["lastSearch"] = 1451392648,
-			["name"] = "Blackrock Ore/exact",
-			["filter"] = "Blackrock Ore/exact",
+			["lastSearch"] = 1454782570,
+			["name"] = "Dream Dust/exact",
+			["filter"] = "Dream Dust/exact",
 		}, -- [7]
 		{
 			["searchMode"] = "normal",
-			["lastSearch"] = 1451385320,
-			["name"] = "blood of the mountain",
-			["filter"] = "blood of the mountain",
+			["lastSearch"] = 1454782527,
+			["name"] = "Illusion Dust/exact",
+			["filter"] = "Illusion Dust/exact",
 		}, -- [8]
 		{
 			["searchMode"] = "normal",
-			["lastSearch"] = 1451385305,
-			["name"] = "lava core",
-			["filter"] = "lava core",
+			["lastSearch"] = 1454782401,
+			["name"] = "Arcane Dust/exact",
+			["filter"] = "Arcane Dust/exact",
 		}, -- [9]
 		{
 			["searchMode"] = "normal",
-			["lastSearch"] = 1451385281,
-			["name"] = "fiery core",
-			["filter"] = "fiery core",
+			["lastSearch"] = 1454782231,
+			["name"] = "Infinite Dust/exact",
+			["filter"] = "Infinite Dust/exact",
 		}, -- [10]
 		{
 			["searchMode"] = "normal",
-			["lastSearch"] = 1451385273,
-			["name"] = "dark iron ore",
-			["filter"] = "dark iron ore",
+			["lastSearch"] = 1454782057,
+			["name"] = "Hypnotic Dust/exact",
+			["filter"] = "Hypnotic Dust/exact",
 		}, -- [11]
 		{
 			["searchMode"] = "normal",
-			["lastSearch"] = 1451385261,
-			["name"] = "core leather",
-			["filter"] = "core leather",
+			["lastSearch"] = 1454782053,
+			["name"] = "Lesser Nether Essence/exact",
+			["filter"] = "Lesser Nether Essence/exact",
 		}, -- [12]
 		{
 			["searchMode"] = "normal",
-			["lastSearch"] = 1451383031,
-			["name"] = "Volatile Earth/exact",
-			["filter"] = "Volatile Earth/exact",
+			["lastSearch"] = 1454781984,
+			["name"] = "Greater Nether Essence/exact",
+			["filter"] = "Greater Nether Essence/exact",
 		}, -- [13]
 		{
 			["searchMode"] = "normal",
-			["lastSearch"] = 1451381989,
-			["name"] = "Felblight/exact",
-			["filter"] = "Felblight/exact",
+			["lastSearch"] = 1454781938,
+			["name"] = "Greater Eternal Essence/exact",
+			["filter"] = "Greater Eternal Essence/exact",
 		}, -- [14]
 		{
 			["searchMode"] = "normal",
-			["lastSearch"] = 1451381723,
-			["name"] = "Elementium Bar/exact",
-			["filter"] = "Elementium Bar/exact",
+			["lastSearch"] = 1454781931,
+			["name"] = "Lesser Eternal Essence/exact",
+			["filter"] = "Lesser Eternal Essence/exact",
 		}, -- [15]
 		{
 			["searchMode"] = "normal",
-			["lastSearch"] = 1451381664,
-			["name"] = "Elementium Ore/exact",
-			["filter"] = "Elementium Ore/exact",
+			["lastSearch"] = 1454781758,
+			["name"] = "Greater Planar Essence/exact",
+			["filter"] = "Greater Planar Essence/exact",
 		}, -- [16]
 		{
 			["searchMode"] = "normal",
-			["lastSearch"] = 1451381346,
-			["name"] = "Eternium Bar/exact",
-			["filter"] = "Eternium Bar/exact",
+			["lastSearch"] = 1454781740,
+			["name"] = "Lesser Cosmic Essence/exact",
+			["filter"] = "Lesser Cosmic Essence/exact",
 		}, -- [17]
 		{
 			["searchMode"] = "normal",
-			["lastSearch"] = 1451381343,
-			["name"] = "Khorium Bar/exact",
-			["filter"] = "Khorium Bar/exact",
+			["lastSearch"] = 1454781715,
+			["name"] = "Greater Cosmic Essence/exact",
+			["filter"] = "Greater Cosmic Essence/exact",
 		}, -- [18]
 		{
 			["searchMode"] = "normal",
-			["lastSearch"] = 1451381329,
-			["name"] = "Pyrium Bar/exact",
-			["filter"] = "Pyrium Bar/exact",
+			["lastSearch"] = 1454781701,
+			["name"] = "Lesser Celestial Essence/exact",
+			["filter"] = "Lesser Celestial Essence/exact",
 		}, -- [19]
 		{
 			["searchMode"] = "normal",
-			["lastSearch"] = 1451381307,
-			["name"] = "Pyrite Ore/exact",
-			["filter"] = "Pyrite Ore/exact",
+			["lastSearch"] = 1454781690,
+			["name"] = "Greater Celestial Essence/exact",
+			["filter"] = "Greater Celestial Essence/exact",
 		}, -- [20]
 		{
 			["searchMode"] = "normal",
-			["lastSearch"] = 1451324816,
-			["name"] = "of the bandit/uncommon",
-			["filter"] = "of the bandit/uncommon",
+			["lastSearch"] = 1454781678,
+			["name"] = "Mysterious Essence/exact",
+			["filter"] = "Mysterious Essence/exact",
 		}, -- [21]
 		{
-			["lastSearch"] = 1451324533,
+			["searchMode"] = "normal",
+			["lastSearch"] = 1454781674,
+			["name"] = "Small Radiant Shard/exact",
+			["filter"] = "Small Radiant Shard/exact",
+		}, -- [22]
+		{
+			["searchMode"] = "normal",
+			["lastSearch"] = 1454781665,
+			["name"] = "Small Brilliant Shard/exact",
+			["filter"] = "Small Brilliant Shard/exact",
+		}, -- [23]
+		{
+			["searchMode"] = "normal",
+			["lastSearch"] = 1454781661,
+			["name"] = "Large Brilliant Shard/exact",
+			["filter"] = "Large Brilliant Shard/exact",
+		}, -- [24]
+		{
+			["searchMode"] = "normal",
+			["lastSearch"] = 1454781633,
+			["name"] = "Small Prismatic Shard/exact",
+			["filter"] = "Small Prismatic Shard/exact",
+		}, -- [25]
+		{
+			["searchMode"] = "normal",
+			["lastSearch"] = 1454781626,
+			["name"] = "Large Prismatic Shard/exact",
+			["filter"] = "Large Prismatic Shard/exact",
+		}, -- [26]
+		{
+			["searchMode"] = "normal",
+			["lastSearch"] = 1454781597,
+			["name"] = "Void Crystal/exact",
+			["filter"] = "Void Crystal/exact",
+		}, -- [27]
+		{
+			["searchMode"] = "normal",
+			["lastSearch"] = 1454781565,
+			["name"] = "Dream Shard/exact",
+			["filter"] = "Dream Shard/exact",
+		}, -- [28]
+		{
+			["searchMode"] = "normal",
+			["lastSearch"] = 1454781500,
+			["name"] = "Maelstrom Crystal/exact",
+			["filter"] = "Maelstrom Crystal/exact",
+		}, -- [29]
+		{
+			["searchMode"] = "normal",
+			["lastSearch"] = 1454781491,
+			["name"] = "Heavenly Shard/exact",
+			["filter"] = "Heavenly Shard/exact",
+		}, -- [30]
+		{
+			["searchMode"] = "normal",
+			["lastSearch"] = 1454781461,
+			["name"] = "Small Ethereal Shard/exact",
+			["filter"] = "Small Ethereal Shard/exact",
+		}, -- [31]
+		{
+			["searchMode"] = "normal",
+			["lastSearch"] = 1454781450,
+			["name"] = "Cardinal Ruby/exact",
+			["filter"] = "Cardinal Ruby/exact",
+		}, -- [32]
+		{
+			["searchMode"] = "normal",
+			["lastSearch"] = 1454781423,
+			["name"] = "Abyss Crystal/exact",
+			["filter"] = "Abyss Crystal/exact",
+		}, -- [33]
+		{
+			["searchMode"] = "normal",
+			["lastSearch"] = 1454781365,
+			["name"] = "Sha Crystal/exact",
+			["filter"] = "Sha Crystal/exact",
+		}, -- [34]
+		{
+			["searchMode"] = "normal",
+			["lastSearch"] = 1454780460,
+			["name"] = "Protector's Trillium Legguards/exact",
+			["filter"] = "Protector's Trillium Legguards/exact",
+		}, -- [35]
+		{
+			["searchMode"] = "normal",
+			["lastSearch"] = 1454780453,
+			["name"] = "Blessed Trillium Greaves/exact",
+			["filter"] = "Blessed Trillium Greaves/exact",
+		}, -- [36]
+		{
+			["searchMode"] = "normal",
+			["lastSearch"] = 1454780411,
+			["name"] = "Avenger's Trillium Legplates/exact",
+			["filter"] = "Avenger's Trillium Legplates/exact",
+		}, -- [37]
+		{
+			["searchMode"] = "normal",
+			["lastSearch"] = 1454780407,
+			["name"] = "Avenger's Trillium Waistplate/exact",
+			["filter"] = "Avenger's Trillium Waistplate/exact",
+		}, -- [38]
+		{
+			["searchMode"] = "normal",
+			["lastSearch"] = 1454780403,
+			["name"] = "Blessed Trillium Belt/exact",
+			["filter"] = "Blessed Trillium Belt/exact",
+		}, -- [39]
+		{
+			["searchMode"] = "normal",
+			["lastSearch"] = 1454780397,
+			["name"] = "Protector's Trillium Waistguard/exact",
+			["filter"] = "Protector's Trillium Waistguard/exact",
+		}, -- [40]
+		{
+			["searchMode"] = "normal",
+			["lastSearch"] = 1454780122,
+			["name"] = "Aquamarine/exact",
+			["filter"] = "Aquamarine/exact",
+		}, -- [41]
+		{
+			["searchMode"] = "normal",
+			["lastSearch"] = 1454780113,
+			["name"] = "Breath of Wind/exact",
+			["filter"] = "Breath of Wind/exact",
+		}, -- [42]
+		{
+			["searchMode"] = "normal",
+			["lastSearch"] = 1454779753,
+			["name"] = "Spirit of War/exact",
+			["filter"] = "Spirit of War/exact",
+		}, -- [43]
+		{
+			["searchMode"] = "normal",
+			["lastSearch"] = 1454779414,
+			["name"] = "core leather",
+			["filter"] = "core leather",
+		}, -- [44]
+		{
+			["searchMode"] = "normal",
+			["lastSearch"] = 1454779381,
+			["name"] = "Heart of Darkness/exact",
+			["filter"] = "Heart of Darkness/exact",
+		}, -- [45]
+		{
+			["searchMode"] = "normal",
+			["lastSearch"] = 1454777936,
+			["name"] = "savage blood",
+			["filter"] = "savage blood",
+		}, -- [46]
+		{
+			["searchMode"] = "normal",
+			["lastSearch"] = 1454777910,
+			["name"] = "Felblight/exact",
+			["filter"] = "Felblight/exact",
+		}, -- [47]
+		{
+			["searchMode"] = "normal",
+			["lastSearch"] = 1454714049,
+			["name"] = "hexweave bag",
+			["filter"] = "hexweave bag",
+		}, -- [48]
+		{
+			["lastSearch"] = 1454713217,
 			["name"] = "starflower/exact/even;Talador Orchid/exact/even;Go...",
 			["filter"] = "starflower/exact/even;Talador Orchid/exact/even;Gorgrond Flytrap/exact/even;Fireweed/exact/even;Frostweed/exact/even;Nagrand Arrowbloom/exact/even",
 			["searchMode"] = "normal",
 			["isFavorite"] = true,
-		}, -- [22]
-		{
-			["searchMode"] = "normal",
-			["lastSearch"] = 1451323559,
-			["name"] = "10 Pound Mud Snapper/exact",
-			["filter"] = "10 Pound Mud Snapper/exact",
-		}, -- [23]
-		{
-			["searchMode"] = "normal",
-			["lastSearch"] = 1451322501,
-			["name"] = "Savage Blood/exact",
-			["filter"] = "Savage Blood/exact",
-		}, -- [24]
-		{
-			["searchMode"] = "normal",
-			["lastSearch"] = 1451313763,
-			["name"] = "Talador Orchid/exact",
-			["filter"] = "Talador Orchid/exact",
-		}, -- [25]
-		{
-			["searchMode"] = "normal",
-			["lastSearch"] = 1451313653,
-			["name"] = "Starflower/exact",
-			["filter"] = "Starflower/exact",
-		}, -- [26]
-		{
-			["searchMode"] = "normal",
-			["lastSearch"] = 1451313114,
-			["name"] = "Nagrand Arrowbloom/exact",
-			["filter"] = "Nagrand Arrowbloom/exact",
-		}, -- [27]
-		{
-			["searchMode"] = "normal",
-			["lastSearch"] = 1451312302,
-			["name"] = "Gorgrond Flytrap/exact",
-			["filter"] = "Gorgrond Flytrap/exact",
-		}, -- [28]
-		{
-			["searchMode"] = "normal",
-			["lastSearch"] = 1451312170,
-			["name"] = "Frostweed/exact",
-			["filter"] = "Frostweed/exact",
-		}, -- [29]
-		{
-			["searchMode"] = "normal",
-			["lastSearch"] = 1451312121,
-			["name"] = "Fireweed/exact",
-			["filter"] = "Fireweed/exact",
-		}, -- [30]
-		{
-			["searchMode"] = "normal",
-			["lastSearch"] = 1451234170,
-			["name"] = "White Trillium Ore/exact",
-			["filter"] = "White Trillium Ore/exact",
-		}, -- [31]
-		{
-			["searchMode"] = "normal",
-			["lastSearch"] = 1451233931,
-			["name"] = "Black Trillium Ore/exact",
-			["filter"] = "Black Trillium Ore/exact",
-		}, -- [32]
-		{
-			["searchMode"] = "normal",
-			["lastSearch"] = 1451233869,
-			["name"] = "Ghost Iron Bar/exact",
-			["filter"] = "Ghost Iron Bar/exact",
-		}, -- [33]
-		{
-			["searchMode"] = "normal",
-			["lastSearch"] = 1451233754,
-			["name"] = "Ghost Iron Ore/exact",
-			["filter"] = "Ghost Iron Ore/exact",
-		}, -- [34]
-		{
-			["searchMode"] = "normal",
-			["lastSearch"] = 1451233664,
-			["name"] = "Obsidium Bar/exact",
-			["filter"] = "Obsidium Bar/exact",
-		}, -- [35]
-		{
-			["searchMode"] = "normal",
-			["lastSearch"] = 1451233662,
-			["name"] = "Obsidium Ore/exact",
-			["filter"] = "Obsidium Ore/exact",
-		}, -- [36]
-		{
-			["searchMode"] = "normal",
-			["lastSearch"] = 1451233655,
-			["name"] = "Saronite Bar/exact",
-			["filter"] = "Saronite Bar/exact",
-		}, -- [37]
-		{
-			["searchMode"] = "normal",
-			["lastSearch"] = 1451233651,
-			["name"] = "Saronite Ore/exact",
-			["filter"] = "Saronite Ore/exact",
-		}, -- [38]
-		{
-			["searchMode"] = "normal",
-			["lastSearch"] = 1451233631,
-			["name"] = "Khorium Ore/exact",
-			["filter"] = "Khorium Ore/exact",
-		}, -- [39]
-		{
-			["searchMode"] = "normal",
-			["lastSearch"] = 1451233495,
-			["name"] = "Cobalt Ore/exact",
-			["filter"] = "Cobalt Ore/exact",
-		}, -- [40]
-		{
-			["searchMode"] = "normal",
-			["lastSearch"] = 1451233413,
-			["name"] = "Felsteel Bar/exact",
-			["filter"] = "Felsteel Bar/exact",
-		}, -- [41]
-		{
-			["searchMode"] = "normal",
-			["lastSearch"] = 1451233386,
-			["name"] = "Eternium Ore/exact",
-			["filter"] = "Eternium Ore/exact",
-		}, -- [42]
-		{
-			["searchMode"] = "normal",
-			["lastSearch"] = 1451233306,
-			["name"] = "Adamantite Ore/exact",
-			["filter"] = "Adamantite Ore/exact",
-		}, -- [43]
-		{
-			["searchMode"] = "normal",
-			["lastSearch"] = 1451233302,
-			["name"] = "Adamantite Bar/exact",
-			["filter"] = "Adamantite Bar/exact",
-		}, -- [44]
-		{
-			["searchMode"] = "normal",
-			["lastSearch"] = 1451233279,
-			["name"] = "Fel Iron Ore/exact",
-			["filter"] = "Fel Iron Ore/exact",
-		}, -- [45]
-		{
-			["searchMode"] = "normal",
-			["lastSearch"] = 1451233272,
-			["name"] = "Fel Iron Bar/exact",
-			["filter"] = "Fel Iron Bar/exact",
-		}, -- [46]
-		{
-			["searchMode"] = "normal",
-			["lastSearch"] = 1451233161,
-			["name"] = "Thorium Ore/exact",
-			["filter"] = "Thorium Ore/exact",
-		}, -- [47]
-		{
-			["searchMode"] = "normal",
-			["lastSearch"] = 1451233158,
-			["name"] = "Thorium Bar/exact",
-			["filter"] = "Thorium Bar/exact",
-		}, -- [48]
-		{
-			["searchMode"] = "normal",
-			["lastSearch"] = 1451233139,
-			["name"] = "Mithril Bar/exact",
-			["filter"] = "Mithril Bar/exact",
 		}, -- [49]
 		{
 			["searchMode"] = "normal",
-			["lastSearch"] = 1451233136,
-			["name"] = "Mithril Ore/exact",
-			["filter"] = "Mithril Ore/exact",
+			["lastSearch"] = 1454712707,
+			["name"] = "arcane crystal",
+			["filter"] = "arcane crystal",
 		}, -- [50]
 		{
 			["searchMode"] = "normal",
-			["lastSearch"] = 1451233118,
-			["name"] = "Iron Bar/exact",
-			["filter"] = "Iron Bar/exact",
+			["lastSearch"] = 1454655138,
+			["name"] = "exotic leather",
+			["filter"] = "exotic leather",
 		}, -- [51]
 		{
 			["searchMode"] = "normal",
-			["lastSearch"] = 1451233110,
-			["name"] = "Iron Ore/exact",
-			["filter"] = "Iron Ore/exact",
+			["lastSearch"] = 1454655131,
+			["name"] = "Magnificent Hide/exact",
+			["filter"] = "Magnificent Hide/exact",
 		}, -- [52]
 		{
 			["searchMode"] = "normal",
-			["lastSearch"] = 1451233102,
-			["name"] = "Steel Bar/exact",
-			["filter"] = "Steel Bar/exact",
+			["lastSearch"] = 1454653786,
+			["name"] = "frozen orb",
+			["filter"] = "frozen orb",
 		}, -- [53]
 		{
 			["searchMode"] = "normal",
-			["lastSearch"] = 1451233044,
-			["name"] = "Silver Ore/exact",
-			["filter"] = "Silver Ore/exact",
+			["lastSearch"] = 1454653774,
+			["name"] = "Chaos Orb/exact",
+			["filter"] = "Chaos Orb/exact",
 		}, -- [54]
 		{
 			["searchMode"] = "normal",
-			["lastSearch"] = 1451233037,
-			["name"] = "Silver Bar/exact",
-			["filter"] = "Silver Bar/exact",
+			["lastSearch"] = 1454653731,
+			["name"] = "magnif",
+			["filter"] = "magnif",
 		}, -- [55]
 		{
 			["searchMode"] = "normal",
-			["lastSearch"] = 1451232991,
-			["name"] = "Bronze Bar/exact",
-			["filter"] = "Bronze Bar/exact",
+			["lastSearch"] = 1454653586,
+			["name"] = "primordial saronite",
+			["filter"] = "primordial saronite",
 		}, -- [56]
 		{
-			["searchMode"] = "normal",
-			["lastSearch"] = 1451232978,
-			["name"] = "Tin Bar/exact",
-			["filter"] = "Tin Bar/exact",
+			["searchMode"] = "crafting",
+			["lastSearch"] = 1454653070,
+			["name"] = "Borean Leather",
+			["filter"] = "Borean Leather",
 		}, -- [57]
 		{
 			["searchMode"] = "normal",
-			["lastSearch"] = 1451232974,
-			["name"] = "Tin Ore/exact",
-			["filter"] = "Tin Ore/exact",
+			["lastSearch"] = 1454652904,
+			["name"] = "primal air",
+			["filter"] = "primal air",
 		}, -- [58]
 		{
 			["searchMode"] = "normal",
-			["lastSearch"] = 1451232965,
-			["name"] = "Copper Bar/exact",
-			["filter"] = "Copper Bar/exact",
+			["lastSearch"] = 1454652890,
+			["name"] = "primal fire",
+			["filter"] = "primal fire",
 		}, -- [59]
 		{
 			["searchMode"] = "normal",
-			["lastSearch"] = 1451232956,
-			["name"] = "Copper Ore/exact",
-			["filter"] = "Copper Ore/exact",
+			["lastSearch"] = 1454652837,
+			["name"] = "runecloth",
+			["filter"] = "runecloth",
 		}, -- [60]
 		{
 			["searchMode"] = "normal",
-			["lastSearch"] = 1451152750,
-			["name"] = "Medallion of the Legion/exact",
-			["filter"] = "Medallion of the Legion/exact",
+			["lastSearch"] = 1454651002,
+			["name"] = "Raw Beast Hide/exact",
+			["filter"] = "Raw Beast Hide/exact",
 		}, -- [61]
 		{
 			["searchMode"] = "normal",
-			["lastSearch"] = 1451141780,
-			["name"] = "grumpling",
-			["filter"] = "grumpling",
+			["lastSearch"] = 1454648284,
+			["name"] = "Coin of Many Faces/exact",
+			["filter"] = "Coin of Many Faces/exact",
 		}, -- [62]
 		{
 			["searchMode"] = "normal",
-			["lastSearch"] = 1451031372,
-			["name"] = "blood spirit",
-			["filter"] = "blood spirit",
+			["lastSearch"] = 1454647708,
+			["name"] = "Mote of Fire/exact",
+			["filter"] = "Mote of Fire/exact",
 		}, -- [63]
 		{
 			["searchMode"] = "normal",
-			["lastSearch"] = 1451031348,
-			["name"] = "chaos orb",
-			["filter"] = "chaos orb",
+			["lastSearch"] = 1454647706,
+			["name"] = "Mote of Shadow/exact",
+			["filter"] = "Mote of Shadow/exact",
 		}, -- [64]
 		{
 			["searchMode"] = "normal",
-			["lastSearch"] = 1451030620,
-			["name"] = "Green Winter Clothes/exact",
-			["filter"] = "Green Winter Clothes/exact",
+			["lastSearch"] = 1454647704,
+			["name"] = "Primal Shadow/exact",
+			["filter"] = "Primal Shadow/exact",
 		}, -- [65]
 		{
 			["searchMode"] = "normal",
-			["lastSearch"] = 1451030587,
-			["name"] = "Red Winter Clothes/exact",
-			["filter"] = "Red Winter Clothes/exact",
+			["lastSearch"] = 1454647698,
+			["name"] = "Primal Life/exact",
+			["filter"] = "Primal Life/exact",
 		}, -- [66]
 		{
 			["searchMode"] = "normal",
-			["lastSearch"] = 1450982879,
-			["name"] = "Minion of Grumpus/exact",
-			["filter"] = "Minion of Grumpus/exact",
+			["lastSearch"] = 1454647690,
+			["name"] = "Mote of Life/exact",
+			["filter"] = "Mote of Life/exact",
 		}, -- [67]
 		{
 			["searchMode"] = "normal",
-			["lastSearch"] = 1450964055,
-			["name"] = "Spectral Grog/exact",
-			["filter"] = "Spectral Grog/exact",
+			["lastSearch"] = 1454647510,
+			["name"] = "Essence of Water/exact",
+			["filter"] = "Essence of Water/exact",
 		}, -- [68]
 		{
 			["searchMode"] = "normal",
-			["lastSearch"] = 1450958862,
-			["name"] = "Recipe: Winter Veil Egg Nog/exact",
-			["filter"] = "Recipe: Winter Veil Egg Nog/exact",
+			["lastSearch"] = 1454647451,
+			["name"] = "rAW BEAST HIDE",
+			["filter"] = "rAW BEAST HIDE",
 		}, -- [69]
 		{
 			["searchMode"] = "normal",
-			["lastSearch"] = 1450948746,
-			["name"] = "Sorcerous Earth/exact",
-			["filter"] = "Sorcerous Earth/exact",
+			["lastSearch"] = 1454644060,
+			["name"] = "Fel Iron Bar/exact",
+			["filter"] = "Fel Iron Bar/exact",
 		}, -- [70]
 		{
 			["searchMode"] = "normal",
-			["lastSearch"] = 1450948733,
-			["name"] = "Sorcerous Air/exact",
-			["filter"] = "Sorcerous Air/exact",
+			["lastSearch"] = 1454643672,
+			["name"] = "iron bar",
+			["filter"] = "iron bar",
 		}, -- [71]
 		{
 			["searchMode"] = "normal",
-			["lastSearch"] = 1450948651,
-			["name"] = "Sorcerous Water/exact",
-			["filter"] = "Sorcerous Water/exact",
+			["lastSearch"] = 1454643660,
+			["name"] = "gold bar",
+			["filter"] = "gold bar",
 		}, -- [72]
 		{
 			["searchMode"] = "normal",
-			["lastSearch"] = 1450948636,
-			["name"] = "Sorcerous Fire/exact",
-			["filter"] = "Sorcerous Fire/exact",
+			["lastSearch"] = 1454460586,
+			["name"] = "mote of fire",
+			["filter"] = "mote of fire",
 		}, -- [73]
 		{
 			["searchMode"] = "normal",
-			["lastSearch"] = 1450947583,
-			["name"] = "ghostly skeleton key",
-			["filter"] = "ghostly skeleton key",
+			["lastSearch"] = 1454460515,
+			["name"] = "primordial sar",
+			["filter"] = "primordial sar",
 		}, -- [74]
 		{
 			["searchMode"] = "normal",
-			["lastSearch"] = 1450945666,
-			["name"] = "Cobalt Bar/exact",
-			["filter"] = "Cobalt Bar/exact",
+			["lastSearch"] = 1454456374,
+			["name"] = "Blackrock Ore/exact",
+			["filter"] = "Blackrock Ore/exact",
 		}, -- [75]
 		{
 			["searchMode"] = "normal",
-			["lastSearch"] = 1450943201,
-			["name"] = "medallion of the legion",
-			["filter"] = "medallion of the legion",
+			["lastSearch"] = 1454456087,
+			["name"] = "True Iron Ore/exact",
+			["filter"] = "True Iron Ore/exact",
 		}, -- [76]
 		{
 			["searchMode"] = "normal",
-			["lastSearch"] = 1450943159,
-			["name"] = "champion's honor",
-			["filter"] = "champion's honor",
+			["lastSearch"] = 1454450464,
+			["name"] = "dark whelp",
+			["filter"] = "dark whelp",
 		}, -- [77]
 		{
 			["searchMode"] = "normal",
-			["lastSearch"] = 1450943102,
-			["name"] = "elixir of the rapid",
-			["filter"] = "elixir of the rapid",
+			["lastSearch"] = 1454442457,
+			["name"] = "Lunar Lantern/exact",
+			["filter"] = "Lunar Lantern/exact",
 		}, -- [78]
 		{
 			["searchMode"] = "normal",
-			["lastSearch"] = 1450940393,
-			["name"] = "temporal crystal/exact",
-			["filter"] = "temporal crystal/exact",
+			["lastSearch"] = 1454442393,
+			["name"] = "lunar lantern",
+			["filter"] = "lunar lantern",
 		}, -- [79]
 		{
 			["searchMode"] = "normal",
-			["lastSearch"] = 1450937649,
-			["name"] = "Frostweave Cloth/exact",
-			["filter"] = "Frostweave Cloth/exact",
+			["lastSearch"] = 1454442377,
+			["name"] = "lunar festival",
+			["filter"] = "lunar festival",
 		}, -- [80]
 		{
 			["searchMode"] = "normal",
-			["lastSearch"] = 1450937597,
-			["name"] = "borean leather",
-			["filter"] = "borean leather",
+			["lastSearch"] = 1454435542,
+			["name"] = "Greater Magic Essence/exact",
+			["filter"] = "Greater Magic Essence/exact",
 		}, -- [81]
 		{
 			["searchMode"] = "normal",
-			["lastSearch"] = 1450937577,
-			["name"] = "savage leather/exact",
-			["filter"] = "savage leather/exact",
+			["lastSearch"] = 1454435439,
+			["name"] = "Lesser Planar Essence/exact",
+			["filter"] = "Lesser Planar Essence/exact",
 		}, -- [82]
 		{
 			["searchMode"] = "normal",
-			["lastSearch"] = 1450937557,
-			["name"] = "savage leather",
-			["filter"] = "savage leather",
+			["lastSearch"] = 1454435347,
+			["name"] = "Sorcerous Air/exact",
+			["filter"] = "Sorcerous Air/exact",
 		}, -- [83]
 		{
 			["searchMode"] = "normal",
-			["lastSearch"] = 1450937478,
-			["name"] = "exotic leather",
-			["filter"] = "exotic leather",
+			["lastSearch"] = 1454435340,
+			["name"] = "Sunmote/exact",
+			["filter"] = "Sunmote/exact",
 		}, -- [84]
 		{
 			["searchMode"] = "normal",
-			["lastSearch"] = 1450937472,
-			["name"] = "exotic",
-			["filter"] = "exotic",
+			["lastSearch"] = 1454435332,
+			["name"] = "Small Glimmering Shard/exact",
+			["filter"] = "Small Glimmering Shard/exact",
 		}, -- [85]
 		{
 			["searchMode"] = "normal",
-			["lastSearch"] = 1450937425,
-			["name"] = "magnif",
-			["filter"] = "magnif",
+			["lastSearch"] = 1454435329,
+			["name"] = "Small Glowing Shard/exact",
+			["filter"] = "Small Glowing Shard/exact",
 		}, -- [86]
 		{
 			["searchMode"] = "normal",
-			["lastSearch"] = 1450894049,
-			["name"] = "Rich Purple Silk Shirt/exact",
-			["filter"] = "Rich Purple Silk Shirt/exact",
+			["lastSearch"] = 1454435308,
+			["name"] = "Large Glowing Shard/exact",
+			["filter"] = "Large Glowing Shard/exact",
 		}, -- [87]
 		{
 			["searchMode"] = "normal",
-			["lastSearch"] = 1450892710,
-			["name"] = "Coin of Many Faces/exact",
-			["filter"] = "Coin of Many Faces/exact",
+			["lastSearch"] = 1454435290,
+			["name"] = "Small Dream Shard/exact",
+			["filter"] = "Small Dream Shard/exact",
 		}, -- [88]
 		{
 			["searchMode"] = "normal",
-			["lastSearch"] = 1450887202,
-			["name"] = "Starlight Ink/exact",
-			["filter"] = "Starlight Ink/exact",
+			["lastSearch"] = 1454434865,
+			["name"] = "Elixir of Major Strength/exact",
+			["filter"] = "Elixir of Major Strength/exact",
 		}, -- [89]
 		{
-			["searchMode"] = "crafting",
-			["lastSearch"] = 1450886851,
-			["name"] = "Ink of Dreams",
-			["filter"] = "Ink of Dreams",
+			["searchMode"] = "normal",
+			["lastSearch"] = 1454433769,
+			["name"] = "void crystal",
+			["filter"] = "void crystal",
 		}, -- [90]
 		{
 			["searchMode"] = "normal",
-			["lastSearch"] = 1450708824,
-			["name"] = "illusion dust",
-			["filter"] = "illusion dust",
+			["lastSearch"] = 1454433227,
+			["name"] = "lesser eternal",
+			["filter"] = "lesser eternal",
 		}, -- [91]
 		{
 			["searchMode"] = "normal",
-			["lastSearch"] = 1450708815,
-			["name"] = "hypnotic dust",
-			["filter"] = "hypnotic dust",
+			["lastSearch"] = 1454433111,
+			["name"] = "lesser cosmic",
+			["filter"] = "lesser cosmic",
 		}, -- [92]
 		{
 			["searchMode"] = "normal",
-			["lastSearch"] = 1450708809,
-			["name"] = "arcane dust",
-			["filter"] = "arcane dust",
+			["lastSearch"] = 1454432787,
+			["name"] = "maelstrom crystal",
+			["filter"] = "maelstrom crystal",
 		}, -- [93]
 		{
-			["searchMode"] = "normal",
-			["lastSearch"] = 1450708802,
-			["name"] = "infinite dust",
-			["filter"] = "infinite dust",
+			["searchMode"] = "crafting",
+			["lastSearch"] = 1454432606,
+			["name"] = "Dream Shard",
+			["filter"] = "Dream Shard",
 		}, -- [94]
 		{
 			["searchMode"] = "normal",
-			["lastSearch"] = 1450708749,
-			["name"] = "strange dust",
-			["filter"] = "strange dust",
+			["lastSearch"] = 1454431920,
+			["name"] = "Essence of Undeath/exact",
+			["filter"] = "Essence of Undeath/exact",
 		}, -- [95]
 		{
 			["searchMode"] = "normal",
-			["lastSearch"] = 1450707316,
-			["name"] = "crashin",
-			["filter"] = "crashin",
+			["lastSearch"] = 1454431889,
+			["name"] = "Enchant Weapon - Icy Chill/exact",
+			["filter"] = "Enchant Weapon - Icy Chill/exact",
 		}, -- [96]
 		{
 			["searchMode"] = "normal",
-			["lastSearch"] = 1450703149,
-			["name"] = "primal life",
-			["filter"] = "primal life",
+			["lastSearch"] = 1454431824,
+			["name"] = "icy chill",
+			["filter"] = "icy chill",
 		}, -- [97]
 		{
 			["searchMode"] = "normal",
-			["lastSearch"] = 1450703141,
-			["name"] = "mote of shadow",
-			["filter"] = "mote of shadow",
+			["lastSearch"] = 1454431377,
+			["name"] = "Ghost Mushroom/exact",
+			["filter"] = "Ghost Mushroom/exact",
 		}, -- [98]
 		{
 			["searchMode"] = "normal",
-			["lastSearch"] = 1450703136,
-			["name"] = "primal shadow",
-			["filter"] = "primal shadow",
+			["lastSearch"] = 1454431340,
+			["name"] = "Elixir of Demonslaying/exact",
+			["filter"] = "Elixir of Demonslaying/exact",
 		}, -- [99]
 		{
 			["searchMode"] = "normal",
-			["lastSearch"] = 1450703128,
-			["name"] = "primal air",
-			["filter"] = "primal air",
+			["lastSearch"] = 1454431283,
+			["name"] = "mystic essence",
+			["filter"] = "mystic essence",
 		}, -- [100]
 		{
 			["searchMode"] = "normal",
-			["lastSearch"] = 1450703119,
-			["name"] = "primal fire",
-			["filter"] = "primal fire",
+			["lastSearch"] = 1454431199,
+			["name"] = "Greater Mystic Essence/exact",
+			["filter"] = "Greater Mystic Essence/exact",
 		}, -- [101]
 	},
 	["g@ @sniperSound"] = "TSM_CASH_REGISTER",
 	["g@ @marketValueSource"] = "dbmarket",
 	["g@ @maxDeSearchLvl"] = 735,
 	["g@ @minDeSearchLvl"] = 1,
-	["g@ @normalPostPrice"] = "110% dbmarket",
+	["g@ @normalPostPrice"] = "150% dbmarket",
 	["_version"] = 3,
 	["_currentProfile"] = {
 		["Ifarmforyou - Outland"] = "Default",
-		["Ryjax - Aggramar"] = "Default",
+		["Sheyshay - Outland"] = "Default",
 		["Sheyshey - Outland"] = "Default",
 		["Shayshey - Outland"] = "Default",
-		["Sheyshay - Outland"] = "Default",
 		["Sheyrah - Outland"] = "Default",
 		["Kylosandrax - Aggramar"] = "Default",
+		["Glyphdealz - Outland"] = "Default",
+		["Startree - Outland"] = "Default",
 		["Lokbawks - Outland"] = "Default",
-		["Sheyrrah - Outland"] = "Default",
-		["Farmershey - Outland"] = "Default",
 		["Kxchanter - Aggramar"] = "Default",
 		["Kromethious - Aggramar"] = "Default",
 		["Kxtrader - Aggramar"] = "Default",
-		["Glyphdealz - Outland"] = "Default",
-		["Ryvok - Aggramar"] = "Default",
+		["Sheyrrah - Outland"] = "Default",
 		["Haroohiipan - Outland"] = "Default",
+		["Farmershey - Outland"] = "Default",
 	},
 }

@@ -236,7 +236,7 @@ sh_Local["tooltip_CB3"] = {
 }
 sh_Local["tooltip_CB4"] = {
 	"Blinking",
-	"Enable a red blinking when the shield current value is below 20% of it's max value.",
+	"Enable a red blinking when the shield current value is below 20% of its max value.",
 }
 sh_Local["tooltip_CB5"] = {
 	"Outline",

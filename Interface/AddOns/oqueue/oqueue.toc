@@ -1,7 +1,7 @@
 ## Title: oQueue
-## Version: 2.1.1
+## Version: 3.0.7c
 ## Interface: 60000
-## X-Min-Interface: 50400
+## X-Min-Interface: 60000
 ## Author: Tiny of the Zerg
 ## Notes: Oath's premade finder using social mesh networking
 ## X-Category: PvP
@@ -9,7 +9,7 @@
 ## DefaultState: enabled
 ## X-Curse-Project-Name: oQueue
 ## X-Curse-Project-ID: oqueue
-## X-Curse-Packaged-Version: 2.1.1
+## X-Curse-Packaged-Version: 3.0.7c
 ## SavedVariables: OQ_data
 
 oqueue.defines.lua 
@@ -25,9 +25,6 @@ locales\oqueue.ru.lua
 
 region\realms.us.lua
 region\realms.eu.lua
-
-Libs\LibStub\LibStub.lua
-Libs\LibBossIDs-1.0\lib.xml
 
 oqueue.lua
 oqueue_tables.lua

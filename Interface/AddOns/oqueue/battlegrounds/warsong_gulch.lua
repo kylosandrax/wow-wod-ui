@@ -44,18 +44,18 @@ local function get_location_name( x, y, location, radius )
 end
 
 local function get_score()
-  if (AlwaysUpFrame2Text == nil) or (AlwaysUpFrame3Text == nil) then
+  if (AlwaysUpFrame1Text == nil) or (AlwaysUpFrame2Text == nil) then
     return 0,0 ;
   end
+  local line1 = AlwaysUpFrame1Text:GetText() ;
   local line2 = AlwaysUpFrame2Text:GetText() ;
-  local line3 = AlwaysUpFrame3Text:GetText() ;
-  if (line2 == nil) or (line3 == nil) then
+  if (line1 == nil) or (line2 == nil) then
     return 0,0 ;
   end
-  if (AlwaysUpFrame1Text ~= nil) then
-    local line1 = AlwaysUpFrame1Text:GetText() ;
-    if (line1 ~= nil) then
-      local tm = line1:match( "Remaining: (%d+)" ) ;  
+  if (AlwaysUpFrame3Text ~= nil) then
+    local line3 = AlwaysUpFrame3Text:GetText() ;
+    if (line3) and (line3 ~= "") then
+      local tm = line3:match( "Time Remaining: (%d+)" ) ;  
       local dt = _wsg_expire_tm - GetTime() ;
       tm = tonumber(tm) * 60 ;
       -- reset time if off by more then 120 seconds
@@ -64,7 +64,7 @@ local function get_score()
       end
     end
   end
-  return tonumber(line2:match( "%d+" )), tonumber(line3:match( "%d+" )) ;
+  return tonumber(line1:match( "%d+" )), tonumber(line2:match( "%d+" )) ;
 end
 
 local function wsg_get_current_loc()

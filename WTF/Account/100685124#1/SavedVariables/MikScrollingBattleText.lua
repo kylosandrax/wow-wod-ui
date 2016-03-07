@@ -3,24 +3,24 @@ MSBTProfiles_SavedVars = {
 	["profiles"] = {
 		["Default"] = {
 			["scrollAreas"] = {
-				["Static"] = {
-					["offsetY"] = 134,
-				},
 				["Incoming"] = {
 					["offsetX"] = -433,
 					["offsetY"] = -186,
-				},
-				["Notification"] = {
-					["offsetX"] = -171,
-					["offsetY"] = 259,
 				},
 				["Outgoing"] = {
 					["offsetX"] = 393,
 					["offsetY"] = -183,
 				},
+				["Notification"] = {
+					["offsetX"] = -171,
+					["offsetY"] = 259,
+				},
+				["Static"] = {
+					["offsetY"] = 134,
+				},
 			},
-			["normalFontName"] = "ElvUI Combat",
-			["critFontName"] = "ElvUI Combat",
+			["normalFontName"] = "Friz Quadrata TT",
+			["critFontName"] = "Friz Quadrata TT",
 			["creationVersion"] = "5.7.138",
 		},
 	},

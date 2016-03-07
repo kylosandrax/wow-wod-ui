@@ -10,8 +10,21 @@ VER 3 0000000000000006 "FDK2" "INV_MISC_QUESTIONMARK"
 #showtooltip
 /click FDK2
 END
+VER 3 0000000000000007 "Frost2H" "INV_MISC_QUESTIONMARK"
+#showtooltip
+/click Frost2H
+END
+VER 3 000000000000000A "HopForward" "ACHIEVEMENT_GUILDPERK_QUICK AND DEAD"
+/run ServerHop_HopForward()
+END
 VER 3 0000000000000001 "Loomdoom" "INV_CHEST_PLATE15"
 /i Hey: I've no heirlooms so don't go too nuts.
+END
+VER 3 0000000000000008 "MaxCamDistance" "134269"
+/script SetCVar("cameraDistanceMax",30) 
+END
+VER 3 0000000000000009 "PullTimer" "INV_MISC_QUESTIONMARK"
+/dbm pull 10
 END
 VER 3 0000000000000003 "Tanan Rares" "132431"
 /run local t,s={"Terrorfist",39288,"Vengeance",39290,"Deathtalon",39287,"Doomroller",39289},'' for i=1,#t-1,2 do s=s..(IsQuestFlaggedCompleted(t[i+1]) and '\124cffff0000' or '\124cff00ff00')..t[i]..'\124r, ' end print(s:sub(1,-3))

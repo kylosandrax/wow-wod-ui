@@ -22,19 +22,19 @@ local UnitName = UnitName
 
 local CONTINENT_DRAENOR = 7
 local BODYGUARD_BANNED_ZONES = {
-    [978] = true,  -- Ashran
-    [1009] = true, -- Stormshield
-    [1011] = true  -- Warspear
+	[978] = true,  -- Ashran
+	[1009] = true, -- Stormshield
+	[1011] = true  -- Warspear
 }
 
 function BG:IsValidZone()
-    SetMapToCurrentZone()
-    local currentContinent = GetCurrentMapContinent()
-    local currentMapAreaID = GetCurrentMapAreaID()
-    local valid = currentContinent == CONTINENT_DRAENOR and not BODYGUARD_BANNED_ZONES[currentMapAreaID]
-    BG.db.IsInValidZone = valid
+	SetMapToCurrentZone()
+	local currentContinent = GetCurrentMapContinent()
+	local currentMapAreaID = GetCurrentMapAreaID()
+	local valid = currentContinent == CONTINENT_DRAENOR and not BODYGUARD_BANNED_ZONES[currentMapAreaID]
+	BG.db.IsInValidZone = valid
 
-    return valid
+	return valid
 end
 
 function BG:IsShowing()
@@ -104,9 +104,9 @@ function BG:CreateFrame()
 	self:HideFrame()
 
 	frame:SetTemplate("Default", nil, true)
-	frame:SetPoint("CENTER", E.UIParent, "CENTER")
-	frame:SetWidth(UF.db.units.bodyguard.width)
-	frame:SetHeight(UF.db.units.bodyguard.height)
+	frame:Point("CENTER", E.UIParent, "CENTER")
+	frame:Width(UF.db.units.bodyguard.width)
+	frame:Height(UF.db.units.bodyguard.height)
 
 	frame.healthBar = CreateFrame("StatusBar", nil, frame)
 	frame.healthBar:SetInside(frame)
@@ -117,7 +117,7 @@ function BG:CreateFrame()
 
 	frame.healthBar.name = frame.healthBar:CreateFontString(nil, 'OVERLAY')
 	UF:Configure_FontString(frame.healthBar.name)
-	frame.healthBar.name:SetPoint("CENTER", frame, "CENTER")
+	frame.healthBar.name:Point("CENTER", frame, "CENTER")
 
 	frame.healthBar.name:SetTextColor(unpack(ElvUF.colors.reaction[5]))
 
@@ -133,13 +133,15 @@ function BG:UpdateSettings()
 		elseif not E.db.unitframe.units.player.enable then
 			self.frame:SetParent(E.UIParent)
 		end
-	else
+		E:EnableMover(self.frame.mover:GetName())
+	elseif self.frame then
 		self.frame:SetParent(E.HiddenFrame)
+		E:DisableMover(self.frame.mover:GetName())
 	end
 
 	self:HealthUpdate(self.db.Health, self.db.MaxHealth)
-	self.frame:SetWidth(UF.db.units.bodyguard.width)
-	self.frame:SetHeight(UF.db.units.bodyguard.height)
+	self.frame:Width(UF.db.units.bodyguard.width)
+	self.frame:Height(UF.db.units.bodyguard.height)
 end
 
 

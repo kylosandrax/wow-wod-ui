@@ -41,10 +41,3 @@ X: -291
 Y: 146
 W: 250
 H: 30
-Frame: AuctionFrame
-FrameLevel: 107
-Anchor: TOPLEFT
-X: 16
-Y: -116
-W: 832
-H: 447

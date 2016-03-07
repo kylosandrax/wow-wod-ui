@@ -18,3 +18,12 @@ ElvUI: enabled
 ShieldHealth: disabled
 TradeSkillMaster_WoWuction: enabled
 _NPCScan: disabled
+SatchelScanner: disabled
+TidyPlates_ThreatPlates: disabled
+TidyPlates_Quatre: disabled
+TidyPlates_Grey: disabled
+TidyPlatesWidgets: disabled
+TidyPlatesHub: disabled
+CrossRealmAssist: enabled
+ServerHop: disabled
+TradeSkillMaster_Destroying: disabled

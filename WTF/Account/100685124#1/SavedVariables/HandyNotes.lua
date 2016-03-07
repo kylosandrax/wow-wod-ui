@@ -2,17 +2,17 @@
 HandyNotesDB = {
 	["profileKeys"] = {
 		["Zapunzel - Aggramar"] = "Zapunzel - Aggramar",
-		["Ryvok - Terokkar"] = "Ryvok - Terokkar",
-		["Greenthorn - Aggramar"] = "Greenthorn - Aggramar",
 		["Ryjax - Aggramar"] = "Ryjax - Aggramar",
-		["Stormslinger - Aggramar"] = "Stormslinger - Aggramar",
-		["Kylosandrax - Aggramar"] = "Kylosandrax - Aggramar",
-		["Kromethious - Aggramar"] = "Kromethious - Aggramar",
+		["Greenthorn - Aggramar"] = "Greenthorn - Aggramar",
+		["Ryvok - Terokkar"] = "Ryvok - Terokkar",
 		["Feldspar - Aggramar"] = "Feldspar - Aggramar",
-		["Kxtrader - Aggramar"] = "Kxtrader - Aggramar",
-		["Kxchanter - Aggramar"] = "Kxchanter - Aggramar",
+		["Kylosandrax - Aggramar"] = "Kylosandrax - Aggramar",
 		["Kyloc - Aggramar"] = "Kyloc - Aggramar",
+		["Stormslinger - Aggramar"] = "Stormslinger - Aggramar",
 		["Banjax - Aggramar"] = "Banjax - Aggramar",
+		["Kxchanter - Aggramar"] = "Kxchanter - Aggramar",
+		["Kromethious - Aggramar"] = "Kromethious - Aggramar",
+		["Kxtrader - Aggramar"] = "Kxtrader - Aggramar",
 		["Kylosandrix - Aggramar"] = "Kylosandrix - Aggramar",
 		["Ryvok - Aggramar"] = "Ryvok - Aggramar",
 		["Bronin - Aggramar"] = "Bronin - Aggramar",
@@ -20,27 +20,27 @@ HandyNotesDB = {
 	["profiles"] = {
 		["Zapunzel - Aggramar"] = {
 		},
-		["Ryvok - Terokkar"] = {
+		["Ryjax - Aggramar"] = {
 		},
 		["Greenthorn - Aggramar"] = {
 		},
-		["Ryjax - Aggramar"] = {
-		},
-		["Stormslinger - Aggramar"] = {
-		},
-		["Kylosandrax - Aggramar"] = {
-		},
-		["Kromethious - Aggramar"] = {
+		["Ryvok - Terokkar"] = {
 		},
 		["Feldspar - Aggramar"] = {
 		},
-		["Kxtrader - Aggramar"] = {
-		},
-		["Kxchanter - Aggramar"] = {
+		["Kylosandrax - Aggramar"] = {
 		},
 		["Kyloc - Aggramar"] = {
 		},
+		["Stormslinger - Aggramar"] = {
+		},
 		["Banjax - Aggramar"] = {
+		},
+		["Kxchanter - Aggramar"] = {
+		},
+		["Kromethious - Aggramar"] = {
+		},
+		["Kxtrader - Aggramar"] = {
 		},
 		["Kylosandrix - Aggramar"] = {
 		},
@@ -53,17 +53,17 @@ HandyNotesDB = {
 HandyNotes_HandyNotesDB = {
 	["profileKeys"] = {
 		["Zapunzel - Aggramar"] = "Zapunzel - Aggramar",
-		["Ryvok - Terokkar"] = "Ryvok - Terokkar",
-		["Greenthorn - Aggramar"] = "Greenthorn - Aggramar",
 		["Ryjax - Aggramar"] = "Ryjax - Aggramar",
-		["Stormslinger - Aggramar"] = "Stormslinger - Aggramar",
-		["Kylosandrax - Aggramar"] = "Kylosandrax - Aggramar",
-		["Kromethious - Aggramar"] = "Kromethious - Aggramar",
+		["Greenthorn - Aggramar"] = "Greenthorn - Aggramar",
+		["Ryvok - Terokkar"] = "Ryvok - Terokkar",
 		["Feldspar - Aggramar"] = "Feldspar - Aggramar",
-		["Kxtrader - Aggramar"] = "Kxtrader - Aggramar",
-		["Kxchanter - Aggramar"] = "Kxchanter - Aggramar",
+		["Kylosandrax - Aggramar"] = "Kylosandrax - Aggramar",
 		["Kyloc - Aggramar"] = "Kyloc - Aggramar",
+		["Stormslinger - Aggramar"] = "Stormslinger - Aggramar",
 		["Banjax - Aggramar"] = "Banjax - Aggramar",
+		["Kxchanter - Aggramar"] = "Kxchanter - Aggramar",
+		["Kromethious - Aggramar"] = "Kromethious - Aggramar",
+		["Kxtrader - Aggramar"] = "Kxtrader - Aggramar",
 		["Kylosandrix - Aggramar"] = "Kylosandrix - Aggramar",
 		["Ryvok - Aggramar"] = "Ryvok - Aggramar",
 		["Bronin - Aggramar"] = "Bronin - Aggramar",
@@ -71,27 +71,27 @@ HandyNotes_HandyNotesDB = {
 	["profiles"] = {
 		["Zapunzel - Aggramar"] = {
 		},
-		["Ryvok - Terokkar"] = {
+		["Ryjax - Aggramar"] = {
 		},
 		["Greenthorn - Aggramar"] = {
 		},
-		["Ryjax - Aggramar"] = {
-		},
-		["Stormslinger - Aggramar"] = {
-		},
-		["Kylosandrax - Aggramar"] = {
-		},
-		["Kromethious - Aggramar"] = {
+		["Ryvok - Terokkar"] = {
 		},
 		["Feldspar - Aggramar"] = {
 		},
-		["Kxtrader - Aggramar"] = {
-		},
-		["Kxchanter - Aggramar"] = {
+		["Kylosandrax - Aggramar"] = {
 		},
 		["Kyloc - Aggramar"] = {
 		},
+		["Stormslinger - Aggramar"] = {
+		},
 		["Banjax - Aggramar"] = {
+		},
+		["Kxchanter - Aggramar"] = {
+		},
+		["Kromethious - Aggramar"] = {
+		},
+		["Kxtrader - Aggramar"] = {
 		},
 		["Kylosandrix - Aggramar"] = {
 		},

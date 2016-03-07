@@ -1,0 +1,12 @@
+tag 2.1.0.21
+3c50f983d9ce09b82c71d03ed8d5cdbeb0a31fdf
+Benjamin Staneck <staneck@gmail.com>
+2016-02-20 05:53:32 +0100
+
+
+
+--------------------
+
+Infus:
+	- Fix for dynamic groups not showing border/background
+	Ticket-number: 474

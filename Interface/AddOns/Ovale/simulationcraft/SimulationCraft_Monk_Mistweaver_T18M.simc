@@ -26,10 +26,12 @@ actions.precombat+=/potion,name=draenic_intellect_potion
 # Executed every time the actor is available.
 
 actions=auto_attack
+actions+=/spear_hand_strike,if=target.debuff.casting.react
 actions+=/invoke_xuen
 actions+=/chi_brew,if=chi=0
 actions+=/use_item,name=intuitions_gift
 actions+=/use_item,name=mirror_of_the_blademaster
+actions+=/use_item,slot=trinket1
 actions+=/blood_fury,if=target.time_to_die<18
 actions+=/berserking,if=target.time_to_die<18
 actions+=/arcane_torrent,if=chi.max-chi>=1&target.time_to_die<18

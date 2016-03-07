@@ -77,7 +77,7 @@ function UF:Construct_AltPowerBar(frame)
 	altpower:CreateBackdrop("Default", true)
 
 	altpower.text = altpower:CreateFontString(nil, 'OVERLAY')
-	altpower.text:SetPoint("CENTER")
+	altpower.text:Point("CENTER")
 	altpower.text:SetJustifyH("CENTER")
 	UF:Configure_FontString(altpower.text)
 
@@ -132,12 +132,12 @@ function UF:Construct_RaidDebuffs(frame)
 
 	rdebuff.count = rdebuff:CreateFontString(nil, 'OVERLAY')
 	rdebuff.count:FontTemplate(nil, 10, 'OUTLINE')
-	rdebuff.count:SetPoint('BOTTOMRIGHT', 0, 2)
+	rdebuff.count:Point('BOTTOMRIGHT', 0, 2)
 	rdebuff.count:SetTextColor(1, .9, 0)
 
 	rdebuff.time = rdebuff:CreateFontString(nil, 'OVERLAY')
 	rdebuff.time:FontTemplate(nil, 10, 'OUTLINE')
-	rdebuff.time:SetPoint('CENTER')
+	rdebuff.time:Point('CENTER')
 	rdebuff.time:SetTextColor(1, .9, 0)
 
 	return rdebuff
@@ -159,7 +159,7 @@ function UF:Construct_DebuffHighlight(frame)
 	x:Hide();
 
 	frame.DBHGlow = x
-	
+
 	if frame.Health then
 		dbh:SetParent(frame.Health)
 		frame.DBHGlow:SetParent(frame.Health)
@@ -356,16 +356,16 @@ function UF:UpdateComboDisplay(event, unit)
 		cpoints:Show()
 		if USE_MINI_COMBOBAR then
 			HEALTH_OFFSET_Y = DETACHED and 0 or (SPACING + (COMBOBAR_HEIGHT/2))
-			self.Portrait.backdrop:SetPoint("TOPRIGHT", self, "TOPRIGHT", 0, -PORTRAIT_OFFSET_Y)
+			self.Portrait.backdrop:Point("TOPRIGHT", self, "TOPRIGHT", 0, -PORTRAIT_OFFSET_Y)
 			self.Health:Point("TOPRIGHT", self, "TOPRIGHT", -(BORDER+PORTRAIT_WIDTH), -HEALTH_OFFSET_Y)
 		else
 			HEALTH_OFFSET_Y = DETACHED and 0 or (SPACING + COMBOBAR_HEIGHT)
-			self.Portrait.backdrop:SetPoint("TOPRIGHT", self, "TOPRIGHT")
+			self.Portrait.backdrop:Point("TOPRIGHT", self, "TOPRIGHT")
 			self.Health:Point("TOPRIGHT", self, "TOPRIGHT", -(BORDER+PORTRAIT_WIDTH), -(BORDER + HEALTH_OFFSET_Y))
 		end
 	else
 		cpoints:Hide()
-		self.Portrait.backdrop:SetPoint("TOPRIGHT", self, "TOPRIGHT")
+		self.Portrait.backdrop:Point("TOPRIGHT", self, "TOPRIGHT")
 		self.Health:Point("TOPRIGHT", self, "TOPRIGHT", -(BORDER+PORTRAIT_WIDTH), -BORDER)
 	end
 end
@@ -481,8 +481,10 @@ function UF:UpdateAuraWatch(frame, petOverride, db)
 				icon:Width(db.size);
 				icon:Height(db.size);
 				icon:ClearAllPoints()
-				icon:SetPoint(buffs[i].point, frame.Health, buffs[i].point, buffs[i].xOffset, buffs[i].yOffset);
+				--Protect against missing .point value
+				if not buffs[i].point then buffs[i].point = "TOPLEFT" end
 
+				icon:Point(buffs[i].point, frame.Health, buffs[i].point, buffs[i].xOffset, buffs[i].yOffset);
 
 				if not icon.icon then
 					icon.icon = icon:CreateTexture(nil, "BORDER");
@@ -554,15 +556,15 @@ function UF:UpdateAuraWatch(frame, petOverride, db)
 				icon.count:ClearAllPoints()
 				if icon.displayText then
 					local point, anchorPoint, x, y = unpack(textCounterOffsets[buffs[i].point])
-					icon.count:SetPoint(point, icon.text, anchorPoint, x, y)
+					icon.count:Point(point, icon.text, anchorPoint, x, y)
 				else
-					icon.count:SetPoint("CENTER", unpack(counterOffsets[buffs[i].point]));
+					icon.count:Point("CENTER", unpack(counterOffsets[buffs[i].point]));
 				end
 
-				icon.count:FontTemplate(unitframeFont, db.fontSize, 'OUTLINE');
-				icon.text:FontTemplate(unitframeFont, db.fontSize, 'OUTLINE');
+				icon.count:FontTemplate(unitframeFont, db.fontSize, E.db['unitframe'].fontOutline);
+				icon.text:FontTemplate(unitframeFont, db.fontSize, E.db['unitframe'].fontOutline);
 				icon.text:ClearAllPoints()
-				icon.text:SetPoint(buffs[i].point, icon, buffs[i].point)
+				icon.text:Point(buffs[i].point, icon, buffs[i].point)
 
 				if buffs[i].enabled then
 					auras.icons[buffs[i].id] = icon;
@@ -584,6 +586,8 @@ function UF:UpdateAuraWatch(frame, petOverride, db)
 	if frame.AuraWatch.Update then
 		frame.AuraWatch.Update(frame)
 	end
+
+	frame:UpdateElement("AuraWatch")
 
 	buffs = nil;
 end
@@ -626,7 +630,7 @@ function UF:UpdateRoleIcon()
 		lfdrole:Hide()
 		return
 	end
-	
+
 	local isInstance, instanceType = IsInInstance()
 	local role
 

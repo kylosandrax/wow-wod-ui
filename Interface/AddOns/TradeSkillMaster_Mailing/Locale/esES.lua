@@ -94,6 +94,7 @@ L["Auto Recheck Mail"] = "Comprobar automáticamente los correos" -- Needs revie
 -- L["No Target Player"] = ""
 -- L["No Target Specified"] = ""
 -- L["Nothing to Move"] = ""
+-- L["Not sending any gold as you either did not enter a limit or did not press enter to store the limit."] = ""
 -- L["Not sending any gold as you have less than the specified limit."] = ""
 -- L["Not Target Specified"] = ""
 -- L["Open All Mail"] = ""

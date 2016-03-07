@@ -1,8 +1,8 @@
 ﻿local DEBUG = true					--|
 local DEBUG_COMBAT_LOG = false		--|
-local VERSION = 2.35				--|
+local VERSION = 2.38				--|
 --------------------------------------
-local getnB = 15
+local getnB = 18
 local timer,temp,timer2 = 0,true,0
 local O,Ot,Oo = {},{},{}
 local TESTMODE = false
@@ -193,9 +193,9 @@ function Sh_options()
 		["f:pos:2"] = nil,
 		["f:pos:3"] = "CENTER",
 		["f:pos:4"] = 0,
-		["f:pos:5"] = -50,
+		["f:pos:5"] = -150,
 		
-		["tex_barre"] = "Interface\\PaperDollInfoFrame\\UI-Character-Skills-Bar", -- Texture des barres des boucliers
+		["tex_barre"] = "Interface\\TargetingFrame\\UI-StatusBar", -- Texture des barres des boucliers
 		["f:tex:fond"] = "Interface\\Tooltips\\UI-Tooltip-Background", -- Texture du fond de la barre du fond
 		["f:tex:border"] = "Interface\\Tooltips\\UI-Tooltip-Border", -- Texture de la bordeure de la barre du fond
 		["font:val"] = "Fonts\\FRIZQT__.TTF", -- Text de la valeur des boucliers
@@ -222,65 +222,77 @@ function Sh_options()
 		["b:a"] = 100,
 
 		 -- Couleur des barres des boucliers
-		["1:r"] = 0.6,
-		["1:v"] = 0.8,
-		["1:b"] = 0,
+		["1:r"] = 0.75,
+		["1:v"] = 0.75,
+		["1:b"] = 0.75,
 		
-		["2:r"] = 0.8,
-		["2:v"] = 0,
+		["2:r"] = 1,
+		["2:v"] = 0.7,
 		["2:b"] = 0,
 		
-		["3:r"] = 0,
-		["3:v"] = 0.2,
-		["3:b"] = 1,
-		
-		["4:r"] = 1,
-		["4:v"] = 1,
-		["4:b"] = 1,
-		
+		["3:r"] = 1,
+		["3:v"] = 0.94,
+		["3:b"] = 0.33,
+
+		["4:r"] = 0.71,
+		["4:v"] = 0.78,
+		["4:b"] = 0.81,
+
 		["5:r"] = 1,
-		["5:v"] = 0.3,
-		["5:b"] = 0,
-		
-		["6:r"] = 0.5,
-		["6:v"] = 1,
-		["6:b"] = 0.6,
-		
-		["7:r"] = 0.7,
-		["7:v"] = 0.7,
-		["7:b"] = 0.7,
-		
-		["8:r"] = 0.9,
-		["8:v"] = 0.7,
-		["8:b"] = 0,
-		
-		["9:r"] = 1,
-		["9:v"] = 0.95,
-		["9:b"] = 0.77,
-		
-		["10:r"] = 1,
-		["10:v"] = 0.7,
-		["10:b"] = 0.3,
-		
-		["11:r"] = 0.8,
+		["5:v"] = 0.82,
+		["5:b"] = 0.43,
+
+		["6:r"] = 1,
+		["6:v"] = 0.82,
+		["6:b"] = 0.56,
+
+		["7:r"] = 0.99,
+		["7:v"] = 0.95,
+		["7:b"] = 0.51,
+
+		["8:r"] = 1,
+		["8:v"] = 0.95,
+		["8:b"] = 0.77,
+
+		["9:r"] = 0.89,
+		["9:v"] = 0.14,
+		["9:b"] = 0.4,
+
+		["10:r"] = 0.74,
+		["10:v"] = 0.8,
+		["10:b"] = 0.44,
+
+		["11:r"] = 0,
 		["11:v"] = 1,
-		["11:b"] = 1,
-		
+		["11:b"] = 0.964705882352941,
+
 		["12:r"] = 1,
-		["12:v"] = 0.7,
+		["12:v"] = 0.3,
 		["12:b"] = 0,
 		
-		["13:r"] = 1,
-		["13:v"] = 0.7,
-		["13:b"] = 0,
+		["13:r"] = 0.04,
+		["13:v"] = 0.69,
+		["13:b"] = 1,
+
+		["14:r"] = 0.26,
+		["14:v"] = 0.82,
+		["14:b"] = 0.6,
+
+		["15:r"] = 0.9,
+		["15:v"] = 0.7,
+		["15:b"] = 0,
 		
-		["14:r"] = 1,
-		["14:v"] = 1,
-		["14:b"] = 0,
-		
-		["15:r"] = 0.7,
-		["15:v"] = 0,
-		["15:b"] = 0.7,
+		["16:r"] = 0.99,
+		["16:v"] = 0.47,
+		["16:b"] = 0.19,
+
+		["17:r"] = 0.65,
+		["17:v"] = 0.93,
+		["17:b"] = 0.2,
+
+		["18:r"] = 0.96,
+		["18:v"] = 0.03,
+		["18:b"] = 0.02,
 	}
 	
 	Ot = {
@@ -299,8 +311,8 @@ function Sh_options()
 		["f:pos:2"] = nil,
 		["f:pos:3"] = "CENTER",
 		["f:pos:4"] = 0,
-		["f:pos:5"] = -100,
-		["tex_barre"] = "Interface\\PaperDollInfoFrame\\UI-Character-Skills-Bar",
+		["f:pos:5"] = -150,
+		["tex_barre"] = "Interface\\TargetingFrame\\UI-StatusBar",
 		["f:tex:fond"] = "Interface\\Tooltips\\UI-Tooltip-Background",
 		["f:tex:border"] = "Interface\\Tooltips\\UI-Tooltip-Border",
 		["font:val"] = "Fonts\\FRIZQT__.TTF",
@@ -327,65 +339,77 @@ function Sh_options()
 		["b:a"] = 100,
 
 		 -- Couleur des barres des boucliers
-		["1:r"] = 0.6,
-		["1:v"] = 0.8,
-		["1:b"] = 0,
+		["1:r"] = 0.75,
+		["1:v"] = 0.75,
+		["1:b"] = 0.75,
 		
-		["2:r"] = 0.8,
-		["2:v"] = 0,
+		["2:r"] = 1,
+		["2:v"] = 0.7,
 		["2:b"] = 0,
 		
-		["3:r"] = 0,
-		["3:v"] = 0.2,
-		["3:b"] = 1,
-		
-		["4:r"] = 1,
-		["4:v"] = 1,
-		["4:b"] = 1,
-		
+		["3:r"] = 1,
+		["3:v"] = 0.94,
+		["3:b"] = 0.33,
+
+		["4:r"] = 0.71,
+		["4:v"] = 0.78,
+		["4:b"] = 0.81,
+
 		["5:r"] = 1,
-		["5:v"] = 0.3,
-		["5:b"] = 0,
-		
-		["6:r"] = 0.5,
-		["6:v"] = 1,
-		["6:b"] = 0.6,
-		
-		["7:r"] = 0.7,
-		["7:v"] = 0.7,
-		["7:b"] = 0.7,
-		
-		["8:r"] = 0.9,
-		["8:v"] = 0.7,
-		["8:b"] = 0,
-		
-		["9:r"] = 1,
-		["9:v"] = 0.95,
-		["9:b"] = 0.77,
-		
-		["10:r"] = 1,
-		["10:v"] = 0.7,
-		["10:b"] = 0.3,
-		
-		["11:r"] = 0.8,
+		["5:v"] = 0.82,
+		["5:b"] = 0.43,
+
+		["6:r"] = 1,
+		["6:v"] = 0.82,
+		["6:b"] = 0.56,
+
+		["7:r"] = 0.99,
+		["7:v"] = 0.95,
+		["7:b"] = 0.51,
+
+		["8:r"] = 1,
+		["8:v"] = 0.95,
+		["8:b"] = 0.77,
+
+		["9:r"] = 0.89,
+		["9:v"] = 0.14,
+		["9:b"] = 0.4,
+
+		["10:r"] = 0.74,
+		["10:v"] = 0.8,
+		["10:b"] = 0.44,
+
+		["11:r"] = 0,
 		["11:v"] = 1,
-		["11:b"] = 1,
-		
+		["11:b"] = 0.964705882352941,
+
 		["12:r"] = 1,
-		["12:v"] = 0.7,
+		["12:v"] = 0.3,
 		["12:b"] = 0,
 		
-		["13:r"] = 1,
-		["13:v"] = 0.7,
-		["13:b"] = 0,
+		["13:r"] = 0.04,
+		["13:v"] = 0.69,
+		["13:b"] = 1,
+
+		["14:r"] = 0.26,
+		["14:v"] = 0.82,
+		["14:b"] = 0.6,
+
+		["15:r"] = 0.9,
+		["15:v"] = 0.7,
+		["15:b"] = 0,
 		
-		["14:r"] = 1,
-		["14:v"] = 1,
-		["14:b"] = 0,
-		
-		["15:r"] = 0.7,
-		["15:v"] = 0,
-		["15:b"] = 0.7,
+		["16:r"] = 0.99,
+		["16:v"] = 0.47,
+		["16:b"] = 0.19,
+
+		["17:r"] = 0.65,
+		["17:v"] = 0.93,
+		["17:b"] = 0.2,
+
+		["18:r"] = 0.96,
+		["18:v"] = 0.03,
+		["18:b"] = 0.02,
 	}
 	
 	
@@ -511,68 +535,100 @@ local cooldownTIME = 0
 local Btex = {}
 local Bid = {}
 
-----DK
--- Anti-Magic Shell
-Bid[1]  = 48707
-Btex[1] = "spell_shadow_antimagicshell"
--- Blood Shield
-Bid[2]  = 77535
-Btex[2] = "spell_deathknight_butcher2"
+---- WARRIOR ----
 
----- MAGE
--- Barrière de glace
-Bid[3]  = 11426
-Btex[3] = "spell_ice_lament"
--- Incanter's Ward
-Bid[4]  = 1463
-Btex[4] = "spell_shadow_detectlesserinvisibility"
-
----- DEMONISTE
---Sacrificial Pact
-Bid[5]  = 108416
-Btex[5] = "warlock_sacrificial_pact"
-
-----SHAMAN
--- Stone Bulwark
-Bid[6]  = 114893
-Btex[6] = "ability_shaman_stonebulwark"
-
-----WAR
 -- Shield Barrier
-Bid[7]  = 112048
-Btex[7] = "inv_shield_07"
+Bid[1]  = 112048
+Btex[1] = "inv_shield_07"
 
-----MOINE
--- Guard
-Bid[8]  = 115295
-Btex[8] = "ability_monk_guard"
 
----- PRETRE
--- Mot de pouvoir bouclier
-Bid[9]  = 17
-Btex[9] = "Spell_holy_PowerWordShield"
--- Spirit Shell
-Bid[10]  = 114908
-Btex[10] = "ability_shaman_astralshift"
--- Divine Aegis
-Bid[11]  = 47753
-Btex[11] = "spell_holy_devineaegis"
--- Clarity of Will
-Bid[12]  = 152118
-Btex[12] = "ability_priest_clarityofwill"
+---- PALADIN ----
 
----- PALADIN
 -- Illuminated Healing
-Bid[13]  = 86273
-Btex[13] = "spell_holy_absolution"
+Bid[2]  = 86273
+Btex[2] = "spell_holy_absolution"
 -- Sacred Shield
-Bid[14]  = 65148
-Btex[14] = "ability_paladin_blessedmending"
+Bid[3]  = 65148
+Btex[3] = "ability_paladin_blessedmending"
+-- Saved by the Light
+Bid[4]  = 157047
+Btex[4] = "Ability_paladin_savedbythelight"
 
----- DEMONISTE
--- Twilight Ward
-Bid[15]  = 159693
-Btex[15] = "spell_fire_twilightfireward"
+
+---- HUNTER ----
+
+
+---- ROGUE ----
+
+
+---- PRIEST ----
+
+-- Angelic Bulwark
+Bid[5]  = 114214
+Btex[5] = "ability_priest_angelicbulwark"
+-- Clarity of Will
+Bid[6]  = 152118
+Btex[6] = "ability_priest_clarityofwill"
+-- Divine Aegis
+Bid[7]  = 47753
+Btex[7] = "spell_holy_devineaegis"
+-- Power Word: Shield
+Bid[8]  = 17
+Btex[8] = "Spell_holy_PowerWordShield"
+-- Spirit Shell
+Bid[9]  = 114908
+Btex[9] = "ability_shaman_astralshift"
+
+
+---- SHAMAN ----
+
+-- Stone Bulwark
+Bid[10]  = 114893
+Btex[10] = "ability_shaman_stonebulwark"
+
+
+---- MAGE ----
+
+-- Ice Barrier
+Bid[11]  = 11426
+Btex[11] = "spell_ice_lament"
+
+
+---- WARLOCK ----
+
+-- Sacrificial Pact
+Bid[12]  = 108416
+Btex[12] = "warlock_sacrificial_pact"
+-- Soul Leech
+Bid[13]  = 108366
+Btex[13] = "warlock_siphonlife"
+
+
+---- MONK ----
+
+-- Life Cocoon
+Bid[14]  = 116849
+Btex[14] = "ability_monk_chicocoon"
+-- Guard
+Bid[15]  = 115295
+Btex[15] = "ability_monk_guard"
+
+
+---- DRUID ----
+
+-- Tooth and Claw
+Bid[16]  = 135601
+Btex[16] = "inv_misc_monsterfang_01"
+
+
+---- DEATH KNIGHT ----
+
+-- Anti-Magic Shell
+Bid[17]  = 48707
+Btex[17] = "spell_shadow_antimagicshell"
+-- Blood Shield
+Bid[18]  = 77535
+Btex[18] = "spell_deathknight_butcher2"
 
 
 
@@ -1755,7 +1811,7 @@ function Sh_opt_LOAD()
 	if Sh_DB then
 		if	Sh_DB["Profile"] then 
 			if Sh_DB["Profile"]["version"] ~= nil then
-				if Sh_DB["Profile"]["version"] < 2.30 then
+				if Sh_DB["Profile"]["version"] < 2.38 then
 					Sh_DB = nil
 				end
 				

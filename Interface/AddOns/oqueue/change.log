@@ -1,5 +1,51 @@
 ﻿change.log for oQueue
 
+v3.0.7c BUGFIX: brewmaster monks will now register as tanks
+        BUGFIX: protected against nil realm name on initialization  
+        BUGFIX: protected against nil compare when entering wsg
+        BUGFIX: added new special realm name for EU's "Marécage de Zangar" (thx Alathea!)
+        UPD: added french realm name variants
+
+v3.0.7  BUGFIX: will now allow groups to waitlist for premades
+        BUGFIX: working better with category activities for pulldown selections
+
+v3.0.6	BUGFIX: income report when leaving an instance will now be reported (IsInInstance return type changed)
+        UPD: now supports level ranges to 100
+        UPD: removed boss-ids 
+        UPD: new premade type - 'ashran'
+        add: holiday additions (enable: /oq j2tw   disable: /oq grinch)
+        add: new raid - Highmaul
+
+v3.0.5  BUGFIX: support for passworded groups returned
+        add: ban by name-realm now supported; right click group name, group member, or wait lister to ban
+
+v3.0.4  BUGFIX: EU groups were not visible (thx nuage!)
+        UPD: auto-refresh timer will refresh to 45 seconds if you select another premade type
+
+v3.0.3  BUGFIX: search premade-type defaulted to group specified on the create-premade tab
+        BUGFIX: oQueue whispers to non-oqueue group leaders removed
+        BUGFIX: now able to set notes on oQueue groups when wait listed
+        BUGFIX: protected against blizz spamming GROUP_ROSTER_UPDATE (was getting 'too many group actions')
+        UPD: find-premade list will auto-refresh the contents every 45 seconds while open
+
+v3.0.2  BUGFIX: fixed invite bug (seems you must do InviteApplicant and not InviteUnit even tho you can whisper them; testing was on connected accts >.<)
+
+v3.0.1  BUGFIX: removed lingering alts reference on setup tab (thx bangorme!)
+        UPD: pre-loaded the GroupFinder so searches would produce something w/out having to open the window
+        UPD: put 'custom' activities into 'raids' if the activity description contains 'heroic', 'normal', or 'flex'
+        UPD: insured GetCVar("portal") results are uppercase; seems it can vary
+        UPD: group type 'roleplay' removed
+        UPD: group listing adhering to groupfinder query mechanism (multi queries invalidate previous group ids)
+        add: 'mythic' now searchable
+
+v3.0.0  ** MANDATORY UPDATE - PROTOCOL CHANGE **
+        UPD: now works x-realm using group finder back end (thx blizz for the hotfixes!)
+        UPD: removed battle.net communications
+        UPD: removed the mesh network 
+        UPD: removed the scoreboard
+        UPD: removed the bounty board
+        UPD: removed the karma system
+
 v2.1.1  BUGFIX: missed realmList to portal for EU region 
 
 v2.1.0  ** MANDATORY UPDATE - PROTOCOL CHANGE **

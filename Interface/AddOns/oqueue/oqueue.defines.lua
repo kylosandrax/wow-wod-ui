@@ -21,7 +21,7 @@ setmetatable(OQ._T, {__index=defaultFunc}) ;
 local L = OQ._T ;
 
 OQ.FONT = "Fonts\\FRIZQT__.TTF" ;
-if (string.sub(GetCVar("portal") or "US",1,2) == "EU") then
+if (string.sub(strupper(GetCVar("portal")) or "US",1,2) == "EU") then
   -- force to unicode supported font, allowing cyrillic fonts to render properly
   OQ.FONT = "Interface\\Addons\\oqueue\\fonts\\ARIALB.TTF" ;
 end
@@ -127,6 +127,7 @@ OQ.NONE = 15 ;
 OQ.DKP  = 16 ;
 
 OQ.TYPE_NONE        = 'X' ;
+OQ.TYPE_ASHRAN      = 's' ;
 OQ.TYPE_BG          = 'B' ;
 OQ.TYPE_RBG         = 'A' ;
 OQ.TYPE_RAID        = 'R' ;
@@ -137,7 +138,6 @@ OQ.TYPE_QUESTS      = 'Q' ;
 OQ.TYPE_LADDER      = 'L' ;
 OQ.TYPE_CHALLENGE   = 'C' ;
 OQ.TYPE_MISC        = 'M' ;
-OQ.TYPE_ROLEPLAY    = 'P' ;
 OQ.TYPE_ALL_PENDING = 'p' ;
 
 OQ.VOIP_DOLBYAXON   = 'D' ;
@@ -205,6 +205,7 @@ OQ.LANG_ICON = { [OQ.LANG_UNSPECIFIED  ] = nil,
                } ;
 
 OQ.PREMADE_TYPES = { [ OQ.TYPE_NONE      ] = 1,
+                     [ OQ.TYPE_ASHRAN    ] = 1,
                      [ OQ.TYPE_BG        ] = 1,
                      [ OQ.TYPE_RBG       ] = 1,
                      [ OQ.TYPE_RAID      ] = 1,
@@ -215,7 +216,6 @@ OQ.PREMADE_TYPES = { [ OQ.TYPE_NONE      ] = 1,
                      [ OQ.TYPE_LADDER    ] = 1,
                      [ OQ.TYPE_CHALLENGE ] = 1,
                      [ OQ.TYPE_MISC      ] = 1,
-                     [ OQ.TYPE_ROLEPLAY  ] = 1,
                    } ;
 
 OQ.DD_NONE     = "none" ;
@@ -325,6 +325,9 @@ OQ.SHORT_LEVEL_RANGE = { [ "UNK"     ] = 1,
                          [ "85"      ] = 17,
                          [ "85 - 89" ] = 18,
                          [ "90"      ] = 19,
+                         [ "90 - 94" ] = 20,
+                         [ "95 - 99" ] = 21,
+                         [ "100"     ] = 22,
                          [  1 ] = "UNK",
                          [  2 ] = "10 - 14",
                          [  3 ] = "15 - 19",
@@ -344,6 +347,9 @@ OQ.SHORT_LEVEL_RANGE = { [ "UNK"     ] = 1,
                          [ 17 ] = "85"     ,
                          [ 18 ] = "85 - 89",
                          [ 19 ] = "90"     ,
+                         [ 20 ] = "90 - 94",
+                         [ 21 ] = "95 - 99",
+                         [ 22 ] = "100"    ,
                        } ;
 
 OQ.CLASS_COLORS = { ["DK"]  = { r = 0.77, g = 0.12, b = 0.23 },
@@ -488,7 +494,7 @@ OQ.CLASS_SPEC   = { [250]  = { id =  1, type = OQ.TANK  , n = "DK.Blood"        
                     [ 62]  = { id = 11, type = OQ.CASTER, n = "MG.Arcane"       , spy = "Knockback" },
                     [ 63]  = { id = 12, type = OQ.CASTER, n = "MG.Fire"         , spy = "Ranged" },
                     [ 64]  = { id = 13, type = OQ.CASTER, n = "MG.Frost"        , spy = "Ranged" },
-                    [268]  = { id = 14, type = OQ.MDPS  , n = "MK.Brewmaster"   , spy = "Tank" },
+                    [268]  = { id = 14, type = OQ.TANK  , n = "MK.Brewmaster"   , spy = "Tank" },
                     [269]  = { id = 15, type = OQ.MDPS  , n = "MK.Windwalker"   , spy = "Melee" },
                     [270]  = { id = 16, type = OQ.MDPS  , n = "MK.Mistweaver"   , spy = "Healer" },
                     [ 65]  = { id = 17, type = OQ.RDPS  , n = "PA.Holy"         , spy = "Healer" },
@@ -602,19 +608,32 @@ OQ.rank_breaks = { ["pvp"  ] = { [1] = { r = "knight" , line =    100, rank = 1 
                    
 OQ.SCENARIO_BOSS_ID   = 200000 ; -- generic id unused by anything else to report scenario completion
 
-OQ._difficulty = { [ 1] = { n =0.25, desc = L["5 player"]          , diff = L["normal"] },
-                   [ 2] = { n =   1, desc = L["5 player (heroic)"] , diff = L["heroic"] },
-                   [ 3] = { n =   4, desc = L["10 player"]         , diff = L["normal"] },
-                   [ 4] = { n =   8, desc = L["25 player"]         , diff = L["normal"] },
-                   [ 5] = { n =   8, desc = L["10 player (heroic)"], diff = L["heroic"] },
-                   [ 6] = { n =  10, desc = L["25 player (heroic)"], diff = L["heroic"] },
-                   [ 7] = { n =   2, desc = L["LFR"]               , diff = L["LFR"] },
-                   [ 8] = { n =   3, desc = L["challenge mode"]    , diff = L["challenge"] },
-                   [ 9] = { n =   0, desc = L["40 player"]         , diff = L["normal"] },
-                   [10] = { n =   0, desc = L["-"]                 , diff = L["normal"] },
-                   [11] = { n =   2, desc = L["scenario (heroic)"] , diff = L["heroic"] },
-                   [12] = { n =   1, desc = L["scenario"]          , diff = L["normal"] },
-                   [14] = { n =   3, desc = L["flex raid"]         , diff = L["flex"] },
+OQ.d_5norm   = "A" ;
+OQ.d_5hero   = "B" ;
+OQ.d_10norm  = "C" ;
+OQ.d_25norm  = "D" ;
+OQ.d_10hero  = "E" ;
+OQ.d_25hero  = "F" ;
+OQ.d_flex    = "G" ;
+OQ.d_normal  = "H" ;
+OQ.d_heroic  = "I" ;
+OQ.d_mythic  = "J" ;
+
+OQ._difficulty = { [ 1] = { n =0.25, desc = L["5 player"]          , flag = OQ.d_5norm , diff = L["normal"] },
+                   [ 2] = { n =   1, desc = L["5 player (heroic)"] , flag = OQ.d_5hero , diff = L["heroic"] },
+                   [ 3] = { n =   4, desc = L["10 player"]         , flag = OQ.d_10norm, diff = L["normal"] },
+                   [ 4] = { n =   8, desc = L["25 player"]         , flag = OQ.d_25norm, diff = L["normal"] },
+                   [ 5] = { n =   8, desc = L["10 player (heroic)"], flag = OQ.d_10hero, diff = L["heroic"] },
+                   [ 6] = { n =  10, desc = L["25 player (heroic)"], flag = OQ.d_25hero, diff = L["heroic"] },
+                   [ 7] = { n =   2, desc = L["LFR"]               , flag = OQ.d_flex  , diff = L["LFR"]    },
+                   [ 8] = { n =   3, desc = L["challenge mode"]    , flag = OQ.d_5hero , diff = L["challenge"] },
+                   [ 9] = { n =   0, desc = L["40 player"]         , flag = OQ.d_normal, diff = L["normal"] },
+                   [10] = { n =   0, desc = L["-"]                 , flag = OQ.d_normal, diff = L["normal"] },
+                   [11] = { n =   2, desc = L["scenario (heroic)"] , flag = OQ.d_5hero , diff = L["heroic"] },
+                   [12] = { n =   1, desc = L["scenario"]          , flag = OQ.d_5norm , diff = L["normal"] },
+                   [14] = { n =   3, desc = L["normal"]            , flag = OQ.d_normal, diff = L["normal"] },
+                   [15] = { n =   4, desc = L["heroic"]            , flag = OQ.d_heroic, diff = L["heroic"] },
+                   [16] = { n =  10, desc = L["mythic"]            , flag = OQ.d_mythic, diff = L["mythic"] },
                  } ;
                  
 OQ.difficulty_abbr =  { [ 1] = "5m" , -- 5 norm
@@ -630,7 +649,9 @@ OQ.difficulty_abbr =  { [ 1] = "5m" , -- 5 norm
                         [11] = ""   , -- scenario heroic
                         [12] = ""   , -- scenario
                         [13] = ""   , -- --
-                        [14] = "", -- flex
+                        [14] = ""   , -- flex
+                        [15] = ""   , -- flex heroic
+                        [16] = ""   , -- mythic
                       } ;
                       
 OQ.DIFFICULTY_ICON = { [ 0] = "Interface\\Addons\\oqueue\\art\\diff_unk.tga",
@@ -639,13 +660,15 @@ OQ.DIFFICULTY_ICON = { [ 0] = "Interface\\Addons\\oqueue\\art\\diff_unk.tga",
                        [ 5] = "Interface\\Addons\\oqueue\\art\\diff_10h.tga",
                        [ 6] = "Interface\\Addons\\oqueue\\art\\diff_25h.tga",
                        [ 7] = "Interface\\Addons\\oqueue\\art\\diff_lfr.tga",
-                       [14] = "Interface\\Addons\\oqueue\\art\\diff_flex.tga",
+                       [14] = "Interface\\Addons\\oqueue\\art\\diff_normal.tga",
+                       [15] = "Interface\\Addons\\oqueue\\art\\diff_heroic.tga",
+                       [16] = "Interface\\Addons\\oqueue\\art\\diff_mythic.tga",
                      } ;
 
 OQ.difficulty_color = { [ 1] = "0000ff", -- 5 norm
                         [ 2] = "0000ff", -- 5 heroic
-                        [ 3] = "00ff00", -- 10 norm
-                        [ 4] = "00ff00", -- 25 norm
+                        [ 3] = "00ff00", -- 10 norm -- gone as of 6.0.2
+                        [ 4] = "00ff00", -- 25 norm -- gone as of 6.0.2
                         [ 5] = "ff0000", -- 10 heroic
                         [ 6] = "ff0000", -- 25 heroic
                         [ 7] = "ffff00", -- LFR
@@ -655,7 +678,9 @@ OQ.difficulty_color = { [ 1] = "0000ff", -- 5 norm
                         [11] = "0000ff", -- scenario heroic
                         [12] = "0000ff", -- scenario
                         [13] = "0000ff", -- --
-                        [14] = "FFFF40", -- flex
+                        [14] = "00FF00", -- normal
+                        [15] = "ff0000", -- heroic  
+                        [16] = "C800CA", -- mythic  (hot pink)
                       } ;
                       
 OQ.max_raid_bosses = { [ 1] =  9,

@@ -153,6 +153,9 @@ function oq.timer_trigger( now )
   for i,v in pairs( oq.timers ) do
     if (v.tm) and (v.tm < now) then
       local arg1 = v.arg1 ;
+      if (v.tm == 0) then
+        v.tm = now ;
+      end
       if (arg1 == nil) or (arg1 == "#now") then
         arg1 = now ;
       end
@@ -160,11 +163,13 @@ function oq.timer_trigger( now )
       oq._timer_id = i ;
       retOK, rc = pcall( v.func, arg1, v.arg2, v.arg3, v.arg4, v.arg5, v.arg6, v.arg7 ) ;
       if (retOK == true) then 
-        if (rc ~= nil) or (v == nil) or (v.one_shot) or (v.dt == nil) or (v.dt == 0) then
+        if (rc ~= nil) or (v == nil) or (v.one_shot and (v.tm < now)) or (v.dt == nil) or (v.dt == 0) then
           oq.timers[i] = tbl.delete( oq.timers[i] ) ;
         else
           v.error_cnt = nil ;
-          v.tm = now + v.dt ;
+          if (v.tm > 0) then -- something in the call chain requested a trigger; leave it as zero for next go-around
+            v.tm = now + v.dt ;
+          end
         end
       else
         v.error_cnt = (v.error_cnt or 0) + 1 ;

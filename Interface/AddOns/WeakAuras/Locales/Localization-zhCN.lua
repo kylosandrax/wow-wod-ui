@@ -465,6 +465,7 @@ L["Wobble"] = "摇晃"
 L["Yell"] = "大喊"
 L["Zone"] = "区域"
 L["Zone ID"] = "区域ID" -- Needs review
+-- L["Zone ID List"] = ""
 
 
 

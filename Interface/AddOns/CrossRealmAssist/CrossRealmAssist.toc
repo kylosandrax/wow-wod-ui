@@ -1,0 +1,13 @@
+## Interface: 60200
+## Title: Cross Realm Assist
+## Notes: Easy tool for cross-realm hoping
+## Author: ShadowTheAge
+## Version: 0.5
+## SavedVariables: CrossRealmAssistDB
+## X-Curse-Packaged-Version: v0.65
+## X-Curse-Project-Name: Cross Realm Assist
+## X-Curse-Project-ID: crossrealmassist
+## X-Curse-Repository-ID: wow/crossrealmassist/mainline
+
+embeds.xml
+CrossRealmAssist.lua

@@ -1,19 +1,19 @@
 
 TomTomDB = {
 	["profileKeys"] = {
-		["Ryjax - Aggramar"] = "Default",
-		["Zapunzel - Aggramar"] = "Default",
-		["Stormslinger - Aggramar"] = "Default",
-		["Greenthorn - Aggramar"] = "Default",
 		["Ryvok - Terokkar"] = "Default",
-		["Kromethious - Aggramar"] = "Default",
-		["Kylosandrax - Aggramar"] = "Default",
-		["Kxtrader - Aggramar"] = "Default",
+		["Zapunzel - Aggramar"] = "Default",
 		["Feldspar - Aggramar"] = "Default",
+		["Greenthorn - Aggramar"] = "Default",
+		["Ryjax - Aggramar"] = "Default",
+		["Kyloc - Aggramar"] = "Default",
+		["Kylosandrax - Aggramar"] = "Default",
+		["Banjax - Aggramar"] = "Default",
+		["Stormslinger - Aggramar"] = "Default",
 		["Kylozandrax - Earthen Ring"] = "Default",
 		["Kxchanter - Aggramar"] = "Default",
-		["Kyloc - Aggramar"] = "Default",
-		["Banjax - Aggramar"] = "Default",
+		["Kromethious - Aggramar"] = "Default",
+		["Kxtrader - Aggramar"] = "Default",
 		["Kylosandrix - Aggramar"] = "Default",
 		["Ryvok - Aggramar"] = "Default",
 		["Bronin - Aggramar"] = "Default",
@@ -29,49 +29,49 @@ TomTomDB = {
 TomTomWaypoints = nil
 TomTomWaypointsMF = {
 	["profileKeys"] = {
-		["Ryjax - Aggramar"] = "Ryjax - Aggramar",
-		["Zapunzel - Aggramar"] = "Zapunzel - Aggramar",
-		["Stormslinger - Aggramar"] = "Stormslinger - Aggramar",
-		["Greenthorn - Aggramar"] = "Greenthorn - Aggramar",
 		["Ryvok - Terokkar"] = "Ryvok - Terokkar",
-		["Kromethious - Aggramar"] = "Kromethious - Aggramar",
-		["Kylosandrax - Aggramar"] = "Kylosandrax - Aggramar",
-		["Kxtrader - Aggramar"] = "Kxtrader - Aggramar",
+		["Zapunzel - Aggramar"] = "Zapunzel - Aggramar",
 		["Feldspar - Aggramar"] = "Feldspar - Aggramar",
+		["Greenthorn - Aggramar"] = "Greenthorn - Aggramar",
+		["Ryjax - Aggramar"] = "Ryjax - Aggramar",
+		["Kyloc - Aggramar"] = "Kyloc - Aggramar",
+		["Kylosandrax - Aggramar"] = "Kylosandrax - Aggramar",
+		["Banjax - Aggramar"] = "Banjax - Aggramar",
+		["Stormslinger - Aggramar"] = "Stormslinger - Aggramar",
 		["Kylozandrax - Earthen Ring"] = "Kylozandrax - Earthen Ring",
 		["Kxchanter - Aggramar"] = "Kxchanter - Aggramar",
-		["Kyloc - Aggramar"] = "Kyloc - Aggramar",
-		["Banjax - Aggramar"] = "Banjax - Aggramar",
+		["Kromethious - Aggramar"] = "Kromethious - Aggramar",
+		["Kxtrader - Aggramar"] = "Kxtrader - Aggramar",
 		["Kylosandrix - Aggramar"] = "Kylosandrix - Aggramar",
 		["Ryvok - Aggramar"] = "Ryvok - Aggramar",
 		["Bronin - Aggramar"] = "Bronin - Aggramar",
 	},
 	["profiles"] = {
-		["Ryjax - Aggramar"] = {
+		["Ryvok - Terokkar"] = {
 		},
 		["Zapunzel - Aggramar"] = {
 		},
-		["Stormslinger - Aggramar"] = {
+		["Feldspar - Aggramar"] = {
 		},
 		["Greenthorn - Aggramar"] = {
 		},
-		["Ryvok - Terokkar"] = {
+		["Ryjax - Aggramar"] = {
 		},
-		["Kromethious - Aggramar"] = {
+		["Kyloc - Aggramar"] = {
 		},
 		["Kylosandrax - Aggramar"] = {
 		},
-		["Kxtrader - Aggramar"] = {
+		["Banjax - Aggramar"] = {
 		},
-		["Feldspar - Aggramar"] = {
+		["Stormslinger - Aggramar"] = {
 		},
 		["Kylozandrax - Earthen Ring"] = {
 		},
 		["Kxchanter - Aggramar"] = {
 		},
-		["Kyloc - Aggramar"] = {
+		["Kromethious - Aggramar"] = {
 		},
-		["Banjax - Aggramar"] = {
+		["Kxtrader - Aggramar"] = {
 		},
 		["Kylosandrix - Aggramar"] = {
 		},

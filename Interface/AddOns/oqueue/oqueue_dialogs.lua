@@ -111,8 +111,7 @@ StaticPopupDialogs["OQ_BanUser"] = {
     reason = self.editBox:GetText() ;
     local d = self.data2 ;
     if (d.flag == 1) then
-      local m = oq.raid.group[d.gid].member[d.slot_] ;
-      oq.ban_add( m.realid, reason ) ;
+      oq.ban_add( d.btag, reason ) ;
       oq.remove_member( d.gid, d.slot_ ) ;
     elseif (d.flag == 2) then
       oq.ban_add( d.btag, reason ) ;
@@ -129,8 +128,7 @@ StaticPopupDialogs["OQ_BanUser"] = {
     local reason = self:GetText() ;
     local d = self:GetParent().data2 ;
     if (d.flag == 1) then
-      local m = oq.raid.group[d.gid].member[d.slot_] ;
-      oq.ban_add( m.realid, reason ) ;
+      oq.ban_add( d.btag, reason ) ;
       oq.remove_member( d.gid, d.slot_ ) ;
     elseif (d.flag == 2) then
       oq.ban_add( d.btag, reason ) ;

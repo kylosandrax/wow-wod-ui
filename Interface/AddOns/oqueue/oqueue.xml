@@ -201,27 +201,6 @@
                <Frames>
                </Frames> 
            </Frame>   
-           <Frame name="OQTabPage7" hidden="true">
-               <Anchors>
-                   <Anchor point="TOPLEFT"/>
-                   <Anchor point="BOTTOMRIGHT"/>
-               </Anchors>
-               <Layers>
-                   <Layer level="ARTWORK">
-                       <FontString inherits="GameFontNormal" text="">
-                           <Anchors>
-                               <Anchor point="TOPLEFT" relativeTo="$parent">
-                                   <Offset>
-                                       <AbsDimension x="20" y="-30"/>
-                                   </Offset>
-                               </Anchor>
-                           </Anchors>
-                       </FontString>
-                   </Layer>
-               </Layers>
-               <Frames>
-               </Frames> 
-           </Frame>   
 
            <Button name="$parentTab1" inherits="CharacterFrameTabButtonTemplate" id="1" text= "Premade" >
                <Anchors>
@@ -241,7 +220,6 @@
                        OQTabPage4:Hide();
                        OQTabPage5:Hide();
                        OQTabPage6:Hide();
-                       OQTabPage7:Hide();
                        PlaySound("igCharacterInfoTab");
                    </OnClick>
                </Scripts>
@@ -264,7 +242,6 @@
                        OQTabPage4:Hide();
                        OQTabPage5:Hide();
                        OQTabPage6:Hide();
-                       OQTabPage7:Hide();
                        PlaySound("igCharacterInfoTab");
                    </OnClick>
                </Scripts>
@@ -287,13 +264,12 @@
                        OQTabPage4:Hide();
                        OQTabPage5:Hide();
                        OQTabPage6:Hide();
-                       OQTabPage7:Hide();
                        PlaySound("igCharacterInfoTab");
                    </OnClick>
                </Scripts>
            </Button>
 
-           <Button name="$parentTab4" inherits="CharacterFrameTabButtonTemplate" id="4" text= "The Score" >
+           <Button name="$parentTab4" inherits="CharacterFrameTabButtonTemplate" id="4" text= "Setup" >
                <Anchors>
                    <Anchor point="LEFT" relativeTo="$parentTab3" relativePoint="RIGHT">
                        <Offset>
@@ -311,13 +287,11 @@
                        OQTabPage4:Show();
                        OQTabPage5:Hide();
                        OQTabPage6:Hide();
-                       OQTabPage7:Hide();
                        PlaySound("igCharacterInfoTab");
                    </OnClick>
                </Scripts>
            </Button>
-
-           <Button name="$parentTab5" inherits="CharacterFrameTabButtonTemplate" id="5" text= "Setup" >
+           <Button name="$parentTab5" inherits="CharacterFrameTabButtonTemplate" id="5" text= "Ban List" >
                <Anchors>
                    <Anchor point="LEFT" relativeTo="$parentTab4" relativePoint="RIGHT">
                        <Offset>
@@ -335,12 +309,11 @@
                        OQTabPage4:Hide();
                        OQTabPage5:Show();
                        OQTabPage6:Hide();
-                       OQTabPage7:Hide();
                        PlaySound("igCharacterInfoTab");
                    </OnClick>
                </Scripts>
            </Button>
-           <Button name="$parentTab6" inherits="CharacterFrameTabButtonTemplate" id="6" text= "Ban List" >
+           <Button name="$parentTab6" inherits="CharacterFrameTabButtonTemplate" id="6" text= "Wait List (999)" >
                <Anchors>
                    <Anchor point="LEFT" relativeTo="$parentTab5" relativePoint="RIGHT">
                        <Offset>
@@ -358,30 +331,6 @@
                        OQTabPage4:Hide();
                        OQTabPage5:Hide();
                        OQTabPage6:Show();
-                       OQTabPage7:Hide();
-                       PlaySound("igCharacterInfoTab");
-                   </OnClick>
-               </Scripts>
-           </Button>
-           <Button name="$parentTab7" inherits="CharacterFrameTabButtonTemplate" id="7" text= "Wait List (999)" >
-               <Anchors>
-                   <Anchor point="LEFT" relativeTo="$parentTab6" relativePoint="RIGHT">
-                       <Offset>
-                           <AbsDimension x="-16" y="0"/>
-                       </Offset>
-                   </Anchor>
-               </Anchors>
-               <Scripts>
-                   <OnClick>
-                       PanelTemplates_SetTab(OQMainFrame, 7);
-                       OQ_hide_menu_popup() ;
-                       OQTabPage1:Hide();
-                       OQTabPage2:Hide();
-                       OQTabPage3:Hide();
-                       OQTabPage4:Hide();
-                       OQTabPage5:Hide();
-                       OQTabPage6:Hide();
-                       OQTabPage7:Show();
                        PlaySound("igCharacterInfoTab");
                    </OnClick>
                </Scripts>
@@ -391,8 +340,6 @@
        <Scripts>
            <OnLoad>
                tinsert(UISpecialFrames, self:GetName());
-               PanelTemplates_SetNumTabs(OQMainFrame, 7);
-               PanelTemplates_SetTab(OQMainFrame, 2);
                OQ_onLoad(self) ;
            </OnLoad>
        </Scripts>

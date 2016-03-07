@@ -1,17 +1,18 @@
 ## Interface: 60000
 
-## Version: 2.35
+## Version: 2.38
 
 ## Title: ShieldHealth
-## Notes: Show you how many damage your shield can absord.
+## Notes: Shows which shield spells are currently active (player or target) and how much damage they can absorb.
 ## Notes-frFR: Vous montre la quantite de degats que vous boucliers peuvent encore absorber.
+## Notes-deDE: Zeigt welche Schildzauber zur Zeit aktiv sind (Spieler oder Ziel) und wieviel Schaden diese absorbieren können.
 ## Author: Miow
 ## OptionalDeps: LibSharedMedia-3.0
 
 ## X-License: All rights reserved.
 ## X-eMail: azwentry @ gmail DOT com
 ## X-Donate: PayPal:azwentry @ gmail DOT com
-## X-Category: Combat
+## X-Category: Unit Frames
 
 ## SavedVariables: Sh_DB
 

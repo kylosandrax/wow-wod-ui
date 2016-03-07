@@ -84,6 +84,12 @@ GoGo_Prefs = {
 			},
 			["ZoneID"] = 945,
 		},
+		[767] = {
+			["Preferred"] = {
+			},
+			["Excluded"] = {
+			},
+		},
 		["Warspear"] = {
 			["Preferred"] = {
 			},
@@ -179,12 +185,36 @@ GoGo_Prefs = {
 			["Excluded"] = {
 			},
 		},
+		[768] = {
+			["Preferred"] = {
+			},
+			["Excluded"] = {
+			},
+		},
 		["Auction House"] = {
 			["Preferred"] = {
 			},
 			["Excluded"] = {
 			},
 			["ZoneID"] = 978,
+		},
+		[492] = {
+			["Preferred"] = {
+			},
+			["Excluded"] = {
+			},
+		},
+		[686] = {
+			["Preferred"] = {
+			},
+			["Excluded"] = {
+			},
+		},
+		[721] = {
+			["Preferred"] = {
+			},
+			["Excluded"] = {
+			},
 		},
 		["Gorgrond"] = {
 			["Preferred"] = {
@@ -193,6 +223,12 @@ GoGo_Prefs = {
 			},
 			["ZoneID"] = 949,
 		},
+		[610] = {
+			["Preferred"] = {
+			},
+			["Excluded"] = {
+			},
+		},
 		["The Jade Forest"] = {
 			["Preferred"] = {
 			},
@@ -200,7 +236,19 @@ GoGo_Prefs = {
 			},
 			["ZoneID"] = 806,
 		},
+		[753] = {
+			["Preferred"] = {
+			},
+			["Excluded"] = {
+			},
+		},
 		[761] = {
+			["Preferred"] = {
+			},
+			["Excluded"] = {
+			},
+		},
+		[769] = {
 			["Preferred"] = {
 			},
 			["Excluded"] = {
@@ -213,17 +261,30 @@ GoGo_Prefs = {
 			},
 			["ZoneID"] = 951,
 		},
+		[737] = {
+			["Preferred"] = {
+			},
+			["Excluded"] = {
+			},
+		},
+		[523] = {
+			["Preferred"] = {
+			},
+			["Excluded"] = {
+			},
+		},
 		[521] = {
 			["Preferred"] = {
 			},
 			["Excluded"] = {
 			},
 		},
-		[606] = {
+		["The Burning Glacier"] = {
 			["Preferred"] = {
 			},
 			["Excluded"] = {
 			},
+			["ZoneID"] = 941,
 		},
 		["Throne of Thunder"] = {
 			["Preferred"] = {
@@ -238,7 +299,7 @@ GoGo_Prefs = {
 			["Excluded"] = {
 			},
 		},
-		[43] = {
+		[321] = {
 			["Preferred"] = {
 			},
 			["Excluded"] = {
@@ -276,7 +337,26 @@ GoGo_Prefs = {
 			},
 			["ZoneID"] = 962,
 		},
+		["Siege of Orgrimmar"] = {
+			["Preferred"] = {
+			},
+			["Excluded"] = {
+			},
+			["ZoneID"] = 862,
+		},
 		[889] = {
+			["Preferred"] = {
+			},
+			["Excluded"] = {
+			},
+		},
+		[28] = {
+			["Preferred"] = {
+			},
+			["Excluded"] = {
+			},
+		},
+		[510] = {
 			["Preferred"] = {
 			},
 			["Excluded"] = {
@@ -295,13 +375,13 @@ GoGo_Prefs = {
 			["Excluded"] = {
 			},
 		},
-		[523] = {
+		[606] = {
 			["Preferred"] = {
 			},
 			["Excluded"] = {
 			},
 		},
-		[504] = {
+		[301] = {
 			["Preferred"] = {
 			},
 			["Excluded"] = {
@@ -319,13 +399,13 @@ GoGo_Prefs = {
 			["Excluded"] = {
 			},
 		},
-		[686] = {
+		[690] = {
 			["Preferred"] = {
 			},
 			["Excluded"] = {
 			},
 		},
-		[510] = {
+		[874] = {
 			["Preferred"] = {
 			},
 			["Excluded"] = {
@@ -337,13 +417,13 @@ GoGo_Prefs = {
 			["Excluded"] = {
 			},
 		},
-		[401] = {
+		[731] = {
 			["Preferred"] = {
 			},
 			["Excluded"] = {
 			},
 		},
-		[473] = {
+		[20] = {
 			["Preferred"] = {
 			},
 			["Excluded"] = {
@@ -356,13 +436,13 @@ GoGo_Prefs = {
 			},
 			["ZoneID"] = 807,
 		},
-		[467] = {
+		[401] = {
 			["Preferred"] = {
 			},
 			["Excluded"] = {
 			},
 		},
-		[692] = {
+		[1026] = {
 			["Preferred"] = {
 			},
 			["Excluded"] = {
@@ -375,12 +455,11 @@ GoGo_Prefs = {
 			},
 			["ZoneID"] = 809,
 		},
-		["The Veiled Stair"] = {
+		[525] = {
 			["Preferred"] = {
 			},
 			["Excluded"] = {
 			},
-			["ZoneID"] = 873,
 		},
 		[533] = {
 			["Preferred"] = {
@@ -395,32 +474,32 @@ GoGo_Prefs = {
 			},
 			["ZoneID"] = 862,
 		},
-		["Frostfire Ridge"] = {
-			["Preferred"] = {
-			},
-			["Excluded"] = {
-			},
-			["ZoneID"] = 941,
-		},
-		[321] = {
+		[467] = {
 			["Preferred"] = {
 			},
 			["Excluded"] = {
 			},
 		},
-		[475] = {
+		["The Veiled Stair"] = {
+			["Preferred"] = {
+			},
+			["Excluded"] = {
+			},
+			["ZoneID"] = 873,
+		},
+		[692] = {
 			["Preferred"] = {
 			},
 			["Excluded"] = {
 			},
 		},
-		[690] = {
+		[101] = {
 			["Preferred"] = {
 			},
 			["Excluded"] = {
 			},
 		},
-		[28] = {
+		[613] = {
 			["Preferred"] = {
 			},
 			["Excluded"] = {
@@ -444,7 +523,7 @@ GoGo_Prefs = {
 			["Excluded"] = {
 			},
 		},
-		[874] = {
+		[499] = {
 			["Preferred"] = {
 			},
 			["Excluded"] = {
@@ -468,7 +547,7 @@ GoGo_Prefs = {
 			["Excluded"] = {
 			},
 		},
-		[301] = {
+		[475] = {
 			["Preferred"] = {
 			},
 			["Excluded"] = {
@@ -486,13 +565,26 @@ GoGo_Prefs = {
 			["Excluded"] = {
 			},
 		},
-		[101] = {
+		[542] = {
 			["Preferred"] = {
 			},
 			["Excluded"] = {
 			},
 		},
-		[721] = {
+		[704] = {
+			["Preferred"] = {
+			},
+			["Excluded"] = {
+			},
+		},
+		["Frostfire Ridge"] = {
+			["Preferred"] = {
+			},
+			["Excluded"] = {
+			},
+			["ZoneID"] = 941,
+		},
+		[898] = {
 			["Preferred"] = {
 			},
 			["Excluded"] = {
@@ -505,24 +597,12 @@ GoGo_Prefs = {
 			},
 			["ZoneID"] = 811,
 		},
-		[20] = {
-			["Preferred"] = {
-			},
-			["Excluded"] = {
-			},
-		},
 		["Ashran"] = {
 			["Preferred"] = {
 			},
 			["Excluded"] = {
 			},
 			["ZoneID"] = 978,
-		},
-		[898] = {
-			["Preferred"] = {
-			},
-			["Excluded"] = {
-			},
 		},
 		[27] = {
 			["Preferred"] = {
@@ -543,7 +623,7 @@ GoGo_Prefs = {
 			},
 			["ZoneID"] = 941,
 		},
-		[704] = {
+		[614] = {
 			["Preferred"] = {
 			},
 			["Excluded"] = {
@@ -555,12 +635,11 @@ GoGo_Prefs = {
 			["Excluded"] = {
 			},
 		},
-		["Siege of Orgrimmar"] = {
+		[473] = {
 			["Preferred"] = {
 			},
 			["Excluded"] = {
 			},
-			["ZoneID"] = 862,
 		},
 		[765] = {
 			["Preferred"] = {
@@ -581,7 +660,7 @@ GoGo_Prefs = {
 			["Excluded"] = {
 			},
 		},
-		[1026] = {
+		[504] = {
 			["Preferred"] = {
 			},
 			["Excluded"] = {
@@ -593,12 +672,11 @@ GoGo_Prefs = {
 			["Excluded"] = {
 			},
 		},
-		["The Burning Glacier"] = {
+		[481] = {
 			["Preferred"] = {
 			},
 			["Excluded"] = {
 			},
-			["ZoneID"] = 941,
 		},
 		["The Forge"] = {
 			["Preferred"] = {
@@ -607,13 +685,13 @@ GoGo_Prefs = {
 			},
 			["ZoneID"] = 976,
 		},
-		[481] = {
+		[696] = {
 			["Preferred"] = {
 			},
 			["Excluded"] = {
 			},
 		},
-		[696] = {
+		[43] = {
 			["Preferred"] = {
 			},
 			["Excluded"] = {

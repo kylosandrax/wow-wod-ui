@@ -1,66 +1,51 @@
-Ovale Spell Priority 6.2.16
+Ovale Spell Priority 6.2.17
 ===========================
 
-Changes from version 6.2.15:
+Changes from version 6.2.16:
 ----------------------------
 
--   Only suggest the legendary ring if it is equipped and usable.
+-   Priest: Turn Mindbender and Shadowfiend into main actions with 2pT18 DPS.
 
--   Regenerate scripts to re-add suggesting on-use trinket actions.
+    Add dummy spells for Mindbender and Shadowfiend when wearing 2 pieces of
+    Tier 18 in shadow specialization that only have a 20s cooldown.
+
+-   Add "dummy_replace" keyword to SpellInfo().
+
+    dummy_replace=NNN creates a dummy spell with the same name as the listed
+    spell ID.  This is used define spells with false spell IDs that have the
+    same name as actual spells.
+
+-   Priest: Move Mindbender to the short CD icon.
+
+-   Priest: Add a default Holy script based on Icy Veins.
+
+-   Teach Ovale about Clarity of Purpose for holy priests.
+
+-   Fix the spell IDs for priest Chakra spells.
+
+-   A holy priest's chakra is considered to be a stance.
+
+    Add new stances for priests to be used in scripts:
+
+      - priest_chakra_chastise
+      - priest_chakra_sanctuary
+      - priest_chakra_serenity
+
+    Use the stances instead of using buff-checks to determine how certain
+    spells are affected by the current Chakra.
+
+-   Priest: Chakra spells have a shared cooldown.
+
+-   Add description of what the import_simc.lua script does.
+
+-   Regenerate scripts based on SimulationCraft git master from 2016-01-10.
+
+-   Re-add and adjust interrupt actions to APLs for if the target is casting.
+
+-   Re-add "use_item" to APLs to properly generate code for on-use trinkets.
 
 -   Merge branch 'simulationcraft'.
 
-    Add "use_item" actions to SimC APLs so that script code for on-use
-    trinkets is properly generated.
+    Pull in changes from SimulationCraft git master from 2016-01-10.
 
--   Add "use_item" to APLs to properly generate code for on-use trinkets.
-
--   Suggest using the legendary ring separately from trinkets.
-
-    Also fix a bug where non-spell actions were not emitted by the SplitByTag
-    functions.
-
--   The engineering glove enhancement was removed ages ago.
-
--   Import latest release.sh from curseforge-packager project.
-
--   Update localized strings from CurseForge app from 2015-12-30.
-
--   Regenerate scripts based on SimulationCraft git master from 2015-12-17.
-
--   Avoid emitting "call_action_list" as a missing symbol.
-
-    Filter out special actions from the list of actions that are regarded as
-    requiring symbols.
-
--   Add trinket information for the Soul Capacitor.
-
--   Add item ID for the Empty Drinking Horn.
-
--   Translate SimC's "equipped.<item>" to allow checking for equipped items.
-
--   Translate SimC's "eclipse_dir.<name>" expressions for balance druids.
-
--   Translate SimC's "solar_max" for balance druids.
-
--   Teach OvaleSimulationCraft about "@" absolute value operator.
-
-    Limit its translation to simple inequalities involving absolute values by
-    converting to the appropriate union or intersection of one-sided
-    inequalities. The latter are more suitable for translating into the
-    equivalent Ovale timespan concept.
-
-    This fixes the translation of "@" used in balance druid APLs involving
-    "@eclipse_energy".
-
--   Druid: Move Cenarion Ward back to short CD icon for Guardian druids.
-
-    Cenarion Ward should not be used on cooldown since it wastes a GCD that
-    could be used to generate rage and is situational in providing a burst
-    heal for the tank.
-
--   Merge branch 'simulationcraft'
-
-    Pull in changes from SimulationCraft git master from 2015-12-17.
-
--   Import Tier18M profiles from SimulationCraft git master from 2015-12-17.
+-   Import Tier18M profiles from SimulationCraft git master from 2016-01-10.

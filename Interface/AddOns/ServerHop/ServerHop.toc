@@ -1,0 +1,28 @@
+﻿## Interface: 60200
+## Title: Server Hop
+## Version: 1.17
+## Author: ChronoAS
+## Author-ruRU: Ларахот - Борейская Тундра
+## Notes: Cross-server LFG tool. Includes: changing realm in the fastest way possible and improved automatic search.
+## Notes-ruRU: Инструмент для межсерверного поиска группы. Включает: почти мгновенную смену сервера и улучшенный автоматический поиск.
+## SavedVariables: ServerHopFavouritesList
+## SavedVariablesPerCharacter: ServerHopPosition, ServerHopSettings
+
+embeds.xml
+Locale.lua
+Realmlist.lua
+
+ServerHop_Init.lua
+
+SettingsFrame.lua
+SearchFrame.lua
+HopFrame.lua
+
+ServerHop_Status.lua
+ServerHop_Queue.lua
+ServerHop_Favourites.lua
+ServerHop_GroupCreation.lua
+ServerHop_Minimap.lua
+ServerHop_Events.lua
+
+MainFrame.lua

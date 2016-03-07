@@ -2,12 +2,20 @@
 local LootAppraiser, la = ...;
 local LA = LibStub("AceAddon-3.0"):NewAddon(la, LootAppraiser, "AceConsole-3.0", "AceEvent-3.0", "AceHook-3.0", "LibSink-2.0")
 
+local LibStub = LibStub
 local AceGUI = LibStub("AceGUI-3.0")
 local LibToast = LibStub("LibToast-1.0")
 local LSM = LibStub:GetLibrary("LibSharedMedia-3.0")
 
 -- Lua APIs
-local tostring, pairs, ipairs, table, tonumber, select, time, math, floor, date, print, type = tostring, pairs, ipairs, table, tonumber, select, time, math, floor, date, print, type
+local tostring, pairs, ipairs, table, tonumber, select, time, math, floor, date, print, type, string = 
+	  tostring, pairs, ipairs, table, tonumber, select, time, math, floor, date, print, type, string
+
+-- wow APIs
+local _G, GetMapNameByID, SecondsToTime, GameTooltip, GetContainerItemID, UseContainerItem, GetContainerItemLink, GetContainerNumSlots, GetMerchantItemInfo, GetMerchantNumItems, SendChatMessage, ResetInstances, IsInGroup, DeleteCursorItem, PickupContainerItem, GetRealmName, GetUnitName, GetCurrentMapAreaID, CreateFrame, UIFrameFadeIn, GetLootSlotInfo, GetLootSlotLink, PlaySoundFile, GetLootSlotType, GetNumLootItems, GetItemInfo, GetContainerItemInfo, UIParent, InterfaceOptionsFrame_OpenToCategory, IsShiftKeyDown, UIFrameFadeOut =
+      _G, GetMapNameByID, SecondsToTime, GameTooltip, GetContainerItemID, UseContainerItem, GetContainerItemLink, GetContainerNumSlots, GetMerchantItemInfo, GetMerchantNumItems, SendChatMessage, ResetInstances, IsInGroup, DeleteCursorItem, PickupContainerItem, GetRealmName, GetUnitName, GetCurrentMapAreaID, CreateFrame, UIFrameFadeIn, GetLootSlotInfo, GetLootSlotLink, PlaySoundFile, GetLootSlotType, GetNumLootItems, GetItemInfo, GetContainerItemInfo, UIParent, InterfaceOptionsFrame_OpenToCategory, IsShiftKeyDown, UIFrameFadeOut
+local NUM_BAG_SLOTS, CHAT_FRAME_FADE_TIME, LE_PARTY_CATEGORY_INSTANCE, LE_PARTY_CATEGORY_HOME = 
+      NUM_BAG_SLOTS, CHAT_FRAME_FADE_TIME, LE_PARTY_CATEGORY_INSTANCE, LE_PARTY_CATEGORY_HOME
 
 LA.DEBUG = false
 
@@ -83,6 +91,7 @@ LA.QUALITY_FILTER = { -- little hack to sort them in the menu
 
 -- TSM predefined price sources + 'Custom'
 LA.PRICE_SOURCE = {
+	-- TSM price sources
 	["Custom"] = "Custom Price Source",
 	["DBGlobalHistorical"] = "AuctionDB: Global Historical Price",
 	["DBGlobalMarketAvg"] = "AuctionDB: Global Market Value Avg",
@@ -99,7 +108,14 @@ LA.PRICE_SOURCE = {
 	["wowuctionMarket"] = "wowuction: Realm Market Value",
 	["wowuctionMedian"] = "wowuction: Realm Median Price",
 	["wowuctionRegionMarket"] = "wowuction: Region Market Value",
-	["wowuctionRegionMedian"] = "wowuction: Region Median Price"
+	["wowuctionRegionMedian"] = "wowuction: Region Median Price",
+	-- TUJ price sources
+	["globalMedian"] = "TUJ: Global Median",
+	["globalMean"] = "TUJ: Global Mean",
+	["globalStdDev"] = "TUJ: Global Std Dev",
+	["stddev"] = "TUJ: 14-Day Std Dev",
+	["market"] = "TUJ: 14-Day Price",
+	["recent"] = "TUJ: 3-Day Price",
 };
 
 
@@ -126,7 +142,7 @@ local function OnTooltipSetItem(tooltip, ...)
 	if not lineAdded then
 		local _, link = tooltip:GetItem()
 
-		local itemID = LA:GetItemID(link)
+		local itemID = LA.TSM:GetItemID(link)
 
 		local data = LA.db.global.drops[itemID]
 		if data then
@@ -175,12 +191,13 @@ end
 -- AceAddon-3.0 standard methods
 ---------------------------------------------------------------------------------------]]
 function LA:OnInitialize()
-	LA:Debug("LA:OnInitialize()")
+	self:Debug("LA:OnInitialize()")
 
 	self:initDB()
 
 	-- price source check --
-	local priceSources = self:GetAvailablePriceSources()
+	local priceSources = self.TSM:GetAvailablePriceSources()
+
 	-- only 2 or less price sources -> chat msg: missing modules
 	if self:tablelength(priceSources) <= 2 then
 		-- chat msg
@@ -195,7 +212,7 @@ function LA:OnInitialize()
 		-- price source 'custom'
 		if priceSource == "Custom" then
 			-- validate 'custom' price source 
-			local isValidCustomPriceSource = self:ParseCustomPrice(self:getCustomPriceSource())
+			local isValidCustomPriceSource = self.TSM:ParseCustomPrice(self:getCustomPriceSource())
 			if not isValidCustomPriceSource then
 				-- invalid -> chat msg: invalid 'custom' price source
 				self:Print("|cffff0000Attention!|r You have selected 'Custom' as price source but your formular ist invalid (see TSM documentation for detailed custom price source informations).")
@@ -221,11 +238,21 @@ function LA:OnInitialize()
 
 		OnClick = function(self, button, down)
 			if button == "LeftButton" then
+				local isShiftKeyDown = IsShiftKeyDown()
+				if isShiftKeyDown then
+
+				else
+
+				end
+
 				if not LA:isSessionRunning() then
 			        LA:StartSession(true)        
 			    end
 
 			    LA:ShowMainWindow(true)
+
+
+
 			elseif button == "RightButton" then
 				LA:Print("Open LootAppraiser Configuration")
 
@@ -268,6 +295,20 @@ function LA:OnInitialize()
 			else
 				tooltip:AddLine("Session is not running")
 			end
+
+			-- if module present we add the additional modul informations
+			if self.regModules then
+				for name, module in pairs(self.regModules) do
+					if module.icon and module.icon.tooltip then
+						-- add lines
+						tooltip:AddLine(" ") -- spacer
+
+						for _, line in pairs(module.icon.tooltip) do
+							tooltip:AddLine(line)
+						end
+					end
+				end
+			end
 		end
 	})
 	self.LibDBIcon:Register(LA.METADATA.NAME, self.LibDataBroker, self.db.profile.minimapIcon)
@@ -279,29 +320,131 @@ end
 
 
 function LA:OnEnable()
-	LA:Print("LootAppraiser ENABLED.")
+	LA:Print("ENABLED.")
 
 	-- register chat commands
 	LA:RegisterChatCommand("la", LA.chatCmdLootAppraiser)
 	LA:RegisterChatCommand("lal", LA.chatCmdLootAppraiserLite)
 	LA:RegisterChatCommand("laa", LA.chatCmdGoldAlertTresholdMonitor)
 
+	LA:RegisterChatCommand("lat", LA.test)
+
 	-- register event for...
-	-- ...loot window open
+	-- ...looting items
 	LA:RegisterEvent("LOOT_READY", LA.OnLootReady)
 	LA:RegisterEvent("BAG_UPDATE", LA.OnBagUpdate)
-
+	-- ...looting currency
 	LA:RegisterEvent("CHAT_MSG_MONEY", LA.OnChatMsgMoney)
+
+	-- register event for reset instance
+	--LA:RegisterEvent("CHAT_MSG_SYSTEM", LA.OnResetInfoEvent)
+	LA:RegisterEvent("CHAT_MSG_SYSTEM", LA.OnChatMsgSystem)
 
 	-- set DEBUG=true if player is Netatik-Antonidas --
 	local nameString = GetUnitName("player", true)
 	local realm = GetRealmName()
 
 	if (nameString == "xNetatik" or nameString == "xSailas") and realm == "Antonidas" then
-		LA:Debug("DEBUG enabled")
+		self:Debug("DEBUG enabled")
 		LA.DEBUG = true
 	end
+
+	--TUJTooltip(true)
 end
+
+function LA.test()
+	LA.OnChatMsgSystem("CHAT_MSG_SYSTEM", "'Hügel der Klingenhauer' wurde zurückgesetzt.")
+end
+
+
+--[[-------------------------------------------------------------------------------------
+-- reset instance historie
+---------------------------------------------------------------------------------------]]
+LA.ResetInfo = {}
+local resetmsg = INSTANCE_RESET_SUCCESS:gsub("%%s",".+")
+
+function LA.OnChatMsgSystem(event, msg)
+	if event == "CHAT_MSG_SYSTEM" then
+		if msg:match("^" .. resetmsg .. "$") then
+			LA:D("  match: " .. tostring(msg:match("^" .. resetmsg .. "$")))
+
+			local instanceName = string.match(msg, INSTANCE_RESET_SUCCESS:gsub("%%s","(.+)"))
+			LA.ResetInfo[time() + 60*60] = instanceName
+
+			if BUTTON_RESETINSTANCES then
+				BUTTON_RESETINSTANCES:SetText("Reset Instances (" .. LA:tablelength(LA.ResetInfo) .. "/10)") -- add lockouts
+			end
+		end
+	end
+end
+
+
+--[[
+function LA.doExplicitReset(instancemsg, failed)
+	LA:D("LA.doExplicitReset: instancemsg=" .. tostring(instancemsg) .. ", failed=" .. tostring(failed))
+	if HasLFGRestrictions() or IsInInstance() or (LA:InGroup() and not UnitIsGroupLeader("player")) then return end
+	if not failed then
+		LA:D("  ### ich war da ###")
+		LA:HistoryUpdate(true)
+	end
+
+	local reportchan = LA:InGroup()
+	if reportchan then
+		if not failed then
+			--SendAddonMessage(addonName, "GENERATION_ADVANCE", reportchan)
+		end
+		if true then -- vars.db.Tooltip.ReportResets
+			local msg = instancemsg or RESET_INSTANCES
+			msg = msg:gsub("\1241.+;.+;","") -- ticket 76, remove |1;; escapes on koKR
+			SendChatMessage("<LA> "..msg, reportchan)
+		end
+	end
+end
+--hooksecurefunc("ResetInstances", LA.doExplicitReset)
+
+
+local resetfails = { INSTANCE_RESET_FAILED, INSTANCE_RESET_FAILED_OFFLINE, INSTANCE_RESET_FAILED_ZONING }
+for k,v in pairs(resetfails) do 
+  resetfails[k] = v:gsub("%%s",".+")
+end
+local raiddiffmsg = ERR_RAID_DIFFICULTY_CHANGED_S:gsub("%%s",".+")
+local dungdiffmsg = ERR_DUNGEON_DIFFICULTY_CHANGED_S:gsub("%%s",".+")
+local delaytime = 3 -- seconds to wait on zone change for settings to stabilize
+
+function LA.OnChatMsgSystem(f, evt, msg)
+	LA:D("LA.OnChatMsgSystem: evt=" .. tostring(f) .. ", msg=" .. tostring(evt))
+	if evt == "CHAT_MSG_SYSTEM" then
+    	--local msg = ...
+		if msg:match("^"..resetmsg.."$") then -- I performed expicit reset
+			LA.doExplicitReset(msg)
+		elseif msg:match("^"..INSTANCE_SAVED.."$") then -- just got saved
+			LA:ScheduleTimer("HistoryUpdate", delaytime+1)
+		elseif (msg:match("^"..raiddiffmsg.."$") or msg:match("^"..dungdiffmsg.."$")) and 
+			not addon:histZoneKey() then -- ignore difficulty messages when creating a party while inside an instance
+			LA:HistoryUpdate(true)
+		elseif msg:match(TRANSFER_ABORT_TOO_MANY_INSTANCES) then
+			LA:HistoryUpdate(false, true)
+		else
+			for _, m in pairs(resetfails) do 
+				if msg:match("^"..m.."$") then
+					LA.doExplicitReset(msg, true) -- send failure chat message
+				end
+			end
+		end
+    end
+end
+
+
+function LA:InGroup() 
+	if IsInRaid() then 
+		return "RAID"
+	elseif GetNumGroupMembers() > 0 then 
+		return "PARTY"
+	else 
+		return nil 
+	end
+end
+]]
 
 
 function LA:OnDisable()
@@ -309,14 +452,25 @@ function LA:OnDisable()
 end
 
 
+function LA:RegisterModule(theModule)
+	LA:D("RegisterModule")
+
+	if not self.regModules then
+		self.regModules = {}
+	end
+
+	self.regModules[theModule.name] = theModule
+end
+
+
 function LA.OnChatMsgMoney(event, msg)
 	if not LA:isSessionRunning() then return end
 	
-	LA:D("  OnChatMsgMoney: msg=" .. tostring(msg))
+	LA:D("  OnChatMsgMoney: msg=%s", tostring(msg))
 
 	local lootedCopper = LA:getLootedCopperFromText(msg)
 
-	LA:D("    lootedCopper=" .. tostring(lootedCopper))
+	LA:D("    lootedCopper=%s", tostring(lootedCopper))
 	LA:handleCurrencyLooted(lootedCopper)
 end
 
@@ -324,7 +478,7 @@ end
 -- init lootappraiser db
 ---------------------------------------------------------------------------------------]]
 function LA:initDB()
-	LA:Debug("LA:initDB()")
+	self:Debug("LA:initDB()")
 
 	local parentWidth = UIParent:GetWidth()
 	local parentHeight = UIParent:GetHeight()
@@ -384,8 +538,8 @@ function LA.chatCmdLootAppraiser(input)
     if input == "event" then			
 		MAIN_UI.frame:SetScript("OnEvent", 
 			function (self, event, ...) 
-			-- filter events
-				if string.startsWith(event, "CHAT_MSG_") then --string.startsWith(event, "LOOT_") or
+				-- filter events
+				if string.startsWith(event, "CHAT_MSG_") and event ~= "CHAT_MSG_ADDON" then --string.startsWith(event, "LOOT_") or
 					-- prepare event parameters
 					local variables = ""
 					for n=1,select('#',...) do
@@ -440,7 +594,7 @@ function LA.OnBagUpdate(event, bagID)
 	if bagSnapshot == nil then return end
 	--LA:D("  bagSnapshot=" .. tostring(bagSnapshot))
 
-	LA:D("event:OnBagUpdate with bagID=" .. tostring(bagID))
+	--LA:D("event:OnBagUpdate with bagID=%s", tostring(bagID))
 
 	for slot = 1, GetContainerNumSlots(bagID), 1 do
 		local currentItemID = GetContainerItemID(bagID, slot)
@@ -452,7 +606,7 @@ function LA.OnBagUpdate(event, bagID)
 
 		local value = bagSnapshot[key]
 		if value ~= currentValue then
-			LA:D("  value at slot " .. tostring(slot) .. " changed from " .. tostring(value) .. " to " .. currentValue)
+			LA:D("  value at slot %s changed from %s to %s" , tostring(slot), tostring(value), currentValue)
 
 			-- check against saved loot
 			local data = currentSavedLoot[currentItemID]
@@ -467,7 +621,7 @@ function LA.OnBagUpdate(event, bagID)
 				local quantity = data["quantity"]
 				local itemID = data["itemID"]
 
-				LA:D("    handle item " .. data["link"])
+				LA:D("    handle item %s", data["link"])
 				LA:handleItemLooted(itemLink, itemID, quantity)
 			else
 				LA:D("    ignore bag update of item " .. tostring(currentItemID))
@@ -510,7 +664,7 @@ function LA.OnLootReady( ... )
 			if slotType == 1 then
 				-- item looted
 				local itemLink = GetLootSlotLink(i)
-				local itemID = LA:GetItemID(itemLink, true) -- get item id
+				local itemID = LA.TSM:GetItemID(itemLink, true) -- get item id
 
 				local quantity = select(3, GetLootSlotInfo(i))
 
@@ -576,7 +730,7 @@ end
 ---------------------------------------------------------------------------------------]]
 local mapIDItemCount = {}
 function LA:handleItemLooted(itemLink, itemID, quantity)
-	LA:Debug("handleItemLooted itemID=" .. itemID)
+	self:Debug("handleItemLooted itemID=%s", itemID)
 	LA:D("  " .. tostring(itemID) .. ": handle item: " .. itemLink .. " x" .. tostring(quantity))
 
     local quality = select(3, GetItemInfo(itemID)) or 0
@@ -591,7 +745,16 @@ function LA:handleItemLooted(itemLink, itemID, quantity)
 	end
 
 	LA:D("  " .. tostring(itemID) .. ": price source (before checks): " .. tostring(LA:getPriceSource()))
-    local singleItemValue = LA:GetItemValue(itemID, LA:getPriceSource()) or 0 -- single item
+    local singleItemValue = LA.TSM:GetItemValue(itemID, LA:getPriceSource()) or 0 -- single item
+
+    --[[
+    if TUJMarketInfo then
+    	local o = {}
+    	TUJMarketInfo(itemID, o)
+
+    	LA:print_r(o)
+    end
+    ]]
 		
 	LA:D("  " .. tostring(itemID) .. ": single item value (before checks): " .. tostring(singleItemValue))
 
@@ -599,7 +762,7 @@ function LA:handleItemLooted(itemLink, itemID, quantity)
     if LA:isItemBlacklisted(itemID) then
     --if ITEM_FILTER_BLACKLIST[tostring(itemID)] then
 
-		LA:Debug("  item filter blacklist -> ignored")
+		self:Debug("  item filter blacklist -> ignored")
 		LA:D("  " .. tostring(itemID) .. ": blacklisted -> ignore")
 		return
 
@@ -608,26 +771,26 @@ function LA:handleItemLooted(itemLink, itemID, quantity)
 
     	-- special handling for poor quality items
     	if quality == 0 then
-    		LA:Debug("  poor quality -> VendorSell")
+    		self:Debug("  poor quality -> VendorSell")
 			LA:D("  " .. tostring(itemID) .. ": poor quality -> price source 'VendorSell'")
 
-			singleItemValue = LA:GetItemValue(itemID, "VendorSell") or 0
+			singleItemValue = LA.TSM:GetItemValue(itemID, "VendorSell") or 0
 		end
 
 		-- special handling for item filter vendor sell
 		if ITEM_FILTER_VENDOR[tostring(itemID)] then
-			LA:Debug("  item filter vendor -> VendorSell")
+			self:Debug("  item filter vendor -> VendorSell")
 			LA:D("  " .. tostring(itemID) .. ": item filtered by vendor list -> price source 'VendorSell'")
 
-			singleItemValue = LA:GetItemValue(itemID, "VendorSell") or 0
+			singleItemValue = LA.TSM:GetItemValue(itemID, "VendorSell") or 0
 		end
 
 		-- special handling for soulbound items
 		if singleItemValue == 0 and quality >= 1 then
-			LA:Debug("  item value = 0 -> soulbound item")
+			self:Debug("  item value = 0 -> soulbound item")
 			LA:D("  " .. tostring(itemID) .. ": soulbound item -> price source 'VendorSell'")
 
-			singleItemValue = LA:GetItemValue(itemID, "VendorSell") or 0
+			singleItemValue = LA.TSM:GetItemValue(itemID, "VendorSell") or 0
 		end
 		
 		LA:D("  " .. tostring(itemID) .. ": single item value (after checks): " .. tostring(singleItemValue))
@@ -649,7 +812,7 @@ function LA:handleItemLooted(itemLink, itemID, quantity)
 			LA:incNoteworthyItemCounter(quantity)
 
 			-- print to configured output 'channel'
-			local formattedValue = LA:FormatTextMoney(singleItemValue) or 0
+			local formattedValue = LA.TSM:FormatTextMoney(singleItemValue) or 0
 			LA:Pour(itemLink .. " x" .. quantity .. ": " .. formattedValue)
 
 			-- last noteworthy item ui
@@ -696,7 +859,7 @@ function LA:handleItemLooted(itemLink, itemID, quantity)
 
 			-- check current mapID with session mapID
 			if currentSession["mapID"] ~= GetCurrentMapAreaID() then
-				LA:Debug("  current vs. session mapID: " .. GetCurrentMapAreaID() .. " vs. " .. currentSession["mapID"])
+				self:Debug("  current vs. session mapID: %s vs. %s" , GetCurrentMapAreaID(), currentSession["mapID"])
 
 				-- quick fix: if we loot a noteworthy item we change the map id
 				currentSession["mapID"] = GetCurrentMapAreaID()
@@ -706,8 +869,19 @@ function LA:handleItemLooted(itemLink, itemID, quantity)
 		end
 
 		LA:refreshUIs()
+
+		-- modules callback
+		if self.regModules then
+			for name, data in pairs(self.regModules) do
+				if data and data.callback and data.callback.itemDrop then
+					local callback = data.callback.itemDrop
+
+					callback(itemID, singleItemValue)
+				end
+			end
+		end
 	else
-		LA:Debug("  item quality to low -> ignored")
+		self:Debug("  item quality to low -> ignored")
 		LA:D("  " .. tostring(itemID) .. ": item quality (" .. tostring(quality) .. ") < filter (" .. LA:getQualityFilter() .. ") -> ignore item")
     end
 end
@@ -724,7 +898,7 @@ function LA:handleCurrencyLooted(lootedCopper)
 	if MAIN_UI then
 		if LA:isDisplayEnabled("showCurrencyLooted") then
 			-- format the total looted currency and add to main ui
-			local formattedValue = LA:FormatTextMoney(totalLootedCurrency) or 0
+			local formattedValue = LA.TSM:FormatTextMoney(totalLootedCurrency) or 0
 			VALUE_TOTALCURRENCY:SetText(formattedValue)
 		end
 	end
@@ -735,7 +909,7 @@ end
 -- a new session
 ---------------------------------------------------------------------------------------]]
 function LA:saveCurrentLoot()
-	if not LA:tablelength(savedLoot) == 0 then LA:Debug("savedLoot is not empty...") end
+	if not LA:tablelength(savedLoot) == 0 then self:Debug("savedLoot is not empty...") end
 
 	savedLoot = {}
 
@@ -744,15 +918,15 @@ function LA:saveCurrentLoot()
 
 		if slotType == 1 then
 			-- item looted
-			LA:Debug("item looted (save)")
+			self:Debug("item looted (save)")
 				
 			-- Get Information about Item Looted --
 			local itemLink = GetLootSlotLink(i)
-			local itemID = LA:GetItemID(itemLink, true) -- get item id
+			local itemID = LA.TSM:GetItemID(itemLink, true) -- get item id
 
 			local quantity = select(3, GetLootSlotInfo(i))
 
-			LA:Debug("  item = " .. tostring(itemID))
+			self:Debug("  item=%s", tostring(itemID))
 
 			local data = {}
 			data["link"] = itemLink
@@ -763,12 +937,12 @@ function LA:saveCurrentLoot()
 
 		elseif slotType == 2 then
 			-- currency looted
-			LA:Debug("currency looted (save)")
+			self:Debug("currency looted (save)")
 
 			local lootedCoin = select(2, GetLootSlotInfo(i))
 			local lootedCopper = LA:getLootedCopperFromText(lootedCoin)
 
-			LA:Debug("  lootedCopper = " .. tostring(lootedCopper))
+			self:Debug("  lootedCopper=%s", tostring(lootedCopper))
 
 			local data = {}
 			data["currency"] = lootedCopper
@@ -776,7 +950,7 @@ function LA:saveCurrentLoot()
 			savedLoot[tostring(i)] = data
 		end
 
-		LA:Debug("  savedLoot = " .. tostring(LA:tablelength(savedLoot)))
+		self:Debug("  savedLoot=%s", tostring(LA:tablelength(savedLoot)))
 	end
 end
 
@@ -789,7 +963,7 @@ end
 -- the last noteworthy item ui
 ---------------------------------------------------------------------------------------]]
 function LA:ShowLastNoteworthyItemWindow()
-	LA:Debug("ShowLastNoteworthyItemWindow")
+	self:Debug("ShowLastNoteworthyItemWindow")
 
 	if LAST_NOTEWOTHYITEM_UI then
 		LAST_NOTEWOTHYITEM_UI:Show()
@@ -812,7 +986,7 @@ end
 -- the lite ui
 ---------------------------------------------------------------------------------------]]
 function LA:ShowLiteWindow()
-	LA:Debug("ShowLiteWindow")
+	self:Debug("ShowLiteWindow")
 
 	if LITE_UI then
 		LITE_UI:Show()
@@ -827,7 +1001,7 @@ function LA:ShowLiteWindow()
 	--LITE_UI:EnableResize(false)
 
 	local totalItemValue = currentSession["liv"] or 0
-	LITE_UI:SetTitle("|cffffffff" .. LA:FormatTextMoney(totalItemValue) .. "|r")
+	LITE_UI:SetTitle("|cffffffff" .. LA.TSM:FormatTextMoney(totalItemValue) .. "|r")
 
 	LITE_UI:Show()
 end
@@ -838,7 +1012,7 @@ end
 ---------------------------------------------------------------------------------------]]
 local timerUItotal = 0
 function LA:ShowTimerWindow()
-	LA:Debug("ShowTimerWindow")
+	self:Debug("ShowTimerWindow")
 
 	if TIMER_UI then
 		TIMER_UI:Show()
@@ -953,7 +1127,7 @@ local PaneBackdrop  = {
 local additionalButtonHeight = 0
 local mainUItotal = 0
 function LA:ShowMainWindow(showMainUI) 
-	LA:Debug("ShowMainWindow")
+	self:Debug("ShowMainWindow")
 
 	if MAIN_UI and showMainUI then 
 		MAIN_UI:Show()
@@ -986,12 +1160,17 @@ function LA:ShowMainWindow(showMainUI)
     		if mainUItotal >= 1 then
     			LA:refreshUIs()
 		        mainUItotal = 0
+
+				-- set text
+				if BUTTON_RESETINSTANCES then
+					BUTTON_RESETINSTANCES:SetText("Reset Instances (" .. LA:tablelength(LA.ResetInfo) .. "/10)")
+				end
 		    end	
 		end
 	)
 	MAIN_UI:SetCallback("OnClose",
 		function(widget, event)
-			--LA:Debug("Session ended")
+			--self:Debug("Session ended")
 		end
 	)
 
@@ -1093,10 +1272,40 @@ function LA:ShowMainWindow(showMainUI)
 	if LA:isDisplayEnabled("showResetInstanceButton") then
 		BUTTON_RESETINSTANCES = AceGUI:Create("Button")
 		BUTTON_RESETINSTANCES:SetAutoWidth(true)
-		BUTTON_RESETINSTANCES:SetText("Reset Instances")
+		BUTTON_RESETINSTANCES:SetText("Reset Instances (" .. LA:tablelength(LA.ResetInfo) .. "/10)") -- add lockouts
 		BUTTON_RESETINSTANCES:SetCallback("OnClick", 
 			function()
 				LA:onBtnResetInstancesClick()
+			end
+		)
+		BUTTON_RESETINSTANCES:SetCallback("OnEnter", 
+			function()
+				-- clear list
+				for endTime, instanceName in pairs(LA.ResetInfo) do
+					if endTime < time() then
+						LA.ResetInfo[endTime] = nil
+					end
+				end
+
+				-- prepare tooltip
+				GameTooltip:ClearLines()
+				GameTooltip:SetOwner(MAIN_UI.frame, "ANCHOR_CURSOR")  -- LootAppraiser.GUI is the AceGUI-Frame but we need the real frame
+				
+				GameTooltip:AddLine("Instance lockouts")
+				if LA:tablelength(LA.ResetInfo) > 0 then
+					for endTime, instanceName in pairs(LA.ResetInfo) do
+						GameTooltip:AddDoubleLine("|cffffffff" .. instanceName .. "|r", "|cffffffff" .. date("!%X", endTime - time()) .. "|r")
+					end
+				else
+					GameTooltip:AddLine("|cffffffffNone|r")
+				end
+
+				GameTooltip:Show()
+			end
+		)
+		BUTTON_RESETINSTANCES:SetCallback("OnLeave", 
+			function()
+				GameTooltip:Hide()
 			end
 		)
 		MAIN_UI:AddChild(BUTTON_RESETINSTANCES)
@@ -1136,7 +1345,7 @@ end
 -- prepare the data container with the current configuration
 ---------------------------------------------------------------------------------------]]
 function LA:prepareDataContainer()
-	LA:Debug("prepareDataContainer")
+	self:Debug("prepareDataContainer")
 
 	if currentSession == nil then return end
 
@@ -1184,7 +1393,7 @@ function LA:prepareDataContainer()
 
 	-- ...looted item value (with liv/h)
 	local totalItemValue = currentSession["liv"] or 0
-	local livValue = LA:FormatTextMoney(totalItemValue)
+	local livValue = LA.TSM:FormatTextMoney(totalItemValue)
 	if LA:isDisplayEnabled("showLootedItemValuePerHour") then
 		livValue = livValue .. " (0|cffffd100g|r/h)"
 	end
@@ -1192,7 +1401,7 @@ function LA:prepareDataContainer()
 	VALUE_LOOTEDITEMVALUE = LA:defineRowForFrame(dataContainer, "showLootedItemValue", "Looted Item Value:", livValue)
 
 	-- ...looted currency
-	local formattedTotalLootedCurrency = LA:FormatTextMoney(totalLootedCurrency) or 0
+	local formattedTotalLootedCurrency = LA.TSM:FormatTextMoney(totalLootedCurrency) or 0
 	VALUE_TOTALCURRENCY = LA:defineRowForFrame(dataContainer, "showCurrencyLooted", "Currency Looted:", formattedTotalLootedCurrency)
 
 	-- ...looted item counter
@@ -1220,10 +1429,10 @@ end
 -- add a row with label and value to the frame
 ---------------------------------------------------------------------------------------]]
 function LA:defineRowForFrame(frame, id, name, value)
-	LA:Debug("  defineRowForFrame: id=" .. id .. ", name=" .. name .. ", value=" .. value)
+	self:Debug("  defineRowForFrame: id=%s, name=%s, value=%s", id, name, value)
 
 	if not LA:isDisplayEnabled(id) or frame == nil then 
-		LA:Debug("  -> not visible")
+		self:Debug("  -> not visible")
 		return 
 	end
 
@@ -1257,7 +1466,7 @@ end
 -- refresh the main ui
 ---------------------------------------------------------------------------------------]]
 function LA:refreshUIs()
-	--LA:Debug("refreshUIs")
+	--self:Debug("refreshUIs")
 
 	-- session duration
 	if LA:isSessionRunning() then
@@ -1335,7 +1544,7 @@ function LA:refreshUIs()
 	if LA:isDisplayEnabled("showLootedItemValuePerHour") and LA:isSessionRunning() then
 		local totalItemValue = currentSession["liv"] or 0
 		if LA:isDisplayEnabled("showLootedItemValue") and VALUE_LOOTEDITEMVALUE then
-			local livValue = LA:FormatTextMoney(totalItemValue)
+			local livValue = LA.TSM:FormatTextMoney(totalItemValue)
 			livValue = livValue .. " (" .. LA:calcLootedItemValuePerHour() .. "|cffffd100g|r/h)"
 
 			-- add to main ui
@@ -1354,7 +1563,7 @@ function LA:refreshUIs()
 	if LA:isLootAppraiserLiteEnabled() then
 		if LITE_UI then
 			local totalItemValue = currentSession["liv"] or 0
-			LITE_UI:SetTitle("|cffffffff" .. LA:FormatTextMoney(totalItemValue) .. "|r")
+			LITE_UI:SetTitle("|cffffffff" .. LA.TSM:FormatTextMoney(totalItemValue) .. "|r")
 		end
 	end
 end
@@ -1418,7 +1627,7 @@ function LA:ShowStartSessionDialog()
 	checkboxOpenWindow:SetLabel(" " .. "Open LootAppraiser window")
 	checkboxOpenWindow:SetCallback("OnValueChanged",
 		function(value)
-			--LA:Debug("  OnValueChanged: value=" .. tostring(value))
+			--self:Debug("  OnValueChanged: value=%s", tostring(value))
 			--LA:print_r(value)
 			openLootAppraiser = value.checked
 		end
@@ -1433,34 +1642,34 @@ function LA:print_r ( t )
     local print_r_cache={}
     local function sub_print_r(t,indent)
         if (print_r_cache[tostring(t)]) then
-            print(indent.."*"..tostring(t))
+            LA:D(indent.."*"..tostring(t))
         else
             print_r_cache[tostring(t)]=true
             if (type(t)=="table") then
                 for pos,val in pairs(t) do
                     if (type(val)=="table") then
-                        print(indent.."["..pos.."] => "..tostring(t).." {")
+                        LA:D(indent.."["..pos.."] => "..tostring(t).." {")
                         sub_print_r(val,indent..string.rep(" ",string.len(pos)+8))
-                        print(indent..string.rep(" ",string.len(pos)+6).."}")
+                        LA:D(indent..string.rep(" ",string.len(pos)+6).."}")
                     elseif (type(val)=="string") then
-                        print(indent.."["..pos..'] => "'..val..'"')
+                        LA:D(indent.."["..pos..'] => "'..val..'"')
                     else
-                        print(indent.."["..pos.."] => "..tostring(val))
+                        LA:D(indent.."["..pos.."] => "..tostring(val))
                     end
                 end
             else
-                print(indent..tostring(t))
+                LA:D(indent..tostring(t))
             end
         end
     end
     if (type(t)=="table") then
-        print(tostring(t).." {")
+        LA:D(tostring(t).." {")
         sub_print_r(t,"  ")
-        print("}")
+        LA:D("}")
     else
         sub_print_r(t,"  ")
     end
-    print()
+    LA:D("")
 end
 
 --[[-------------------------------------------------------------------------------------
@@ -1471,12 +1680,10 @@ function LA:StartSession(showMainUI)
 	lootAppraiserDisabled = false
 
 	if LA:isSessionRunning() then
-		LA:Print("LootAppraiser is already running!")
+		--LA:Print("LootAppraiser is already running!")
 	else
 		LA:Print("Start Session")
-		LA:Debug("  mapID=" .. GetCurrentMapAreaID() .. " (" .. GetMapNameByID(GetCurrentMapAreaID()) .. ")")
-		--LA:Debug("  savedLoot: " .. LA:tablelength(savedLoot) .. " items")
-		--LA:printSessions() -- TODO remove
+		self:Debug("  mapID=%s (%s)", GetCurrentMapAreaID(), GetMapNameByID(GetCurrentMapAreaID()))
 
 		sessionIsRunning = true
 
@@ -1486,8 +1693,8 @@ function LA:StartSession(showMainUI)
 		LA:ShowMainWindow(showMainUI)
 
 		-- process saved loot
-		LA:Debug("  savedLoot = " .. tostring(LA:tablelength(savedLoot)))
-		LA:Debug("  process saved loot")
+		self:Debug("  savedLoot=%s", tostring(LA:tablelength(savedLoot)))
+		self:Debug("  process saved loot")
 		for _, data in pairs(savedLoot) do
 			if data["currency"] ~= nil then
 				-- currency
@@ -1511,8 +1718,8 @@ end
 
 
 function LA:prepareNewSession()
-	LA:Debug("prepareNewSession")
-		LA:Debug("  savedLoot: " .. LA:tablelength(savedLoot) .. " items")
+	self:Debug("prepareNewSession")
+		self:Debug("  savedLoot: %s items", LA:tablelength(savedLoot))
 
 	-- start: prepare session (for statistics)
 	currentSession = {}
@@ -1559,7 +1766,7 @@ end
 -- Event handler for button '(Re)Start'
 --------------------------------------------------------------------------]]
 function LA:onBtnStartSessionClick()
-	LA:Debug("onBtnStartSessionClick")
+	self:Debug("onBtnStartSessionClick")
 
 	LA:restartSession()
 end
@@ -1572,7 +1779,7 @@ end
 -- * refresh ui
 --------------------------------------------------------------------------]]
 function LA:restartSession()
-	LA:Debug("restartSession")
+	self:Debug("restartSession")
 	
 	-- calc pause add add to sessionPause
 	sessionPause = sessionPause + (time() - pauseStart)
@@ -1600,7 +1807,7 @@ end
 -- Event handler for button 'stop session'
 --------------------------------------------------------------------------]]
 function LA:onBtnStopSessionClick()
-	LA:Debug("onBtnStopSessionClick")
+	self:Debug("onBtnStopSessionClick")
 
 	LA:pauseSession()
 end
@@ -1614,12 +1821,12 @@ end
 -- * refresh ui
 --------------------------------------------------------------------------]]
 function LA:pauseSession()
-	LA:Debug("pauseSession")
+	self:Debug("pauseSession")
 
 	-- save session
 	if currentSession ~= nil then
 		if currentSession["liv"] and currentSession["liv"] > 0 then
-			LA:Debug("  -> set session end")
+			self:Debug("  -> set session end")
 			currentSession["end"] = time()
 			currentSession["totalItemsLooted"] = totalItemLootedCounter
 
@@ -1653,19 +1860,19 @@ end
 -- Event handler for button 'new session'
 --------------------------------------------------------------------------]]
 function LA:onBtnNewSessionClick()
-	LA:Debug("onBtnNewSessionClick")
+	self:Debug("onBtnNewSessionClick")
 
 	LA:NewSession()
 end
 
 
 function LA:NewSession()
-	LA:Debug("NewSession")
+	self:Debug("NewSession")
 
 	-- save session
 	if currentSession ~= nil then
 		if currentSession["liv"] and currentSession["liv"] > 0 then
-			LA:Debug("  -> set session end")
+			self:Debug("  -> set session end")
 			currentSession["end"] = time()
 			currentSession["totalItemsLooted"] = totalItemLootedCounter
 
@@ -1683,7 +1890,7 @@ function LA:NewSession()
 
 	totalLootedCurrency = 0   	-- the total looted currency during a session
 	if VALUE_TOTALCURRENCY ~= nil then
-		VALUE_TOTALCURRENCY:SetText(LA:FormatTextMoney(totalLootedCurrency))
+		VALUE_TOTALCURRENCY:SetText(LA.TSM:FormatTextMoney(totalLootedCurrency))
 	end
 
 	lootedItemCounter = 0			-- counter for looted items
@@ -1742,7 +1949,7 @@ function LA:onBtnDestroyTrashClick()
 
 			-- blacklist
 			if link and LA:isDestroyBlacklistedItems() then
-				local itemID = LA:GetItemID(link)
+				local itemID = LA.TSM:GetItemID(link)
 				if LA:isItemBlacklisted(itemID) then
 					PickupContainerItem(bag, slot)
 					DeleteCursorItem()
@@ -1775,6 +1982,8 @@ function LA:onBtnResetInstancesClick()
 	if inInstanceGroup or inInstanceGroupRealm then 
 		SendChatMessage("Instances have been reset.","PARTY", nil)
 	end
+
+	LA:print_r(LA.ResetInfo)
 end
 
 
@@ -1816,7 +2025,7 @@ function LA:onBtnSellTrashClick()
 			if LA:isSellTrashTsmGroupEnabled() == true then
 				local id = GetContainerItemID(bag, slot)
 				--if id and LA:isItemInList(id, trashItems) then
-				if id and LA:isItemInGroup(id, LA:getSellTrashTsmGroup()) then
+				if id and LA.TSM:isItemInGroup(id, LA:getSellTrashTsmGroup()) then
 					--LA:Debug("  id=" .. id .. ", found=" .. tostring(trashItems["i:" .. id]) .. ", link=" .. link)
 					UseContainerItem(bag, slot)
 					itemsSold = itemsSold + 1
@@ -1828,7 +2037,7 @@ function LA:onBtnSellTrashClick()
 	if itemsSold == 0 then
 		LA:Print("No items sold.")
 	else
-		LA:Print(tostring(itemsSold) .. " item(s) sold") --for " .. LA:FormatTextMoney(moneyEarned))
+		LA:Print(tostring(itemsSold) .. " item(s) sold") --for " .. LA.TSM:FormatTextMoney(moneyEarned))
 	end
 end
 
@@ -1917,7 +2126,7 @@ function LA:addItemValue2LootedItemValue(itemValue)
 	-- show the new value in main ui (if shown)
 	if MAIN_UI then
 		if LA:isDisplayEnabled("showLootedItemValue") then
-			local livValue = LA:FormatTextMoney(totalItemValue)
+			local livValue = LA.TSM:FormatTextMoney(totalItemValue)
 			if LA:isDisplayEnabled("showLootedItemValuePerHour") then
 				livValue = livValue .. " (" .. LA:calcLootedItemValuePerHour() .. "|cffffd100g|r/h)"
 			end
@@ -1943,7 +2152,7 @@ function LA:addItem2LootCollectedList(itemID, link, quantity, marketValue, notew
 	--LA:Debug("addItem2LootCollectedList(itemID=" .. itemID .. ", link=" .. tostring(link) .. ", quantity=" .. quantity .. ")")
 
 	-- prepare text
-	local formattedItemValue = LA:FormatTextMoney(marketValue) or 0
+	local formattedItemValue = LA.TSM:FormatTextMoney(marketValue) or 0
 	local preparedText = " " .. link .. " x" .. quantity .. ": " .. formattedItemValue
 	
 	-- item / link
@@ -2026,7 +2235,7 @@ function LA:isItemBlacklisted(itemID)
 	--local blacklistItems = LA:GetGroupItems(LA:getBlacklistTsmGroup())
 
 	--local result = LA:isItemInList(itemID, blacklistItems)
-	local result = LA:isItemInGroup(itemID, LA:getBlacklistTsmGroup())
+	local result = LA.TSM:isItemInGroup(itemID, LA:getBlacklistTsmGroup())
 	--LA:Debug("  isItemInList=" .. tostring(result))
 	return result
 end
@@ -2057,7 +2266,7 @@ function LA:isBlacklistTsmGroupEnabled()
 end
 
 function LA:isDestroyBlacklistedItems()
-	--if LA:isBlacklistTsmGroupEnabled() and self.db.profile.addBlacklistedItems2DestroyTrash then
+	--if self:isBlacklistTsmGroupEnabled() and self.db.profile.addBlacklistedItems2DestroyTrash then
 	if self.db.profile.blacklist.addBlacklistedItems2DestroyTrash then
 		return true
 	end
@@ -2109,12 +2318,7 @@ function LA:getPriceSource()
 		self.db.profile.pricesource.source = self.dbDefaults.profile.pricesource.source
 	end
 
-	local priceSource = self.db.profile.pricesource.source
-	--if priceSource == "Custom" then
-	--	priceSource = self.db.profile.pricesource.customPriceSource
-	--end
-
-	return priceSource
+	return self.db.profile.pricesource.source
 end
 
 function LA:getCustomPriceSource()
@@ -2242,9 +2446,9 @@ function LA:getLootedCopperFromText(lootedCurrencyAsText)
 	return copper
 end
 
-function LA:Debug(msg)
-	if LA.DEBUG then
-		LA:Print(tostring(msg))
+function LA:Debug(msg, ...)
+	if self.DEBUG then
+		self:Printf(msg, ...)
 	end
 end
 
@@ -2252,9 +2456,32 @@ end
 --	LA:Debug(msg)
 --end
 
+--[[
 function LA:D(msg)
 	if LA:isDebugOutputEnabled() then
 		LA:Print(tostring(msg))
+	end
+end
+]]
+
+
+function LA:D(msg, ...)
+	if self:isDebugOutputEnabled() then
+		--self:Printf(msg, ...)
+
+		local tab = -1
+		for i = 1,10 do
+			--self:Printf(" name=%s", tostring(GetChatWindowInfo(i)))
+			if GetChatWindowInfo(i)=="LADebug" then
+				tab = i
+				break
+			end
+		end
+
+		if(tab ~= -1) then
+			--_G["ChatFrame"..tab]:AddMessage(...)
+			self:Printf(_G["ChatFrame"..tab], msg, ...)
+		end
 	end
 end
 
@@ -2322,7 +2549,7 @@ function LA:printSessions()
 				factor = sessionDuration
 			end
 
-			local formattedLiv = LA:FormatTextMoney(liv) or 0
+			local formattedLiv = LA.TSM:FormatTextMoney(liv) or 0
 			LA:Debug("    looted item value: " .. formattedLiv)
 
 			local livGold = floor(liv/10000)

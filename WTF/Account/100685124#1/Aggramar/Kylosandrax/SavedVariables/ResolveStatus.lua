@@ -4,7 +4,7 @@ ResolveStatusDB = {
 	["width"] = 250,
 	["combat"] = false,
 	["spam"] = false,
-	["instance"] = false,
+	["keepSession"] = false,
 	["bgalpha"] = 1,
 	["fontpath"] = "Default",
 	["dmgtaken"] = true,
@@ -14,6 +14,6 @@ ResolveStatusDB = {
 	["height"] = 30,
 	["locked"] = true,
 	["texturepath"] = "Default",
+	["instance"] = false,
 	["scale"] = 1,
-	["keepSession"] = false,
 }

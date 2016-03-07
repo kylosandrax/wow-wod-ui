@@ -1,0 +1,8 @@
+2015-09-26  ShadowTheAge  <ShadowTheAge>
+
+[e0a1917e571f] [v0.65]
+* CrossRealmAssist.lua:
+
+Simple filters, minor bug fixes, and reuploading
+
+

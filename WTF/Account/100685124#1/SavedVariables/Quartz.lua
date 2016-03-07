@@ -17,6 +17,8 @@ Quartz3DB = {
 				},
 			},
 		},
+		["EnemyCasts"] = {
+		},
 		["Player"] = {
 			["profiles"] = {
 				["Default"] = {
@@ -24,8 +26,6 @@ Quartz3DB = {
 					["x"] = 1146.00036621094,
 				},
 			},
-		},
-		["EnemyCasts"] = {
 		},
 		["GCD"] = {
 		},
@@ -49,27 +49,27 @@ Quartz3DB = {
 				},
 			},
 		},
-		["Mirror"] = {
-		},
 		["Range"] = {
+		},
+		["Mirror"] = {
 		},
 		["Latency"] = {
 		},
 	},
 	["profileKeys"] = {
-		["Ryjax - Aggramar"] = "Default",
-		["Zapunzel - Aggramar"] = "Default",
-		["Stormslinger - Aggramar"] = "Default",
-		["Greenthorn - Aggramar"] = "Default",
 		["Ryvok - Terokkar"] = "Default",
-		["Kromethious - Aggramar"] = "Default",
-		["Kylosandrax - Aggramar"] = "Default",
-		["Kxtrader - Aggramar"] = "Default",
+		["Zapunzel - Aggramar"] = "Default",
 		["Feldspar - Aggramar"] = "Default",
+		["Greenthorn - Aggramar"] = "Default",
+		["Ryjax - Aggramar"] = "Default",
+		["Kyloc - Aggramar"] = "Default",
+		["Kylosandrax - Aggramar"] = "Default",
+		["Banjax - Aggramar"] = "Default",
+		["Stormslinger - Aggramar"] = "Default",
 		["Kylozandrax - Earthen Ring"] = "Default",
 		["Kxchanter - Aggramar"] = "Default",
-		["Kyloc - Aggramar"] = "Default",
-		["Banjax - Aggramar"] = "Default",
+		["Kromethious - Aggramar"] = "Default",
+		["Kxtrader - Aggramar"] = "Default",
 		["Kylosandrix - Aggramar"] = "Default",
 		["Ryvok - Aggramar"] = "Default",
 		["Bronin - Aggramar"] = "Default",
@@ -79,9 +79,9 @@ Quartz3DB = {
 			["modules"] = {
 				["Buff"] = false,
 				["Timer"] = false,
+				["Focus"] = false,
 				["Pet"] = false,
 				["Mirror"] = false,
-				["Focus"] = false,
 			},
 		},
 	},

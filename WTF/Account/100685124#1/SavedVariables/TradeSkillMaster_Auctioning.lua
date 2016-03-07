@@ -12,21 +12,20 @@ TradeSkillMaster_AuctioningDB = {
 	["_hash"] = 5870975,
 	["_currentProfile"] = {
 		["Ifarmforyou - Outland"] = "Default",
-		["Ryjax - Aggramar"] = "Default",
+		["Sheyshay - Outland"] = "Default",
 		["Sheyshey - Outland"] = "Default",
 		["Shayshey - Outland"] = "Default",
-		["Sheyshay - Outland"] = "Default",
 		["Sheyrah - Outland"] = "Default",
 		["Kylosandrax - Aggramar"] = "Default",
+		["Glyphdealz - Outland"] = "Default",
+		["Startree - Outland"] = "Default",
 		["Lokbawks - Outland"] = "Default",
-		["Sheyrrah - Outland"] = "Default",
-		["Farmershey - Outland"] = "Default",
 		["Kxchanter - Aggramar"] = "Default",
 		["Kromethious - Aggramar"] = "Default",
 		["Kxtrader - Aggramar"] = "Default",
-		["Glyphdealz - Outland"] = "Default",
-		["Ryvok - Aggramar"] = "Default",
+		["Sheyrrah - Outland"] = "Default",
 		["Haroohiipan - Outland"] = "Default",
+		["Farmershey - Outland"] = "Default",
 	},
 	["g@ @roundNormalPrice"] = false,
 	["f@Alliance - Outland@player"] = {
@@ -35,6 +34,7 @@ TradeSkillMaster_AuctioningDB = {
 		["Sheyrrah"] = true,
 		["Sheyshey"] = true,
 		["Sheyshay"] = true,
+		["Startree"] = true,
 		["Glyphdealz"] = true,
 		["Sheyrah"] = true,
 		["Shayshey"] = true,
@@ -45,10 +45,8 @@ TradeSkillMaster_AuctioningDB = {
 	},
 	["g@ @matchWhitelist"] = true,
 	["f@Horde - Aggramar@player"] = {
-		["Ryvok"] = true,
-		["Kromethious"] = true,
-		["Ryjax"] = true,
 		["Kxtrader"] = true,
+		["Kromethious"] = true,
 		["Kylosandrax"] = true,
 		["Kxchanter"] = true,
 	},
@@ -66,12 +64,11 @@ TradeSkillMaster_AuctioningDB = {
 			"Shayshey - Outland", -- [8]
 			"Haroohiipan - Outland", -- [9]
 			"Glyphdealz - Outland", -- [10]
-			"Kxtrader - Aggramar", -- [11]
-			"Kromethious - Aggramar", -- [12]
-			"Kxchanter - Aggramar", -- [13]
+			"Startree - Outland", -- [11]
+			"Kxtrader - Aggramar", -- [12]
+			"Kromethious - Aggramar", -- [13]
 			"Kylosandrax - Aggramar", -- [14]
-			"Ryvok - Aggramar", -- [15]
-			"Ryjax - Aggramar", -- [16]
+			"Kxchanter - Aggramar", -- [15]
 		},
 		["realm"] = {
 			"Outland", -- [1]

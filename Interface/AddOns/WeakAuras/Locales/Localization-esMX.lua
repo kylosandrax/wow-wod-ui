@@ -470,6 +470,7 @@ L["WeakAurasTutorials"] = "WeakAuras - Tutorials"
 L["Yell"] = "Yell"
 -- L["Zone"] = ""
 -- L["Zone ID"] = ""
+-- L["Zone ID List"] = ""
 
 
 

@@ -1,7 +1,5 @@
 
 ResolveHistoryDB = {
-	["Kromethious - Aggramar"] = {
-		["Ulduar"] = {
-		},
+	["Kxchanter - Aggramar"] = {
 	},
 }

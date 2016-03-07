@@ -28,8 +28,8 @@ local tbl = OG.table ;
 -------------------------------------------------------------------------------
 local OG_MAJOR                 = 0 ;
 local OG_MINOR                 = 1 ;
-local OG_REVISION              = 4 ;
-local OG_BUILD                 = 014 ;
+local OG_REVISION              = 7 ;
+local OG_BUILD                 = 017 ;
 local OG_SPECIAL_TAG           = "" ;
 local OG_VERSION               = tostring(OG_MAJOR) ..".".. tostring(OG_MINOR) ..".".. OG_REVISION ;
 local OG_VER_STR               = tostring(OG_MAJOR) .. tostring(OG_MINOR) .. tostring(OG_REVISION) ;
@@ -37,6 +37,7 @@ local gem_colors ;
 local __gems ;
 local __info ;
 local __ilink_info ;
+local find_slot_id = 0 ;
 
 local og = {} ;
 
@@ -68,6 +69,9 @@ function og.hook_options()
   og.options[ "inspect" ] = og.toggle_auto_inspect ;
   og.options[ "off"     ] = function() og.use_ogear(0) end ;
   og.options[ "on"      ] = function() og.use_ogear(1) end ;
+  
+  og.options[ "slot"    ] = function(opt) find_slot_id = tonumber(opt) ; print( "watch-slot: ".. tostring(find_slot_id) ) ; end ;
+  
 end
 
 function og.toggle_auto_inspect()
@@ -107,17 +111,15 @@ end
 function og.usage()
   og.version_banner() ;
   
-  print( "  /oq highlight    toggle gear pve/pvp highlight; blue == pve, red == pvp" ) ;
-  print( "  /oq inspect      toggle auto inspect on ctrl-left click" ) ;
-  print( "  /oq [on | off]   enable / disable oGear (same as checkbox on paperdoll)" ) ;
+  print( "  /og highlight    toggle gear pve/pvp highlight; blue == pve, red == pvp" ) ;
+  print( "  /og inspect      toggle auto inspect on ctrl-left click" ) ;
+  print( "  /og [on | off]   enable / disable oGear (same as checkbox on paperdoll)" ) ;
 end
 
 function og.init()
   og.hook_options() ;
   
-  og.timer_oneshot(  2, og.hook_paperdoll              ) ;
-  og.timer_oneshot(  2, og.hook_inspectdoll            ) ;
-  og.timer_oneshot(  2, og.hook_options_menu           ) ;
+  og.timer_oneshot(  2, og.post_load_hooks ) ;
   
   if (InspectFrame == nil) then
     LoadAddOn("Blizzard_InspectUI") ; -- make sure its loaded
@@ -169,7 +171,7 @@ function og.checkbox( parent, x, y, cx, cy, text_cx, text, is_checked, on_click_
 end
 
 function og.label( parent, x, y, cx, cy, text, justify_v, justify_h, font, strata )
-  local label = parent:CreateFontString( nil, strata or "ARTWORK", font or "GameFontNormalSmall")
+  local label = parent:CreateFontString( parent:GetName() .."_OGText", strata or "ARTWORK", font or "GameFontNormalSmall")
   label:SetWidth( cx ) ;
   label:SetHeight(cy or 25) ;
   if (justify_v == "CENTER") then
@@ -227,50 +229,52 @@ function og.on_equipment_changed()
   og.paperdoll_update( PaperDollFrame, "player" ) ;
 end
 
-function og.on_inspect_ready()
-  if (UnitIsPlayer("target") and UnitIsFriend("player", "target")) then
-    -- update every 1/2 second for 2 seconds to insure data comes in (caching from server)
-    og.paperdoll_clear( InspectFrame ) ;
-    local i ;
-    for i=1,3 do
-      og.timer_oneshot( i * 0.75, og.paperdoll_update, InspectFrame, "target" ) ;
-    end
+function og.on_inspect_ready( unit_id )
+  -- update every 1/2 second for 2 seconds to insure data comes in (caching from server)
+  if (og.timers["og_inspect_frame"] == nil) then
+    -- first time
+    og.paperdoll_update( InspectFrame, "target" ) ;
   end
+  local now = GetTime() ;
+  if (og._last_inspect_tm) and ((now - og._last_inspect_tm) < 0.5) then
+    return ;
+  end
+  og._last_inspect_tm = now ;
+  og.paperdoll_update( InspectFrame, "target" ) ;
+  og.timer( "og_inspect_frame", 0.50, og.paperdoll_update, nil, InspectFrame, "target" ) ;
 end
 
 function og.on_player_target_change()
   if ((OGEAR.ok2autoinspect == 1) and IsControlKeyDown() and UnitIsFriend("player","target") and CanInspect("target") and not InCombatLockdown()) then
+    og.paperdoll_clear( InspectFrame ) ;
     InspectUnit("target") ;
   end
 end
 
-local S_ITEM_LEVEL = ITEM_LEVEL:gsub( "%%d", "(%%d+)" )
-function og.get_actual_ilevel( itemLink )
-   -- Pass the item link to the tooltip:
-  local scantip = GameTooltip ;
-  scantip:SetOwner( UIParent, "ANCHOR_NONE" ) ;
-  scantip:SetHyperlink( itemLink ) ;
-  scantip:Show() ;
-   
-  -- Scan the tooltip
-  local ilevel = 0 ;
-  local enchant_text = "" ;
-  local i ;
-  for i = 2, scantip:NumLines() do -- Line 1 is always the name so you can skip it.
-    local text = _G[ scantip:GetName() .."TextLeft"..i]:GetText() ;
-    if text and text ~= "" then
-      local n = tonumber( text:match(S_ITEM_LEVEL) ) ;
-      if n then
-        ilevel = n ;
-      elseif (text:find( L["Enchanted:"] )) then
-        enchant_text = text ;
-      end
-    end
+function og.post_load_hooks()
+  og.hook_paperdoll() ;
+  og.hook_inspectdoll() ;
+  og.hook_options_menu() ;
+  
+  if (EquipmentFlyout_DisplayButton) then
+    og.old_flyout = EquipmentFlyout_DisplayButton ;
+    EquipmentFlyout_DisplayButton = OG_EquipmentFlyout_DisplayButton ;
   end
-  scantip:Hide() ;
-  return ilevel, enchant_text ;
 end
 
+function og.ScanningTooltip() 
+  if (og._tooltip == nil) then
+    local g = CreateFrame( "GameToolTip", "OGearScanningTooltip", nil, "GameTooltipTemplate" ) ;
+    g:SetOwner( UIParent, "ANCHOR_NONE" ) ;
+    og._tooltip = g ;
+  end
+  -- clear tooltip
+  og._tooltip:ClearLines() ;
+  
+  return og._tooltip ;
+end
+
+local S_ITEM_LEVEL = ITEM_LEVEL:gsub( "%%d", "(%%d+)" )
 local __enchantable = { [  1 ] = nil , -- head
                         [  2 ] = nil , -- neck
                         [  3 ] = true, -- shoulder
@@ -289,24 +293,29 @@ local __enchantable = { [  1 ] = nil , -- head
                         [ 17 ] = true, -- off hand
                       } ;
 
-local __profession_enchantable = { [  1 ] = nil, -- head
-                                   [  2 ] = nil, -- neck
-                                   [  3 ] = nil, -- shoulder
-                                   [ 15 ] = nil, -- back
-                                   [  5 ] = nil, -- chest
-                                   [  9 ] = nil, -- wrist
-                                   [ 10 ] = "ENG", -- hands
-                                   [  6 ] = nil, -- waist
-                                   [  7 ] = nil, -- legs
-                                   [  8 ] = "ENG", -- feet
-                                   [ 11 ] = "ENC", -- finger0
-                                   [ 12 ] = "ENC", -- finger1
-                                   [ 13 ] = nil, -- trinket0
-                                   [ 14 ] = nil, -- trinket1
-                                 } ;
+local __enchantable600 = { [  1 ] = nil , -- head
+                        [  2 ] = true, -- neck
+                        [  3 ] = nil , -- shoulder
+                        [ 15 ] = true, -- back
+                        [  5 ] = nil , -- chest
+                        [  9 ] = nil , -- wrist
+                        [ 10 ] = nil , -- hands
+                        [  6 ] = nil , -- waist
+                        [  7 ] = nil , -- legs
+                        [  8 ] = nil , -- feet
+                        [ 11 ] = true, -- finger0
+                        [ 12 ] = true, -- finger1
+                        [ 13 ] = nil , -- trinket0
+                        [ 14 ] = nil , -- trinket1
+                        [ 16 ] = true, -- main hand
+                        [ 17 ] = true, -- off hand
+                      } ;
 
-function og.nGems( target, slot )
-  local ilink = GetInventoryItemLink( target, slot ) ;
+local function printable( ilink )
+   return gsub(ilink, "\124", "\124\124");
+end
+
+function og.nGems_from_ilink( ilink ) 
   if (ilink == nil) then
     return 0, nil, nil, nil, nil ;
   end
@@ -327,6 +336,7 @@ function og.nGems( target, slot )
   __gems[2]     = nil ;
   __gems[3]     = nil ;
   __gems[4]     = nil ;
+  __gems[5]     = nil ;
   
   tbl.fill( __info, GetItemInfo( item_id ) ) ;    
   
@@ -339,9 +349,10 @@ function og.nGems( target, slot )
     return 0, nil, nil, nil, nil, nil, nil ;
   end
 --  local g = scantip ;
-  local g = GameTooltip ;
+  local g = og.ScanningTooltip() ;
   g:SetOwner( UIParent, "ANCHOR_NONE" ) ;
-  g:SetHyperlink( ibare ) ;
+--  g:SetHyperlink( ibare ) ;
+  g:SetHyperlink( ilink ) ; -- to get the actual ilevel info
   g:Show() ;
   local i = 0 ;
   local ngems = 0 ;
@@ -349,32 +360,48 @@ function og.nGems( target, slot )
     local mytext=_G[ g:GetName() .."TextLeft"..i] ;
     if (mytext ~= nil) then
       local line = mytext:GetText() ;
-      if (line) and (line:find( L[" Socket"] )) then
-        ngems = ngems + 1 ;
-        gem_colors[ngems] = line:sub( 1, line:find( L[" Socket"] ) - 1) ;
-      elseif (line) and (line:find( L["Sha--Touched"] )) and (line:find("\"".. L["Sha--Touched"] .."\"") == nil) then
-        ngems = ngems + 1 ;
-        gem_colors[ngems] = "sha" ;
-      elseif (line) and (line:find( L["PvP Power"] )) then
-        is_pvp = is_pvp + 1 ;
+      local plain = printable( line ) ;
+      if (plain) then
+        if plain:find( L[" Socket"] ) or plain:find( L["Prismatic Socket"] ) then
+          ngems = ngems + 1 ;
+          gem_colors[ngems] = line:sub( 1, line:find( L[" Socket"] ) - 1) ;
+        elseif plain:find( L["Sha--Touched"] ) and (plain:find("\"".. L["Sha--Touched"] .."\"") == nil) then
+          ngems = ngems + 1 ;
+          gem_colors[ngems] = "sha" ;
+        elseif plain:find( L["PvP Power"] ) then
+          is_pvp = is_pvp + 1 ;
+        end
+      
+        local n = tonumber( line:match(S_ITEM_LEVEL) ) ;
+        if n then
+          ilevel = n ;
+        elseif (plain:find( L["Enchanted:"] )) then
+          enchant_text = line ;
+        end
       end
     end
   end
   g:Hide() ;
-  _, __gems[1] = GetItemGem( ilink or ibare, 1 ) ;
-  _, __gems[2] = GetItemGem( ilink or ibare, 2 ) ;
-  _, __gems[3] = GetItemGem( ilink or ibare, 3 ) ;
-  _, __gems[4] = GetItemGem( ilink or ibare, 4 ) ;
-  if (__gems[ngems+1] ~= nil) then
-    ngems = ngems + 1 ;
+--  _, __gems[1] = GetItemGem( ilink or ibare, 1 ) ;
+--  _, __gems[2] = GetItemGem( ilink or ibare, 2 ) ;
+--  _, __gems[3] = GetItemGem( ilink or ibare, 3 ) ;
+--  _, __gems[4] = GetItemGem( ilink or ibare, 4 ) ;
+  local i ;
+  for i=ngems,4 do
+    _, __gems[i] = GetItemGem( ilink or ibare, i ) ;
+    if (__gems[i]) then 
+      ngems = ngems + 1 ;
+    end
   end
 
-  -- get real ilevels
-  ilevel, enchant_text = og.get_actual_ilevel( ilink ) ;
   return ngems, __gems[1], __gems[2], __gems[3], __gems[4], 
                 gem_colors[1], gem_colors[2], gem_colors[3], gem_colors[4], 
                 enchant_id, enchant_text,
                 ilevel, is_pvp ;
+end
+
+function og.nGems( target, slot )
+  return og.nGems_from_ilink( GetInventoryItemLink( target, slot ) ) ;
 end
 
 OG.EMPTY_GEMSLOT =   "|TInterface\\TARGETINGFRAME\\UI-PhasingIcon.blp:16|t" ;
@@ -423,12 +450,13 @@ function og.paperdoll_overlay( frame, is_on )
   end
 end
 
-OG.EMPTY_GEMSLOTS = { ["Meta"]    = "INTERFACE/ITEMSOCKETINGFRAME/UI-EmptySocket-Prismatic",
-                      ["Red"]     = "INTERFACE/ITEMSOCKETINGFRAME/UI-EmptySocket-Red",
-                      ["Yellow"]  = "INTERFACE/ITEMSOCKETINGFRAME/UI-EmptySocket-Yellow",
-                      ["Blue"]    = "INTERFACE/ITEMSOCKETINGFRAME/UI-EmptySocket-Blue",
-                      ["sha"]     = "INTERFACE/ITEMSOCKETINGFRAME/UI-EMPTYSOCKET",
-                      ["unk"]     = "Interface\\TARGETINGFRAME\\UI-PhasingIcon.blp",
+OG.EMPTY_GEMSLOTS = { ["Meta"]      = "INTERFACE/ITEMSOCKETINGFRAME/UI-EmptySocket-Prismatic",
+                      ["Prismatic"] = "INTERFACE/ITEMSOCKETINGFRAME/UI-EmptySocket-Prismatic",
+                      ["Red"]       = "INTERFACE/ITEMSOCKETINGFRAME/UI-EmptySocket-Red",
+                      ["Yellow"]    = "INTERFACE/ITEMSOCKETINGFRAME/UI-EmptySocket-Yellow",
+                      ["Blue"]      = "INTERFACE/ITEMSOCKETINGFRAME/UI-EmptySocket-Blue",
+                      ["sha"]       = "INTERFACE/ITEMSOCKETINGFRAME/UI-EMPTYSOCKET",
+                      ["unk"]       = "Interface\\TARGETINGFRAME\\UI-PhasingIcon.blp",
                     } ;
 
 function og.paperdoll_set_gem( p, n, ilink, color )
@@ -457,10 +485,22 @@ OG.ENCHANT_SLOT  =  { [0] = "INTERFACE/COMMON/Indicator-Gray",
                       [1] = "INTERFACE/ICONS/INV_Jewelry_Talisman_08",
                     } ;
 
-function og.paperdoll_set_enchant( p, n, e_id, enchant_text )
+function og.paperdoll_set_enchant( p, n, e_id, enchant_text, iid, ilevel )
   e_id = tonumber(e_id or 0) or 0 ;
-  if (e_id == 0) and ((enchant_text == nil) or (enchant_text == "")) and (__enchantable[ p._slot ] == nil) then
+  -- issue: 600+ ilevel off hand... only weapon can be enchanted, not shields or caster off hands
+  --
+  if (ilevel < 600) and (__enchantable[ p._slot ] == nil) then
     return 0 ;
+  end
+  if (ilevel >= 600) and (__enchantable600[ p._slot ] == nil) then
+    return 0 ;
+  end
+  if (ilevel >= 600) and (p._slot == 17) then
+    -- only enchantable if off-hand is a weapon
+    local itemType = select( 6, GetItemInfo(iid) ) ;
+    if (itemType ~= "Weapon") then
+      return 0 ;
+    end
   end
   if (p == nil) or (p.gem == nil) or (p.gem[n] == nil) then
     return 0 ;
@@ -476,6 +516,22 @@ function og.paperdoll_set_enchant( p, n, e_id, enchant_text )
   p.gem[n].texture:Show() ;
   p.gem[n]:Show() ;
   return 1 ;
+end
+
+local function HexToRGBPerc(hex)
+   local  ahex = string.sub(hex, 1, 2) ;
+   local  rhex = string.sub(hex, 3, 4) ;
+   local  ghex = string.sub(hex, 5, 6) ;
+   local  bhex = string.sub(hex, 7, 8) ;
+   
+   -- changing default blue associated with rares to something a bit lighter
+   --
+   if (rhex == "00") and (ghex == "70") and (bhex == "dd") then
+     rhex = "2D" ;
+     ghex = "95" ;
+     bhex = "FF" ;
+   end
+   return tonumber( ahex, 16)/255, tonumber(rhex, 16)/255, tonumber(ghex, 16)/255, tonumber(bhex, 16)/255 ;
 end
 
 function og.paperdoll_update( frame, target )
@@ -494,11 +550,14 @@ function og.paperdoll_update( frame, target )
   local enchant_text = "" ;
   local is_pvp = 0 ;
   local i, p, s ;
+  
   for i,p in pairs( f._ilevels ) do
     local ilink = GetInventoryItemLink( target, i ) ;
     local iid   = select( 2, strsplit(":", ilink or "" )) ;
     p._ilink = ilink ;
+    
     n, g1, g2, g3, g4, c1, c2, c3, c4, e_id, enchant_text, ilevel, is_pvp = og.nGems( target, i ) ;
+    
     if (is_pvp) and (is_pvp > 0) then
       p._pvp:SetVertexColor( 1.0,0,0 ) ; -- red
     else
@@ -515,19 +574,27 @@ function og.paperdoll_update( frame, target )
     else
       p._pvp:Hide() ;
     end
-    if (iid ~= nil) and (iid ~= 0) then
+    if (iid) and (iid ~= 0) then
       if (ilevel == nil) or (ilevel == 0) then
         ilevel = select( 4, GetItemInfo(iid)) ;
       end
-      if (ilevel ~= nil) then
+      if (ilevel) then
         p.ilevel:SetText( tostring(ilevel) ) ;
+        p.shadow:SetText( tostring(ilevel) ) ;
+        
+        local a, r, g, b = HexToRGBPerc( ilink:sub( 3, 10) ) ;
+        p.ilevel:SetTextColor( r, g, b ) ;
+        
         p._pvp:SetTexture( "INTERFACE\\BUTTONS\\ButtonHilight-Square" ) ;
       else
         p.ilevel:SetText("--") ;
+        p.shadow:SetText("--") ;
+        p.ilevel:SetTextColor( 128/255, 128/255, 128/255 ) ;
         p._pvp:SetTexture( nil ) ;
       end
     else
       p.ilevel:SetText("") ;
+      p.shadow:SetText("") ;
       p._pvp:SetTexture( nil ) ;
     end
     local k ;
@@ -537,14 +604,14 @@ function og.paperdoll_update( frame, target )
         p.gem[k]:Hide() ;
       end
     end
-    if (p.is_left and (iid ~= nil)) then
-      e = og.paperdoll_set_enchant( p, 1, e_id, enchant_text ) ; 
+    if (p.is_left and (iid)) then
+      e = og.paperdoll_set_enchant( p, 1, e_id, enchant_text, iid, ilevel ) ; 
       if (n >= 1) then og.paperdoll_set_gem( p, 1 + e, g1, c1 ) ; end
       if (n >= 2) then og.paperdoll_set_gem( p, 2 + e, g2, c2 ) ; end
       if (n >= 3) then og.paperdoll_set_gem( p, 3 + e, g3, c3 ) ; end
       if (n >= 4) then og.paperdoll_set_gem( p, 4 + e, g4, c4 ) ; end
-    elseif (iid ~= nil) then
-      e = og.paperdoll_set_enchant( p, (5-n), e_id, enchant_text ) ; 
+    elseif (iid) then
+      e = og.paperdoll_set_enchant( p, (5-n), e_id, enchant_text, iid, ilevel ) ; 
       if (n >= 1) then og.paperdoll_set_gem( p, 1 + (5-n), g1, c1 ) ; end
       if (n >= 2) then og.paperdoll_set_gem( p, 2 + (5-n), g2, c2 ) ; end
       if (n >= 3) then og.paperdoll_set_gem( p, 3 + (5-n), g3, c3 ) ; end
@@ -629,6 +696,7 @@ function og.paperdoll_slot_label( slot, is_left )
   d:SetWidth (50) ;
   d:SetHeight(40) ;
 
+  d.shadow = og.label ( d, 0, 0, 3*12, 25, "xxx" ) ;
   d.ilevel = og.label ( d, 0, 0, 3*12, 25, "xxx" ) ;
   d.is_left = is_left ;
   d._slot = og.get_slot_id( slot ) ;
@@ -667,8 +735,11 @@ function og.paperdoll_slot_label( slot, is_left )
       x = x + cx ;
     end
    
+    d.shadow:SetPoint   ( "BOTTOMLEFT", d, "BOTTOMLEFT",  2, -15 ) ;
+    d.shadow:SetJustifyH("LEFT") ;
+    
     d.ilevel:SetPoint   ( "BOTTOMLEFT", d, "BOTTOMLEFT",  0, -12 ) ;
-    d.ilevel:SetJustifyH("LEFT") ;
+    d.ilevel:SetJustifyH("LEFT") ;    
   else
     local x  =  2 ;
     local y  = 22 ;    
@@ -703,11 +774,17 @@ function og.paperdoll_slot_label( slot, is_left )
       x = x + cx ;
     end
 
+    d.shadow:SetPoint   ( "BOTTOMRIGHT", d, "BOTTOMRIGHT",  2, -13 ) ;
+    d.shadow:SetJustifyH("RIGHT") ;
+    
     d.ilevel:SetPoint   ( "BOTTOMRIGHT", d, "BOTTOMRIGHT",  0, -10 ) ;
     d.ilevel:SetJustifyH("RIGHT") ;
   end
   d.ilevel:SetTextColor( 1.0, 1.0, 1.0, 1 ) ;
   d.ilevel:Show() ;
+  
+  d.shadow:SetTextColor( 0, 0, 0, 1 ) ;
+  d.shadow:Show() ;
   
   d._pvp = slot:CreateTexture(slot:GetName() .."OQHi","OVERLAY") ;
   d._pvp:SetPoint( "TOPLEFT"    , slot, "TOPLEFT"    , -5,  5 ) ;
@@ -732,7 +809,8 @@ function og.paperdoll_clear( frame )
   local i, v, j ;
   for i,v in pairs(frame._ilevelcb._ilevels) do
     v.ilevel:SetText( "" ) ;
-    for j=1,3 do
+    v.shadow:SetText( "" ) ;
+    for j=1,5 do
       v.gem[j].texture:SetTexture( nil ) ;
     end
   end
@@ -748,7 +826,7 @@ function og.hook_options_menu()
   cx = 25 ;
   cy = 30 ;
   text_cx = 200 ;
-  og.label( f, x, y, 200, 35, "|cffFFD100" .. L["oGear"] .."|r", "MIDDLE", "LEFT", "GameFontHighlightLarge" ) ;
+  og.label( f, x, y, 200, 35, "|cffFFD100" .. L["oGear"] .." v".. OG_VERSION .."|r", "MIDDLE", "LEFT", "GameFontHighlightLarge" ) ;
   y = y + 45 ;
   
   f.cb_enable  = og.checkbox( f, x, y, cx, cy, text_cx, L["enable"], (OGEAR._paperdoll_show_ilevel == 1), function(self) end ) ;  
@@ -783,7 +861,7 @@ function og.hook_paperdoll()
     return ;
   end
   local parent = PaperDollFrame ;
-  local f = og.checkbox( parent, 10, parent:GetHeight() - 5, 25, 25, 100, L["show ilevel"], OGEAR._paperdoll_show_ilevel, 
+  local f = og.checkbox( parent, 10, parent:GetHeight() - 8, 25, 25, 100, L["show ilevel"], OGEAR._paperdoll_show_ilevel, 
                          function(self) 
                            if (self:GetChecked()) then
                              OGEAR._paperdoll_show_ilevel = 1 ;
@@ -882,40 +960,8 @@ function og.hook_inspectdoll()
   f._target          = "target" ;
 
   parent._ilevelcb = f ;
-  parent:SetScript( "OnShow", function(self) self._ilevelcb._old_show_func(self) ; og.paperdoll_overlay( self._ilevelcb, OGEAR._paperdoll_show_ilevel or 0 ) ; end ) ;
-  parent:SetScript( "OnHide", function(self) og.paperdoll_overlay( self._ilevelcb, 0 ) ; self._ilevelcb._old_hide_func(self) ; end ) ;
-end
-
-function og.paperdoll_check( tag )
-  local f = InspectFrame._ilevelcb ;
-  local i, v, j, s ;
-  print( "--  check" ) ;
-  for i,v in pairs(f._ilevels) do
-    if (type(v.gem[1]) ~= "table") then
-      s = tostring(i) ..": ".. tostring(v.gem) .."  " ;
-      if (tbl.__inuse[v.gem]) then
-        s = s .."A  " ;
-      else
-        s = s .."X  " ;
-      end
-      s = s .. tostring(type(v.gem[1]):sub(1,1)) .." (".. tostring(v.gem[1]) ..") " ;
-      s = s .. tostring(type(v.gem[2]):sub(1,1)) .." (".. tostring(v.gem[2]) ..") " ;
-      s = s .. tostring(type(v.gem[3]):sub(1,1)) .." (".. tostring(v.gem[3]) ..") " ;
-      s = s .. tostring(type(v.gem[4]):sub(1,1)) .." (".. tostring(v.gem[4]) ..") " ;
-      s = s .. tostring(type(v.gem[5]):sub(1,1)) .." (".. tostring(v.gem[5]) ..") " ;
-      print( s ) ;
-      local j, x ;
-      for j, x in pairs(v.gem) do
-        print( "  ".. tostring(j) ..": [".. tostring(x) .."]" ) ;
-      end
-      
-      tbl._watchlist[v.gem] = 1 ;
-    end
-    if (tag) then
-      tbl._watchlist[v.gem] = 1 ;
-    end
-  end
-  print( "--" ) ;
+  parent:SetScript( "OnShow", function(self) self._ilevelcb._old_show_func(self) ; og.paperdoll_overlay( self._ilevelcb, OGEAR._paperdoll_show_ilevel or 0 ) ; NotifyInspect( "target" ) ; end ) ;
+  parent:SetScript( "OnHide", function(self) og.paperdoll_overlay( self._ilevelcb, 0 ) ; self._ilevelcb._old_hide_func(self) ; ClearInspectPlayer() ; end ) ;
 end
 
 function og.register_base_events() 
@@ -936,6 +982,40 @@ function og.register_events()
   og.ui:RegisterEvent( "PLAYER_EQUIPMENT_CHANGED" ) ;
   og.ui:RegisterEvent( "PLAYER_TARGET_CHANGED"    ) ;
   og.ui:RegisterEvent( "SOCKET_INFO_UPDATE"       ) ;
+end
+
+function OG_EquipmentFlyout_DisplayButton(button, paperDollItemSlot)
+  if (og.old_flyout) then
+    og.old_flyout(button, paperDollItemSlot) ;
+  end
+  
+  local location = button.location;
+  if ( not location ) then
+    return ;
+  end
+  if ( location >= EQUIPMENTFLYOUT_FIRST_SPECIAL_LOCATION ) then
+    return ;
+  end
+  local player, bank, bags, voidStorage, slot, bag, tab, voidSlot = EquipmentManager_UnpackLocation(location);
+  local ilink = nil ;
+  if (bag and slot) then
+    ilink = GetContainerItemLink( bag, slot ) ;
+  elseif (player) then
+    ilink = GetInventoryItemLink( "player", slot ) ;
+  end
+  
+  if (ilink) then
+    local n, g1, g2, g3, g4, c1, c2, c3, c4, e_id, enchant_text, ilevel, is_pvp = og.nGems_from_ilink( ilink ) ;
+--local id, name, textureName, count, durability, maxDurability, invType, locked, start, duration, enable, setTooltip, gem1, gem2, gem3, quality = EquipmentManager_GetItemInfoByLocation(location);
+    if (button.og_text == nil) then
+      local x, y = 0, button:GetHeight() - 20 ;
+      local cx = button:GetWidth() ;
+      button.og_shadow = og.label( button, x+2, y+2, cx, 30, "xxx", "MIDDLE", "RIGHT", nil, "OVERLAY" ) ;
+      button.og_text   = og.label( button, x  , y  , cx, 30, "xxx", "MIDDLE", "RIGHT", nil, "OVERLAY" ) ;
+    end
+    button.og_text  :SetText( "|cFFffffff".. tostring(ilevel) .."|r" ) ;
+    button.og_shadow:SetText( "|cFF000000".. tostring(ilevel) .."|r" ) ;
+  end
 end
 
 function OG_onLoad(self) 

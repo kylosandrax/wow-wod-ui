@@ -383,7 +383,7 @@ function oq.tooltip_set2( f, m, totheside, is_lead )
 
     end
     tooltip.left [tooltip.nRows]:SetText( OQ.TT_OQVERSION ) ;
-    tooltip.right[tooltip.nRows]:SetText( oq.get_version_str( m.oq_ver ) ) ;
+    tooltip.right[tooltip.nRows]:SetText( oq.get_version_str( m.oq_ver ) or ("--") ) ;
   else
     if (m.premade_type == OQ.TYPE_ARENA) and (m.pdata) and (m.pdata:sub(1,1) == "+") then
       tooltip.left [ 6]:SetText( OQ.TT_MAXHP ) ;
@@ -428,7 +428,7 @@ function oq.tooltip_set2( f, m, totheside, is_lead )
     
     -- show icons for ranks & titles 
     tooltip.left [tooltip.nRows - 1]:SetText( OQ.TT_OQVERSION ) ;
-    tooltip.right[tooltip.nRows - 1]:SetText( oq.get_version_str( m.oq_ver ) ) ;
+    tooltip.right[tooltip.nRows - 1]:SetText( oq.get_version_str( m.oq_ver ) or "--" ) ;
     tooltip.left [tooltip.nRows - 0]:SetText( oq.get_rank_achieves( m.ranks ) ) ;
     tooltip.right[tooltip.nRows - 0]:SetText( "" ) ;
   end
@@ -904,14 +904,14 @@ function oq.pm_tooltip_set( f, raid_token )
   if (raid.type == OQ.TYPE_RAID) or (raid.type == OQ.TYPE_DUNGEON) then
     pm_tooltip:SetHeight( 12 + (pm_tooltip.nRows+2)*16 ) ;
     pm_tooltip.left [pm_tooltip.nRows+2]:SetText( OQ.TT_OQVERSION ) ;
-    pm_tooltip.right[pm_tooltip.nRows+2]:SetText( (raid.oq_ver == 0) and ("--") or oq.get_version_str( raid.oq_ver ) ) ;
+    pm_tooltip.right[pm_tooltip.nRows+2]:SetText( oq.get_version_str( raid.oq_ver ) or ("--") ) ;
     pm_tooltip.right[pm_tooltip.nRows+2]:SetFont(OQ.FONT, 9, "") ;
     offset = -10 ;
     is_long = nil ;
   else
     pm_tooltip:SetHeight( 12 + pm_tooltip.nRows*16 ) ;
     pm_tooltip.left [pm_tooltip.nRows]:SetText( OQ.TT_OQVERSION ) ;
-    pm_tooltip.right[pm_tooltip.nRows]:SetText( (raid.oq_ver == 0) and ("--") or oq.get_version_str( raid.oq_ver ) ) ;
+    pm_tooltip.right[pm_tooltip.nRows]:SetText( oq.get_version_str( raid.oq_ver ) or ("--") ) ;
     pm_tooltip.right[pm_tooltip.nRows]:SetFont(OQ.FONT, 9, "") ;
   end
   

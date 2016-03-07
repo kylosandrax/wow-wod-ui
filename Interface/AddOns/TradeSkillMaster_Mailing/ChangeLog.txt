@@ -1,3 +1,6 @@
+v3.0.2
+*Fixed error if you did not press enter after keying in gold limit for send excess gold to banker.
+
 v3.0.1
 *Fixed error when attempting to loot mail past gold cap.
 

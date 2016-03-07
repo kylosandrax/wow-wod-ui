@@ -92,6 +92,7 @@ L["No Item Specified"] = "지정된 아이템 없음" -- Needs review
 L["No Target Player"] = "대상 없음" -- Needs review
 L["No Target Specified"] = "지정된 대상 없음" -- Needs review
 -- L["Nothing to Move"] = ""
+-- L["Not sending any gold as you either did not enter a limit or did not press enter to store the limit."] = ""
 L["Not sending any gold as you have less than the specified limit."] = "보유량이 지정된 제한보다 적으므로 골드를 발송하지 않습니다." -- Needs review
 L["Not Target Specified"] = "지정된 대상 없음" -- Needs review
 -- L["Open All Mail"] = ""

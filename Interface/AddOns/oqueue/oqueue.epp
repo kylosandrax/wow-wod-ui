@@ -1,11 +1,11 @@
 ﻿[File0]
 DataLen=28687
-TopLine=280
-SelStart=13884
-SelStop=13884
+TopLine=78
+SelStart=1052
+SelStop=1052
 RectSel=0
-CaretPos=13884
-CaretVisible=1
+CaretPos=1052
+CaretVisible=0
 TopLineAlt=0
 SelStartAlt=0
 SelStopAlt=0
@@ -34,12 +34,12 @@ FTPFilename=
 ForcedReadOnly=0
 
 [File1]
-DataLen=1222
+DataLen=1167
 TopLine=0
-SelStart=366
-SelStop=366
+SelStart=368
+SelStop=368
 RectSel=0
-CaretPos=366
+CaretPos=368
 CaretVisible=1
 TopLineAlt=0
 SelStartAlt=0
@@ -69,13 +69,13 @@ FTPFilename=
 ForcedReadOnly=2
 
 [File2]
-DataLen=7791
-TopLine=0
+DataLen=7903
+TopLine=54
 SelStart=0
 SelStop=0
 RectSel=0
 CaretPos=0
-CaretVisible=1
+CaretVisible=0
 TopLineAlt=0
 SelStartAlt=0
 SelStopAlt=0
@@ -104,12 +104,12 @@ FTPFilename=
 ForcedReadOnly=0
 
 [File3]
-DataLen=34329
-TopLine=18
-SelStart=1118
-SelStop=1118
+DataLen=35758
+TopLine=191
+SelStart=10664
+SelStop=10664
 RectSel=0
-CaretPos=1118
+CaretPos=10664
 CaretVisible=1
 TopLineAlt=0
 SelStartAlt=0
@@ -174,12 +174,12 @@ FTPFilename=
 ForcedReadOnly=0
 
 [File5]
-DataLen=65595
-TopLine=319
-SelStart=16017
-SelStop=16027
+DataLen=68563
+TopLine=116
+SelStart=6511
+SelStop=6502
 RectSel=0
-CaretPos=16027
+CaretPos=6502
 CaretVisible=1
 TopLineAlt=0
 SelStartAlt=0
@@ -187,7 +187,8 @@ SelStopAlt=0
 RectSelAlt=0
 CaretPosAlt=0
 CaretVisibleAlt=0
-BookmarkCount=1
+BookmarkCount=2
+Bookmark1=36512
 Folding=
 FileType=768632589
 DataFormat=utf8
@@ -386,12 +387,12 @@ FTPFilename=
 ForcedReadOnly=0
 
 [File11]
-DataLen=44725
-TopLine=788
-SelStart=35642
-SelStop=35642
+DataLen=45264
+TopLine=629
+SelStart=31283
+SelStop=31294
 RectSel=0
-CaretPos=35642
+CaretPos=31294
 CaretVisible=1
 TopLineAlt=0
 SelStartAlt=0
@@ -400,14 +401,14 @@ RectSelAlt=0
 CaretPosAlt=0
 CaretVisibleAlt=0
 BookmarkCount=10
-Bookmark1=32129
-Bookmark2=33420
-Bookmark3=35262
-Bookmark4=32617
+Bookmark1=32658
+Bookmark2=33949
+Bookmark3=35791
+Bookmark4=33146
 Bookmark5=30646
 Bookmark6=-1
-Bookmark7=40961
-Bookmark8=39935
+Bookmark7=41500
+Bookmark8=40474
 Bookmark9=29969
 Folding=
 FileType=768632589
@@ -430,12 +431,12 @@ FTPFilename=
 ForcedReadOnly=0
 
 [File12]
-DataLen=43914
-TopLine=889
-SelStart=33384
-SelStop=33384
+DataLen=43886
+TopLine=658
+SelStart=25149
+SelStop=25149
 RectSel=0
-CaretPos=33384
+CaretPos=25149
 CaretVisible=1
 TopLineAlt=0
 SelStartAlt=0
@@ -444,13 +445,13 @@ RectSelAlt=0
 CaretPosAlt=0
 CaretVisibleAlt=0
 BookmarkCount=8
-Bookmark1=33664
+Bookmark1=33705
 Bookmark2=-1
 Bookmark3=-1
 Bookmark4=-1
-Bookmark5=14851
-Bookmark6=32969
-Bookmark7=37598
+Bookmark5=14861
+Bookmark6=32987
+Bookmark7=37570
 Folding=
 FileType=768632589
 DataFormat=win1252
@@ -472,12 +473,12 @@ FTPFilename=
 ForcedReadOnly=0
 
 [File13]
-DataLen=19381
-TopLine=502
-SelStart=18602
-SelStop=18602
+DataLen=19812
+TopLine=80
+SelStart=5865
+SelStop=5865
 RectSel=0
-CaretPos=18602
+CaretPos=5865
 CaretVisible=1
 TopLineAlt=0
 SelStartAlt=0
@@ -508,11 +509,11 @@ ForcedReadOnly=0
 
 [File14]
 DataLen=16071
-TopLine=0
-SelStart=478
-SelStop=478
+TopLine=78
+SelStart=3711
+SelStop=3720
 RectSel=0
-CaretPos=478
+CaretPos=3720
 CaretVisible=1
 TopLineAlt=0
 SelStartAlt=0
@@ -647,12 +648,12 @@ FTPFilename=
 ForcedReadOnly=0
 
 [File18]
-DataLen=33321
+DataLen=31177
 TopLine=0
-SelStart=604
-SelStop=604
+SelStart=0
+SelStop=0
 RectSel=0
-CaretPos=604
+CaretPos=0
 CaretVisible=1
 TopLineAlt=0
 SelStartAlt=0
@@ -682,12 +683,12 @@ FTPFilename=
 ForcedReadOnly=0
 
 [File19]
-DataLen=38265
-TopLine=0
-SelStart=593
-SelStop=593
+DataLen=34331
+TopLine=620
+SelStart=18158
+SelStop=18158
 RectSel=0
-CaretPos=593
+CaretPos=18158
 CaretVisible=1
 TopLineAlt=0
 SelStartAlt=0
@@ -717,12 +718,12 @@ FTPFilename=
 ForcedReadOnly=0
 
 [File20]
-DataLen=9682
-TopLine=0
-SelStart=754
-SelStop=754
+DataLen=9698
+TopLine=39
+SelStart=2212
+SelStop=2212
 RectSel=0
-CaretPos=754
+CaretPos=2212
 CaretVisible=1
 TopLineAlt=0
 SelStartAlt=0
@@ -745,20 +746,20 @@ WrapPos=-2
 RecordSize=-2
 HexEditor=0
 HexSections=-2
-ProjectStatus=1
+ProjectStatus=0
 RelativeFilename=battlegrounds\warsong_gulch.lua
 Filename=C:\games\wow\Interface\AddOns\oqueue\battlegrounds\warsong_gulch.lua
 FTPFilename=
 ForcedReadOnly=0
 
 [File21]
-DataLen=9966
-TopLine=281
-SelStart=7771
-SelStop=7771
+DataLen=9977
+TopLine=31
+SelStart=2228
+SelStop=2228
 RectSel=0
-CaretPos=7771
-CaretVisible=0
+CaretPos=2228
+CaretVisible=1
 TopLineAlt=0
 SelStartAlt=0
 SelStopAlt=0
@@ -892,12 +893,12 @@ FTPFilename=
 ForcedReadOnly=0
 
 [File25]
-DataLen=22109
-TopLine=347
-SelStart=9952
-SelStop=9974
+DataLen=21993
+TopLine=259
+SelStart=7622
+SelStop=7641
 RectSel=0
-CaretPos=9974
+CaretPos=7641
 CaretVisible=1
 TopLineAlt=0
 SelStartAlt=0
@@ -927,12 +928,12 @@ FTPFilename=
 ForcedReadOnly=0
 
 [File26]
-DataLen=903904
-TopLine=225
-SelStart=10184
-SelStop=10184
+DataLen=778147
+TopLine=19363
+SelStart=664915
+SelStop=664935
 RectSel=0
-CaretPos=10184
+CaretPos=664935
 CaretVisible=1
 TopLineAlt=0
 SelStartAlt=0
@@ -940,10 +941,16 @@ SelStopAlt=0
 RectSelAlt=0
 CaretPosAlt=0
 CaretVisibleAlt=0
-BookmarkCount=4
-Bookmark1=871320
-Bookmark2=569969
-Bookmark3=888318
+BookmarkCount=10
+Bookmark1=736674
+Bookmark2=742470
+Bookmark3=-1
+Bookmark4=-1
+Bookmark5=-1
+Bookmark6=-1
+Bookmark7=-1
+Bookmark8=-1
+Bookmark9=712270
 Folding=
 FileType=768632589
 DataFormat=utf8
@@ -965,12 +972,47 @@ FTPFilename=
 ForcedReadOnly=2
 
 [File27]
-DataLen=28441
-TopLine=199
-SelStart=7082
-SelStop=7088
+DataLen=2291
+TopLine=2
+SelStart=754
+SelStop=743
 RectSel=0
-CaretPos=7088
+CaretPos=743
+CaretVisible=1
+TopLineAlt=0
+SelStartAlt=0
+SelStopAlt=0
+RectSelAlt=0
+CaretPosAlt=0
+CaretVisibleAlt=0
+BookmarkCount=1
+Folding=
+FileType=768632589
+DataFormat=win1252
+AutoIndent=0
+NumberLines=0
+WordWrapIndent=0
+NumberColumns=0
+ShowSpaces=0
+ShowLineBreaks=0
+LiveSpell=0
+WrapPos=-2
+RecordSize=-2
+HexEditor=0
+HexSections=-2
+ProjectStatus=1
+RelativeFilename=oqueue_activities.lua
+Filename=C:\games\wow\Interface\AddOns\oqueue\oqueue_activities.lua
+FTPFilename=
+ForcedReadOnly=0
+
+[File28]
+DataLen=28676
+TopLine=461
+SelStart=16255
+SelStop=16255
+RectSel=0
+CaretPos=16255
 CaretVisible=1
 TopLineAlt=0
 SelStartAlt=0
@@ -979,7 +1021,7 @@ RectSelAlt=0
 CaretPosAlt=0
 CaretVisibleAlt=0
 BookmarkCount=7
-Bookmark1=25394
+Bookmark1=25629
 Bookmark2=8022
 Bookmark3=-1
 Bookmark4=-1
@@ -999,13 +1041,13 @@ WrapPos=-2
 RecordSize=-2
 HexEditor=0
 HexSections=-2
-ProjectStatus=0
+ProjectStatus=1
 RelativeFilename=oqueue_ui_tools.lua
 Filename=C:\games\wow\Interface\AddOns\oqueue\oqueue_ui_tools.lua
 FTPFilename=
 ForcedReadOnly=0
 
-[File28]
+[File29]
 DataLen=9424
 TopLine=194
 SelStart=6544
@@ -1040,13 +1082,13 @@ Filename=C:\games\wow\Interface\AddOns\oqueue\battlegrounds\fog_of_war.lua
 FTPFilename=
 ForcedReadOnly=0
 
-[File29]
-DataLen=6098
-TopLine=31
-SelStart=2096
-SelStop=2096
+[File30]
+DataLen=6310
+TopLine=147
+SelStart=5376
+SelStop=5376
 RectSel=0
-CaretPos=2096
+CaretPos=5376
 CaretVisible=1
 TopLineAlt=0
 SelStartAlt=0
@@ -1076,7 +1118,7 @@ Filename=C:\games\wow\Interface\AddOns\oqueue\oqueue_timers.lua
 FTPFilename=
 ForcedReadOnly=0
 
-[File30]
+[File31]
 DataLen=3566
 TopLine=0
 SelStart=959
@@ -1111,7 +1153,7 @@ Filename=C:\games\wow\Interface\AddOns\oqueue\todo.txt
 FTPFilename=
 ForcedReadOnly=2
 
-[File31]
+[File32]
 DataLen=707
 TopLine=0
 SelStart=533
@@ -1146,13 +1188,13 @@ Filename=C:\games\wow\Interface\AddOns\oqueue\buglist.txt
 FTPFilename=
 ForcedReadOnly=0
 
-[File32]
-DataLen=17298
-TopLine=414
-SelStart=17055
-SelStop=17061
+[File33]
+DataLen=15045
+TopLine=280
+SelStart=12613
+SelStop=12613
 RectSel=0
-CaretPos=17061
+CaretPos=12613
 CaretVisible=1
 TopLineAlt=0
 SelStartAlt=0
@@ -1181,13 +1223,13 @@ Filename=C:\games\wow\Interface\AddOns\oqueue\oqueue.xml
 FTPFilename=
 ForcedReadOnly=0
 
-[File33]
-DataLen=1863
-TopLine=0
-SelStart=559
-SelStop=559
+[File34]
+DataLen=1978
+TopLine=3
+SelStart=329
+SelStop=329
 RectSel=0
-CaretPos=559
+CaretPos=329
 CaretVisible=1
 TopLineAlt=0
 SelStartAlt=0
@@ -1216,13 +1258,13 @@ Filename=C:\games\wow\Interface\AddOns\oqueue\oqueue_filters.lua
 FTPFilename=
 ForcedReadOnly=0
 
-[File34]
-DataLen=83990
-TopLine=0
-SelStart=82
-SelStop=82
+[File35]
+DataLen=86596
+TopLine=1324
+SelStart=85358
+SelStop=85358
 RectSel=0
-CaretPos=82
+CaretPos=85358
 CaretVisible=1
 TopLineAlt=0
 SelStartAlt=0
@@ -1251,7 +1293,7 @@ Filename=C:\games\wow\Interface\AddOns\oqueue\change.log
 FTPFilename=
 ForcedReadOnly=0
 
-[File35]
+[File36]
 DataLen=301
 TopLine=0
 SelStart=98
@@ -1291,7 +1333,7 @@ Managed=1
 BookmarksProjectWide=0
 TabIndex=26
 FirstFileTab=0
-FileCount=36
+FileCount=37
 RemovedCount=2
 
 [Removed0]
